@@ -15,7 +15,7 @@ The project contains:
 
 ### Available Documents
 
-- [Interface vs Abstract Class Questions](InterfaceAbstractClassQuestions.md) - Comprehensive guide with 30+ interview questions and answers about interfaces and abstract classes in C#
+- [C# Interface vs Abstract Class Guide](CSharp-Interface-vs-AbstractClass-Guide.md) - Comprehensive guide with 40+ interview questions and answers about interfaces and abstract classes in C#
 
 ## Getting Started
 
