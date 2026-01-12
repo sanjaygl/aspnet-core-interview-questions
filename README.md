@@ -15,8 +15,8 @@ The project contains:
 
 ### Available Documents
 
-- [C# Interface vs Abstract Class Guide](CSharp-Interface-vs-AbstractClass-Guide.md) - Comprehensive guide with 40+ interview questions and answers about interfaces and abstract classes in C#
-- [C# Collections Complete Guide](CSharp-Collections-Complete-Guide.md) - Detailed technical documentation covering all C# collection types, performance considerations, and interview questions
+- [C# Interface vs Abstract Class Guide](docs/CSharp-Interface-vs-AbstractClass-Guide.md) - Comprehensive guide with 40+ interview questions and answers about interfaces and abstract classes in C#
+- [C# Collections Complete Guide](docs/CSharp-Collections-Complete-Guide.md) - Detailed technical documentation covering all C# collection types, performance considerations, and interview questions
 
 ## Getting Started
 
@@ -29,5 +29,5 @@ The project contains:
 
 - **Algorithms**: Factorial calculation, Fibonacci sequence, palindrome detection
 - **Data Structures**: Array manipulation, duplicate detection
-- **C# Concepts**: Interface implementation, abstract classes, inheritance
+- **C# Concepts**: Interface implementation, abstract classes, inheritance, collections
 - **Best Practices**: SOLID principles, design patterns, performance considerations
