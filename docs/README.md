@@ -17,6 +17,7 @@ The project contains:
 
 - [C# Interface vs Abstract Class Guide](CSharp-Interface-vs-AbstractClass-Guide.md) - Comprehensive guide with 40+ interview questions and answers about interfaces and abstract classes in C#
 - [C# Collections Complete Guide](CSharp-Collections-Complete-Guide.md) - Detailed technical documentation covering all C# collection types, performance considerations, and interview questions
+- [C# Design Patterns Complete Guide](CSharp-Design-Patterns-Complete-Guide.md) - Comprehensive guide covering all 23 GoF design patterns with modern C# implementations, real-world examples, and interview questions
 
 ## Getting Started
 

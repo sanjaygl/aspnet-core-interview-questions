@@ -1,7 +1,5 @@
 <Solution>
-  <Folder Name="/docs/">
-    <File Path="../../../Users/sanjay.bopche/source/repos/CodingProblem/CodingProblem/InterfaceAbstractClassQuestions.md" />
-  </Folder>
+  <Folder Name="/docs/" />
   <Folder Name="/src/">
     <Project Path="CodingProblem/CodingProblem.csproj" />
   </Folder>
