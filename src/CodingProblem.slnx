@@ -1,5 +1,7 @@
 <Solution>
-  <Folder Name="/docs/" />
+  <Folder Name="/docs/">
+    <File Path="../docs/CSharp-Boxing-Unboxing-Stack-Heap.md" />
+  </Folder>
   <Folder Name="/docs/solid-principles/">
     <File Path="../docs/solid-principles/dependency-inversion-principle.md" />
     <File Path="../docs/solid-principles/index.md" />
