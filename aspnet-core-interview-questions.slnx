@@ -1,0 +1,33 @@
+<Solution>
+  <Folder Name="/docs/">
+    <File Path="docs/CSharp-Boxing-Unboxing-Stack-Heap.md" />
+    <File Path="docs/CSharp-Collections-Complete-Guide.md" />
+    <File Path="docs/CSharp-Design-Patterns-Complete-Guide-Backup.md" />
+    <File Path="docs/CSharp-Interface-vs-AbstractClass-Guide.md" />
+    <File Path="docs/CSharp-Ref-Out-Keywords-Guide.md" />
+  </Folder>
+  <Folder Name="/docs/clean-architecture/">
+    <File Path="docs/clean-architecture/dependency-rule.md" />
+    <File Path="docs/clean-architecture/folder-structure-dotnet.md" />
+    <File Path="docs/clean-architecture/index.md" />
+    <File Path="docs/clean-architecture/overview.md" />
+    <File Path="docs/clean-architecture/pitfalls-and-best-practices.md" />
+    <File Path="docs/clean-architecture/sample-project-walkthrough.md" />
+  </Folder>
+  <Folder Name="/docs/design-patterns/">
+    <File Path="docs/design-patterns/CSharp-Design-Patterns-Complete-Guide.md" />
+    <File Path="docs/design-patterns/index.md" />
+  </Folder>
+  <Folder Name="/docs/solid-principles/">
+    <File Path="docs/solid-principles/dependency-inversion-principle.md" />
+    <File Path="docs/solid-principles/interface-segregation-principle.md" />
+    <File Path="docs/solid-principles/liskov-substitution-principle.md" />
+    <File Path="docs/solid-principles/open-closed-principle.md" />
+    <File Path="docs/solid-principles/single-responsibility-principle.md" />
+    <File Path="docs/solid-principles/SOLID-Design-Principles-Introduction.md" />
+  </Folder>
+  <Folder Name="/src/">
+    <File Path="README.md" />
+    <Project Path="src/CodingProblem/CodingProblem.csproj" />
+  </Folder>
+</Solution>
