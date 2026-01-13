@@ -18,6 +18,8 @@ The project contains:
 - [C# Interface vs Abstract Class Guide](docs/CSharp-Interface-vs-AbstractClass-Guide.md) - Comprehensive guide with 40+ interview questions and answers about interfaces and abstract classes in C#
 - [C# Collections Complete Guide](docs/CSharp-Collections-Complete-Guide.md) - Detailed technical documentation covering all C# collection types, performance considerations, and interview questions
 - [C# Design Patterns Complete Guide](docs/CSharp-Design-Patterns-Complete-Guide.md) - Comprehensive guide covering all 23 GoF design patterns with modern C# implementations, real-world examples, and interview questions
+- [C# Boxing, Unboxing, Stack & Heap Guide](docs/CSharp-Boxing-Unboxing-Stack-Heap.md) - Complete guide to value types, reference types, boxing/unboxing, and memory management with performance considerations
+- [C# ref and out Keywords Guide](docs/CSharp-Ref-Out-Keywords-Guide.md) - Comprehensive guide to parameter passing in C# including ref, out, in modifiers with real-world examples and interview questions
 
 ### SOLID Design Principles (Object-Oriented Design Foundation)
 
@@ -80,5 +82,7 @@ The project contains:
 - **Algorithms**: Factorial calculation, Fibonacci sequence, palindrome detection
 - **Data Structures**: Array manipulation, duplicate detection
 - **C# Concepts**: Interface implementation, abstract classes, inheritance, collections
+- **Memory Management**: Value types, reference types, boxing/unboxing, stack/heap allocation
+- **Parameter Passing**: ref, out, in modifiers and their use cases
 - **Best Practices**: SOLID principles, design patterns, performance considerations
 - **Object-Oriented Design**: SOLID principles, design patterns, clean architecture
