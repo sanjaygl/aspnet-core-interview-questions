@@ -20,6 +20,7 @@ The project contains:
 - [C# Design Patterns Complete Guide](docs/CSharp-Design-Patterns-Complete-Guide.md) - Comprehensive guide covering all 23 GoF design patterns with modern C# implementations, real-world examples, and interview questions
 - [C# Boxing, Unboxing, Stack & Heap Guide](docs/CSharp-Boxing-Unboxing-Stack-Heap.md) - Complete guide to value types, reference types, boxing/unboxing, and memory management with performance considerations
 - [C# ref and out Keywords Guide](docs/CSharp-Ref-Out-Keywords-Guide.md) - Comprehensive guide to parameter passing in C# including ref, out, in modifiers with real-world examples and interview questions
+- [C# Extension Methods Guide](docs/CSharp-Extension-Methods-Guide.md) - Complete guide to extension methods including syntax, best practices, real-world examples, advanced scenarios, and 25+ interview questions
 
 ### SOLID Design Principles (Object-Oriented Design Foundation)
 
