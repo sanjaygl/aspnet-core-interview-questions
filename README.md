@@ -21,6 +21,7 @@ The project contains:
 - [C# Boxing, Unboxing, Stack & Heap Guide](docs/CSharp-Boxing-Unboxing-Stack-Heap.md) - Complete guide to value types, reference types, boxing/unboxing, and memory management with performance considerations
 - [C# ref and out Keywords Guide](docs/CSharp-Ref-Out-Keywords-Guide.md) - Comprehensive guide to parameter passing in C# including ref, out, in modifiers with real-world examples and interview questions
 - [C# Extension Methods Guide](docs/CSharp-Extension-Methods-Guide.md) - Complete guide to extension methods including syntax, best practices, real-world examples, advanced scenarios, and 25+ interview questions
+- [Detailed .NET Coding Interview Questions and Answers](docs/dotnet-coding-interview-questions-detailed.md) - Comprehensive set of .NET interview questions with detailed explanations and code examples covering API design, performance, security, architecture, and best practices
 
 ### SOLID Design Principles (Object-Oriented Design Foundation)
 
@@ -70,6 +71,9 @@ The project contains:
 - [Observer](docs/design-patterns/behavioral/observer.md) - Notify multiple objects about state changes
 - [Strategy](docs/design-patterns/behavioral/strategy.md) - Encapsulate algorithms and make them interchangeable
 - [Template Method](docs/design-patterns/behavioral/template-method.md) - Define algorithm skeleton in base class
+
+### Angular
+- [Angular Interview Questions 2026 (v16–21+)](docs/Angular-Interview-Questions-2026.md) –  Comprehensive, up-to-date Angular interview questions and answers (mid/senior/lead), including Signals, Standalone APIs, SSR, Control Flow, performance, security, and more, with code examples and best practices.
 
 ## Getting Started
 
