@@ -1,8 +1,10 @@
 <Solution>
   <Folder Name="/docs/">
+    <File Path="docs/Angular-Interview-Questions-2026.md" />
     <File Path="docs/CSharp-Boxing-Unboxing-Stack-Heap.md" />
     <File Path="docs/CSharp-Collections-Complete-Guide.md" />
     <File Path="docs/CSharp-Design-Patterns-Complete-Guide-Backup.md" />
+    <File Path="docs/CSharp-Extension-Methods-Guide.md" />
     <File Path="docs/CSharp-Interface-vs-AbstractClass-Guide.md" />
     <File Path="docs/CSharp-Ref-Out-Keywords-Guide.md" />
   </Folder>

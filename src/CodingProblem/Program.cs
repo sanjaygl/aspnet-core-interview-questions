@@ -21,6 +21,13 @@
             Console.WriteLine(anum);
             Console.WriteLine(obj);
 
+            Singleton singleton1 = Singleton.GetInstance;
+            singleton1.DoWork();
+            Logger logger = Logger.GetInstance;
+            logger.Log("Hello");
+
+            FindUpperCase.FindUpperCaseIterative("abcdeGTXYZqghABCD");
+
             Console.ReadLine();
         }
 
