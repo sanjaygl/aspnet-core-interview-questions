@@ -5,7 +5,6 @@ Replacing with advanced, experience-based questions including MCP, model setting
 
 This is the code block that represents the suggested code change:
 
-````````markdown
 # Generative AI & GitHub Copilot – Advanced Interview Questions (100+)
 
 ## 1. What is Generative AI (GenAI)?
