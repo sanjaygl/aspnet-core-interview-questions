@@ -5206,6 +5206,6208 @@ public class FunctionalStyleDemo
 
 ---
 
+## 7. Data Structures & Algorithms
+
+### 7.1 Find Missing Number
+
+**Problem:**
+Given an array containing n distinct numbers from 0 to n, find the one that is missing from the array.
+
+**Example:**
+```
+Input: [3, 0, 1]
+Output: 2
+
+Input: [9,6,4,2,3,5,7,0,1]
+Output: 8
+```
+
+**Solution 1: Using Math (Sum Formula)**
+```csharp
+public class MissingNumberFinder
+{
+    // Time: O(n), Space: O(1)
+    public static int FindMissingNumber(int[] nums)
+    {
+        int n = nums.Length;
+        // Sum of first n natural numbers: n * (n + 1) / 2
+        int expectedSum = n * (n + 1) / 2;
+        int actualSum = nums.Sum();
+        
+        return expectedSum - actualSum;
+    }
+    
+    public static void Example()
+    {
+        int[] nums1 = { 3, 0, 1 };
+        Console.WriteLine($"Missing number: {FindMissingNumber(nums1)}"); // 2
+        
+        int[] nums2 = { 9, 6, 4, 2, 3, 5, 7, 0, 1 };
+        Console.WriteLine($"Missing number: {FindMissingNumber(nums2)}"); // 8
+    }
+}
+```
+
+**Solution 2: Using XOR (Bit Manipulation)**
+```csharp
+public class MissingNumberFinderXOR
+{
+    // Time: O(n), Space: O(1)
+    // XOR properties: a ^ a = 0, a ^ 0 = a
+    public static int FindMissingNumber(int[] nums)
+    {
+        int result = nums.Length;
+        
+        for (int i = 0; i < nums.Length; i++)
+        {
+            result ^= i ^ nums[i];
+        }
+        
+        return result;
+    }
+}
+```
+
+**Solution 3: Using HashSet**
+```csharp
+public class MissingNumberFinderHashSet
+{
+    // Time: O(n), Space: O(n)
+    public static int FindMissingNumber(int[] nums)
+    {
+        HashSet<int> numSet = new HashSet<int>(nums);
+        
+        for (int i = 0; i <= nums.Length; i++)
+        {
+            if (!numSet.Contains(i))
+            {
+                return i;
+            }
+        }
+        
+        return -1; // Should never reach here
+    }
+}
+```
+
+**Comparison:**
+
+| Approach | Time Complexity | Space Complexity | Pros | Cons |
+|----------|----------------|------------------|------|------|
+| Math Formula | O(n) | O(1) | Simple, efficient | May overflow for large n |
+| XOR | O(n) | O(1) | No overflow risk | Less intuitive |
+| HashSet | O(n) | O(n) | Easy to understand | Extra space |
+
+---
+
+### 7.2 Rotate Array
+
+**Problem:**
+Rotate an array to the right by k steps.
+
+**Example:**
+```
+Input: nums = [1,2,3,4,5,6,7], k = 3
+Output: [5,6,7,1,2,3,4]
+
+Input: nums = [-1,-100,3,99], k = 2
+Output: [3,99,-1,-100]
+```
+
+**Solution 1: Using Reverse (In-Place)**
+```csharp
+public class ArrayRotator
+{
+    // Time: O(n), Space: O(1)
+    public static void Rotate(int[] nums, int k)
+    {
+        if (nums == null || nums.Length == 0) return;
+        
+        k = k % nums.Length; // Handle k > nums.Length
+        
+        // Reverse entire array
+        Reverse(nums, 0, nums.Length - 1);
+        
+        // Reverse first k elements
+        Reverse(nums, 0, k - 1);
+        
+        // Reverse remaining elements
+        Reverse(nums, k, nums.Length - 1);
+    }
+    
+    private static void Reverse(int[] nums, int start, int end)
+    {
+        while (start < end)
+        {
+            int temp = nums[start];
+            nums[start] = nums[end];
+            nums[end] = temp;
+            start++;
+            end--;
+        }
+    }
+    
+    public static void Example()
+    {
+        int[] nums = { 1, 2, 3, 4, 5, 6, 7 };
+        Rotate(nums, 3);
+        Console.WriteLine(string.Join(", ", nums)); // 5, 6, 7, 1, 2, 3, 4
+    }
+}
+```
+
+**Solution 2: Using Extra Array**
+```csharp
+public class ArrayRotatorExtraSpace
+{
+    // Time: O(n), Space: O(n)
+    public static int[] Rotate(int[] nums, int k)
+    {
+        if (nums == null || nums.Length == 0) return nums;
+        
+        int n = nums.Length;
+        k = k % n;
+        int[] result = new int[n];
+        
+        for (int i = 0; i < n; i++)
+        {
+            result[(i + k) % n] = nums[i];
+        }
+        
+        return result;
+    }
+}
+```
+
+**Solution 3: Using LINQ**
+```csharp
+public class ArrayRotatorLINQ
+{
+    public static int[] Rotate(int[] nums, int k)
+    {
+        if (nums == null || nums.Length == 0) return nums;
+        
+        int n = nums.Length;
+        k = k % n;
+        
+        return nums.Skip(n - k).Concat(nums.Take(n - k)).ToArray();
+    }
+}
+```
+
+**Step-by-Step Example (Reverse Method):**
+```
+Original: [1, 2, 3, 4, 5, 6, 7], k = 3
+
+Step 1 - Reverse all: [7, 6, 5, 4, 3, 2, 1]
+Step 2 - Reverse first k: [5, 6, 7, 4, 3, 2, 1]
+Step 3 - Reverse rest: [5, 6, 7, 1, 2, 3, 4]
+```
+
+---
+
+### 7.3 Merge Two Sorted Arrays
+
+**Problem:**
+Merge two sorted arrays into one sorted array.
+
+**Example:**
+```
+Input: nums1 = [1,2,3,0,0,0], m = 3, nums2 = [2,5,6], n = 3
+Output: [1,2,2,3,5,6]
+
+Input: nums1 = [1], m = 1, nums2 = [], n = 0
+Output: [1]
+```
+
+**Solution 1: Merge from End (In-Place)**
+```csharp
+public class ArrayMerger
+{
+    // Time: O(m + n), Space: O(1)
+    // Merge nums2 into nums1 (nums1 has enough space)
+    public static void Merge(int[] nums1, int m, int[] nums2, int n)
+    {
+        int i = m - 1;      // Last element in nums1
+        int j = n - 1;      // Last element in nums2
+        int k = m + n - 1;  // Last position in nums1
+        
+        while (j >= 0)
+        {
+            if (i >= 0 && nums1[i] > nums2[j])
+            {
+                nums1[k--] = nums1[i--];
+            }
+            else
+            {
+                nums1[k--] = nums2[j--];
+            }
+        }
+    }
+    
+    public static void Example()
+    {
+        int[] nums1 = { 1, 2, 3, 0, 0, 0 };
+        int[] nums2 = { 2, 5, 6 };
+        
+        Merge(nums1, 3, nums2, 3);
+        Console.WriteLine(string.Join(", ", nums1)); // 1, 2, 2, 3, 5, 6
+    }
+}
+```
+
+**Solution 2: Create New Array**
+```csharp
+public class ArrayMergerNewArray
+{
+    // Time: O(m + n), Space: O(m + n)
+    public static int[] Merge(int[] nums1, int[] nums2)
+    {
+        int m = nums1.Length;
+        int n = nums2.Length;
+        int[] result = new int[m + n];
+        
+        int i = 0, j = 0, k = 0;
+        
+        while (i < m && j < n)
+        {
+            if (nums1[i] <= nums2[j])
+            {
+                result[k++] = nums1[i++];
+            }
+            else
+            {
+                result[k++] = nums2[j++];
+            }
+        }
+        
+        // Copy remaining elements
+        while (i < m) result[k++] = nums1[i++];
+        while (j < n) result[k++] = nums2[j++];
+        
+        return result;
+    }
+}
+```
+
+**Solution 3: Using LINQ**
+```csharp
+public class ArrayMergerLINQ
+{
+    public static int[] Merge(int[] nums1, int[] nums2)
+    {
+        return nums1.Concat(nums2).OrderBy(x => x).ToArray();
+    }
+    
+    // More efficient for already sorted arrays
+    public static int[] MergeSorted(int[] nums1, int[] nums2)
+    {
+        var merged = new List<int>();
+        int i = 0, j = 0;
+        
+        while (i < nums1.Length && j < nums2.Length)
+        {
+            if (nums1[i] <= nums2[j])
+                merged.Add(nums1[i++]);
+            else
+                merged.Add(nums2[j++]);
+        }
+        
+        merged.AddRange(nums1.Skip(i));
+        merged.AddRange(nums2.Skip(j));
+        
+        return merged.ToArray();
+    }
+}
+```
+
+---
+
+### 7.4 Find Duplicate Elements
+
+**Problem:**
+Find all duplicate elements in an array.
+
+**Example:**
+```
+Input: [4,3,2,7,8,2,3,1]
+Output: [2,3]
+
+Input: [1,1,2]
+Output: [1]
+```
+
+**Solution 1: Using HashSet**
+```csharp
+public class DuplicateFinder
+{
+    // Time: O(n), Space: O(n)
+    public static List<int> FindDuplicates(int[] nums)
+    {
+        HashSet<int> seen = new HashSet<int>();
+        HashSet<int> duplicates = new HashSet<int>();
+        
+        foreach (int num in nums)
+        {
+            if (!seen.Add(num))
+            {
+                duplicates.Add(num);
+            }
+        }
+        
+        return duplicates.ToList();
+    }
+    
+    public static void Example()
+    {
+        int[] nums = { 4, 3, 2, 7, 8, 2, 3, 1 };
+        var duplicates = FindDuplicates(nums);
+        Console.WriteLine(string.Join(", ", duplicates)); // 2, 3
+    }
+}
+```
+
+**Solution 2: Using LINQ**
+```csharp
+public class DuplicateFinderLINQ
+{
+    public static List<int> FindDuplicates(int[] nums)
+    {
+        return nums.GroupBy(x => x)
+                   .Where(g => g.Count() > 1)
+                   .Select(g => g.Key)
+                   .ToList();
+    }
+    
+    // With count of occurrences
+    public static Dictionary<int, int> FindDuplicatesWithCount(int[] nums)
+    {
+        return nums.GroupBy(x => x)
+                   .Where(g => g.Count() > 1)
+                   .ToDictionary(g => g.Key, g => g.Count());
+    }
+}
+```
+
+**Solution 3: Using Dictionary**
+```csharp
+public class DuplicateFinderDictionary
+{
+    // Time: O(n), Space: O(n)
+    // Returns duplicates with their frequencies
+    public static Dictionary<int, int> FindDuplicatesWithFrequency(int[] nums)
+    {
+        Dictionary<int, int> frequency = new Dictionary<int, int>();
+        
+        foreach (int num in nums)
+        {
+            if (frequency.ContainsKey(num))
+                frequency[num]++;
+            else
+                frequency[num] = 1;
+        }
+        
+        return frequency.Where(kvp => kvp.Value > 1)
+                       .ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
+    }
+}
+```
+
+**Solution 4: In-Place (Array values in range [1, n])**
+```csharp
+public class DuplicateFinderInPlace
+{
+    // Time: O(n), Space: O(1)
+    // Works only when array contains values in range [1, n]
+    public static List<int> FindDuplicates(int[] nums)
+    {
+        List<int> result = new List<int>();
+        
+        foreach (int num in nums)
+        {
+            int index = Math.Abs(num) - 1;
+            
+            if (nums[index] < 0)
+            {
+                result.Add(Math.Abs(num));
+            }
+            else
+            {
+                nums[index] = -nums[index];
+            }
+        }
+        
+        // Restore original array
+        for (int i = 0; i < nums.Length; i++)
+        {
+            nums[i] = Math.Abs(nums[i]);
+        }
+        
+        return result;
+    }
+}
+```
+
+---
+
+### 7.5 Two-Sum Problem
+
+**Problem:**
+Given an array of integers and a target sum, return indices of two numbers that add up to the target.
+
+**Example:**
+```
+Input: nums = [2,7,11,15], target = 9
+Output: [0,1]
+Explanation: nums[0] + nums[1] = 2 + 7 = 9
+
+Input: nums = [3,2,4], target = 6
+Output: [1,2]
+```
+
+**Solution 1: Using Dictionary (Optimal)**
+```csharp
+public class TwoSumSolver
+{
+    // Time: O(n), Space: O(n)
+    public static int[] TwoSum(int[] nums, int target)
+    {
+        Dictionary<int, int> map = new Dictionary<int, int>();
+        
+        for (int i = 0; i < nums.Length; i++)
+        {
+            int complement = target - nums[i];
+            
+            if (map.ContainsKey(complement))
+            {
+                return new int[] { map[complement], i };
+            }
+            
+            map[nums[i]] = i;
+        }
+        
+        return new int[] { -1, -1 };
+    }
+    
+    public static void Example()
+    {
+        int[] nums = { 2, 7, 11, 15 };
+        int target = 9;
+        
+        int[] result = TwoSum(nums, target);
+        Console.WriteLine($"Indices: [{result[0]}, {result[1]}]"); // [0, 1]
+    }
+}
+```
+
+**Solution 2: Brute Force**
+```csharp
+public class TwoSumBruteForce
+{
+    // Time: O(n²), Space: O(1)
+    public static int[] TwoSum(int[] nums, int target)
+    {
+        for (int i = 0; i < nums.Length; i++)
+        {
+            for (int j = i + 1; j < nums.Length; j++)
+            {
+                if (nums[i] + nums[j] == target)
+                {
+                    return new int[] { i, j };
+                }
+            }
+        }
+        
+        return new int[] { -1, -1 };
+    }
+}
+```
+
+**Solution 3: Two Pointers (For Sorted Array)**
+```csharp
+public class TwoSumTwoPointers
+{
+    // Time: O(n), Space: O(1)
+    // Works only if array is sorted or you can sort it
+    public static int[] TwoSum(int[] nums, int target)
+    {
+        // Create array of (value, originalIndex) pairs
+        var indexed = nums.Select((value, index) => (value, index))
+                         .OrderBy(x => x.value)
+                         .ToArray();
+        
+        int left = 0;
+        int right = indexed.Length - 1;
+        
+        while (left < right)
+        {
+            int sum = indexed[left].value + indexed[right].value;
+            
+            if (sum == target)
+            {
+                return new int[] 
+                { 
+                    Math.Min(indexed[left].index, indexed[right].index),
+                    Math.Max(indexed[left].index, indexed[right].index)
+                };
+            }
+            else if (sum < target)
+            {
+                left++;
+            }
+            else
+            {
+                right--;
+            }
+        }
+        
+        return new int[] { -1, -1 };
+    }
+}
+```
+
+**Variations:**
+
+```csharp
+public class TwoSumVariations
+{
+    // Return all pairs that sum to target
+    public static List<(int, int)> FindAllPairs(int[] nums, int target)
+    {
+        var result = new List<(int, int)>();
+        var map = new Dictionary<int, List<int>>();
+        
+        for (int i = 0; i < nums.Length; i++)
+        {
+            int complement = target - nums[i];
+            
+            if (map.ContainsKey(complement))
+            {
+                foreach (int j in map[complement])
+                {
+                    result.Add((j, i));
+                }
+            }
+            
+            if (!map.ContainsKey(nums[i]))
+                map[nums[i]] = new List<int>();
+            
+            map[nums[i]].Add(i);
+        }
+        
+        return result;
+    }
+    
+    // Return values instead of indices
+    public static int[] TwoSumValues(int[] nums, int target)
+    {
+        HashSet<int> seen = new HashSet<int>();
+        
+        foreach (int num in nums)
+        {
+            int complement = target - num;
+            
+            if (seen.Contains(complement))
+            {
+                return new int[] { complement, num };
+            }
+            
+            seen.Add(num);
+        }
+        
+        return new int[] { -1, -1 };
+    }
+}
+```
+
+---
+
+### 7.6 Valid Parentheses
+
+**Problem:**
+Given a string containing just the characters '(', ')', '{', '}', '[' and ']', determine if the input string is valid.
+
+**Rules:**
+- Open brackets must be closed by the same type of brackets
+- Open brackets must be closed in the correct order
+
+**Example:**
+```
+Input: "()"
+Output: true
+
+Input: "()[]{}"
+Output: true
+
+Input: "(]"
+Output: false
+
+Input: "([)]"
+Output: false
+
+Input: "{[]}"
+Output: true
+```
+
+**Solution 1: Using Stack**
+```csharp
+public class ParenthesesValidator
+{
+    // Time: O(n), Space: O(n)
+    public static bool IsValid(string s)
+    {
+        if (string.IsNullOrEmpty(s)) return true;
+        if (s.Length % 2 != 0) return false;
+        
+        Stack<char> stack = new Stack<char>();
+        Dictionary<char, char> pairs = new Dictionary<char, char>
+        {
+            { ')', '(' },
+            { '}', '{' },
+            { ']', '[' }
+        };
+        
+        foreach (char c in s)
+        {
+            if (c == '(' || c == '{' || c == '[')
+            {
+                stack.Push(c);
+            }
+            else if (pairs.ContainsKey(c))
+            {
+                if (stack.Count == 0 || stack.Pop() != pairs[c])
+                {
+                    return false;
+                }
+            }
+        }
+        
+        return stack.Count == 0;
+    }
+    
+    public static void Example()
+    {
+        Console.WriteLine(IsValid("()"));       // True
+        Console.WriteLine(IsValid("()[]{}"));   // True
+        Console.WriteLine(IsValid("(]"));       // False
+        Console.WriteLine(IsValid("([)]"));     // False
+        Console.WriteLine(IsValid("{[]}"));     // True
+    }
+}
+```
+
+**Solution 2: Alternative Implementation**
+```csharp
+public class ParenthesesValidatorAlt
+{
+    public static bool IsValid(string s)
+    {
+        Stack<char> stack = new Stack<char>();
+        
+        foreach (char c in s)
+        {
+            switch (c)
+            {
+                case '(':
+                    stack.Push(')');
+                    break;
+                case '{':
+                    stack.Push('}');
+                    break;
+                case '[':
+                    stack.Push(']');
+                    break;
+                default:
+                    if (stack.Count == 0 || stack.Pop() != c)
+                        return false;
+                    break;
+            }
+        }
+        
+        return stack.Count == 0;
+    }
+}
+```
+
+**Extended Version: With Different Bracket Types**
+```csharp
+public class AdvancedParenthesesValidator
+{
+    public static bool IsValid(string s, char[]? allowedBrackets = null)
+    {
+        var openBrackets = new HashSet<char> { '(', '{', '[', '<' };
+        var closeBrackets = new Dictionary<char, char>
+        {
+            { ')', '(' },
+            { '}', '{' },
+            { ']', '[' },
+            { '>', '<' }
+        };
+        
+        if (allowedBrackets != null)
+        {
+            openBrackets = new HashSet<char>(allowedBrackets.Where(c => openBrackets.Contains(c)));
+        }
+        
+        Stack<char> stack = new Stack<char>();
+        
+        foreach (char c in s)
+        {
+            if (openBrackets.Contains(c))
+            {
+                stack.Push(c);
+            }
+            else if (closeBrackets.ContainsKey(c))
+            {
+                if (stack.Count == 0 || stack.Pop() != closeBrackets[c])
+                {
+                    return false;
+                }
+            }
+        }
+        
+        return stack.Count == 0;
+    }
+    
+    // Return detailed validation result
+    public static (bool IsValid, string Error, int ErrorPosition) ValidateDetailed(string s)
+    {
+        Stack<(char bracket, int position)> stack = new Stack<(char, int)>();
+        var closeBrackets = new Dictionary<char, char>
+        {
+            { ')', '(' },
+            { '}', '{' },
+            { ']', '[' }
+        };
+        
+        for (int i = 0; i < s.Length; i++)
+        {
+            char c = s[i];
+            
+            if (c == '(' || c == '{' || c == '[')
+            {
+                stack.Push((c, i));
+            }
+            else if (closeBrackets.ContainsKey(c))
+            {
+                if (stack.Count == 0)
+                {
+                    return (false, $"Unexpected closing bracket '{c}'", i);
+                }
+                
+                var (openBracket, openPos) = stack.Pop();
+                
+                if (openBracket != closeBrackets[c])
+                {
+                    return (false, 
+                        $"Mismatched brackets: '{openBracket}' at {openPos} and '{c}' at {i}", 
+                        i);
+                }
+            }
+        }
+        
+        if (stack.Count > 0)
+        {
+            var (bracket, position) = stack.Peek();
+            return (false, $"Unclosed bracket '{bracket}' at position {position}", position);
+        }
+        
+        return (true, string.Empty, -1);
+    }
+}
+```
+
+---
+
+### 7.7 Implement LRU Cache
+
+**Problem:**
+Design a data structure that follows the Least Recently Used (LRU) cache constraints.
+
+**Operations:**
+- `Get(key)`: Get the value of the key if it exists, otherwise return -1
+- `Put(key, value)`: Update or insert the value if the key exists. When cache reaches capacity, invalidate the least recently used item before inserting a new item.
+
+**Example:**
+```
+LRUCache cache = new LRUCache(2);
+cache.Put(1, 1);
+cache.Put(2, 2);
+cache.Get(1);       // returns 1
+cache.Put(3, 3);    // evicts key 2
+cache.Get(2);       // returns -1 (not found)
+cache.Put(4, 4);    // evicts key 1
+cache.Get(1);       // returns -1 (not found)
+cache.Get(3);       // returns 3
+cache.Get(4);       // returns 4
+```
+
+**Solution 1: Using Dictionary + LinkedList**
+```csharp
+public class LRUCache
+{
+    private readonly int capacity;
+    private readonly Dictionary<int, LinkedListNode<CacheItem>> cache;
+    private readonly LinkedList<CacheItem> lruList;
+    
+    public LRUCache(int capacity)
+    {
+        this.capacity = capacity;
+        this.cache = new Dictionary<int, LinkedListNode<CacheItem>>();
+        this.lruList = new LinkedList<CacheItem>();
+    }
+    
+    // Time: O(1)
+    public int Get(int key)
+    {
+        if (!cache.ContainsKey(key))
+            return -1;
+        
+        var node = cache[key];
+        
+        // Move to front (most recently used)
+        lruList.Remove(node);
+        lruList.AddFirst(node);
+        
+        return node.Value.Value;
+    }
+    
+    // Time: O(1)
+    public void Put(int key, int value)
+    {
+        if (cache.ContainsKey(key))
+        {
+            // Update existing
+            var node = cache[key];
+            node.Value.Value = value;
+            
+            // Move to front
+            lruList.Remove(node);
+            lruList.AddFirst(node);
+        }
+        else
+        {
+            // Add new
+            if (cache.Count >= capacity)
+            {
+                // Remove least recently used (last item)
+                var lruNode = lruList.Last;
+                lruList.RemoveLast();
+                cache.Remove(lruNode.Value.Key);
+            }
+            
+            var newItem = new CacheItem { Key = key, Value = value };
+            var newNode = lruList.AddFirst(newItem);
+            cache[key] = newNode;
+        }
+    }
+    
+    private class CacheItem
+    {
+        public int Key { get; set; }
+        public int Value { get; set; }
+    }
+}
+```
+
+**Solution 2: Using .NET MemoryCache (Production Ready)**
+```csharp
+using Microsoft.Extensions.Caching.Memory;
+
+public class LRUCacheMemory
+{
+    private readonly IMemoryCache cache;
+    private readonly MemoryCacheOptions options;
+    
+    public LRUCacheMemory(int capacity)
+    {
+        options = new MemoryCacheOptions
+        {
+            SizeLimit = capacity
+        };
+        cache = new MemoryCache(options);
+    }
+    
+    public int Get(int key)
+    {
+        if (cache.TryGetValue(key, out int value))
+        {
+            return value;
+        }
+        return -1;
+    }
+    
+    public void Put(int key, int value)
+    {
+        var cacheEntryOptions = new MemoryCacheEntryOptions()
+            .SetSize(1)
+            .SetSlidingExpiration(TimeSpan.FromMinutes(5));
+        
+        cache.Set(key, value, cacheEntryOptions);
+    }
+}
+```
+
+**Solution 3: Generic LRU Cache**
+```csharp
+public class LRUCache<TKey, TValue> where TKey : notnull
+{
+    private readonly int capacity;
+    private readonly Dictionary<TKey, LinkedListNode<CacheItem>> cache;
+    private readonly LinkedList<CacheItem> lruList;
+    private readonly object lockObject = new object();
+    
+    public LRUCache(int capacity)
+    {
+        if (capacity <= 0)
+            throw new ArgumentException("Capacity must be positive", nameof(capacity));
+        
+        this.capacity = capacity;
+        this.cache = new Dictionary<TKey, LinkedListNode<CacheItem>>();
+        this.lruList = new LinkedList<CacheItem>();
+    }
+    
+    public bool TryGet(TKey key, out TValue value)
+    {
+        lock (lockObject)
+        {
+            if (!cache.ContainsKey(key))
+            {
+                value = default!;
+                return false;
+            }
+            
+            var node = cache[key];
+            value = node.Value.Value;
+            
+            // Move to front
+            lruList.Remove(node);
+            lruList.AddFirst(node);
+            
+            return true;
+        }
+    }
+    
+    public void Put(TKey key, TValue value)
+    {
+        lock (lockObject)
+        {
+            if (cache.ContainsKey(key))
+            {
+                var node = cache[key];
+                node.Value.Value = value;
+                
+                lruList.Remove(node);
+                lruList.AddFirst(node);
+            }
+            else
+            {
+                if (cache.Count >= capacity)
+                {
+                    var lruNode = lruList.Last;
+                    lruList.RemoveLast();
+                    cache.Remove(lruNode.Value.Key);
+                }
+                
+                var newItem = new CacheItem { Key = key, Value = value };
+                var newNode = lruList.AddFirst(newItem);
+                cache[key] = newNode;
+            }
+        }
+    }
+    
+    public void Clear()
+    {
+        lock (lockObject)
+        {
+            cache.Clear();
+            lruList.Clear();
+        }
+    }
+    
+    public int Count
+    {
+        get
+        {
+            lock (lockObject)
+            {
+                return cache.Count;
+            }
+        }
+    }
+    
+    private class CacheItem
+    {
+        public TKey Key { get; set; } = default!;
+        public TValue Value { get; set; } = default!;
+    }
+}
+```
+
+**Usage Example:**
+```csharp
+public class LRUCacheExample
+{
+    public static void Example()
+    {
+        var cache = new LRUCache(2);
+        
+        cache.Put(1, 1);
+        cache.Put(2, 2);
+        Console.WriteLine(cache.Get(1));    // 1
+        
+        cache.Put(3, 3);                    // evicts key 2
+        Console.WriteLine(cache.Get(2));    // -1
+        
+        cache.Put(4, 4);                    // evicts key 1
+        Console.WriteLine(cache.Get(1));    // -1
+        Console.WriteLine(cache.Get(3));    // 3
+        Console.WriteLine(cache.Get(4));    // 4
+    }
+    
+    public static void GenericExample()
+    {
+        var cache = new LRUCache<string, User>(3);
+        
+        cache.Put("user1", new User { Id = 1, Name = "Alice" });
+        cache.Put("user2", new User { Id = 2, Name = "Bob" });
+        cache.Put("user3", new User { Id = 3, Name = "Charlie" });
+        
+        if (cache.TryGet("user1", out var user))
+        {
+            Console.WriteLine($"Found: {user.Name}");
+        }
+        
+        cache.Put("user4", new User { Id = 4, Name = "David" }); // evicts user2
+        
+        if (!cache.TryGet("user2", out _))
+        {
+            Console.WriteLine("user2 was evicted");
+        }
+    }
+}
+
+public class User
+{
+    public int Id { get; set; }
+    public string Name { get; set; } = string.Empty;
+}
+```
+
+**Time & Space Complexity:**
+
+| Operation | Time | Space |
+|-----------|------|-------|
+| Get | O(1) | - |
+| Put | O(1) | - |
+| Overall | - | O(capacity) |
+
+---
+
+## 8. .NET Core / ASP.NET Core Coding
+
+### 8.1 Create REST API with Proper HTTP Status Codes
+
+**Problem:**
+Create a RESTful API for a Product resource with proper HTTP status codes and responses.
+
+**Requirements:**
+- GET all products (200 OK)
+- GET product by ID (200 OK or 404 Not Found)
+- POST create product (201 Created)
+- PUT update product (200 OK or 404 Not Found)
+- DELETE product (204 No Content or 404 Not Found)
+- Proper validation with 400 Bad Request
+
+**Solution:**
+
+```csharp
+// Models
+public class Product
+{
+    public int Id { get; set; }
+    public string Name { get; set; } = string.Empty;
+    public string Description { get; set; } = string.Empty;
+    public decimal Price { get; set; }
+    public int Stock { get; set; }
+    public DateTime CreatedAt { get; set; }
+    public DateTime? UpdatedAt { get; set; }
+}
+
+public class CreateProductRequest
+{
+    [Required(ErrorMessage = "Product name is required")]
+    [StringLength(100, MinimumLength = 3)]
+    public string Name { get; set; } = string.Empty;
+    
+    [StringLength(500)]
+    public string Description { get; set; } = string.Empty;
+    
+    [Range(0.01, 1000000, ErrorMessage = "Price must be between 0.01 and 1,000,000")]
+    public decimal Price { get; set; }
+    
+    [Range(0, int.MaxValue, ErrorMessage = "Stock cannot be negative")]
+    public int Stock { get; set; }
+}
+
+public class UpdateProductRequest
+{
+    [Required]
+    [StringLength(100, MinimumLength = 3)]
+    public string Name { get; set; } = string.Empty;
+    
+    [StringLength(500)]
+    public string Description { get; set; } = string.Empty;
+    
+    [Range(0.01, 1000000)]
+    public decimal Price { get; set; }
+    
+    [Range(0, int.MaxValue)]
+    public int Stock { get; set; }
+}
+
+public class ApiResponse<T>
+{
+    public bool Success { get; set; }
+    public string Message { get; set; } = string.Empty;
+    public T? Data { get; set; }
+    public List<string>? Errors { get; set; }
+}
+
+// Controller
+[ApiController]
+[Route("api/[controller]")]
+[Produces("application/json")]
+public class ProductsController : ControllerBase
+{
+    private readonly IProductService _productService;
+    private readonly ILogger<ProductsController> _logger;
+    
+    public ProductsController(
+        IProductService productService,
+        ILogger<ProductsController> logger)
+    {
+        _productService = productService;
+        _logger = logger;
+    }
+    
+    /// <summary>
+    /// Get all products
+    /// </summary>
+    /// <returns>List of products</returns>
+    [HttpGet]
+    [ProducesResponseType(typeof(ApiResponse<List<Product>>), StatusCodes.Status200OK)]
+    public async Task<ActionResult<ApiResponse<List<Product>>>> GetAll()
+    {
+        try
+        {
+            var products = await _productService.GetAllAsync();
+            
+            return Ok(new ApiResponse<List<Product>>
+            {
+                Success = true,
+                Message = "Products retrieved successfully",
+                Data = products
+            });
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error retrieving products");
+            return StatusCode(500, new ApiResponse<List<Product>>
+            {
+                Success = false,
+                Message = "An error occurred while retrieving products",
+                Errors = new List<string> { ex.Message }
+            });
+        }
+    }
+    
+    /// <summary>
+    /// Get product by ID
+    /// </summary>
+    /// <param name="id">Product ID</param>
+    /// <returns>Product details</returns>
+    [HttpGet("{id}")]
+    [ProducesResponseType(typeof(ApiResponse<Product>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ApiResponse<Product>), StatusCodes.Status404NotFound)]
+    public async Task<ActionResult<ApiResponse<Product>>> GetById(int id)
+    {
+        try
+        {
+            var product = await _productService.GetByIdAsync(id);
+            
+            if (product == null)
+            {
+                return NotFound(new ApiResponse<Product>
+                {
+                    Success = false,
+                    Message = $"Product with ID {id} not found"
+                });
+            }
+            
+            return Ok(new ApiResponse<Product>
+            {
+                Success = true,
+                Message = "Product retrieved successfully",
+                Data = product
+            });
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error retrieving product {ProductId}", id);
+            return StatusCode(500, new ApiResponse<Product>
+            {
+                Success = false,
+                Message = "An error occurred while retrieving the product",
+                Errors = new List<string> { ex.Message }
+            });
+        }
+    }
+    
+    /// <summary>
+    /// Create a new product
+    /// </summary>
+    /// <param name="request">Product creation request</param>
+    /// <returns>Created product</returns>
+    [HttpPost]
+    [ProducesResponseType(typeof(ApiResponse<Product>), StatusCodes.Status201Created)]
+    [ProducesResponseType(typeof(ApiResponse<Product>), StatusCodes.Status400BadRequest)]
+    public async Task<ActionResult<ApiResponse<Product>>> Create(
+        [FromBody] CreateProductRequest request)
+    {
+        try
+        {
+            if (!ModelState.IsValid)
+            {
+                var errors = ModelState.Values
+                    .SelectMany(v => v.Errors)
+                    .Select(e => e.ErrorMessage)
+                    .ToList();
+                
+                return BadRequest(new ApiResponse<Product>
+                {
+                    Success = false,
+                    Message = "Validation failed",
+                    Errors = errors
+                });
+            }
+            
+            var product = await _productService.CreateAsync(request);
+            
+            return CreatedAtAction(
+                nameof(GetById),
+                new { id = product.Id },
+                new ApiResponse<Product>
+                {
+                    Success = true,
+                    Message = "Product created successfully",
+                    Data = product
+                });
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error creating product");
+            return StatusCode(500, new ApiResponse<Product>
+            {
+                Success = false,
+                Message = "An error occurred while creating the product",
+                Errors = new List<string> { ex.Message }
+            });
+        }
+    }
+    
+    /// <summary>
+    /// Update an existing product
+    /// </summary>
+    /// <param name="id">Product ID</param>
+    /// <param name="request">Product update request</param>
+    /// <returns>Updated product</returns>
+    [HttpPut("{id}")]
+    [ProducesResponseType(typeof(ApiResponse<Product>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ApiResponse<Product>), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(ApiResponse<Product>), StatusCodes.Status404NotFound)]
+    public async Task<ActionResult<ApiResponse<Product>>> Update(
+        int id,
+        [FromBody] UpdateProductRequest request)
+    {
+        try
+        {
+            if (!ModelState.IsValid)
+            {
+                var errors = ModelState.Values
+                    .SelectMany(v => v.Errors)
+                    .Select(e => e.ErrorMessage)
+                    .ToList();
+                
+                return BadRequest(new ApiResponse<Product>
+                {
+                    Success = false,
+                    Message = "Validation failed",
+                    Errors = errors
+                });
+            }
+            
+            var product = await _productService.UpdateAsync(id, request);
+            
+            if (product == null)
+            {
+                return NotFound(new ApiResponse<Product>
+                {
+                    Success = false,
+                    Message = $"Product with ID {id} not found"
+                });
+            }
+            
+            return Ok(new ApiResponse<Product>
+            {
+                Success = true,
+                Message = "Product updated successfully",
+                Data = product
+            });
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error updating product {ProductId}", id);
+            return StatusCode(500, new ApiResponse<Product>
+            {
+                Success = false,
+                Message = "An error occurred while updating the product",
+                Errors = new List<string> { ex.Message }
+            });
+        }
+    }
+    
+    /// <summary>
+    /// Delete a product
+    /// </summary>
+    /// <param name="id">Product ID</param>
+    /// <returns>No content</returns>
+    [HttpDelete("{id}")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> Delete(int id)
+    {
+        try
+        {
+            var success = await _productService.DeleteAsync(id);
+            
+            if (!success)
+            {
+                return NotFound(new ApiResponse<object>
+                {
+                    Success = false,
+                    Message = $"Product with ID {id} not found"
+                });
+            }
+            
+            return NoContent();
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error deleting product {ProductId}", id);
+            return StatusCode(500, new ApiResponse<object>
+            {
+                Success = false,
+                Message = "An error occurred while deleting the product",
+                Errors = new List<string> { ex.Message }
+            });
+        }
+    }
+}
+
+// Service Interface
+public interface IProductService
+{
+    Task<List<Product>> GetAllAsync();
+    Task<Product?> GetByIdAsync(int id);
+    Task<Product> CreateAsync(CreateProductRequest request);
+    Task<Product?> UpdateAsync(int id, UpdateProductRequest request);
+    Task<bool> DeleteAsync(int id);
+}
+
+// Service Implementation
+public class ProductService : IProductService
+{
+    private readonly ApplicationDbContext _context;
+    
+    public ProductService(ApplicationDbContext context)
+    {
+        _context = context;
+    }
+    
+    public async Task<List<Product>> GetAllAsync()
+    {
+        return await _context.Products
+            .OrderByDescending(p => p.CreatedAt)
+            .ToListAsync();
+    }
+    
+    public async Task<Product?> GetByIdAsync(int id)
+    {
+        return await _context.Products.FindAsync(id);
+    }
+    
+    public async Task<Product> CreateAsync(CreateProductRequest request)
+    {
+        var product = new Product
+        {
+            Name = request.Name,
+            Description = request.Description,
+            Price = request.Price,
+            Stock = request.Stock,
+            CreatedAt = DateTime.UtcNow
+        };
+        
+        _context.Products.Add(product);
+        await _context.SaveChangesAsync();
+        
+        return product;
+    }
+    
+    public async Task<Product?> UpdateAsync(int id, UpdateProductRequest request)
+    {
+        var product = await _context.Products.FindAsync(id);
+        
+        if (product == null)
+            return null;
+        
+        product.Name = request.Name;
+        product.Description = request.Description;
+        product.Price = request.Price;
+        product.Stock = request.Stock;
+        product.UpdatedAt = DateTime.UtcNow;
+        
+        await _context.SaveChangesAsync();
+        
+        return product;
+    }
+    
+    public async Task<bool> DeleteAsync(int id)
+    {
+        var product = await _context.Products.FindAsync(id);
+        
+        if (product == null)
+            return false;
+        
+        _context.Products.Remove(product);
+        await _context.SaveChangesAsync();
+        
+        return true;
+    }
+}
+```
+
+**HTTP Status Codes Summary:**
+
+| Status Code | Meaning | Use Case |
+|-------------|---------|----------|
+| 200 OK | Success | GET, PUT successful |
+| 201 Created | Resource created | POST successful |
+| 204 No Content | Success with no body | DELETE successful |
+| 400 Bad Request | Invalid input | Validation errors |
+| 404 Not Found | Resource not found | GET, PUT, DELETE non-existent resource |
+| 500 Internal Server Error | Server error | Unexpected errors |
+
+---
+
+### 8.2 Implement Global Exception Handling
+
+**Problem:**
+Implement centralized exception handling for an ASP.NET Core application to avoid repetitive try-catch blocks.
+
+**Solution 1: Using Middleware**
+
+```csharp
+// Custom Exception Classes
+public class NotFoundException : Exception
+{
+    public NotFoundException(string message) : base(message) { }
+}
+
+public class ValidationException : Exception
+{
+    public List<string> Errors { get; }
+    
+    public ValidationException(List<string> errors) 
+        : base("One or more validation errors occurred")
+    {
+        Errors = errors;
+    }
+}
+
+public class BusinessException : Exception
+{
+    public BusinessException(string message) : base(message) { }
+}
+
+// Error Response Model
+public class ErrorResponse
+{
+    public int StatusCode { get; set; }
+    public string Message { get; set; } = string.Empty;
+    public List<string>? Errors { get; set; }
+    public string? StackTrace { get; set; }
+    public DateTime Timestamp { get; set; } = DateTime.UtcNow;
+}
+
+// Global Exception Handling Middleware
+public class GlobalExceptionHandlerMiddleware
+{
+    private readonly RequestDelegate _next;
+    private readonly ILogger<GlobalExceptionHandlerMiddleware> _logger;
+    private readonly IHostEnvironment _environment;
+    
+    public GlobalExceptionHandlerMiddleware(
+        RequestDelegate next,
+        ILogger<GlobalExceptionHandlerMiddleware> logger,
+        IHostEnvironment environment)
+    {
+        _next = next;
+        _logger = logger;
+        _environment = environment;
+    }
+    
+    public async Task InvokeAsync(HttpContext context)
+    {
+        try
+        {
+            await _next(context);
+        }
+        catch (Exception ex)
+        {
+            await HandleExceptionAsync(context, ex);
+        }
+    }
+    
+    private async Task HandleExceptionAsync(HttpContext context, Exception exception)
+    {
+        _logger.LogError(exception, "An unhandled exception occurred");
+        
+        context.Response.ContentType = "application/json";
+        
+        var response = new ErrorResponse
+        {
+            Timestamp = DateTime.UtcNow
+        };
+        
+        switch (exception)
+        {
+            case NotFoundException notFoundEx:
+                context.Response.StatusCode = StatusCodes.Status404NotFound;
+                response.StatusCode = StatusCodes.Status404NotFound;
+                response.Message = notFoundEx.Message;
+                break;
+                
+            case ValidationException validationEx:
+                context.Response.StatusCode = StatusCodes.Status400BadRequest;
+                response.StatusCode = StatusCodes.Status400BadRequest;
+                response.Message = validationEx.Message;
+                response.Errors = validationEx.Errors;
+                break;
+                
+            case BusinessException businessEx:
+                context.Response.StatusCode = StatusCodes.Status400BadRequest;
+                response.StatusCode = StatusCodes.Status400BadRequest;
+                response.Message = businessEx.Message;
+                break;
+                
+            case UnauthorizedAccessException:
+                context.Response.StatusCode = StatusCodes.Status401Unauthorized;
+                response.StatusCode = StatusCodes.Status401Unauthorized;
+                response.Message = "Unauthorized access";
+                break;
+                
+            default:
+                context.Response.StatusCode = StatusCodes.Status500InternalServerError;
+                response.StatusCode = StatusCodes.Status500InternalServerError;
+                response.Message = "An internal server error occurred";
+                break;
+        }
+        
+        // Include stack trace only in development
+        if (_environment.IsDevelopment())
+        {
+            response.StackTrace = exception.StackTrace;
+        }
+        
+        var jsonResponse = JsonSerializer.Serialize(response);
+        await context.Response.WriteAsync(jsonResponse);
+    }
+}
+
+// Extension Method
+public static class ExceptionMiddlewareExtensions
+{
+    public static IApplicationBuilder UseGlobalExceptionHandler(
+        this IApplicationBuilder builder)
+    {
+        return builder.UseMiddleware<GlobalExceptionHandlerMiddleware>();
+    }
+}
+
+// Program.cs or Startup.cs
+public class Program
+{
+    public static void Main(string[] args)
+    {
+        var builder = WebApplication.CreateBuilder(args);
+        
+        // Add services
+        builder.Services.AddControllers();
+        
+        var app = builder.Build();
+        
+        // Use global exception handler (must be early in pipeline)
+        app.UseGlobalExceptionHandler();
+        
+        app.UseHttpsRedirection();
+        app.UseAuthorization();
+        app.MapControllers();
+        
+        app.Run();
+    }
+}
+```
+
+**Solution 2: Using IExceptionHandler (.NET 8+)**
+
+```csharp
+public class GlobalExceptionHandler : IExceptionHandler
+{
+    private readonly ILogger<GlobalExceptionHandler> _logger;
+    
+    public GlobalExceptionHandler(ILogger<GlobalExceptionHandler> logger)
+    {
+        _logger = logger;
+    }
+    
+    public async ValueTask<bool> TryHandleAsync(
+        HttpContext httpContext,
+        Exception exception,
+        CancellationToken cancellationToken)
+    {
+        _logger.LogError(exception, "An error occurred: {Message}", exception.Message);
+        
+        var (statusCode, message) = exception switch
+        {
+            NotFoundException => (StatusCodes.Status404NotFound, exception.Message),
+            ValidationException => (StatusCodes.Status400BadRequest, exception.Message),
+            BusinessException => (StatusCodes.Status400BadRequest, exception.Message),
+            UnauthorizedAccessException => (StatusCodes.Status401Unauthorized, "Unauthorized"),
+            _ => (StatusCodes.Status500InternalServerError, "Internal server error")
+        };
+        
+        httpContext.Response.StatusCode = statusCode;
+        
+        var response = new ErrorResponse
+        {
+            StatusCode = statusCode,
+            Message = message,
+            Timestamp = DateTime.UtcNow
+        };
+        
+        if (exception is ValidationException validationEx)
+        {
+            response.Errors = validationEx.Errors;
+        }
+        
+        await httpContext.Response.WriteAsJsonAsync(response, cancellationToken);
+        
+        return true;
+    }
+}
+
+// Program.cs
+builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
+builder.Services.AddProblemDetails();
+
+var app = builder.Build();
+
+app.UseExceptionHandler();
+```
+
+**Usage in Controllers:**
+
+```csharp
+[ApiController]
+[Route("api/[controller]")]
+public class ProductsController : ControllerBase
+{
+    private readonly IProductService _productService;
+    
+    public ProductsController(IProductService productService)
+    {
+        _productService = productService;
+    }
+    
+    [HttpGet("{id}")]
+    public async Task<ActionResult<Product>> GetById(int id)
+    {
+        // No try-catch needed - handled by global exception handler
+        var product = await _productService.GetByIdAsync(id);
+        
+        if (product == null)
+            throw new NotFoundException($"Product with ID {id} not found");
+        
+        return Ok(product);
+    }
+    
+    [HttpPost]
+    public async Task<ActionResult<Product>> Create(CreateProductRequest request)
+    {
+        // Validation
+        if (request.Price <= 0)
+        {
+            throw new ValidationException(new List<string> 
+            { 
+                "Price must be greater than 0" 
+            });
+        }
+        
+        var product = await _productService.CreateAsync(request);
+        return CreatedAtAction(nameof(GetById), new { id = product.Id }, product);
+    }
+}
+```
+
+---
+
+### 8.3 Pagination & Filtering
+
+**Problem:**
+Implement efficient pagination and filtering for large datasets.
+
+**Solution:**
+
+```csharp
+// Pagination Models
+public class PaginationParams
+{
+    private const int MaxPageSize = 50;
+    private int _pageSize = 10;
+    
+    public int PageNumber { get; set; } = 1;
+    
+    public int PageSize
+    {
+        get => _pageSize;
+        set => _pageSize = value > MaxPageSize ? MaxPageSize : value;
+    }
+}
+
+public class PagedResult<T>
+{
+    public List<T> Items { get; set; } = new();
+    public int PageNumber { get; set; }
+    public int PageSize { get; set; }
+    public int TotalCount { get; set; }
+    public int TotalPages { get; set; }
+    public bool HasPrevious => PageNumber > 1;
+    public bool HasNext => PageNumber < TotalPages;
+}
+
+public class ProductFilterParams : PaginationParams
+{
+    public string? SearchTerm { get; set; }
+    public decimal? MinPrice { get; set; }
+    public decimal? MaxPrice { get; set; }
+    public string? SortBy { get; set; } // "name", "price", "created"
+    public string? SortOrder { get; set; } = "asc"; // "asc" or "desc"
+}
+
+// Extension Methods for Pagination
+public static class QueryableExtensions
+{
+    public static async Task<PagedResult<T>> ToPagedListAsync<T>(
+        this IQueryable<T> source,
+        int pageNumber,
+        int pageSize)
+    {
+        var count = await source.CountAsync();
+        var items = await source
+            .Skip((pageNumber - 1) * pageSize)
+            .Take(pageSize)
+            .ToListAsync();
+        
+        return new PagedResult<T>
+        {
+            Items = items,
+            PageNumber = pageNumber,
+            PageSize = pageSize,
+            TotalCount = count,
+            TotalPages = (int)Math.Ceiling(count / (double)pageSize)
+        };
+    }
+}
+
+// Controller
+[ApiController]
+[Route("api/[controller]")]
+public class ProductsController : ControllerBase
+{
+    private readonly ApplicationDbContext _context;
+    
+    public ProductsController(ApplicationDbContext context)
+    {
+        _context = context;
+    }
+    
+    [HttpGet]
+    public async Task<ActionResult<PagedResult<Product>>> GetProducts(
+        [FromQuery] ProductFilterParams filterParams)
+    {
+        var query = _context.Products.AsQueryable();
+        
+        // Filtering
+        if (!string.IsNullOrWhiteSpace(filterParams.SearchTerm))
+        {
+            query = query.Where(p =>
+                p.Name.Contains(filterParams.SearchTerm) ||
+                p.Description.Contains(filterParams.SearchTerm));
+        }
+        
+        if (filterParams.MinPrice.HasValue)
+        {
+            query = query.Where(p => p.Price >= filterParams.MinPrice.Value);
+        }
+        
+        if (filterParams.MaxPrice.HasValue)
+        {
+            query = query.Where(p => p.Price <= filterParams.MaxPrice.Value);
+        }
+        
+        // Sorting
+        query = filterParams.SortBy?.ToLower() switch
+        {
+            "name" => filterParams.SortOrder?.ToLower() == "desc"
+                ? query.OrderByDescending(p => p.Name)
+                : query.OrderBy(p => p.Name),
+            "price" => filterParams.SortOrder?.ToLower() == "desc"
+                ? query.OrderByDescending(p => p.Price)
+                : query.OrderBy(p => p.Price),
+            "created" => filterParams.SortOrder?.ToLower() == "desc"
+                ? query.OrderByDescending(p => p.CreatedAt)
+                : query.OrderBy(p => p.CreatedAt),
+            _ => query.OrderByDescending(p => p.CreatedAt) // Default
+        };
+        
+        // Pagination
+        var pagedResult = await query.ToPagedListAsync(
+            filterParams.PageNumber,
+            filterParams.PageSize);
+        
+        // Add pagination headers
+        Response.Headers.Add("X-Pagination", JsonSerializer.Serialize(new
+        {
+            pagedResult.TotalCount,
+            pagedResult.PageSize,
+            pagedResult.PageNumber,
+            pagedResult.TotalPages,
+            pagedResult.HasPrevious,
+            pagedResult.HasNext
+        }));
+        
+        return Ok(pagedResult);
+    }
+}
+```
+
+**Advanced Filtering with Specification Pattern:**
+
+```csharp
+// Specification Pattern
+public interface ISpecification<T>
+{
+    Expression<Func<T, bool>> Criteria { get; }
+    List<Expression<Func<T, object>>> Includes { get; }
+    Expression<Func<T, object>>? OrderBy { get; }
+    Expression<Func<T, object>>? OrderByDescending { get; }
+    int Take { get; }
+    int Skip { get; }
+    bool IsPagingEnabled { get; }
+}
+
+public class BaseSpecification<T> : ISpecification<T>
+{
+    public Expression<Func<T, bool>> Criteria { get; private set; }
+    public List<Expression<Func<T, object>>> Includes { get; } = new();
+    public Expression<Func<T, object>>? OrderBy { get; private set; }
+    public Expression<Func<T, object>>? OrderByDescending { get; private set; }
+    public int Take { get; private set; }
+    public int Skip { get; private set; }
+    public bool IsPagingEnabled { get; private set; }
+    
+    protected BaseSpecification(Expression<Func<T, bool>> criteria)
+    {
+        Criteria = criteria;
+    }
+    
+    protected void AddInclude(Expression<Func<T, object>> includeExpression)
+    {
+        Includes.Add(includeExpression);
+    }
+    
+    protected void ApplyOrderBy(Expression<Func<T, object>> orderByExpression)
+    {
+        OrderBy = orderByExpression;
+    }
+    
+    protected void ApplyOrderByDescending(Expression<Func<T, object>> orderByDescendingExpression)
+    {
+        OrderByDescending = orderByDescendingExpression;
+    }
+    
+    protected void ApplyPaging(int skip, int take)
+    {
+        Skip = skip;
+        Take = take;
+        IsPagingEnabled = true;
+    }
+}
+
+public class ProductsWithFiltersSpecification : BaseSpecification<Product>
+{
+    public ProductsWithFiltersSpecification(ProductFilterParams filterParams)
+        : base(x =>
+            (string.IsNullOrWhiteSpace(filterParams.SearchTerm) ||
+             x.Name.Contains(filterParams.SearchTerm) ||
+             x.Description.Contains(filterParams.SearchTerm)) &&
+            (!filterParams.MinPrice.HasValue || x.Price >= filterParams.MinPrice.Value) &&
+            (!filterParams.MaxPrice.HasValue || x.Price <= filterParams.MaxPrice.Value))
+    {
+        ApplyPaging(
+            (filterParams.PageNumber - 1) * filterParams.PageSize,
+            filterParams.PageSize);
+        
+        if (filterParams.SortBy?.ToLower() == "name")
+        {
+            if (filterParams.SortOrder?.ToLower() == "desc")
+                ApplyOrderByDescending(p => p.Name);
+            else
+                ApplyOrderBy(p => p.Name);
+        }
+        else
+        {
+            ApplyOrderByDescending(p => p.CreatedAt);
+        }
+    }
+}
+```
+
+---
+
+### 8.4 Custom Middleware Example
+
+**Problem:**
+Create custom middleware for request logging, performance monitoring, and API key validation.
+
+**Solution 1: Request Logging Middleware**
+
+```csharp
+public class RequestLoggingMiddleware
+{
+    private readonly RequestDelegate _next;
+    private readonly ILogger<RequestLoggingMiddleware> _logger;
+    
+    public RequestLoggingMiddleware(
+        RequestDelegate next,
+        ILogger<RequestLoggingMiddleware> logger)
+    {
+        _next = next;
+        _logger = logger;
+    }
+    
+    public async Task InvokeAsync(HttpContext context)
+    {
+        // Log request
+        var requestId = Guid.NewGuid().ToString();
+        context.Items["RequestId"] = requestId;
+        
+        _logger.LogInformation(
+            "Request {RequestId}: {Method} {Path} started at {Time}",
+            requestId,
+            context.Request.Method,
+            context.Request.Path,
+            DateTime.UtcNow);
+        
+        // Capture request body
+        context.Request.EnableBuffering();
+        var requestBody = await ReadRequestBodyAsync(context.Request);
+        
+        // Capture response
+        var originalBodyStream = context.Response.Body;
+        using var responseBody = new MemoryStream();
+        context.Response.Body = responseBody;
+        
+        var stopwatch = Stopwatch.StartNew();
+        
+        try
+        {
+            await _next(context);
+        }
+        finally
+        {
+            stopwatch.Stop();
+            
+            // Log response
+            context.Response.Body.Seek(0, SeekOrigin.Begin);
+            var responseBodyText = await new StreamReader(context.Response.Body).ReadToEndAsync();
+            context.Response.Body.Seek(0, SeekOrigin.Begin);
+            
+            _logger.LogInformation(
+                "Request {RequestId}: {Method} {Path} completed with {StatusCode} in {ElapsedMs}ms",
+                requestId,
+                context.Request.Method,
+                context.Request.Path,
+                context.Response.StatusCode,
+                stopwatch.ElapsedMilliseconds);
+            
+            // Copy response back to original stream
+            await responseBody.CopyToAsync(originalBodyStream);
+        }
+    }
+    
+    private async Task<string> ReadRequestBodyAsync(HttpRequest request)
+    {
+        request.Body.Seek(0, SeekOrigin.Begin);
+        using var reader = new StreamReader(request.Body, leaveOpen: true);
+        var body = await reader.ReadToEndAsync();
+        request.Body.Seek(0, SeekOrigin.Begin);
+        return body;
+    }
+}
+```
+
+**Solution 2: Performance Monitoring Middleware**
+
+```csharp
+public class PerformanceMonitoringMiddleware
+{
+    private readonly RequestDelegate _next;
+    private readonly ILogger<PerformanceMonitoringMiddleware> _logger;
+    private readonly int _slowRequestThresholdMs;
+    
+    public PerformanceMonitoringMiddleware(
+        RequestDelegate next,
+        ILogger<PerformanceMonitoringMiddleware> logger,
+        IConfiguration configuration)
+    {
+        _next = next;
+        _logger = logger;
+        _slowRequestThresholdMs = configuration.GetValue<int>(
+            "PerformanceMonitoring:SlowRequestThresholdMs", 1000);
+    }
+    
+    public async Task InvokeAsync(HttpContext context)
+    {
+        var stopwatch = Stopwatch.StartNew();
+        
+        try
+        {
+            await _next(context);
+        }
+        finally
+        {
+            stopwatch.Stop();
+            
+            var elapsed = stopwatch.ElapsedMilliseconds;
+            
+            if (elapsed > _slowRequestThresholdMs)
+            {
+                _logger.LogWarning(
+                    "Slow request detected: {Method} {Path} took {ElapsedMs}ms",
+                    context.Request.Method,
+                    context.Request.Path,
+                    elapsed);
+            }
+            
+            // Add performance header
+            context.Response.Headers.Add("X-Response-Time-Ms", elapsed.ToString());
+        }
+    }
+}
+```
+
+**Solution 3: API Key Validation Middleware**
+
+```csharp
+public class ApiKeyMiddleware
+{
+    private readonly RequestDelegate _next;
+    private readonly IConfiguration _configuration;
+    private const string API_KEY_HEADER = "X-API-Key";
+    
+    public ApiKeyMiddleware(RequestDelegate next, IConfiguration configuration)
+    {
+        _next = next;
+        _configuration = configuration;
+    }
+    
+    public async Task InvokeAsync(HttpContext context)
+    {
+        // Skip authentication for certain paths
+        if (ShouldSkipValidation(context.Request.Path))
+        {
+            await _next(context);
+            return;
+        }
+        
+        if (!context.Request.Headers.TryGetValue(API_KEY_HEADER, out var extractedApiKey))
+        {
+            context.Response.StatusCode = StatusCodes.Status401Unauthorized;
+            await context.Response.WriteAsync("API Key is missing");
+            return;
+        }
+        
+        var apiKey = _configuration.GetValue<string>("ApiKey");
+        
+        if (!apiKey.Equals(extractedApiKey))
+        {
+            context.Response.StatusCode = StatusCodes.Status403Forbidden;
+            await context.Response.WriteAsync("Invalid API Key");
+            return;
+        }
+        
+        await _next(context);
+    }
+    
+    private bool ShouldSkipValidation(PathString path)
+    {
+        var publicPaths = new[] { "/health", "/swagger", "/api/auth" };
+        return publicPaths.Any(p => path.StartsWithSegments(p));
+    }
+}
+```
+
+**Solution 4: Rate Limiting Middleware**
+
+```csharp
+public class RateLimitingMiddleware
+{
+    private readonly RequestDelegate _next;
+    private readonly IMemoryCache _cache;
+    private readonly int _requestLimit;
+    private readonly TimeSpan _timeWindow;
+    
+    public RateLimitingMiddleware(
+        RequestDelegate next,
+        IMemoryCache cache,
+        IConfiguration configuration)
+    {
+        _next = next;
+        _cache = cache;
+        _requestLimit = configuration.GetValue<int>("RateLimit:RequestLimit", 100);
+        _timeWindow = TimeSpan.FromMinutes(
+            configuration.GetValue<int>("RateLimit:TimeWindowMinutes", 1));
+    }
+    
+    public async Task InvokeAsync(HttpContext context)
+    {
+        var clientId = GetClientIdentifier(context);
+        var cacheKey = $"RateLimit_{clientId}";
+        
+        if (!_cache.TryGetValue(cacheKey, out int requestCount))
+        {
+            requestCount = 0;
+        }
+        
+        requestCount++;
+        
+        if (requestCount > _requestLimit)
+        {
+            context.Response.StatusCode = StatusCodes.Status429TooManyRequests;
+            context.Response.Headers.Add("Retry-After", _timeWindow.TotalSeconds.ToString());
+            await context.Response.WriteAsync("Rate limit exceeded. Try again later.");
+            return;
+        }
+        
+        _cache.Set(cacheKey, requestCount, _timeWindow);
+        
+        context.Response.Headers.Add("X-Rate-Limit-Limit", _requestLimit.ToString());
+        context.Response.Headers.Add("X-Rate-Limit-Remaining", (_requestLimit - requestCount).ToString());
+        
+        await _next(context);
+    }
+    
+    private string GetClientIdentifier(HttpContext context)
+    {
+        // Use IP address or authenticated user ID
+        return context.Connection.RemoteIpAddress?.ToString() 
+               ?? context.User?.Identity?.Name 
+               ?? "anonymous";
+    }
+}
+```
+
+**Registration in Program.cs:**
+
+```csharp
+var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddMemoryCache();
+builder.Services.AddControllers();
+
+var app = builder.Build();
+
+// Order matters!
+app.UseMiddleware<RequestLoggingMiddleware>();
+app.UseMiddleware<PerformanceMonitoringMiddleware>();
+app.UseMiddleware<ApiKeyMiddleware>();
+app.UseMiddleware<RateLimitingMiddleware>();
+
+app.UseHttpsRedirection();
+app.UseAuthorization();
+app.MapControllers();
+
+app.Run();
+```
+
+---
+
+### 8.5 Logging / Exception Middleware
+
+**Problem:**
+Implement comprehensive logging with structured logging and correlation IDs.
+
+**Solution:**
+
+```csharp
+// Correlation ID Middleware
+public class CorrelationIdMiddleware
+{
+    private readonly RequestDelegate _next;
+    private const string CorrelationIdHeader = "X-Correlation-ID";
+    
+    public CorrelationIdMiddleware(RequestDelegate next)
+    {
+        _next = next;
+    }
+    
+    public async Task InvokeAsync(HttpContext context)
+    {
+        var correlationId = GetOrCreateCorrelationId(context);
+        
+        // Add to response headers
+        context.Response.Headers.Add(CorrelationIdHeader, correlationId);
+        
+        // Add to logging scope
+        using var _ = context.RequestServices
+            .GetRequiredService<ILoggerFactory>()
+            .CreateLogger<CorrelationIdMiddleware>()
+            .BeginScope(new Dictionary<string, object>
+            {
+                ["CorrelationId"] = correlationId
+            });
+        
+        await _next(context);
+    }
+    
+    private string GetOrCreateCorrelationId(HttpContext context)
+    {
+        if (context.Request.Headers.TryGetValue(CorrelationIdHeader, out var correlationId))
+        {
+            return correlationId.ToString();
+        }
+        
+        return Guid.NewGuid().ToString();
+    }
+}
+
+// Structured Logging Middleware
+public class StructuredLoggingMiddleware
+{
+    private readonly RequestDelegate _next;
+    private readonly ILogger<StructuredLoggingMiddleware> _logger;
+    
+    public StructuredLoggingMiddleware(
+        RequestDelegate next,
+        ILogger<StructuredLoggingMiddleware> logger)
+    {
+        _next = next;
+        _logger = logger;
+    }
+    
+    public async Task InvokeAsync(HttpContext context)
+    {
+        var stopwatch = Stopwatch.StartNew();
+        
+        try
+        {
+            await _next(context);
+            
+            stopwatch.Stop();
+            
+            LogRequestCompleted(context, stopwatch.ElapsedMilliseconds, null);
+        }
+        catch (Exception ex)
+        {
+            stopwatch.Stop();
+            
+            LogRequestCompleted(context, stopwatch.ElapsedMilliseconds, ex);
+            
+            throw;
+        }
+    }
+    
+    private void LogRequestCompleted(
+        HttpContext context,
+        long elapsedMs,
+        Exception? exception)
+    {
+        var logLevel = exception != null ? LogLevel.Error : LogLevel.Information;
+        
+        _logger.Log(
+            logLevel,
+            exception,
+            "HTTP {Method} {Path} responded {StatusCode} in {ElapsedMs}ms",
+            context.Request.Method,
+            context.Request.Path,
+            context.Response.StatusCode,
+            elapsedMs);
+    }
+}
+
+// Application Logging Service
+public interface IAppLogger
+{
+    void LogInformation(string message, params object[] args);
+    void LogWarning(string message, params object[] args);
+    void LogError(Exception exception, string message, params object[] args);
+    void LogDebug(string message, params object[] args);
+}
+
+public class AppLogger : IAppLogger
+{
+    private readonly ILogger<AppLogger> _logger;
+    private readonly IHttpContextAccessor _httpContextAccessor;
+    
+    public AppLogger(
+        ILogger<AppLogger> logger,
+        IHttpContextAccessor httpContextAccessor)
+    {
+        _logger = logger;
+        _httpContextAccessor = httpContextAccessor;
+    }
+    
+    public void LogInformation(string message, params object[] args)
+    {
+        using var scope = CreateLogScope();
+        _logger.LogInformation(message, args);
+    }
+    
+    public void LogWarning(string message, params object[] args)
+    {
+        using var scope = CreateLogScope();
+        _logger.LogWarning(message, args);
+    }
+    
+    public void LogError(Exception exception, string message, params object[] args)
+    {
+        using var scope = CreateLogScope();
+        _logger.LogError(exception, message, args);
+    }
+    
+    public void LogDebug(string message, params object[] args)
+    {
+        using var scope = CreateLogScope();
+        _logger.LogDebug(message, args);
+    }
+    
+    private IDisposable? CreateLogScope()
+    {
+        var context = _httpContextAccessor.HttpContext;
+        
+        if (context == null)
+            return null;
+        
+        var scopeData = new Dictionary<string, object>
+        {
+            ["RequestPath"] = context.Request.Path,
+            ["RequestMethod"] = context.Request.Method,
+            ["UserAgent"] = context.Request.Headers["User-Agent"].ToString(),
+            ["RemoteIpAddress"] = context.Connection.RemoteIpAddress?.ToString() ?? "Unknown"
+        };
+        
+        if (context.User?.Identity?.IsAuthenticated == true)
+        {
+            scopeData["UserId"] = context.User.Identity.Name ?? "Unknown";
+        }
+        
+        return _logger.BeginScope(scopeData);
+    }
+}
+
+// appsettings.json configuration
+/*
+{
+  "Logging": {
+    "LogLevel": {
+      "Default": "Information",
+      "Microsoft.AspNetCore": "Warning"
+    },
+    "Console": {
+      "IncludeScopes": true,
+      "TimestampFormat": "yyyy-MM-dd HH:mm:ss "
+    }
+  }
+}
+*/
+
+// Program.cs
+var builder = WebApplication.CreateBuilder(args);
+
+// Add services
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddSingleton<IAppLogger, AppLogger>();
+builder.Services.AddControllers();
+
+// Configure logging
+builder.Logging.ClearProviders();
+builder.Logging.AddConsole();
+builder.Logging.AddDebug();
+
+var app = builder.Build();
+
+// Add middleware
+app.UseMiddleware<CorrelationIdMiddleware>();
+app.UseMiddleware<StructuredLoggingMiddleware>();
+
+app.UseHttpsRedirection();
+app.UseAuthorization();
+app.MapControllers();
+
+app.Run();
+```
+
+**Usage Example:**
+
+```csharp
+[ApiController]
+[Route("api/[controller]")]
+public class ProductsController : ControllerBase
+{
+    private readonly IAppLogger _logger;
+    private readonly IProductService _productService;
+    
+    public ProductsController(
+        IAppLogger logger,
+        IProductService productService)
+    {
+        _logger = logger;
+        _productService = productService;
+    }
+    
+    [HttpGet("{id}")]
+    public async Task<ActionResult<Product>> GetById(int id)
+    {
+        _logger.LogInformation("Retrieving product with ID: {ProductId}", id);
+        
+        try
+        {
+            var product = await _productService.GetByIdAsync(id);
+            
+            if (product == null)
+            {
+                _logger.LogWarning("Product not found: {ProductId}", id);
+                return NotFound();
+            }
+            
+            return Ok(product);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error retrieving product: {ProductId}", id);
+            throw;
+        }
+    }
+}
+```
+
+---
+
+## 9. Dependency Injection
+
+### 9.1 Scoped vs Singleton vs Transient
+
+**Problem:**
+Explain and demonstrate the three service lifetimes in .NET Core DI with practical examples.
+
+**Service Lifetimes:**
+
+| Lifetime | Description | Use Case | Created | Disposed |
+|----------|-------------|----------|---------|----------|
+| **Transient** | New instance every time | Lightweight, stateless services | Each request | Immediately after use |
+| **Scoped** | One instance per request | Per-request state, DbContext | Once per HTTP request | End of request |
+| **Singleton** | One instance for app lifetime | Configuration, caching | App startup | App shutdown |
+
+**Solution:**
+
+```csharp
+// Service Interfaces
+public interface IOperationTransient
+{
+    Guid OperationId { get; }
+    DateTime CreatedAt { get; }
+}
+
+public interface IOperationScoped
+{
+    Guid OperationId { get; }
+    DateTime CreatedAt { get; }
+}
+
+public interface IOperationSingleton
+{
+    Guid OperationId { get; }
+    DateTime CreatedAt { get; }
+}
+
+// Service Implementation
+public class Operation : IOperationTransient, IOperationScoped, IOperationSingleton
+{
+    public Guid OperationId { get; } = Guid.NewGuid();
+    public DateTime CreatedAt { get; } = DateTime.UtcNow;
+}
+
+// Demo Service to Show Lifetimes
+public class OperationService
+{
+    public IOperationTransient TransientOperation { get; }
+    public IOperationScoped ScopedOperation { get; }
+    public IOperationSingleton SingletonOperation { get; }
+    
+    public OperationService(
+        IOperationTransient transientOperation,
+        IOperationScoped scopedOperation,
+        IOperationSingleton singletonOperation)
+    {
+        TransientOperation = transientOperation;
+        ScopedOperation = scopedOperation;
+        SingletonOperation = singletonOperation;
+    }
+}
+
+// Program.cs Registration
+var builder = WebApplication.CreateBuilder(args);
+
+// Register services with different lifetimes
+builder.Services.AddTransient<IOperationTransient, Operation>();
+builder.Services.AddScoped<IOperationScoped, Operation>();
+builder.Services.AddSingleton<IOperationSingleton, Operation>();
+builder.Services.AddTransient<OperationService>();
+
+var app = builder.Build();
+
+// Test endpoint
+app.MapGet("/lifetime-test", (
+    OperationService operationService1,
+    OperationService operationService2,
+    IOperationTransient transient,
+    IOperationScoped scoped,
+    IOperationSingleton singleton) =>
+{
+    return new
+    {
+        Service1 = new
+        {
+            Transient = operationService1.TransientOperation.OperationId,
+            Scoped = operationService1.ScopedOperation.OperationId,
+            Singleton = operationService1.SingletonOperation.OperationId
+        },
+        Service2 = new
+        {
+            Transient = operationService2.TransientOperation.OperationId,
+            Scoped = operationService2.ScopedOperation.OperationId,
+            Singleton = operationService2.SingletonOperation.OperationId
+        },
+        DirectInjection = new
+        {
+            Transient = transient.OperationId,
+            Scoped = scoped.OperationId,
+            Singleton = singleton.OperationId
+        }
+    };
+});
+
+app.Run();
+```
+
+**Real-World Examples:**
+
+```csharp
+// 1. TRANSIENT - Email Service (stateless, lightweight)
+public interface IEmailService
+{
+    Task SendEmailAsync(string to, string subject, string body);
+}
+
+public class EmailService : IEmailService
+{
+    private readonly ILogger<EmailService> _logger;
+    
+    public EmailService(ILogger<EmailService> logger)
+    {
+        _logger = logger;
+    }
+    
+    public async Task SendEmailAsync(string to, string subject, string body)
+    {
+        _logger.LogInformation("Sending email to {To}", to);
+        // Send email logic
+        await Task.CompletedTask;
+    }
+}
+
+// Register as Transient
+builder.Services.AddTransient<IEmailService, EmailService>();
+
+// 2. SCOPED - Database Context (per-request state)
+public class ApplicationDbContext : DbContext
+{
+    public DbSet<Product> Products { get; set; }
+    public DbSet<Order> Orders { get; set; }
+    
+    public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
+        : base(options)
+    {
+    }
+}
+
+// Register as Scoped (default for DbContext)
+builder.Services.AddDbContext<ApplicationDbContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+// 3. SINGLETON - Configuration Service (shared state)
+public interface IAppConfiguration
+{
+    string GetSetting(string key);
+    T GetSetting<T>(string key);
+}
+
+public class AppConfiguration : IAppConfiguration
+{
+    private readonly IConfiguration _configuration;
+    private readonly ConcurrentDictionary<string, object> _cache;
+    
+    public AppConfiguration(IConfiguration configuration)
+    {
+        _configuration = configuration;
+        _cache = new ConcurrentDictionary<string, object>();
+    }
+    
+    public string GetSetting(string key)
+    {
+        return _cache.GetOrAdd(key, k => _configuration[k] ?? string.Empty).ToString()!;
+    }
+    
+    public T GetSetting<T>(string key)
+    {
+        return (T)_cache.GetOrAdd(key, k => _configuration.GetValue<T>(k)!);
+    }
+}
+
+// Register as Singleton
+builder.Services.AddSingleton<IAppConfiguration, AppConfiguration>();
+
+// 4. SCOPED - Unit of Work Pattern
+public interface IUnitOfWork : IDisposable
+{
+    IProductRepository Products { get; }
+    IOrderRepository Orders { get; }
+    Task<int> SaveChangesAsync();
+}
+
+public class UnitOfWork : IUnitOfWork
+{
+    private readonly ApplicationDbContext _context;
+    
+    public IProductRepository Products { get; }
+    public IOrderRepository Orders { get; }
+    
+    public UnitOfWork(
+        ApplicationDbContext context,
+        IProductRepository products,
+        IOrderRepository orders)
+    {
+        _context = context;
+        Products = products;
+        Orders = orders;
+    }
+    
+    public async Task<int> SaveChangesAsync()
+    {
+        return await _context.SaveChangesAsync();
+    }
+    
+    public void Dispose()
+    {
+        _context?.Dispose();
+    }
+}
+
+// Register as Scoped
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+```
+
+**Common Pitfalls:**
+
+```csharp
+// ❌ WRONG: Injecting Scoped service into Singleton
+public class SingletonService // Registered as Singleton
+{
+    private readonly ApplicationDbContext _context; // Scoped!
+    
+    // This will cause issues - DbContext will live for entire app lifetime
+    public SingletonService(ApplicationDbContext context)
+    {
+        _context = context;
+    }
+}
+
+// ✅ CORRECT: Use IServiceScopeFactory
+public class SingletonService
+{
+    private readonly IServiceScopeFactory _scopeFactory;
+    
+    public SingletonService(IServiceScopeFactory scopeFactory)
+    {
+        _scopeFactory = scopeFactory;
+    }
+    
+    public async Task DoWorkAsync()
+    {
+        using var scope = _scopeFactory.CreateScope();
+        var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+        // Use context
+    }
+}
+```
+
+---
+
+### 9.2 Coding Custom Service Registration
+
+**Problem:**
+Create custom extension methods for service registration with advanced patterns.
+
+**Solution 1: Extension Method for Bulk Registration**
+
+```csharp
+public static class ServiceCollectionExtensions
+{
+    // Register all services from an assembly by convention
+    public static IServiceCollection AddApplicationServices(
+        this IServiceCollection services,
+        Assembly assembly)
+    {
+        var serviceTypes = assembly.GetTypes()
+            .Where(t => t.IsClass && !t.IsAbstract)
+            .Where(t => t.Name.EndsWith("Service"))
+            .ToList();
+        
+        foreach (var implementationType in serviceTypes)
+        {
+            var interfaceType = implementationType.GetInterfaces()
+                .FirstOrDefault(i => i.Name == $"I{implementationType.Name}");
+            
+            if (interfaceType != null)
+            {
+                services.AddScoped(interfaceType, implementationType);
+            }
+        }
+        
+        return services;
+    }
+    
+    // Register services by interface marker
+    public static IServiceCollection AddServicesByInterface<TInterface>(
+        this IServiceCollection services,
+        ServiceLifetime lifetime = ServiceLifetime.Scoped)
+    {
+        var interfaceType = typeof(TInterface);
+        var types = AppDomain.CurrentDomain.GetAssemblies()
+            .SelectMany(s => s.GetTypes())
+            .Where(t => interfaceType.IsAssignableFrom(t) && t.IsClass && !t.IsAbstract);
+        
+        foreach (var type in types)
+        {
+            var serviceInterface = type.GetInterfaces()
+                .FirstOrDefault(i => i != interfaceType && interfaceType.IsAssignableFrom(i));
+            
+            if (serviceInterface != null)
+            {
+                services.Add(new ServiceDescriptor(serviceInterface, type, lifetime));
+            }
+        }
+        
+        return services;
+    }
+    
+    // Decorator pattern registration
+    public static IServiceCollection Decorate<TInterface, TDecorator>(
+        this IServiceCollection services)
+        where TInterface : class
+        where TDecorator : class, TInterface
+    {
+        var wrappedDescriptor = services.FirstOrDefault(
+            s => s.ServiceType == typeof(TInterface));
+        
+        if (wrappedDescriptor == null)
+        {
+            throw new InvalidOperationException(
+                $"{typeof(TInterface).Name} is not registered");
+        }
+        
+        var objectFactory = ActivatorUtilities.CreateFactory(
+            typeof(TDecorator),
+            new[] { typeof(TInterface) });
+        
+        services.Replace(ServiceDescriptor.Describe(
+            typeof(TInterface),
+            provider =>
+            {
+                var wrappedInstance = ActivatorUtilities.CreateInstance(
+                    provider,
+                    wrappedDescriptor.ImplementationType!);
+                
+                return objectFactory(provider, new[] { wrappedInstance });
+            },
+            wrappedDescriptor.Lifetime));
+        
+        return services;
+    }
+    
+    // Conditional registration
+    public static IServiceCollection AddConditional<TInterface, TImplementation>(
+        this IServiceCollection services,
+        Func<IServiceProvider, bool> condition,
+        ServiceLifetime lifetime = ServiceLifetime.Scoped)
+        where TInterface : class
+        where TImplementation : class, TInterface
+    {
+        services.Add(new ServiceDescriptor(
+            typeof(TInterface),
+            provider => condition(provider)
+                ? ActivatorUtilities.CreateInstance<TImplementation>(provider)
+                : throw new InvalidOperationException("Condition not met"),
+            lifetime));
+        
+        return services;
+    }
+}
+
+// Usage Examples
+public class Program
+{
+    public static void Main(string[] args)
+    {
+        var builder = WebApplication.CreateBuilder(args);
+        
+        // 1. Register all services from assembly
+        builder.Services.AddApplicationServices(typeof(Program).Assembly);
+        
+        // 2. Register by marker interface
+        builder.Services.AddServicesByInterface<ITransientService>(
+            ServiceLifetime.Transient);
+        
+        // 3. Decorator pattern
+        builder.Services.AddScoped<IProductService, ProductService>();
+        builder.Services.Decorate<IProductService, CachedProductService>();
+        
+        // 4. Conditional registration
+        builder.Services.AddConditional<IPaymentGateway, StripePaymentGateway>(
+            provider =>
+            {
+                var config = provider.GetRequiredService<IConfiguration>();
+                return config["PaymentProvider"] == "Stripe";
+            });
+        
+        var app = builder.Build();
+        app.Run();
+    }
+}
+```
+
+**Solution 2: Factory Pattern Registration**
+
+```csharp
+// Factory Interface
+public interface IServiceFactory<T>
+{
+    T Create(string key);
+}
+
+// Factory Implementation
+public class PaymentGatewayFactory : IServiceFactory<IPaymentGateway>
+{
+    private readonly IServiceProvider _serviceProvider;
+    
+    public PaymentGatewayFactory(IServiceProvider serviceProvider)
+    {
+        _serviceProvider = serviceProvider;
+    }
+    
+    public IPaymentGateway Create(string key)
+    {
+        return key.ToLower() switch
+        {
+            "stripe" => _serviceProvider.GetRequiredService<StripePaymentGateway>(),
+            "paypal" => _serviceProvider.GetRequiredService<PayPalPaymentGateway>(),
+            "square" => _serviceProvider.GetRequiredService<SquarePaymentGateway>(),
+            _ => throw new ArgumentException($"Unknown payment gateway: {key}")
+        };
+    }
+}
+
+// Service Interface
+public interface IPaymentGateway
+{
+    Task<bool> ProcessPaymentAsync(decimal amount);
+}
+
+// Implementations
+public class StripePaymentGateway : IPaymentGateway
+{
+    public async Task<bool> ProcessPaymentAsync(decimal amount)
+    {
+        // Stripe logic
+        await Task.CompletedTask;
+        return true;
+    }
+}
+
+public class PayPalPaymentGateway : IPaymentGateway
+{
+    public async Task<bool> ProcessPaymentAsync(decimal amount)
+    {
+        // PayPal logic
+        await Task.CompletedTask;
+        return true;
+    }
+}
+
+// Registration
+builder.Services.AddScoped<StripePaymentGateway>();
+builder.Services.AddScoped<PayPalPaymentGateway>();
+builder.Services.AddScoped<SquarePaymentGateway>();
+builder.Services.AddScoped<IServiceFactory<IPaymentGateway>, PaymentGatewayFactory>();
+
+// Usage
+public class PaymentController : ControllerBase
+{
+    private readonly IServiceFactory<IPaymentGateway> _gatewayFactory;
+    
+    public PaymentController(IServiceFactory<IPaymentGateway> gatewayFactory)
+    {
+        _gatewayFactory = gatewayFactory;
+    }
+    
+    [HttpPost("process")]
+    public async Task<IActionResult> ProcessPayment(
+        [FromBody] PaymentRequest request)
+    {
+        var gateway = _gatewayFactory.Create(request.Provider);
+        var result = await gateway.ProcessPaymentAsync(request.Amount);
+        return Ok(result);
+    }
+}
+```
+
+**Solution 3: Options Pattern with Validation**
+
+```csharp
+// Options Class
+public class EmailSettings
+{
+    public string SmtpServer { get; set; } = string.Empty;
+    public int Port { get; set; }
+    public string Username { get; set; } = string.Empty;
+    public string Password { get; set; } = string.Empty;
+    public bool EnableSsl { get; set; }
+}
+
+// Validator
+public class EmailSettingsValidator : IValidateOptions<EmailSettings>
+{
+    public ValidateOptionsResult Validate(string? name, EmailSettings options)
+    {
+        if (string.IsNullOrWhiteSpace(options.SmtpServer))
+        {
+            return ValidateOptionsResult.Fail("SMTP Server is required");
+        }
+        
+        if (options.Port <= 0 || options.Port > 65535)
+        {
+            return ValidateOptionsResult.Fail("Port must be between 1 and 65535");
+        }
+        
+        return ValidateOptionsResult.Success;
+    }
+}
+
+// Extension Method
+public static class OptionsExtensions
+{
+    public static IServiceCollection AddValidatedOptions<TOptions>(
+        this IServiceCollection services,
+        IConfiguration configuration,
+        string sectionName)
+        where TOptions : class
+    {
+        services.AddOptions<TOptions>()
+            .Bind(configuration.GetSection(sectionName))
+            .ValidateDataAnnotations()
+            .ValidateOnStart();
+        
+        return services;
+    }
+}
+
+// Registration
+builder.Services.AddValidatedOptions<EmailSettings>(
+    builder.Configuration,
+    "EmailSettings");
+
+builder.Services.AddSingleton<IValidateOptions<EmailSettings>, EmailSettingsValidator>();
+
+// Usage
+public class EmailService
+{
+    private readonly EmailSettings _settings;
+    
+    public EmailService(IOptions<EmailSettings> options)
+    {
+        _settings = options.Value;
+    }
+}
+```
+
+**Solution 4: Named Services**
+
+```csharp
+public static class NamedServiceExtensions
+{
+    public static IServiceCollection AddNamedService<TInterface, TImplementation>(
+        this IServiceCollection services,
+        string name)
+        where TInterface : class
+        where TImplementation : class, TInterface
+    {
+        services.AddSingleton<TImplementation>();
+        
+        services.AddSingleton<Func<string, TInterface>>(provider =>
+        {
+            return serviceName =>
+            {
+                if (serviceName == name)
+                {
+                    return provider.GetRequiredService<TImplementation>();
+                }
+                throw new ArgumentException($"Unknown service: {serviceName}");
+            };
+        });
+        
+        return services;
+    }
+}
+
+// Usage
+builder.Services.AddNamedService<ICache, RedisCache>("redis");
+builder.Services.AddNamedService<ICache, MemoryCache>("memory");
+
+public class CacheService
+{
+    private readonly ICache _cache;
+    
+    public CacheService(Func<string, ICache> cacheFactory)
+    {
+        _cache = cacheFactory("redis");
+    }
+}
+```
+
+---
+
+## 10. Database & SQL
+
+### 10.1 Find 2nd Highest Salary
+
+**Problem:**
+Write SQL queries to find the second highest salary from an Employee table.
+
+**Table Structure:**
+```sql
+CREATE TABLE Employee (
+    Id INT PRIMARY KEY,
+    Name NVARCHAR(100),
+    Salary DECIMAL(18,2),
+    DepartmentId INT
+);
+```
+
+**Solution 1: Using OFFSET FETCH (SQL Server 2012+)**
+```sql
+SELECT DISTINCT Salary AS SecondHighestSalary
+FROM Employee
+ORDER BY Salary DESC
+OFFSET 1 ROWS
+FETCH NEXT 1 ROWS ONLY;
+```
+
+**Solution 2: Using Subquery**
+```sql
+SELECT MAX(Salary) AS SecondHighestSalary
+FROM Employee
+WHERE Salary < (SELECT MAX(Salary) FROM Employee);
+```
+
+**Solution 3: Using ROW_NUMBER()**
+```sql
+WITH RankedSalaries AS (
+    SELECT 
+        Salary,
+        ROW_NUMBER() OVER (ORDER BY Salary DESC) AS RowNum
+    FROM Employee
+    WHERE Salary IS NOT NULL
+    GROUP BY Salary
+)
+SELECT Salary AS SecondHighestSalary
+FROM RankedSalaries
+WHERE RowNum = 2;
+```
+
+**Solution 4: Using DENSE_RANK() (Handles Duplicates)**
+```sql
+WITH RankedSalaries AS (
+    SELECT 
+        Salary,
+        DENSE_RANK() OVER (ORDER BY Salary DESC) AS Rank
+    FROM Employee
+)
+SELECT DISTINCT Salary AS SecondHighestSalary
+FROM RankedSalaries
+WHERE Rank = 2;
+```
+
+**Solution 5: Finding Nth Highest Salary**
+```sql
+CREATE FUNCTION GetNthHighestSalary(@N INT)
+RETURNS DECIMAL(18,2)
+AS
+BEGIN
+    DECLARE @Result DECIMAL(18,2);
+    
+    WITH RankedSalaries AS (
+        SELECT 
+            Salary,
+            DENSE_RANK() OVER (ORDER BY Salary DESC) AS Rank
+        FROM Employee
+        WHERE Salary IS NOT NULL
+    )
+    SELECT @Result = Salary
+    FROM RankedSalaries
+    WHERE Rank = @N;
+    
+    RETURN @Result;
+END;
+
+-- Usage
+SELECT dbo.GetNthHighestSalary(2) AS SecondHighestSalary;
+```
+
+**Solution 6: Second Highest Per Department**
+```sql
+WITH DepartmentRanks AS (
+    SELECT 
+        DepartmentId,
+        Name,
+        Salary,
+        DENSE_RANK() OVER (
+            PARTITION BY DepartmentId 
+            ORDER BY Salary DESC
+        ) AS SalaryRank
+    FROM Employee
+)
+SELECT 
+    DepartmentId,
+    Name,
+    Salary AS SecondHighestSalary
+FROM DepartmentRanks
+WHERE SalaryRank = 2;
+```
+
+**Comparison:**
+
+| Method | Pros | Cons | Duplicates |
+|--------|------|------|------------|
+| OFFSET FETCH | Simple, readable | Requires DISTINCT | Skips |
+| Subquery | Works in older SQL | Slower for large data | Handles |
+| ROW_NUMBER() | Precise control | Treats duplicates as separate | Skips |
+| DENSE_RANK() | Best for duplicates | More complex | Handles |
+
+---
+
+### 10.2 Remove Duplicate Records
+
+**Problem:**
+Remove duplicate records from a table, keeping only one instance.
+
+**Table Structure:**
+```sql
+CREATE TABLE Customer (
+    Id INT IDENTITY(1,1) PRIMARY KEY,
+    Email NVARCHAR(100),
+    Name NVARCHAR(100),
+    Phone NVARCHAR(20)
+);
+```
+
+**Solution 1: Using CTE and ROW_NUMBER() (Recommended)**
+```sql
+WITH CTE AS (
+    SELECT 
+        *,
+        ROW_NUMBER() OVER (
+            PARTITION BY Email 
+            ORDER BY Id
+        ) AS RowNum
+    FROM Customer
+)
+DELETE FROM CTE
+WHERE RowNum > 1;
+```
+
+**Solution 2: Keep Latest Record**
+```sql
+WITH CTE AS (
+    SELECT 
+        *,
+        ROW_NUMBER() OVER (
+            PARTITION BY Email 
+            ORDER BY Id DESC
+        ) AS RowNum
+    FROM Customer
+)
+DELETE FROM CTE
+WHERE RowNum > 1;
+```
+
+**Solution 3: Using NOT IN (Less Efficient)**
+```sql
+DELETE FROM Customer
+WHERE Id NOT IN (
+    SELECT MIN(Id)
+    FROM Customer
+    GROUP BY Email
+);
+```
+
+**Solution 4: Using Self Join**
+```sql
+DELETE c1
+FROM Customer c1
+INNER JOIN Customer c2
+    ON c1.Email = c2.Email
+    AND c1.Id > c2.Id;
+```
+
+**Solution 5: Create New Table (Safest)**
+```sql
+-- Create new table with unique records
+SELECT DISTINCT Email, Name, Phone
+INTO Customer_Clean
+FROM Customer;
+
+-- Drop old table and rename
+DROP TABLE Customer;
+EXEC sp_rename 'Customer_Clean', 'Customer';
+```
+
+**Solution 6: With Multiple Columns**
+```sql
+WITH CTE AS (
+    SELECT 
+        *,
+        ROW_NUMBER() OVER (
+            PARTITION BY Email, Phone 
+            ORDER BY Id
+        ) AS RowNum
+    FROM Customer
+)
+DELETE FROM CTE
+WHERE RowNum > 1;
+```
+
+**Solution 7: Find Duplicates First (Analysis)**
+```sql
+-- Find duplicate emails
+SELECT 
+    Email,
+    COUNT(*) AS DuplicateCount
+FROM Customer
+GROUP BY Email
+HAVING COUNT(*) > 1;
+
+-- Show all duplicate records
+SELECT c.*
+FROM Customer c
+INNER JOIN (
+    SELECT Email
+    FROM Customer
+    GROUP BY Email
+    HAVING COUNT(*) > 1
+) duplicates ON c.Email = duplicates.Email
+ORDER BY c.Email, c.Id;
+```
+
+---
+
+### 10.3 Join Multiple Tables
+
+**Problem:**
+Demonstrate different types of joins with multiple tables.
+
+**Tables:**
+```sql
+CREATE TABLE Department (
+    DepartmentId INT PRIMARY KEY,
+    DepartmentName NVARCHAR(100)
+);
+
+CREATE TABLE Employee (
+    EmployeeId INT PRIMARY KEY,
+    Name NVARCHAR(100),
+    DepartmentId INT,
+    ManagerId INT,
+    Salary DECIMAL(18,2)
+);
+
+CREATE TABLE Project (
+    ProjectId INT PRIMARY KEY,
+    ProjectName NVARCHAR(100),
+    DepartmentId INT
+);
+
+CREATE TABLE EmployeeProject (
+    EmployeeId INT,
+    ProjectId INT,
+    Role NVARCHAR(50),
+    PRIMARY KEY (EmployeeId, ProjectId)
+);
+```
+
+**Solution 1: INNER JOIN (Employees with Departments)**
+```sql
+SELECT 
+    e.EmployeeId,
+    e.Name AS EmployeeName,
+    d.DepartmentName,
+    e.Salary
+FROM Employee e
+INNER JOIN Department d ON e.DepartmentId = d.DepartmentId;
+```
+
+**Solution 2: LEFT JOIN (All Employees, Even Without Department)**
+```sql
+SELECT 
+    e.EmployeeId,
+    e.Name AS EmployeeName,
+    ISNULL(d.DepartmentName, 'No Department') AS DepartmentName,
+    e.Salary
+FROM Employee e
+LEFT JOIN Department d ON e.DepartmentId = d.DepartmentId;
+```
+
+**Solution 3: Self Join (Employees with Managers)**
+```sql
+SELECT 
+    e.EmployeeId,
+    e.Name AS EmployeeName,
+    m.Name AS ManagerName,
+    d.DepartmentName
+FROM Employee e
+LEFT JOIN Employee m ON e.ManagerId = m.EmployeeId
+LEFT JOIN Department d ON e.DepartmentId = d.DepartmentId;
+```
+
+**Solution 4: Multiple Joins (Employees, Departments, Projects)**
+```sql
+SELECT 
+    e.Name AS EmployeeName,
+    d.DepartmentName,
+    p.ProjectName,
+    ep.Role
+FROM Employee e
+INNER JOIN Department d ON e.DepartmentId = d.DepartmentId
+INNER JOIN EmployeeProject ep ON e.EmployeeId = ep.EmployeeId
+INNER JOIN Project p ON ep.ProjectId = p.ProjectId
+ORDER BY e.Name, p.ProjectName;
+```
+
+**Solution 5: Complex Query with Aggregations**
+```sql
+SELECT 
+    d.DepartmentName,
+    COUNT(DISTINCT e.EmployeeId) AS EmployeeCount,
+    COUNT(DISTINCT p.ProjectId) AS ProjectCount,
+    AVG(e.Salary) AS AverageSalary,
+    MAX(e.Salary) AS MaxSalary
+FROM Department d
+LEFT JOIN Employee e ON d.DepartmentId = e.DepartmentId
+LEFT JOIN EmployeeProject ep ON e.EmployeeId = ep.EmployeeId
+LEFT JOIN Project p ON ep.ProjectId = p.ProjectId
+GROUP BY d.DepartmentId, d.DepartmentName
+ORDER BY EmployeeCount DESC;
+```
+
+**Solution 6: CROSS APPLY (Get Top N per Group)**
+```sql
+-- Get top 3 highest paid employees per department
+SELECT 
+    d.DepartmentName,
+    TopEmployees.Name,
+    TopEmployees.Salary
+FROM Department d
+CROSS APPLY (
+    SELECT TOP 3 
+        e.Name,
+        e.Salary
+    FROM Employee e
+    WHERE e.DepartmentId = d.DepartmentId
+    ORDER BY e.Salary DESC
+) AS TopEmployees;
+```
+
+**Solution 7: Employees Working on Multiple Projects**
+```sql
+SELECT 
+    e.Name AS EmployeeName,
+    STRING_AGG(p.ProjectName, ', ') AS Projects,
+    COUNT(p.ProjectId) AS ProjectCount
+FROM Employee e
+INNER JOIN EmployeeProject ep ON e.EmployeeId = ep.EmployeeId
+INNER JOIN Project p ON ep.ProjectId = p.ProjectId
+GROUP BY e.EmployeeId, e.Name
+HAVING COUNT(p.ProjectId) > 1
+ORDER BY ProjectCount DESC;
+```
+
+---
+
+### 10.4 Write Pagination Query
+
+**Problem:**
+Implement efficient pagination for large result sets.
+
+**Solution 1: OFFSET FETCH (SQL Server 2012+)**
+```sql
+DECLARE @PageNumber INT = 1;
+DECLARE @PageSize INT = 10;
+
+SELECT 
+    EmployeeId,
+    Name,
+    DepartmentId,
+    Salary
+FROM Employee
+ORDER BY EmployeeId
+OFFSET (@PageNumber - 1) * @PageSize ROWS
+FETCH NEXT @PageSize ROWS ONLY;
+```
+
+**Solution 2: Pagination with Total Count**
+```sql
+DECLARE @PageNumber INT = 1;
+DECLARE @PageSize INT = 10;
+
+-- Get total count
+DECLARE @TotalCount INT;
+SELECT @TotalCount = COUNT(*) FROM Employee;
+
+-- Calculate total pages
+DECLARE @TotalPages INT = CEILING(@TotalCount * 1.0 / @PageSize);
+
+-- Get page data
+SELECT 
+    EmployeeId,
+    Name,
+    DepartmentId,
+    Salary,
+    @TotalCount AS TotalRecords,
+    @TotalPages AS TotalPages,
+    @PageNumber AS CurrentPage
+FROM Employee
+ORDER BY EmployeeId
+OFFSET (@PageNumber - 1) * @PageSize ROWS
+FETCH NEXT @PageSize ROWS ONLY;
+```
+
+**Solution 3: Stored Procedure for Pagination**
+```sql
+CREATE PROCEDURE GetEmployeesPaginated
+    @PageNumber INT = 1,
+    @PageSize INT = 10,
+    @SortColumn NVARCHAR(50) = 'EmployeeId',
+    @SortOrder NVARCHAR(4) = 'ASC',
+    @SearchTerm NVARCHAR(100) = NULL
+AS
+BEGIN
+    SET NOCOUNT ON;
+    
+    -- Validate inputs
+    IF @PageNumber < 1 SET @PageNumber = 1;
+    IF @PageSize < 1 SET @PageSize = 10;
+    IF @PageSize > 100 SET @PageSize = 100; -- Max page size
+    
+    -- Get total count
+    DECLARE @TotalCount INT;
+    SELECT @TotalCount = COUNT(*)
+    FROM Employee
+    WHERE @SearchTerm IS NULL 
+       OR Name LIKE '%' + @SearchTerm + '%';
+    
+    -- Build dynamic SQL for sorting
+    DECLARE @SQL NVARCHAR(MAX);
+    SET @SQL = N'
+    SELECT 
+        EmployeeId,
+        Name,
+        DepartmentId,
+        Salary,
+        ' + CAST(@TotalCount AS NVARCHAR) + ' AS TotalRecords,
+        ' + CAST(CEILING(@TotalCount * 1.0 / @PageSize) AS NVARCHAR) + ' AS TotalPages,
+        ' + CAST(@PageNumber AS NVARCHAR) + ' AS CurrentPage
+    FROM Employee
+    WHERE @SearchTerm IS NULL 
+       OR Name LIKE ''%'' + @SearchTerm + ''%''
+    ORDER BY ' + QUOTENAME(@SortColumn) + ' ' + @SortOrder + '
+    OFFSET ' + CAST((@PageNumber - 1) * @PageSize AS NVARCHAR) + ' ROWS
+    FETCH NEXT ' + CAST(@PageSize AS NVARCHAR) + ' ROWS ONLY';
+    
+    EXEC sp_executesql @SQL, N'@SearchTerm NVARCHAR(100)', @SearchTerm;
+END;
+
+-- Usage
+EXEC GetEmployeesPaginated 
+    @PageNumber = 2, 
+    @PageSize = 20,
+    @SortColumn = 'Name',
+    @SortOrder = 'DESC',
+    @SearchTerm = 'John';
+```
+
+**Solution 4: EF Core LINQ Pagination**
+```csharp
+public async Task<PagedResult<Employee>> GetEmployeesPaginatedAsync(
+    int pageNumber,
+    int pageSize,
+    string? sortColumn = "Id",
+    string? sortOrder = "asc",
+    string? searchTerm = null)
+{
+    var query = _context.Employees.AsQueryable();
+    
+    // Filtering
+    if (!string.IsNullOrWhiteSpace(searchTerm))
+    {
+        query = query.Where(e => e.Name.Contains(searchTerm));
+    }
+    
+    // Get total count
+    var totalCount = await query.CountAsync();
+    
+    // Sorting
+    query = sortColumn?.ToLower() switch
+    {
+        "name" => sortOrder == "desc" 
+            ? query.OrderByDescending(e => e.Name)
+            : query.OrderBy(e => e.Name),
+        "salary" => sortOrder == "desc"
+            ? query.OrderByDescending(e => e.Salary)
+            : query.OrderBy(e => e.Salary),
+        _ => query.OrderBy(e => e.EmployeeId)
+    };
+    
+    // Pagination
+    var items = await query
+        .Skip((pageNumber - 1) * pageSize)
+        .Take(pageSize)
+        .ToListAsync();
+    
+    return new PagedResult<Employee>
+    {
+        Items = items,
+        PageNumber = pageNumber,
+        PageSize = pageSize,
+        TotalCount = totalCount,
+        TotalPages = (int)Math.Ceiling(totalCount / (double)pageSize)
+    };
+}
+```
+
+**Solution 5: Keyset Pagination (Better Performance)**
+```sql
+-- Initial page
+SELECT TOP 10
+    EmployeeId,
+    Name,
+    Salary
+FROM Employee
+ORDER BY EmployeeId;
+
+-- Next page (using last EmployeeId from previous page)
+DECLARE @LastEmployeeId INT = 10;
+
+SELECT TOP 10
+    EmployeeId,
+    Name,
+    Salary
+FROM Employee
+WHERE EmployeeId > @LastEmployeeId
+ORDER BY EmployeeId;
+```
+
+---
+
+### 10.5 Lazy vs Eager Loading (EF Core)
+
+**Problem:**
+Demonstrate the difference between lazy loading and eager loading in Entity Framework Core.
+
+**Solution:**
+
+```csharp
+// Models
+public class Department
+{
+    public int DepartmentId { get; set; }
+    public string Name { get; set; } = string.Empty;
+    public virtual ICollection<Employee> Employees { get; set; } = new List<Employee>();
+}
+
+public class Employee
+{
+    public int EmployeeId { get; set; }
+    public string Name { get; set; } = string.Empty;
+    public int DepartmentId { get; set; }
+    public virtual Department Department { get; set; } = null!;
+    public virtual ICollection<Project> Projects { get; set; } = new List<Project>();
+}
+
+public class Project
+{
+    public int ProjectId { get; set; }
+    public string Name { get; set; } = string.Empty;
+    public virtual ICollection<Employee> Employees { get; set; } = new List<Employee>();
+}
+
+// 1. Lazy Loading (Load on Access)
+public class LazyLoadingExample
+{
+    private readonly ApplicationDbContext _context;
+    
+    public LazyLoadingExample(ApplicationDbContext context)
+    {
+        _context = context;
+    }
+    
+    public async Task<Employee> GetEmployeeWithLazyLoading(int id)
+    {
+        // Only loads Employee
+        var employee = await _context.Employees.FindAsync(id);
+        
+        // Department loaded on access (separate query)
+        var departmentName = employee.Department.Name;
+        
+        // Projects loaded on access (separate query)
+        var projectCount = employee.Projects.Count;
+        
+        return employee;
+        // Result: 3 database queries (1 + 1 + 1)
+    }
+}
+
+// Enable Lazy Loading in DbContext
+public class ApplicationDbContext : DbContext
+{
+    public DbSet<Employee> Employees { get; set; }
+    public DbSet<Department> Departments { get; set; }
+    public DbSet<Project> Projects { get; set; }
+    
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    {
+        // Enable lazy loading
+        optionsBuilder.UseLazyLoadingProxies();
+    }
+}
+
+// 2. Eager Loading (Load with Include)
+public class EagerLoadingExample
+{
+    private readonly ApplicationDbContext _context;
+    
+    public EagerLoadingExample(ApplicationDbContext context)
+    {
+        _context = context;
+    }
+    
+    // Single Query with Include
+    public async Task<Employee> GetEmployeeWithEagerLoading(int id)
+    {
+        return await _context.Employees
+            .Include(e => e.Department)
+            .Include(e => e.Projects)
+            .FirstOrDefaultAsync(e => e.EmployeeId == id);
+        // Result: 1 database query with JOINs
+    }
+    
+    // Multiple Levels
+    public async Task<List<Department>> GetDepartmentsWithEmployeesAndProjects()
+    {
+        return await _context.Departments
+            .Include(d => d.Employees)
+                .ThenInclude(e => e.Projects)
+            .ToListAsync();
+    }
+    
+    // Filtered Include (EF Core 5+)
+    public async Task<List<Department>> GetDepartmentsWithFilteredEmployees()
+    {
+        return await _context.Departments
+            .Include(d => d.Employees.Where(e => e.Salary > 50000))
+            .ToListAsync();
+    }
+}
+
+// 3. Explicit Loading (Load on Demand)
+public class ExplicitLoadingExample
+{
+    private readonly ApplicationDbContext _context;
+    
+    public ExplicitLoadingExample(ApplicationDbContext context)
+    {
+        _context = context;
+    }
+    
+    public async Task<Employee> GetEmployeeWithExplicitLoading(int id)
+    {
+        var employee = await _context.Employees.FindAsync(id);
+        
+        if (employee != null)
+        {
+            // Explicitly load Department
+            await _context.Entry(employee)
+                .Reference(e => e.Department)
+                .LoadAsync();
+            
+            // Explicitly load Projects
+            await _context.Entry(employee)
+                .Collection(e => e.Projects)
+                .LoadAsync();
+        }
+        
+        return employee;
+    }
+    
+    // Load with Query
+    public async Task<Employee> GetEmployeeWithFilteredProjects(int id)
+    {
+        var employee = await _context.Employees.FindAsync(id);
+        
+        if (employee != null)
+        {
+            // Load only active projects
+            await _context.Entry(employee)
+                .Collection(e => e.Projects)
+                .Query()
+                .Where(p => p.IsActive)
+                .LoadAsync();
+        }
+        
+        return employee;
+    }
+}
+
+// 4. Projection (Select Only What You Need)
+public class ProjectionExample
+{
+    private readonly ApplicationDbContext _context;
+    
+    public ProjectionExample(ApplicationDbContext context)
+    {
+        _context = context;
+    }
+    
+    public async Task<List<EmployeeDto>> GetEmployeesProjection()
+    {
+        return await _context.Employees
+            .Select(e => new EmployeeDto
+            {
+                EmployeeId = e.EmployeeId,
+                Name = e.Name,
+                DepartmentName = e.Department.Name,
+                ProjectCount = e.Projects.Count
+            })
+            .ToListAsync();
+        // Most efficient - only selected columns
+    }
+}
+
+public class EmployeeDto
+{
+    public int EmployeeId { get; set; }
+    public string Name { get; set; } = string.Empty;
+    public string DepartmentName { get; set; } = string.Empty;
+    public int ProjectCount { get; set; }
+}
+```
+
+**Comparison:**
+
+| Method | Queries | When to Use | Pros | Cons |
+|--------|---------|-------------|------|------|
+| **Lazy** | Multiple (N+1) | Unknown needs | Flexible | Performance issues |
+| **Eager** | Single (JOINs) | Known needs | Fast, efficient | May load too much |
+| **Explicit** | On-demand | Conditional | Control | More code |
+| **Projection** | Single (SELECT) | DTOs | Most efficient | Read-only |
+
+---
+
+### 10.6 Writing Optimized LINQ Queries
+
+**Problem:**
+Write efficient LINQ queries that translate to optimized SQL.
+
+**Solution:**
+
+```csharp
+// BAD: Loads all data into memory, then filters
+public async Task<List<Employee>> GetHighSalaryEmployeesBad()
+{
+    var allEmployees = await _context.Employees.ToListAsync();
+    return allEmployees.Where(e => e.Salary > 100000).ToList();
+    // SQL: SELECT * FROM Employees (all rows)
+    // Filtering done in memory
+}
+
+// GOOD: Filters in database
+public async Task<List<Employee>> GetHighSalaryEmployeesGood()
+{
+    return await _context.Employees
+        .Where(e => e.Salary > 100000)
+        .ToListAsync();
+    // SQL: SELECT * FROM Employees WHERE Salary > 100000
+}
+
+// BAD: Multiple database calls
+public async Task<decimal> GetAverageSalaryBad()
+{
+    var employees = await _context.Employees.ToListAsync();
+    return employees.Average(e => e.Salary);
+}
+
+// GOOD: Single aggregation query
+public async Task<decimal> GetAverageSalaryGood()
+{
+    return await _context.Employees.AverageAsync(e => e.Salary);
+    // SQL: SELECT AVG(Salary) FROM Employees
+}
+
+// BAD: Checking existence with Count
+public async Task<bool> EmployeeExistsBad(string email)
+{
+    var count = await _context.Employees
+        .Where(e => e.Email == email)
+        .CountAsync();
+    return count > 0;
+    // SQL: SELECT COUNT(*) FROM Employees WHERE Email = @email
+}
+
+// GOOD: Using AnyAsync
+public async Task<bool> EmployeeExistsGood(string email)
+{
+    return await _context.Employees
+        .AnyAsync(e => e.Email == email);
+    // SQL: SELECT CASE WHEN EXISTS(...) THEN 1 ELSE 0 END
+}
+
+// BAD: Loading navigation property in loop (N+1 problem)
+public async Task<List<string>> GetDepartmentNamesBad(List<int> employeeIds)
+{
+    var names = new List<string>();
+    
+    foreach (var id in employeeIds)
+    {
+        var employee = await _context.Employees.FindAsync(id);
+        await _context.Entry(employee).Reference(e => e.Department).LoadAsync();
+        names.Add(employee.Department.Name);
+    }
+    
+    return names;
+    // N+1 queries: 1 + N (one query per employee)
+}
+
+// GOOD: Single query with Include
+public async Task<List<string>> GetDepartmentNamesGood(List<int> employeeIds)
+{
+    return await _context.Employees
+        .Where(e => employeeIds.Contains(e.EmployeeId))
+        .Include(e => e.Department)
+        .Select(e => e.Department.Name)
+        .ToListAsync();
+    // Single query with JOIN
+}
+
+// BAD: Using FirstOrDefault unnecessarily
+public async Task<int> GetTotalEmployeesBad()
+{
+    var firstEmployee = await _context.Employees.FirstOrDefaultAsync();
+    return await _context.Employees.CountAsync();
+}
+
+// GOOD: Direct count
+public async Task<int> GetTotalEmployeesGood()
+{
+    return await _context.Employees.CountAsync();
+}
+
+// Optimized Complex Query
+public async Task<List<DepartmentSummaryDto>> GetDepartmentSummaries()
+{
+    return await _context.Departments
+        .Select(d => new DepartmentSummaryDto
+        {
+            DepartmentId = d.DepartmentId,
+            Name = d.Name,
+            EmployeeCount = d.Employees.Count,
+            AverageSalary = d.Employees.Average(e => e.Salary),
+            TotalSalary = d.Employees.Sum(e => e.Salary),
+            HighestPaid = d.Employees
+                .OrderByDescending(e => e.Salary)
+                .Select(e => e.Name)
+                .FirstOrDefault()
+        })
+        .ToListAsync();
+    // Single efficient query with GROUP BY
+}
+
+// Using AsNoTracking for Read-Only Queries
+public async Task<List<Employee>> GetEmployeesReadOnly()
+{
+    return await _context.Employees
+        .AsNoTracking() // Faster, no change tracking overhead
+        .Where(e => e.IsActive)
+        .ToListAsync();
+}
+
+// Compiled Queries for Repeated Use
+private static readonly Func<ApplicationDbContext, int, Task<Employee?>> 
+    _getEmployeeById = EF.CompileAsyncQuery(
+        (ApplicationDbContext context, int id) =>
+            context.Employees
+                .Include(e => e.Department)
+                .FirstOrDefault(e => e.EmployeeId == id));
+
+public async Task<Employee?> GetEmployeeByIdCompiled(int id)
+{
+    return await _getEmployeeById(_context, id);
+    // Faster subsequent executions
+}
+```
+
+---
+
+### 10.7 Handling N+1 Problem
+
+**Problem:**
+Identify and fix the N+1 query problem in Entity Framework.
+
+**N+1 Problem Example:**
+
+```csharp
+// PROBLEM: N+1 Queries
+public async Task<List<string>> GetDepartmentEmployeeNames()
+{
+    var departments = await _context.Departments.ToListAsync(); // 1 query
+    
+    var result = new List<string>();
+    foreach (var dept in departments) // N queries (one per department)
+    {
+        var employeeNames = await _context.Employees
+            .Where(e => e.DepartmentId == dept.DepartmentId)
+            .Select(e => e.Name)
+            .ToListAsync();
+        
+        result.AddRange(employeeNames);
+    }
+    
+    return result;
+}
+// Total: 1 + N queries (1 for departments + 1 for each department's employees)
+```
+
+**Solution 1: Eager Loading with Include**
+
+```csharp
+public async Task<List<string>> GetDepartmentEmployeeNamesFixed1()
+{
+    var departments = await _context.Departments
+        .Include(d => d.Employees) // Load employees with departments
+        .ToListAsync();
+    
+    return departments
+        .SelectMany(d => d.Employees)
+        .Select(e => e.Name)
+        .ToList();
+    // Total: 1 query with JOIN
+}
+```
+
+**Solution 2: Projection (Best Performance)**
+
+```csharp
+public async Task<List<string>> GetDepartmentEmployeeNamesFixed2()
+{
+    return await _context.Departments
+        .SelectMany(d => d.Employees)
+        .Select(e => e.Name)
+        .ToListAsync();
+    // Total: 1 query, only selects needed columns
+}
+```
+
+**Solution 3: Split Query (EF Core 5+)**
+
+```csharp
+public async Task<List<Department>> GetDepartmentsWithEmployeesSplitQuery()
+{
+    return await _context.Departments
+        .Include(d => d.Employees)
+        .AsSplitQuery() // Uses 2 efficient queries instead of large JOIN
+        .ToListAsync();
+    // 2 queries: one for departments, one for all employees
+    // Better for large result sets
+}
+```
+
+**Real-World Example: Blog Posts with Comments**
+
+```csharp
+public class BlogPost
+{
+    public int Id { get; set; }
+    public string Title { get; set; } = string.Empty;
+    public virtual ICollection<Comment> Comments { get; set; } = new List<Comment>();
+}
+
+public class Comment
+{
+    public int Id { get; set; }
+    public string Text { get; set; } = string.Empty;
+    public int BlogPostId { get; set; }
+    public virtual BlogPost BlogPost { get; set; } = null!;
+}
+
+// N+1 PROBLEM
+public async Task<List<BlogPostDto>> GetBlogPostsBad()
+{
+    var posts = await _context.BlogPosts.ToListAsync(); // 1 query
+    
+    var result = new List<BlogPostDto>();
+    foreach (var post in posts) // N queries
+    {
+        var commentCount = await _context.Comments
+            .CountAsync(c => c.BlogPostId == post.Id);
+        
+        result.Add(new BlogPostDto
+        {
+            Id = post.Id,
+            Title = post.Title,
+            CommentCount = commentCount
+        });
+    }
+    
+    return result;
+}
+
+// SOLUTION 1: Eager Loading
+public async Task<List<BlogPostDto>> GetBlogPostsGood1()
+{
+    return await _context.BlogPosts
+        .Include(p => p.Comments)
+        .Select(p => new BlogPostDto
+        {
+            Id = p.Id,
+            Title = p.Title,
+            CommentCount = p.Comments.Count
+        })
+        .ToListAsync();
+    // 1 query with JOIN
+}
+
+// SOLUTION 2: GroupJoin in Single Query
+public async Task<List<BlogPostDto>> GetBlogPostsGood2()
+{
+    return await _context.BlogPosts
+        .GroupJoin(
+            _context.Comments,
+            post => post.Id,
+            comment => comment.BlogPostId,
+            (post, comments) => new BlogPostDto
+            {
+                Id = post.Id,
+                Title = post.Title,
+                CommentCount = comments.Count()
+            })
+        .ToListAsync();
+}
+
+// SOLUTION 3: Projection (Most Efficient)
+public async Task<List<BlogPostDto>> GetBlogPostsGood3()
+{
+    return await _context.BlogPosts
+        .Select(p => new BlogPostDto
+        {
+            Id = p.Id,
+            Title = p.Title,
+            CommentCount = p.Comments.Count
+        })
+        .ToListAsync();
+    // SQL: SELECT Id, Title, (SELECT COUNT(*) FROM Comments WHERE...) FROM BlogPosts
+}
+```
+
+**Detection Tools:**
+
+```csharp
+// Enable query logging to detect N+1
+public class ApplicationDbContext : DbContext
+{
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    {
+        optionsBuilder
+            .LogTo(Console.WriteLine, LogLevel.Information)
+            .EnableSensitiveDataLogging()
+            .EnableDetailedErrors();
+    }
+}
+
+// MiniProfiler for ASP.NET Core
+public void ConfigureServices(IServiceCollection services)
+{
+    services.AddMiniProfiler(options =>
+    {
+        options.RouteBasePath = "/profiler";
+    }).AddEntityFramework();
+}
+```
+
+---
+
+## 11. Microservices & Distributed Systems
+
+### 11.1 Implement Retry with Polly
+
+**Problem:**
+Implement retry logic with exponential backoff for resilient microservice communication.
+
+**Solution:**
+
+```csharp
+// Install NuGet Packages:
+// Polly
+// Microsoft.Extensions.Http.Polly
+
+// 1. Basic Retry Policy
+public class RetryPolicyExample
+{
+    public async Task<string> CallApiWithRetry(string url)
+    {
+        var retryPolicy = Policy
+            .Handle<HttpRequestException>()
+            .WaitAndRetryAsync(
+                retryCount: 3,
+                sleepDurationProvider: retryAttempt => 
+                    TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)),
+                onRetry: (exception, timeSpan, retryCount, context) =>
+                {
+                    Console.WriteLine($"Retry {retryCount} after {timeSpan.TotalSeconds}s due to: {exception.Message}");
+                });
+        
+        using var httpClient = new HttpClient();
+        
+        return await retryPolicy.ExecuteAsync(async () =>
+        {
+            var response = await httpClient.GetAsync(url);
+            response.EnsureSuccessStatusCode();
+            return await response.Content.ReadAsStringAsync();
+        });
+    }
+}
+
+// 2. Retry with Exponential Backoff
+public class ExponentialBackoffRetry
+{
+    private readonly IHttpClientFactory _httpClientFactory;
+    private readonly ILogger<ExponentialBackoffRetry> _logger;
+    
+    public ExponentialBackoffRetry(
+        IHttpClientFactory httpClientFactory,
+        ILogger<ExponentialBackoffRetry> logger)
+    {
+        _httpClientFactory = httpClientFactory;
+        _logger = logger;
+    }
+    
+    public async Task<T?> ExecuteWithRetryAsync<T>(
+        Func<HttpClient, Task<T>> action,
+        string clientName = "default")
+    {
+        var retryPolicy = Policy
+            .Handle<HttpRequestException>()
+            .Or<TaskCanceledException>()
+            .WaitAndRetryAsync(
+                retryCount: 5,
+                sleepDurationProvider: retryAttempt => 
+                    TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)) + 
+                    TimeSpan.FromMilliseconds(Random.Shared.Next(0, 1000)), // Jitter
+                onRetry: (exception, timeSpan, retryCount, context) =>
+                {
+                    _logger.LogWarning(
+                        "Retry {RetryCount} of {ClientName} after {Delay}ms due to: {Error}",
+                        retryCount,
+                        clientName,
+                        timeSpan.TotalMilliseconds,
+                        exception.Message);
+                });
+        
+        var client = _httpClientFactory.CreateClient(clientName);
+        
+        return await retryPolicy.ExecuteAsync(() => action(client));
+    }
+}
+
+// 3. Configuring HttpClient with Polly in Program.cs
+public class Program
+{
+    public static void Main(string[] args)
+    {
+        var builder = WebApplication.CreateBuilder(args);
+        
+        // Add Polly policies to HttpClient
+        builder.Services.AddHttpClient("OrderService", client =>
+        {
+            client.BaseAddress = new Uri("https://order-service.example.com");
+            client.Timeout = TimeSpan.FromSeconds(30);
+        })
+        .AddTransientHttpErrorPolicy(policyBuilder =>
+            policyBuilder.WaitAndRetryAsync(
+                retryCount: 3,
+                sleepDurationProvider: retryAttempt => 
+                    TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)),
+                onRetry: (outcome, timespan, retryCount, context) =>
+                {
+                    Console.WriteLine($"Retrying... Attempt {retryCount}");
+                }))
+        .AddTransientHttpErrorPolicy(policyBuilder =>
+            policyBuilder.CircuitBreakerAsync(
+                handledEventsAllowedBeforeBreaking: 5,
+                durationOfBreak: TimeSpan.FromSeconds(30)));
+        
+        var app = builder.Build();
+        app.Run();
+    }
+}
+
+// 4. Advanced Retry with Different Strategies
+public class AdvancedRetryStrategies
+{
+    // Retry only on specific status codes
+    public static IAsyncPolicy<HttpResponseMessage> GetRetryPolicyForSpecificErrors()
+    {
+        return Policy
+            .HandleResult<HttpResponseMessage>(r => 
+                r.StatusCode == System.Net.HttpStatusCode.RequestTimeout ||
+                r.StatusCode == System.Net.HttpStatusCode.TooManyRequests ||
+                (int)r.StatusCode >= 500)
+            .WaitAndRetryAsync(
+                retryCount: 3,
+                sleepDurationProvider: retryAttempt => 
+                    TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)));
+    }
+    
+    // Retry with timeout
+    public static IAsyncPolicy GetRetryWithTimeout()
+    {
+        var timeoutPolicy = Policy.TimeoutAsync(TimeSpan.FromSeconds(10));
+        
+        var retryPolicy = Policy
+            .Handle<HttpRequestException>()
+            .Or<TimeoutRejectedException>()
+            .WaitAndRetryAsync(3, retryAttempt => 
+                TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)));
+        
+        return Policy.WrapAsync(retryPolicy, timeoutPolicy);
+    }
+    
+    // Conditional retry based on result
+    public static IAsyncPolicy<HttpResponseMessage> GetConditionalRetryPolicy()
+    {
+        return Policy<HttpResponseMessage>
+            .HandleResult(r => !r.IsSuccessStatusCode)
+            .OrResult(r => r.StatusCode == System.Net.HttpStatusCode.TooManyRequests)
+            .WaitAndRetryAsync(
+                retryCount: 3,
+                sleepDurationProvider: (retryAttempt, response, context) =>
+                {
+                    // Use Retry-After header if present
+                    if (response.Result?.Headers.RetryAfter?.Delta.HasValue == true)
+                    {
+                        return response.Result.Headers.RetryAfter.Delta.Value;
+                    }
+                    return TimeSpan.FromSeconds(Math.Pow(2, retryAttempt));
+                },
+                onRetryAsync: async (response, timespan, retryCount, context) =>
+                {
+                    await Task.CompletedTask;
+                    Console.WriteLine($"Retry {retryCount} after {timespan.TotalSeconds}s");
+                });
+    }
+}
+
+// 5. Service Class Using Retry
+public interface IOrderService
+{
+    Task<Order> GetOrderAsync(int orderId);
+    Task<bool> CreateOrderAsync(Order order);
+}
+
+public class OrderService : IOrderService
+{
+    private readonly IHttpClientFactory _httpClientFactory;
+    private readonly ILogger<OrderService> _logger;
+    private readonly IAsyncPolicy<HttpResponseMessage> _retryPolicy;
+    
+    public OrderService(
+        IHttpClientFactory httpClientFactory,
+        ILogger<OrderService> logger)
+    {
+        _httpClientFactory = httpClientFactory;
+        _logger = logger;
+        
+        _retryPolicy = Policy<HttpResponseMessage>
+            .Handle<HttpRequestException>()
+            .OrResult(r => !r.IsSuccessStatusCode)
+            .WaitAndRetryAsync(
+                retryCount: 3,
+                sleepDurationProvider: retryAttempt => 
+                    TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)),
+                onRetry: (outcome, timespan, retryCount, context) =>
+                {
+                    _logger.LogWarning(
+                        "Retry {RetryCount} for {Url} after {Delay}ms",
+                        retryCount,
+                        outcome.Result?.RequestMessage?.RequestUri,
+                        timespan.TotalMilliseconds);
+                });
+    }
+    
+    public async Task<Order> GetOrderAsync(int orderId)
+    {
+        var client = _httpClientFactory.CreateClient("OrderService");
+        
+        var response = await _retryPolicy.ExecuteAsync(() =>
+            client.GetAsync($"/api/orders/{orderId}"));
+        
+        response.EnsureSuccessStatusCode();
+        
+        return await response.Content.ReadFromJsonAsync<Order>() 
+            ?? throw new Exception("Failed to deserialize order");
+    }
+    
+    public async Task<bool> CreateOrderAsync(Order order)
+    {
+        var client = _httpClientFactory.CreateClient("OrderService");
+        
+        var response = await _retryPolicy.ExecuteAsync(() =>
+            client.PostAsJsonAsync("/api/orders", order));
+        
+        return response.IsSuccessStatusCode;
+    }
+}
+
+public class Order
+{
+    public int Id { get; set; }
+    public string CustomerName { get; set; } = string.Empty;
+    public decimal TotalAmount { get; set; }
+}
+```
+
+---
+
+### 11.2 Circuit Breaker Example
+
+**Problem:**
+Implement circuit breaker pattern to prevent cascading failures in microservices.
+
+**Solution:**
+
+```csharp
+// 1. Basic Circuit Breaker
+public class CircuitBreakerExample
+{
+    private readonly IAsyncPolicy<HttpResponseMessage> _circuitBreakerPolicy;
+    
+    public CircuitBreakerExample()
+    {
+        _circuitBreakerPolicy = Policy<HttpResponseMessage>
+            .Handle<HttpRequestException>()
+            .OrResult(r => !r.IsSuccessStatusCode)
+            .CircuitBreakerAsync(
+                handledEventsAllowedBeforeBreaking: 3, // Open after 3 failures
+                durationOfBreak: TimeSpan.FromSeconds(30), // Stay open for 30s
+                onBreak: (result, timespan) =>
+                {
+                    Console.WriteLine($"Circuit breaker opened for {timespan.TotalSeconds}s");
+                },
+                onReset: () =>
+                {
+                    Console.WriteLine("Circuit breaker reset");
+                },
+                onHalfOpen: () =>
+                {
+                    Console.WriteLine("Circuit breaker is half-open");
+                });
+    }
+    
+    public async Task<string> CallServiceAsync(string url)
+    {
+        using var client = new HttpClient();
+        
+        var response = await _circuitBreakerPolicy.ExecuteAsync(() =>
+            client.GetAsync(url));
+        
+        return await response.Content.ReadAsStringAsync();
+    }
+}
+
+// 2. Combined Retry + Circuit Breaker
+public static class Program
+{
+    public static void Main(string[] args)
+    {
+        var builder = WebApplication.CreateBuilder(args);
+        
+        builder.Services.AddHttpClient("PaymentService", client =>
+        {
+            client.BaseAddress = new Uri("https://payment-service.example.com");
+        })
+        // Retry policy (inner)
+        .AddTransientHttpErrorPolicy(policyBuilder =>
+            policyBuilder.WaitAndRetryAsync(
+                retryCount: 3,
+                sleepDurationProvider: retryAttempt => 
+                    TimeSpan.FromSeconds(Math.Pow(2, retryAttempt))))
+        // Circuit breaker policy (outer)
+        .AddTransientHttpErrorPolicy(policyBuilder =>
+            policyBuilder.CircuitBreakerAsync(
+                handledEventsAllowedBeforeBreaking: 5,
+                durationOfBreak: TimeSpan.FromSeconds(30)));
+        
+        var app = builder.Build();
+        app.Run();
+    }
+}
+
+// 3. Advanced Circuit Breaker with Fallback
+public class PaymentService
+{
+    private readonly IHttpClientFactory _httpClientFactory;
+    private readonly ILogger<PaymentService> _logger;
+    private readonly IAsyncPolicy<PaymentResult> _policy;
+    
+    public PaymentService(
+        IHttpClientFactory httpClientFactory,
+        ILogger<PaymentService> logger)
+    {
+        _httpClientFactory = httpClientFactory;
+        _logger = logger;
+        
+        // Fallback policy
+        var fallbackPolicy = Policy<PaymentResult>
+            .Handle<BrokenCircuitException>()
+            .Or<HttpRequestException>()
+            .FallbackAsync(
+                fallbackValue: new PaymentResult 
+                { 
+                    Success = false, 
+                    Message = "Service temporarily unavailable" 
+                },
+                onFallbackAsync: async (result, context) =>
+                {
+                    _logger.LogWarning("Fallback triggered for payment processing");
+                    await Task.CompletedTask;
+                });
+        
+        // Circuit breaker policy
+        var circuitBreakerPolicy = Policy<PaymentResult>
+            .Handle<HttpRequestException>()
+            .CircuitBreakerAsync(
+                handledEventsAllowedBeforeBreaking: 5,
+                durationOfBreak: TimeSpan.FromMinutes(1),
+                onBreak: (result, duration) =>
+                {
+                    _logger.LogError("Circuit breaker opened for {Duration}s", 
+                        duration.TotalSeconds);
+                },
+                onReset: () =>
+                {
+                    _logger.LogInformation("Circuit breaker reset");
+                });
+        
+        // Retry policy
+        var retryPolicy = Policy<PaymentResult>
+            .Handle<HttpRequestException>()
+            .WaitAndRetryAsync(
+                retryCount: 3,
+                sleepDurationProvider: retryAttempt => 
+                    TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)));
+        
+        // Combine policies: Fallback -> CircuitBreaker -> Retry
+        _policy = Policy.WrapAsync(fallbackPolicy, circuitBreakerPolicy, retryPolicy);
+    }
+    
+    public async Task<PaymentResult> ProcessPaymentAsync(decimal amount, string cardNumber)
+    {
+        return await _policy.ExecuteAsync(async () =>
+        {
+            var client = _httpClientFactory.CreateClient("PaymentService");
+            
+            var request = new PaymentRequest
+            {
+                Amount = amount,
+                CardNumber = cardNumber
+            };
+            
+            var response = await client.PostAsJsonAsync("/api/payments/process", request);
+            response.EnsureSuccessStatusCode();
+            
+            return await response.Content.ReadFromJsonAsync<PaymentResult>()
+                ?? throw new Exception("Failed to deserialize payment result");
+        });
+    }
+}
+
+public class PaymentRequest
+{
+    public decimal Amount { get; set; }
+    public string CardNumber { get; set; } = string.Empty;
+}
+
+public class PaymentResult
+{
+    public bool Success { get; set; }
+    public string Message { get; set; } = string.Empty;
+    public string TransactionId { get; set; } = string.Empty;
+}
+
+// 4. Circuit Breaker State Monitoring
+public interface ICircuitBreakerStateStore
+{
+    CircuitState GetState(string serviceName);
+    void SetState(string serviceName, CircuitState state);
+}
+
+public enum CircuitState
+{
+    Closed,
+    Open,
+    HalfOpen
+}
+
+public class CircuitBreakerMonitoringService
+{
+    private readonly ICircuitBreakerStateStore _stateStore;
+    private readonly ILogger<CircuitBreakerMonitoringService> _logger;
+    
+    public CircuitBreakerMonitoringService(
+        ICircuitBreakerStateStore stateStore,
+        ILogger<CircuitBreakerMonitoringService> logger)
+    {
+        _stateStore = stateStore;
+        _logger = logger;
+    }
+    
+    public IAsyncPolicy<HttpResponseMessage> CreateMonitoredCircuitBreaker(string serviceName)
+    {
+        return Policy<HttpResponseMessage>
+            .Handle<HttpRequestException>()
+            .OrResult(r => !r.IsSuccessStatusCode)
+            .CircuitBreakerAsync(
+                handledEventsAllowedBeforeBreaking: 5,
+                durationOfBreak: TimeSpan.FromMinutes(1),
+                onBreak: (result, duration) =>
+                {
+                    _stateStore.SetState(serviceName, CircuitState.Open);
+                    _logger.LogError(
+                        "Circuit breaker OPENED for {Service} for {Duration}s",
+                        serviceName,
+                        duration.TotalSeconds);
+                },
+                onReset: () =>
+                {
+                    _stateStore.SetState(serviceName, CircuitState.Closed);
+                    _logger.LogInformation(
+                        "Circuit breaker CLOSED for {Service}",
+                        serviceName);
+                },
+                onHalfOpen: () =>
+                {
+                    _stateStore.SetState(serviceName, CircuitState.HalfOpen);
+                    _logger.LogInformation(
+                        "Circuit breaker HALF-OPEN for {Service}",
+                        serviceName);
+                });
+    }
+}
+```
+
+---
+
+### 11.3 Saga Pattern Flow
+
+**Problem:**
+Implement the Saga pattern for distributed transactions across microservices.
+
+**Solution:**
+
+```csharp
+// Saga Pattern: Orchestration-Based
+
+// 1. Saga State and Events
+public enum SagaState
+{
+    NotStarted,
+    OrderCreated,
+    PaymentProcessed,
+    InventoryReserved,
+    ShipmentCreated,
+    Completed,
+    Failed,
+    Compensating,
+    Compensated
+}
+
+public abstract class SagaEvent
+{
+    public Guid SagaId { get; set; }
+    public DateTime Timestamp { get; set; } = DateTime.UtcNow;
+}
+
+public class OrderCreatedEvent : SagaEvent
+{
+    public int OrderId { get; set; }
+    public decimal Amount { get; set; }
+}
+
+public class PaymentProcessedEvent : SagaEvent
+{
+    public string TransactionId { get; set; } = string.Empty;
+}
+
+public class PaymentFailedEvent : SagaEvent
+{
+    public string Reason { get; set; } = string.Empty;
+}
+
+// 2. Saga Orchestrator
+public class OrderSaga
+{
+    private readonly IOrderService _orderService;
+    private readonly IPaymentService _paymentService;
+    private readonly IInventoryService _inventoryService;
+    private readonly IShippingService _shippingService;
+    private readonly ILogger<OrderSaga> _logger;
+    
+    public Guid SagaId { get; private set; }
+    public SagaState State { get; private set; }
+    public OrderData Data { get; private set; }
+    
+    public OrderSaga(
+        IOrderService orderService,
+        IPaymentService paymentService,
+        IInventoryService inventoryService,
+        IShippingService shippingService,
+        ILogger<OrderSaga> logger)
+    {
+        _orderService = orderService;
+        _paymentService = paymentService;
+        _inventoryService = inventoryService;
+        _shippingService = shippingService;
+        _logger = logger;
+        
+        SagaId = Guid.NewGuid();
+        State = SagaState.NotStarted;
+        Data = new OrderData();
+    }
+    
+    public async Task<bool> ExecuteAsync(CreateOrderRequest request)
+    {
+        _logger.LogInformation("Starting saga {SagaId}", SagaId);
+        
+        try
+        {
+            // Step 1: Create Order
+            await CreateOrderAsync(request);
+            
+            // Step 2: Process Payment
+            await ProcessPaymentAsync();
+            
+            // Step 3: Reserve Inventory
+            await ReserveInventoryAsync();
+            
+            // Step 4: Create Shipment
+            await CreateShipmentAsync();
+            
+            State = SagaState.Completed;
+            _logger.LogInformation("Saga {SagaId} completed successfully", SagaId);
+            return true;
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Saga {SagaId} failed, starting compensation", SagaId);
+            await CompensateAsync();
+            return false;
+        }
+    }
+    
+    private async Task CreateOrderAsync(CreateOrderRequest request)
+    {
+        Data.OrderId = await _orderService.CreateOrderAsync(request);
+        State = SagaState.OrderCreated;
+        _logger.LogInformation("Order {OrderId} created", Data.OrderId);
+    }
+    
+    private async Task ProcessPaymentAsync()
+    {
+        var result = await _paymentService.ProcessPaymentAsync(
+            Data.OrderId, 
+            Data.Amount);
+        
+        if (!result.Success)
+        {
+            throw new PaymentException("Payment failed: " + result.Message);
+        }
+        
+        Data.TransactionId = result.TransactionId;
+        State = SagaState.PaymentProcessed;
+        _logger.LogInformation("Payment processed: {TransactionId}", Data.TransactionId);
+    }
+    
+    private async Task ReserveInventoryAsync()
+    {
+        var result = await _inventoryService.ReserveItemsAsync(
+            Data.OrderId,
+            Data.Items);
+        
+        if (!result.Success)
+        {
+            throw new InventoryException("Inventory reservation failed: " + result.Message);
+        }
+        
+        Data.ReservationId = result.ReservationId;
+        State = SagaState.InventoryReserved;
+        _logger.LogInformation("Inventory reserved: {ReservationId}", Data.ReservationId);
+    }
+    
+    private async Task CreateShipmentAsync()
+    {
+        var result = await _shippingService.CreateShipmentAsync(Data.OrderId);
+        
+        if (!result.Success)
+        {
+            throw new ShippingException("Shipment creation failed: " + result.Message);
+        }
+        
+        Data.ShipmentId = result.ShipmentId;
+        State = SagaState.ShipmentCreated;
+        _logger.LogInformation("Shipment created: {ShipmentId}", Data.ShipmentId);
+    }
+    
+    private async Task CompensateAsync()
+    {
+        State = SagaState.Compensating;
+        
+        // Compensate in reverse order
+        if (State >= SagaState.ShipmentCreated)
+        {
+            await _shippingService.CancelShipmentAsync(Data.ShipmentId);
+            _logger.LogInformation("Shipment cancelled: {ShipmentId}", Data.ShipmentId);
+        }
+        
+        if (State >= SagaState.InventoryReserved)
+        {
+            await _inventoryService.ReleaseReservationAsync(Data.ReservationId);
+            _logger.LogInformation("Inventory released: {ReservationId}", Data.ReservationId);
+        }
+        
+        if (State >= SagaState.PaymentProcessed)
+        {
+            await _paymentService.RefundPaymentAsync(Data.TransactionId);
+            _logger.LogInformation("Payment refunded: {TransactionId}", Data.TransactionId);
+        }
+        
+        if (State >= SagaState.OrderCreated)
+        {
+            await _orderService.CancelOrderAsync(Data.OrderId);
+            _logger.LogInformation("Order cancelled: {OrderId}", Data.OrderId);
+        }
+        
+        State = SagaState.Compensated;
+        _logger.LogInformation("Saga {SagaId} compensated", SagaId);
+    }
+}
+
+public class OrderData
+{
+    public int OrderId { get; set; }
+    public decimal Amount { get; set; }
+    public List<OrderItem> Items { get; set; } = new();
+    public string TransactionId { get; set; } = string.Empty;
+    public string ReservationId { get; set; } = string.Empty;
+    public string ShipmentId { get; set; } = string.Empty;
+}
+
+public class CreateOrderRequest
+{
+    public string CustomerName { get; set; } = string.Empty;
+    public List<OrderItem> Items { get; set; } = new();
+    public decimal Amount { get; set; }
+}
+
+public class OrderItem
+{
+    public int ProductId { get; set; }
+    public int Quantity { get; set; }
+}
+
+// Service Interfaces
+public interface IOrderService
+{
+    Task<int> CreateOrderAsync(CreateOrderRequest request);
+    Task CancelOrderAsync(int orderId);
+}
+
+public interface IPaymentService
+{
+    Task<PaymentResult> ProcessPaymentAsync(int orderId, decimal amount);
+    Task RefundPaymentAsync(string transactionId);
+}
+
+public interface IInventoryService
+{
+    Task<InventoryResult> ReserveItemsAsync(int orderId, List<OrderItem> items);
+    Task ReleaseReservationAsync(string reservationId);
+}
+
+public interface IShippingService
+{
+    Task<ShippingResult> CreateShipmentAsync(int orderId);
+    Task CancelShipmentAsync(string shipmentId);
+}
+
+public class InventoryResult
+{
+    public bool Success { get; set; }
+    public string Message { get; set; } = string.Empty;
+    public string ReservationId { get; set; } = string.Empty;
+}
+
+public class ShippingResult
+{
+    public bool Success { get; set; }
+    public string Message { get; set; } = string.Empty;
+    public string ShipmentId { get; set; } = string.Empty;
+}
+
+// Exceptions
+public class PaymentException : Exception
+{
+    public PaymentException(string message) : base(message) { }
+}
+
+public class InventoryException : Exception
+{
+    public InventoryException(string message) : base(message) { }
+}
+
+public class ShippingException : Exception
+{
+    public ShippingException(string message) : base(message) { }
+}
+
+// Usage
+public class OrderController : ControllerBase
+{
+    private readonly IServiceProvider _serviceProvider;
+    
+    public OrderController(IServiceProvider serviceProvider)
+    {
+        _serviceProvider = serviceProvider;
+    }
+    
+    [HttpPost]
+    public async Task<IActionResult> CreateOrder([FromBody] CreateOrderRequest request)
+    {
+        using var scope = _serviceProvider.CreateScope();
+        
+        var saga = scope.ServiceProvider.GetRequiredService<OrderSaga>();
+        var success = await saga.ExecuteAsync(request);
+        
+        if (success)
+        {
+            return Ok(new { orderId = saga.Data.OrderId, sagaId = saga.SagaId });
+        }
+        
+        return BadRequest(new { message = "Order creation failed", sagaId = saga.SagaId });
+    }
+}
+```
+
+---
+
+## 12. Real-World Coding Scenarios
+
+### 12.1 Design Order Processing System
+
+**Problem:**
+Design a complete order processing system with validation, state management, and event handling.
+
+**Solution:**
+
+```csharp
+// Order Entity with State Pattern
+public class Order
+{
+    public int Id { get; set; }
+    public string OrderNumber { get; set; } = string.Empty;
+    public int CustomerId { get; set; }
+    public OrderStatus Status { get; set; }
+    public List<OrderItem> Items { get; set; } = new();
+    public decimal TotalAmount { get; set; }
+    public DateTime CreatedAt { get; set; }
+    public DateTime? UpdatedAt { get; set; }
+}
+
+public enum OrderStatus
+{
+    Draft,
+    Pending,
+    Confirmed,
+    Processing,
+    Shipped,
+    Delivered,
+    Cancelled
+}
+
+public class OrderItem
+{
+    public int Id { get; set; }
+    public int ProductId { get; set; }
+    public string ProductName { get; set; } = string.Empty;
+    public int Quantity { get; set; }
+    public decimal UnitPrice { get; set; }
+    public decimal TotalPrice => Quantity * UnitPrice;
+}
+
+// Order Service with Complete Business Logic
+public interface IOrderProcessingService
+{
+    Task<Result<Order>> CreateOrderAsync(CreateOrderCommand command);
+    Task<Result> ConfirmOrderAsync(int orderId);
+    Task<Result> CancelOrderAsync(int orderId, string reason);
+    Task<Result<Order>> GetOrderAsync(int orderId);
+}
+
+public class OrderProcessingService : IOrderProcessingService
+{
+    private readonly IOrderRepository _orderRepository;
+    private readonly IProductRepository _productRepository;
+    private readonly IInventoryService _inventoryService;
+    private readonly IPaymentService _paymentService;
+    private readonly IEventPublisher _eventPublisher;
+    private readonly ILogger<OrderProcessingService> _logger;
+    
+    public OrderProcessingService(
+        IOrderRepository orderRepository,
+        IProductRepository productRepository,
+        IInventoryService inventoryService,
+        IPaymentService paymentService,
+        IEventPublisher eventPublisher,
+        ILogger<OrderProcessingService> logger)
+    {
+        _orderRepository = orderRepository;
+        _productRepository = productRepository;
+        _inventoryService = inventoryService;
+        _paymentService = paymentService;
+        _eventPublisher = eventPublisher;
+        _logger = logger;
+    }
+    
+    public async Task<Result<Order>> CreateOrderAsync(CreateOrderCommand command)
+    {
+        try
+        {
+            // Validate customer
+            if (command.CustomerId <= 0)
+                return Result<Order>.Failure("Invalid customer");
+            
+            // Validate items
+            if (!command.Items.Any())
+                return Result<Order>.Failure("Order must have at least one item");
+            
+            // Check product availability
+            var productIds = command.Items.Select(i => i.ProductId).ToList();
+            var products = await _productRepository.GetByIdsAsync(productIds);
+            
+            if (products.Count != productIds.Count)
+                return Result<Order>.Failure("Some products not found");
+            
+            // Check inventory
+            foreach (var item in command.Items)
+            {
+                var available = await _inventoryService.CheckAvailabilityAsync(
+                    item.ProductId, 
+                    item.Quantity);
+                
+                if (!available)
+                    return Result<Order>.Failure(
+                        $"Insufficient inventory for product {item.ProductId}");
+            }
+            
+            // Create order
+            var order = new Order
+            {
+                OrderNumber = GenerateOrderNumber(),
+                CustomerId = command.CustomerId,
+                Status = OrderStatus.Pending,
+                CreatedAt = DateTime.UtcNow,
+                Items = command.Items.Select(i => new OrderItem
+                {
+                    ProductId = i.ProductId,
+                    ProductName = products.First(p => p.Id == i.ProductId).Name,
+                    Quantity = i.Quantity,
+                    UnitPrice = products.First(p => p.Id == i.ProductId).Price
+                }).ToList()
+            };
+            
+            order.TotalAmount = order.Items.Sum(i => i.TotalPrice);
+            
+            // Save order
+            await _orderRepository.AddAsync(order);
+            await _orderRepository.SaveChangesAsync();
+            
+            // Publish event
+            await _eventPublisher.PublishAsync(new OrderCreatedEvent
+            {
+                OrderId = order.Id,
+                CustomerId = order.CustomerId,
+                TotalAmount = order.TotalAmount,
+                Timestamp = DateTime.UtcNow
+            });
+            
+            _logger.LogInformation("Order {OrderId} created successfully", order.Id);
+            
+            return Result<Order>.Success(order);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error creating order");
+            return Result<Order>.Failure("Failed to create order");
+        }
+    }
+    
+    public async Task<Result> ConfirmOrderAsync(int orderId)
+    {
+        var order = await _orderRepository.GetByIdAsync(orderId);
+        
+        if (order == null)
+            return Result.Failure("Order not found");
+        
+        if (order.Status != OrderStatus.Pending)
+            return Result.Failure($"Cannot confirm order in {order.Status} status");
+        
+        // Process payment
+        var paymentResult = await _paymentService.ProcessPaymentAsync(
+            orderId, 
+            order.TotalAmount);
+        
+        if (!paymentResult.Success)
+            return Result.Failure("Payment failed: " + paymentResult.Message);
+        
+        // Reserve inventory
+        foreach (var item in order.Items)
+        {
+            await _inventoryService.ReserveAsync(item.ProductId, item.Quantity);
+        }
+        
+        // Update order status
+        order.Status = OrderStatus.Confirmed;
+        order.UpdatedAt = DateTime.UtcNow;
+        
+        await _orderRepository.UpdateAsync(order);
+        await _orderRepository.SaveChangesAsync();
+        
+        // Publish event
+        await _eventPublisher.PublishAsync(new OrderConfirmedEvent
+        {
+            OrderId = order.Id,
+            Timestamp = DateTime.UtcNow
+        });
+        
+        return Result.Success();
+    }
+    
+    public async Task<Result> CancelOrderAsync(int orderId, string reason)
+    {
+        var order = await _orderRepository.GetByIdAsync(orderId);
+        
+        if (order == null)
+            return Result.Failure("Order not found");
+        
+        if (order.Status == OrderStatus.Delivered || order.Status == OrderStatus.Cancelled)
+            return Result.Failure($"Cannot cancel order in {order.Status} status");
+        
+        // Refund if payment was processed
+        if (order.Status >= OrderStatus.Confirmed)
+        {
+            await _paymentService.RefundAsync(orderId);
+        }
+        
+        // Release inventory
+        if (order.Status >= OrderStatus.Confirmed)
+        {
+            foreach (var item in order.Items)
+            {
+                await _inventoryService.ReleaseAsync(item.ProductId, item.Quantity);
+            }
+        }
+        
+        order.Status = OrderStatus.Cancelled;
+        order.UpdatedAt = DateTime.UtcNow;
+        
+        await _orderRepository.UpdateAsync(order);
+        await _orderRepository.SaveChangesAsync();
+        
+        await _eventPublisher.PublishAsync(new OrderCancelledEvent
+        {
+            OrderId = order.Id,
+            Reason = reason,
+            Timestamp = DateTime.UtcNow
+        });
+        
+        return Result.Success();
+    }
+    
+    public async Task<Result<Order>> GetOrderAsync(int orderId)
+    {
+        var order = await _orderRepository.GetByIdAsync(orderId);
+        
+        if (order == null)
+            return Result<Order>.Failure("Order not found");
+        
+        return Result<Order>.Success(order);
+    }
+    
+    private string GenerateOrderNumber()
+    {
+        return $"ORD-{DateTime.UtcNow:yyyyMMdd}-{Guid.NewGuid().ToString("N").Substring(0, 8).ToUpper()}";
+    }
+}
+
+// Commands and Events
+public class CreateOrderCommand
+{
+    public int CustomerId { get; set; }
+    public List<OrderItemCommand> Items { get; set; } = new();
+}
+
+public class OrderItemCommand
+{
+    public int ProductId { get; set; }
+    public int Quantity { get; set; }
+}
+
+public class OrderCreatedEvent
+{
+    public int OrderId { get; set; }
+    public int CustomerId { get; set; }
+    public decimal TotalAmount { get; set; }
+    public DateTime Timestamp { get; set; }
+}
+
+public class OrderConfirmedEvent
+{
+    public int OrderId { get; set; }
+    public DateTime Timestamp { get; set; }
+}
+
+public class OrderCancelledEvent
+{
+    public int OrderId { get; set; }
+    public string Reason { get; set; } = string.Empty;
+    public DateTime Timestamp { get; set; }
+}
+
+// Result Pattern
+public class Result
+{
+    public bool IsSuccess { get; set; }
+    public string Message { get; set; } = string.Empty;
+    
+    public static Result Success() => new Result { IsSuccess = true };
+    public static Result Failure(string message) => new Result { IsSuccess = false, Message = message };
+}
+
+public class Result<T> : Result
+{
+    public T? Data { get; set; }
+    
+    public static Result<T> Success(T data) => new Result<T> { IsSuccess = true, Data = data };
+    public new static Result<T> Failure(string message) => new Result<T> { IsSuccess = false, Message = message };
+}
+```
+
+---
+
+### 12.2 Handle Concurrent API Requests
+
+**Problem:**
+Handle concurrent requests safely with proper locking and race condition prevention.
+
+**Solution:**
+
+```csharp
+// 1. Using Semaphore for Concurrency Control
+public class ConcurrentRequestHandler
+{
+    private readonly SemaphoreSlim _semaphore;
+    private readonly ILogger<ConcurrentRequestHandler> _logger;
+    
+    public ConcurrentRequestHandler(ILogger<ConcurrentRequestHandler> logger, int maxConcurrency = 10)
+    {
+        _semaphore = new SemaphoreSlim(maxConcurrency, maxConcurrency);
+        _logger = logger;
+    }
+    
+    public async Task<T> ExecuteWithConcurrencyLimitAsync<T>(Func<Task<T>> action)
+    {
+        await _semaphore.WaitAsync();
+        
+        try
+        {
+            return await action();
+        }
+        finally
+        {
+            _semaphore.Release();
+        }
+    }
+}
+
+// 2. Preventing Double-Booking (e.g., Seat Reservation)
+public class SeatReservationService
+{
+    private readonly ApplicationDbContext _context;
+    private readonly IDistributedCache _cache;
+    private readonly ILogger<SeatReservationService> _logger;
+    
+    public SeatReservationService(
+        ApplicationDbContext context,
+        IDistributedCache cache,
+        ILogger<SeatReservationService> logger)
+    {
+        _context = context;
+        _cache = cache;
+        _logger = logger;
+    }
+    
+    public async Task<Result<Reservation>> ReserveSeatAsync(int seatId, int userId)
+    {
+        var lockKey = $"seat:lock:{seatId}";
+        var lockValue = Guid.NewGuid().ToString();
+        
+        try
+        {
+            // Distributed lock using Redis
+            var lockAcquired = await TryAcquireLockAsync(lockKey, lockValue, TimeSpan.FromSeconds(10));
+            
+            if (!lockAcquired)
+            {
+                return Result<Reservation>.Failure("Seat is being reserved by another user");
+            }
+            
+            // Check if seat is available
+            var seat = await _context.Seats
+                .Include(s => s.Reservations)
+                .FirstOrDefaultAsync(s => s.Id == seatId);
+            
+            if (seat == null)
+            {
+                return Result<Reservation>.Failure("Seat not found");
+            }
+            
+            if (seat.Reservations.Any(r => r.Status == ReservationStatus.Active))
+            {
+                return Result<Reservation>.Failure("Seat already reserved");
+            }
+            
+            // Create reservation
+            var reservation = new Reservation
+            {
+                SeatId = seatId,
+                UserId = userId,
+                Status = ReservationStatus.Active,
+                ReservedAt = DateTime.UtcNow,
+                ExpiresAt = DateTime.UtcNow.AddMinutes(15)
+            };
+            
+            _context.Reservations.Add(reservation);
+            await _context.SaveChangesAsync();
+            
+            return Result<Reservation>.Success(reservation);
+        }
+        finally
+        {
+            await ReleaseLockAsync(lockKey, lockValue);
+        }
+    }
+    
+    private async Task<bool> TryAcquireLockAsync(string key, string value, TimeSpan expiry)
+    {
+        try
+        {
+            var options = new DistributedCacheEntryOptions
+            {
+                AbsoluteExpirationRelativeToNow = expiry
+            };
+            
+            var existing = await _cache.GetStringAsync(key);
+            
+            if (existing != null)
+                return false;
+            
+            await _cache.SetStringAsync(key, value, options);
+            return true;
+        }
+        catch
+        {
+            return false;
+        }
+    }
+    
+    private async Task ReleaseLockAsync(string key, string value)
+    {
+        var existing = await _cache.GetStringAsync(key);
+        
+        if (existing == value)
+        {
+            await _cache.RemoveAsync(key);
+        }
+    }
+}
+
+// 3. Handling Concurrent Updates with Optimistic Locking
+public class Product
+{
+    public int Id { get; set; }
+    public string Name { get; set; } = string.Empty;
+    public int Stock { get; set; }
+    public byte[] RowVersion { get; set; } = Array.Empty<byte>();
+}
+
+public class ProductService
+{
+    private readonly ApplicationDbContext _context;
+    private readonly ILogger<ProductService> _logger;
+    private const int MaxRetries = 3;
+    
+    public ProductService(ApplicationDbContext context, ILogger<ProductService> logger)
+    {
+        _context = context;
+        _logger = logger;
+    }
+    
+    public async Task<Result> UpdateStockAsync(int productId, int quantity)
+    {
+        int retryCount = 0;
+        
+        while (retryCount < MaxRetries)
+        {
+            try
+            {
+                var product = await _context.Products.FindAsync(productId);
+                
+                if (product == null)
+                    return Result.Failure("Product not found");
+                
+                if (product.Stock < quantity)
+                    return Result.Failure("Insufficient stock");
+                
+                product.Stock -= quantity;
+                
+                await _context.SaveChangesAsync();
+                
+                return Result.Success();
+            }
+            catch (DbUpdateConcurrencyException ex)
+            {
+                retryCount++;
+                _logger.LogWarning(
+                    "Concurrency conflict updating product {ProductId}, retry {RetryCount}",
+                    productId, retryCount);
+                
+                if (retryCount >= MaxRetries)
+                {
+                    _logger.LogError(ex, "Max retries reached for product {ProductId}", productId);
+                    return Result.Failure("Failed to update stock due to concurrent updates");
+                }
+                
+                // Reload entity with current database values
+                var entry = ex.Entries.Single();
+                await entry.ReloadAsync();
+            }
+        }
+        
+        return Result.Failure("Unexpected error");
+    }
+}
+
+// DbContext configuration for optimistic locking
+public class ApplicationDbContext : DbContext
+{
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<Product>()
+            .Property(p => p.RowVersion)
+            .IsRowVersion();
+    }
+}
+
+// 4. Batch Processing Concurrent Requests
+public class BatchProcessor<T>
+{
+    private readonly SemaphoreSlim _semaphore;
+    private readonly int _batchSize;
+    
+    public BatchProcessor(int maxConcurrency = 10, int batchSize = 100)
+    {
+        _semaphore = new SemaphoreSlim(maxConcurrency);
+        _batchSize = batchSize;
+    }
+    
+    public async Task<List<TResult>> ProcessBatchAsync<TResult>(
+        List<T> items,
+        Func<T, Task<TResult>> processor)
+    {
+        var results = new ConcurrentBag<TResult>();
+        var batches = items.Chunk(_batchSize);
+        
+        foreach (var batch in batches)
+        {
+            var tasks = batch.Select(async item =>
+            {
+                await _semaphore.WaitAsync();
+                try
+                {
+                    var result = await processor(item);
+                    results.Add(result);
+                }
+                finally
+                {
+                    _semaphore.Release();
+                }
+            });
+            
+            await Task.WhenAll(tasks);
+        }
+        
+        return results.ToList();
+    }
+}
+```
+
+---
+
+### 12.3 Idempotent API Implementation
+
+**Problem:**
+Implement idempotent APIs to handle duplicate requests safely.
+
+**Solution:**
+
+```csharp
+// 1. Idempotency Key Middleware
+public class IdempotencyMiddleware
+{
+    private readonly RequestDelegate _next;
+    private readonly IDistributedCache _cache;
+    private readonly ILogger<IdempotencyMiddleware> _logger;
+    
+    public IdempotencyMiddleware(
+        RequestDelegate next,
+        IDistributedCache cache,
+        ILogger<IdempotencyMiddleware> logger)
+    {
+        _next = next;
+        _cache = cache;
+        _logger = logger;
+    }
+    
+    public async Task InvokeAsync(HttpContext context)
+    {
+        // Only apply to POST, PUT, DELETE
+        if (context.Request.Method == "GET" || context.Request.Method == "HEAD")
+        {
+            await _next(context);
+            return;
+        }
+        
+        // Get idempotency key from header
+        if (!context.Request.Headers.TryGetValue("Idempotency-Key", out var idempotencyKey))
+        {
+            await _next(context);
+            return;
+        }
+        
+        var cacheKey = $"idempotency:{idempotencyKey}";
+        
+        // Check if request was already processed
+        var cachedResponse = await _cache.GetStringAsync(cacheKey);
+        
+        if (cachedResponse != null)
+        {
+            _logger.LogInformation("Returning cached response for idempotency key: {Key}", idempotencyKey);
+            
+            var cached = JsonSerializer.Deserialize<CachedResponse>(cachedResponse);
+            
+            context.Response.StatusCode = cached!.StatusCode;
+            context.Response.ContentType = "application/json";
+            
+            await context.Response.WriteAsync(cached.Body);
+            return;
+        }
+        
+        // Capture response
+        var originalBodyStream = context.Response.Body;
+        using var responseBody = new MemoryStream();
+        context.Response.Body = responseBody;
+        
+        await _next(context);
+        
+        // Cache successful responses
+        if (context.Response.StatusCode >= 200 && context.Response.StatusCode < 300)
+        {
+            context.Response.Body.Seek(0, SeekOrigin.Begin);
+            var responseText = await new StreamReader(context.Response.Body).ReadToEndAsync();
+            context.Response.Body.Seek(0, SeekOrigin.Begin);
+            
+            var cached = new CachedResponse
+            {
+                StatusCode = context.Response.StatusCode,
+                Body = responseText
+            };
+            
+            var cacheOptions = new DistributedCacheEntryOptions
+            {
+                AbsoluteExpirationRelativeToNow = TimeSpan.FromHours(24)
+            };
+            
+            await _cache.SetStringAsync(
+                cacheKey,
+                JsonSerializer.Serialize(cached),
+                cacheOptions);
+        }
+        
+        await responseBody.CopyToAsync(originalBodyStream);
+    }
+}
+
+public class CachedResponse
+{
+    public int StatusCode { get; set; }
+    public string Body { get; set; } = string.Empty;
+}
+
+// 2. Idempotent Payment Processing
+public class PaymentService
+{
+    private readonly ApplicationDbContext _context;
+    private readonly IDistributedCache _cache;
+    private readonly ILogger<PaymentService> _logger;
+    
+    public PaymentService(
+        ApplicationDbContext context,
+        IDistributedCache cache,
+        ILogger<PaymentService> logger)
+    {
+        _context = context;
+        _cache = cache;
+        _logger = logger;
+    }
+    
+    public async Task<PaymentResult> ProcessPaymentAsync(PaymentRequest request, string idempotencyKey)
+    {
+        var lockKey = $"payment:lock:{idempotencyKey}";
+        var resultKey = $"payment:result:{idempotencyKey}";
+        
+        // Check if payment already processed
+        var cachedResult = await _cache.GetStringAsync(resultKey);
+        
+        if (cachedResult != null)
+        {
+            _logger.LogInformation("Payment already processed: {IdempotencyKey}", idempotencyKey);
+            return JsonSerializer.Deserialize<PaymentResult>(cachedResult)!;
+        }
+        
+        // Acquire lock
+        var lockValue = Guid.NewGuid().ToString();
+        var lockAcquired = await TryAcquireLockAsync(lockKey, lockValue, TimeSpan.FromMinutes(1));
+        
+        if (!lockAcquired)
+        {
+            // Another request is processing, wait and retry
+            await Task.Delay(100);
+            cachedResult = await _cache.GetStringAsync(resultKey);
+            
+            if (cachedResult != null)
+            {
+                return JsonSerializer.Deserialize<PaymentResult>(cachedResult)!;
+            }
+            
+            return new PaymentResult
+            {
+                Success = false,
+                Message = "Payment is being processed"
+            };
+        }
+        
+        try
+        {
+            // Check for existing payment
+            var existingPayment = await _context.Payments
+                .FirstOrDefaultAsync(p => p.IdempotencyKey == idempotencyKey);
+            
+            if (existingPayment != null)
+            {
+                var result = new PaymentResult
+                {
+                    Success = true,
+                    TransactionId = existingPayment.TransactionId,
+                    Message = "Payment already processed"
+                };
+                
+                await CacheResultAsync(resultKey, result);
+                return result;
+            }
+            
+            // Process payment
+            var payment = new Payment
+            {
+                IdempotencyKey = idempotencyKey,
+                Amount = request.Amount,
+                Currency = request.Currency,
+                Status = PaymentStatus.Pending,
+                CreatedAt = DateTime.UtcNow
+            };
+            
+            _context.Payments.Add(payment);
+            await _context.SaveChangesAsync();
+            
+            // Call payment gateway
+            var transactionId = await ProcessWithGatewayAsync(request);
+            
+            payment.TransactionId = transactionId;
+            payment.Status = PaymentStatus.Completed;
+            payment.CompletedAt = DateTime.UtcNow;
+            
+            await _context.SaveChangesAsync();
+            
+            var successResult = new PaymentResult
+            {
+                Success = true,
+                TransactionId = transactionId,
+                Message = "Payment processed successfully"
+            };
+            
+            // Cache result
+            await CacheResultAsync(resultKey, successResult);
+            
+            return successResult;
+        }
+        finally
+        {
+            await ReleaseLockAsync(lockKey, lockValue);
+        }
+    }
+    
+    private async Task<bool> TryAcquireLockAsync(string key, string value, TimeSpan expiry)
+    {
+        try
+        {
+            var existing = await _cache.GetStringAsync(key);
+            if (existing != null) return false;
+            
+            await _cache.SetStringAsync(key, value, new DistributedCacheEntryOptions
+            {
+                AbsoluteExpirationRelativeToNow = expiry
+            });
+            
+            return true;
+        }
+        catch
+        {
+            return false;
+        }
+    }
+    
+    private async Task ReleaseLockAsync(string key, string value)
+    {
+        var existing = await _cache.GetStringAsync(key);
+        if (existing == value)
+        {
+            await _cache.RemoveAsync(key);
+        }
+    }
+    
+    private async Task CacheResultAsync(string key, PaymentResult result)
+    {
+        await _cache.SetStringAsync(
+            key,
+            JsonSerializer.Serialize(result),
+            new DistributedCacheEntryOptions
+            {
+                AbsoluteExpirationRelativeToNow = TimeSpan.FromDays(7)
+            });
+    }
+    
+    private async Task<string> ProcessWithGatewayAsync(PaymentRequest request)
+    {
+        // Simulate payment gateway call
+        await Task.Delay(100);
+        return Guid.NewGuid().ToString();
+    }
+}
+
+public class Payment
+{
+    public int Id { get; set; }
+    public string IdempotencyKey { get; set; } = string.Empty;
+    public decimal Amount { get; set; }
+    public string Currency { get; set; } = string.Empty;
+    public string TransactionId { get; set; } = string.Empty;
+    public PaymentStatus Status { get; set; }
+    public DateTime CreatedAt { get; set; }
+    public DateTime? CompletedAt { get; set; }
+}
+
+public enum PaymentStatus
+{
+    Pending,
+    Completed,
+    Failed
+}
+
+public class PaymentRequest
+{
+    public decimal Amount { get; set; }
+    public string Currency { get; set; } = "USD";
+    public string CardNumber { get; set; } = string.Empty;
+}
+
+public class PaymentResult
+{
+    public bool Success { get; set; }
+    public string TransactionId { get; set; } = string.Empty;
+    public string Message { get; set; } = string.Empty;
+}
+
+// Controller Usage
+[ApiController]
+[Route("api/[controller]")]
+public class PaymentsController : ControllerBase
+{
+    private readonly PaymentService _paymentService;
+    
+    public PaymentsController(PaymentService paymentService)
+    {
+        _paymentService = paymentService;
+    }
+    
+    [HttpPost]
+    public async Task<ActionResult<PaymentResult>> ProcessPayment(
+        [FromBody] PaymentRequest request,
+        [FromHeader(Name = "Idempotency-Key")] string idempotencyKey)
+    {
+        if (string.IsNullOrWhiteSpace(idempotencyKey))
+        {
+            return BadRequest(new { error = "Idempotency-Key header is required" });
+        }
+        
+        var result = await _paymentService.ProcessPaymentAsync(request, idempotencyKey);
+        
+        if (!result.Success)
+        {
+            return BadRequest(result);
+        }
+        
+        return Ok(result);
+    }
+}
+```
+
+---
+
+## 13. System Design
+
+### 13.1 Design URL Shortener
+
+**Problem:**
+Design a URL shortening service like bit.ly.
+
+**Solution:**
+
+```csharp
+// URL Shortener Service
+public class UrlShortenerService
+{
+    private readonly ApplicationDbContext _context;
+    private readonly IDistributedCache _cache;
+    private readonly ILogger<UrlShortenerService> _logger;
+    private const string BaseUrl = "https://short.url/";
+    private const string Alphabet = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+    private const int ShortCodeLength = 7;
+    
+    public UrlShortenerService(
+        ApplicationDbContext context,
+        IDistributedCache cache,
+        ILogger<UrlShortenerService> logger)
+    {
+        _context = context;
+        _cache = cache;
+        _logger = logger;
+    }
+    
+    public async Task<ShortenedUrl> CreateShortUrlAsync(string longUrl, string? customAlias = null, int? expiryDays = null)
+    {
+        // Validate URL
+        if (!Uri.TryCreate(longUrl, UriKind.Absolute, out _))
+        {
+            throw new ArgumentException("Invalid URL");
+        }
+        
+        // Check if URL already shortened
+        var existing = await _context.ShortenedUrls
+            .FirstOrDefaultAsync(u => u.LongUrl == longUrl && !u.IsExpired);
+        
+        if (existing != null)
+        {
+            return existing;
+        }
+        
+        string shortCode;
+        
+        if (!string.IsNullOrWhiteSpace(customAlias))
+        {
+            // Validate custom alias
+            if (customAlias.Length < 3 || customAlias.Length > 20)
+            {
+                throw new ArgumentException("Custom alias must be between 3 and 20 characters");
+            }
+            
+            // Check if alias available
+            var aliasExists = await _context.ShortenedUrls
+                .AnyAsync(u => u.ShortCode == customAlias);
+            
+            if (aliasExists)
+            {
+                throw new ArgumentException("Custom alias already taken");
+            }
+            
+            shortCode = customAlias;
+        }
+        else
+        {
+            // Generate unique short code
+            shortCode = await GenerateUniqueShortCodeAsync();
+        }
+        
+        var shortenedUrl = new ShortenedUrl
+        {
+            LongUrl = longUrl,
+            ShortCode = shortCode,
+            CreatedAt = DateTime.UtcNow,
+            ExpiresAt = expiryDays.HasValue 
+                ? DateTime.UtcNow.AddDays(expiryDays.Value) 
+                : null,
+            Clicks = 0
+        };
+        
+        _context.ShortenedUrls.Add(shortenedUrl);
+        await _context.SaveChangesAsync();
+        
+        // Cache the mapping
+        await CacheShortUrlAsync(shortCode, longUrl);
+        
+        _logger.LogInformation("Created short URL: {ShortCode} -> {LongUrl}", shortCode, longUrl);
+        
+        return shortenedUrl;
+    }
+    
+    public async Task<string?> GetLongUrlAsync(string shortCode)
+    {
+        // Try cache first
+        var cacheKey = $"url:{shortCode}";
+        var cached = await _cache.GetStringAsync(cacheKey);
+        
+        if (cached != null)
+        {
+            await IncrementClickCountAsync(shortCode);
+            return cached;
+        }
+        
+        // Query database
+        var shortenedUrl = await _context.ShortenedUrls
+            .FirstOrDefaultAsync(u => u.ShortCode == shortCode);
+        
+        if (shortenedUrl == null || shortenedUrl.IsExpired)
+        {
+            return null;
+        }
+        
+        // Cache for future requests
+        await CacheShortUrlAsync(shortCode, shortenedUrl.LongUrl);
+        
+        // Increment click count asynchronously
+        _ = IncrementClickCountAsync(shortCode);
+        
+        return shortenedUrl.LongUrl;
+    }
+    
+    public async Task<UrlStatistics> GetStatisticsAsync(string shortCode)
+    {
+        var shortenedUrl = await _context.ShortenedUrls
+            .Include(u => u.ClickEvents)
+            .FirstOrDefaultAsync(u => u.ShortCode == shortCode);
+        
+        if (shortenedUrl == null)
+        {
+            throw new NotFoundException("Short URL not found");
+        }
+        
+        return new UrlStatistics
+        {
+            ShortCode = shortCode,
+            LongUrl = shortenedUrl.LongUrl,
+            TotalClicks = shortenedUrl.Clicks,
+            CreatedAt = shortenedUrl.CreatedAt,
+            ExpiresAt = shortenedUrl.ExpiresAt,
+            ClicksByDate = shortenedUrl.ClickEvents
+                .GroupBy(c => c.ClickedAt.Date)
+                .Select(g => new ClickStat
+                {
+                    Date = g.Key,
+                    Count = g.Count()
+                })
+                .OrderBy(c => c.Date)
+                .ToList(),
+            ClicksByCountry = shortenedUrl.ClickEvents
+                .GroupBy(c => c.Country)
+                .Select(g => new CountryStat
+                {
+                    Country = g.Key,
+                    Count = g.Count()
+                })
+                .OrderByDescending(c => c.Count)
+                .Take(10)
+                .ToList()
+        };
+    }
+    
+    private async Task<string> GenerateUniqueShortCodeAsync()
+    {
+        for (int attempts = 0; attempts < 5; attempts++)
+        {
+            var shortCode = GenerateRandomCode();
+            
+            var exists = await _context.ShortenedUrls
+                .AnyAsync(u => u.ShortCode == shortCode);
+            
+            if (!exists)
+            {
+                return shortCode;
+            }
+        }
+        
+        throw new Exception("Failed to generate unique short code");
+    }
+    
+    private string GenerateRandomCode()
+    {
+        var random = new Random();
+        var code = new char[ShortCodeLength];
+        
+        for (int i = 0; i < ShortCodeLength; i++)
+        {
+            code[i] = Alphabet[random.Next(Alphabet.Length)];
+        }
+        
+        return new string(code);
+    }
+    
+    private async Task CacheShortUrlAsync(string shortCode, string longUrl)
+    {
+        var cacheKey = $"url:{shortCode}";
+        await _cache.SetStringAsync(
+            cacheKey,
+            longUrl,
+            new DistributedCacheEntryOptions
+            {
+                AbsoluteExpirationRelativeToNow = TimeSpan.FromHours(24)
+            });
+    }
+    
+    private async Task IncrementClickCountAsync(string shortCode)
+    {
+        try
+        {
+            var url = await _context.ShortenedUrls
+                .FirstOrDefaultAsync(u => u.ShortCode == shortCode);
+            
+            if (url != null)
+            {
+                url.Clicks++;
+                url.LastAccessedAt = DateTime.UtcNow;
+                
+                // Log click event
+                _context.ClickEvents.Add(new ClickEvent
+                {
+                    ShortenedUrlId = url.Id,
+                    ClickedAt = DateTime.UtcNow,
+                    Country = "US" // Would come from IP geolocation
+                });
+                
+                await _context.SaveChangesAsync();
+            }
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Failed to increment click count for {ShortCode}", shortCode);
+        }
+    }
+}
+
+// Models
+public class ShortenedUrl
+{
+    public int Id { get; set; }
+    public string LongUrl { get; set; } = string.Empty;
+    public string ShortCode { get; set; } = string.Empty;
+    public DateTime CreatedAt { get; set; }
+    public DateTime? ExpiresAt { get; set; }
+    public DateTime? LastAccessedAt { get; set; }
+    public long Clicks { get; set; }
+    public bool IsExpired => ExpiresAt.HasValue && ExpiresAt.Value < DateTime.UtcNow;
+    public ICollection<ClickEvent> ClickEvents { get; set; } = new List<ClickEvent>();
+}
+
+public class ClickEvent
+{
+    public int Id { get; set; }
+    public int ShortenedUrlId { get; set; }
+    public DateTime ClickedAt { get; set; }
+    public string Country { get; set; } = string.Empty;
+    public ShortenedUrl ShortenedUrl { get; set; } = null!;
+}
+
+public class UrlStatistics
+{
+    public string ShortCode { get; set; } = string.Empty;
+    public string LongUrl { get; set; } = string.Empty;
+    public long TotalClicks { get; set; }
+    public DateTime CreatedAt { get; set; }
+    public DateTime? ExpiresAt { get; set; }
+    public List<ClickStat> ClicksByDate { get; set; } = new();
+    public List<CountryStat> ClicksByCountry { get; set; } = new();
+}
+
+public class ClickStat
+{
+    public DateTime Date { get; set; }
+    public int Count { get; set; }
+}
+
+public class CountryStat
+{
+    public string Country { get; set; } = string.Empty;
+    public int Count { get; set; }
+}
+
+// Controller
+[ApiController]
+[Route("api/[controller]")]
+public class UrlShortenerController : ControllerBase
+{
+    private readonly UrlShortenerService _urlShortener;
+    
+    public UrlShortenerController(UrlShortenerService urlShortener)
+    {
+        _urlShortener = urlShortener;
+    }
+    
+    [HttpPost("shorten")]
+    public async Task<ActionResult<ShortenedUrl>> CreateShortUrl([FromBody] CreateShortUrlRequest request)
+    {
+        var result = await _urlShortener.CreateShortUrlAsync(
+            request.LongUrl,
+            request.CustomAlias,
+            request.ExpiryDays);
+        
+        return Ok(result);
+    }
+    
+    [HttpGet("{shortCode}")]
+    public async Task<IActionResult> RedirectToLongUrl(string shortCode)
+    {
+        var longUrl = await _urlShortener.GetLongUrlAsync(shortCode);
+        
+        if (longUrl == null)
+        {
+            return NotFound();
+        }
+        
+        return Redirect(longUrl);
+    }
+    
+    [HttpGet("{shortCode}/stats")]
+    public async Task<ActionResult<UrlStatistics>> GetStatistics(string shortCode)
+    {
+        var stats = await _urlShortener.GetStatisticsAsync(shortCode);
+        return Ok(stats);
+    }
+}
+
+public class CreateShortUrlRequest
+{
+    public string LongUrl { get; set; } = string.Empty;
+    public string? CustomAlias { get; set; }
+    public int? ExpiryDays { get; set; }
+}
+```
+
+---
+
 ## 14. Advanced Database & Stored Procedures
 
 ### 14.1 Nested Stored Procedures with Temp Tables and Variables
