@@ -2610,6 +2610,8 @@ This scenario tests your understanding of variable and temp table scope in neste
 **Question:** You have three stored procedures: `sp_ProcessOrders`, `sp_CalculateTax`, and `sp_GenerateInvoice`. They are called in sequence (nested). `sp_ProcessOrders` creates a temp table `#OrderDetails` and a temp variable `@OrderTotal`. `sp_CalculateTax` is called from `sp_ProcessOrders` and needs to access `#OrderDetails`. `sp_GenerateInvoice` is called from `sp_CalculateTax` and needs both `#OrderDetails` and `@OrderTotal`. Will this work? If not, how would you fix it?
 
 **Answer:**
+Temp tables are session-scoped and accessible across nested procedures, while temp variables are local-scoped and only accessible within the procedure where they're declared. The solution involves either converting temp variables to temp tables or passing values as OUTPUT parameters.
+
 ```sql
 -- Temp tables are accessible in nested procedures (session-scoped)
 -- Temp variables are NOT accessible in nested procedures (local scope only)
@@ -2664,12 +2666,11 @@ END;
 
 ### Scenario 2: Deadlock Between Two Concurrent Transactions
 
-**Description:**
-This scenario addresses deadlock issues caused by different lock acquisition orders in concurrent transactions. Deadlocks occur when two transactions wait for each other's locks. The solution requires ensuring all transactions access resources in the same order, implementing retry logic, or using appropriate isolation levels.
-
 **Question:** Your application has two concurrent transactions. Transaction A updates the `Inventory` table first, then the `Order` table. Transaction B updates the `Order` table first, then the `Inventory` table. Users are experiencing deadlock errors. How would you resolve this?
 
 **Answer:**
+Deadlocks occur when two transactions wait for each other's locks by accessing resources in different orders. The solution is to ensure all transactions access tables in the same order (Inventory → Order), implement retry logic, or use appropriate isolation levels.
+
 ```sql
 -- PROBLEM: Different lock order causes deadlock
 -- Transaction A: Inventory -> Order
@@ -2698,12 +2699,11 @@ COMMIT;
 
 ### Scenario 3: Query Performance Degradation Over Time
 
-**Description:**
-This scenario demonstrates how queries slow down as tables grow without proper indexing and maintenance. Performance degradation typically results from missing indexes, outdated statistics, or table scans. Solutions include creating appropriate indexes, updating statistics, implementing table partitioning, or using filtered indexes for frequently queried date ranges.
-
 **Question:** A query that used to run in 2 seconds now takes 30 seconds. The table has grown from 10,000 to 10 million rows. The query uses `WHERE CreatedDate >= DATEADD(DAY, -30, GETDATE())`. What could be the issue and how would you fix it?
 
 **Answer:**
+Performance degradation with table growth typically results from missing indexes, outdated statistics, or table scans. Solutions include creating indexes on the filtered column, updating statistics, implementing table partitioning for very large tables, or using filtered indexes for frequently queried date ranges.
+
 ```sql
 -- PROBLEM: Missing index on CreatedDate, or outdated statistics
 
@@ -2732,12 +2732,11 @@ WHERE CreatedDate >= DATEADD(DAY, -90, GETDATE());
 
 ### Scenario 4: Duplicate Records After Data Migration
 
-**Description:**
-This scenario covers data quality issues common in migrations, where duplicates exist with minor variations (extra spaces, case differences, formatting). The solution involves identifying fuzzy matches using string functions, ranking records by completeness, merging duplicates while preserving the best data, and updating foreign key references before cleanup.
-
 **Question:** After migrating data from an old system, you notice duplicate customer records. Some customers have 2-3 duplicate entries with slightly different data (e.g., "John Doe" vs "John  Doe" with extra space, or different email formats). How would you identify and clean these duplicates?
 
 **Answer:**
+Identify duplicates using fuzzy matching with string functions (LTRIM, RTRIM, LOWER), rank records by data completeness, merge duplicates keeping the most complete record, and update foreign key references in related tables before deleting duplicates.
+
 ```sql
 -- Step 1: Identify duplicates using fuzzy matching
 WITH DuplicateCandidates AS (
@@ -2789,12 +2788,11 @@ WHERE dc.DuplicateId <> dc.KeptCustomerId;
 
 ### Scenario 5: Missing Data After Transaction Rollback
 
-**Description:**
-This scenario tests understanding of transaction scope and audit logging. When transactions rollback, all changes including audit logs are lost. The solution requires logging failed attempts outside the transaction scope using TRY-CATCH blocks, separate connections, or table variables that can survive rollbacks in certain scenarios.
-
 **Question:** A stored procedure inserts data into three tables (`Orders`, `OrderItems`, `Payment`) within a transaction. If the payment fails, the transaction rolls back. However, you need to log the failed attempt in an `AuditLog` table. How would you handle this?
 
 **Answer:**
+When transactions rollback, all changes including audit logs are lost. The solution requires logging failed attempts outside the transaction scope using autonomous transactions (separate BEGIN TRANSACTION for logging), TRY-CATCH blocks, or table variables that persist beyond rollback.
+
 ```sql
 -- SOLUTION: Use separate transaction for audit, or TRY-CATCH with nested transactions
 
@@ -2843,12 +2841,11 @@ END;
 
 ### Scenario 6: Performance Issue with LIKE Query
 
-**Description:**
-This scenario addresses performance problems with wildcard searches, particularly leading wildcards that prevent index usage. Solutions include implementing full-text search for text queries, using computed columns for suffix searches, considering search engines like Elasticsearch, or restructuring queries to use prefix searches that can leverage indexes.
-
 **Question:** A search feature allows users to search products by name. The query `SELECT * FROM Products WHERE ProductName LIKE '%laptop%'` is very slow on a table with 5 million products. How would you optimize this?
 
 **Answer:**
+Leading wildcards ('%laptop%') prevent index usage causing table scans. Solutions include implementing full-text search for text queries, using computed columns with reverse strings for suffix searches, considering search engines like Elasticsearch, or restructuring queries to use prefix searches that can leverage indexes.
+
 ```sql
 -- PROBLEM: Leading wildcard prevents index usage
 
@@ -2885,12 +2882,11 @@ CREATE INDEX IX_Products_Name ON Products(ProductName);
 
 ### Scenario 7: Incorrect Results from JOIN Query
 
-**Description:**
-This scenario explores common JOIN mistakes that lead to missing data, particularly using INNER JOIN when LEFT JOIN is needed. The issue often arises when assuming all parent records have child records. Solutions involve using appropriate JOIN types, checking for NULL foreign keys, and verifying data integrity between related tables.
-
 **Question:** You're joining `Orders` and `OrderItems` tables. The query returns fewer rows than expected. Some orders appear to be missing. What could be wrong and how would you debug it?
 
 **Answer:**
+Using INNER JOIN excludes orders without items, causing missing results. Debug by checking for NULL foreign keys, using LEFT JOIN to include all parent records regardless of child records, verifying data integrity, checking JOIN conditions for typos, and confirming data type matches between joined columns.
+
 ```sql
 -- PROBLEM: Using INNER JOIN excludes orders without items
 
