@@ -28,6 +28,7 @@ The project contains:
 ### Database & SQL
 
 - **[📊 SQL Interview Questions - Complete Guide](docs/SQL-Interview-Questions-Guide.md)** - **NEW!** 25 comprehensive SQL interview questions covering DDL/DML/DCL/TCL, JOINs, indexes, normalization, stored procedures vs functions, transactions & ACID, locks & deadlocks, performance optimization, execution plans, and practical scenarios with real-world examples for backend developers
+- **[🗃️ Entity Framework Core - Complete Interview Guide](docs/EF-Core-Interview-Questions-Guide.md)** - **NEW!** 25 comprehensive EF Core interview questions covering DbContext & DbSet, Code First vs Database First, Migrations, Change Tracking, Lazy/Eager/Explicit Loading, Tracking vs No-Tracking queries, LINQ, N+1 problem, AsNoTracking, Raw SQL, Transactions, Concurrency handling, EF Core vs Dapper, Performance optimization, Navigation Properties, Shadow Properties, Connection Resiliency, Soft Delete, Value Conversions, Split Query, Owned Types, Global Query Filters, and Find() vs FirstOrDefault() with real-world examples
 
 ### Frontend Development
 
@@ -119,7 +120,7 @@ The project contains:
 - **Parameter Passing**: ref, out, in modifiers and their use cases
 - **Object-Oriented Design**: SOLID principles, design patterns (23 GoF patterns), clean architecture
 - **ASP.NET Core**: Web API development, middleware, dependency injection, global exception handling
-- **Entity Framework Core**: LINQ optimization, N+1 problem, eager vs lazy loading
+- **Entity Framework Core**: DbContext & DbSet, Code First vs Database First, Migrations, Change Tracking, Lazy/Eager/Explicit Loading, Tracking vs No-Tracking queries, LINQ optimization, N+1 problem, AsNoTracking, Raw SQL, Transactions, Concurrency handling, EF Core vs Dapper, Performance optimization, Navigation Properties, Include/ThenInclude, Shadow Properties, Connection Resiliency, Soft Delete, Value Conversions, Split Query, Owned Types, Global Query Filters, Find() vs FirstOrDefault()
 - **Database & SQL**: DDL/DML/DCL/TCL commands, JOINs, indexes (clustered vs non-clustered), stored procedures vs functions, transactions & ACID, locks & deadlocks, query optimization, execution plans, pagination, NULL handling
 - **Microservices**: Retry patterns with Polly, Circuit Breaker, Saga Pattern, event-driven architecture
 - **Advanced Topics**: MediatR, CQRS, Apache Kafka, rate limiting, idempotent APIs
@@ -129,8 +130,8 @@ The project contains:
 
 ## Repository Statistics
 
-- **📚 Total Documents**: 51+ comprehensive guides
-- **❓ Interview Questions**: 525+ questions with detailed answers
-- **💻 Code Examples**: 225+ real-world code snippets
+- **📚 Total Documents**: 52+ comprehensive guides
+- **❓ Interview Questions**: 550+ questions with detailed answers
+- **💻 Code Examples**: 250+ real-world code snippets
 - **🎯 Coverage**: Beginner to Senior/Lead level
 - **📝 Last Updated**: January 2026
