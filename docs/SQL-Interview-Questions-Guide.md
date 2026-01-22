@@ -2,6 +2,8 @@
 
 ## Table of Contents
 
+### Core Concepts (1-25)
+
 1. [What is SQL?](#1-what-is-sql)
 2. [DDL, DML, DCL, and TCL Commands](#2-ddl-dml-dcl-and-tcl-commands)
 3. [Primary Key vs Foreign Key](#3-primary-key-vs-foreign-key)
@@ -27,6 +29,34 @@
 23. [What is the N+1 Query Problem?](#23-what-is-the-n1-query-problem)
 24. [How to Handle NULL Values in SQL?](#24-how-to-handle-null-values-in-sql)
 25. [What are Execution Plans?](#25-what-are-execution-plans)
+
+### Scenario-Based Questions (26-50)
+
+26. [Scenario 1: Nested Stored Procedures with Temp Tables](#scenario-1-nested-stored-procedures-with-temp-tables)
+27. [Scenario 2: Deadlock Between Two Concurrent Transactions](#scenario-2-deadlock-between-two-concurrent-transactions)
+28. [Scenario 3: Query Performance Degradation Over Time](#scenario-3-query-performance-degradation-over-time)
+29. [Scenario 4: Duplicate Records After Data Migration](#scenario-4-duplicate-records-after-data-migration)
+30. [Scenario 5: Missing Data After Transaction Rollback](#scenario-5-missing-data-after-transaction-rollback)
+31. [Scenario 6: Performance Issue with LIKE Query](#scenario-6-performance-issue-with-like-query)
+32. [Scenario 7: Incorrect Results from JOIN Query](#scenario-7-incorrect-results-from-join-query)
+33. [Scenario 8: Race Condition in Inventory Update](#scenario-8-race-condition-in-inventory-update)
+34. [Scenario 9: Slow Query with Multiple OR Conditions](#scenario-9-slow-query-with-multiple-or-conditions)
+35. [Scenario 10: Data Inconsistency Between Related Tables](#scenario-10-data-inconsistency-between-related-tables)
+36. [Scenario 11: Memory Error with Large Result Set](#scenario-11-memory-error-with-large-result-set)
+37. [Scenario 12: Trigger Causing Performance Issues](#scenario-12-trigger-causing-performance-issues)
+38. [Scenario 13: Incorrect Aggregation Results with NULLs](#scenario-13-incorrect-aggregation-results-with-nulls)
+39. [Scenario 14: Query Timeout on Production](#scenario-14-query-timeout-on-production)
+40. [Scenario 15: Cascading Delete Causing Unexpected Deletions](#scenario-15-cascading-delete-causing-unexpected-deletions)
+41. [Scenario 16: Stored Procedure Returns Different Results on Each Execution](#scenario-16-stored-procedure-returns-different-results-on-each-execution)
+42. [Scenario 17: Foreign Key Constraint Preventing Legitimate Updates](#scenario-17-foreign-key-constraint-preventing-legitimate-updates)
+43. [Scenario 18: Query with Date Range Returns No Results](#scenario-18-query-with-date-range-returns-no-results)
+44. [Scenario 19: Duplicate Key Error on INSERT](#scenario-19-duplicate-key-error-on-insert)
+45. [Scenario 20: CTE Referenced Multiple Times Performance](#scenario-20-cte-referenced-multiple-times-performance)
+46. [Scenario 21: UNION Removing Valid Duplicates](#scenario-21-union-removing-valid-duplicates)
+47. [Scenario 22: Index Not Being Used Despite Existing](#scenario-22-index-not-being-used-despite-existing)
+48. [Scenario 23: Recursive Query Hitting Maximum Recursion](#scenario-23-recursive-query-hitting-maximum-recursion)
+49. [Scenario 24: Bulk Insert Performance Issues](#scenario-24-bulk-insert-performance-issues)
+50. [Scenario 25: Dynamic SQL Injection Risk](#scenario-25-dynamic-sql-injection-risk)
 
 ---
 
@@ -2565,6 +2595,1802 @@ ORDER BY avg_cpu_time DESC;
 | **Nested Loop Join** | Inner loop for each outer row | ? Good for small datasets |
 | **Hash Match Join** | Builds hash table | ? Good for large datasets |
 | **Sort** | Sorts data | ?? Expensive, consider index |
+
+---
+
+## 26. Scenario-Based Interview Questions
+
+This section contains 25 real-world scenario-based questions that test your practical SQL knowledge and problem-solving skills. These scenarios simulate actual challenges you might face in production environments.
+
+### Scenario 1: Nested Stored Procedures with Temp Tables
+
+**Description:**
+This scenario tests your understanding of variable and temp table scope in nested stored procedures. Temp tables are session-scoped and accessible across nested procedures, while temp variables are local-scoped and only accessible within the procedure where they're declared. The solution involves either converting temp variables to temp tables or passing values as parameters.
+
+**Question:** You have three stored procedures: `sp_ProcessOrders`, `sp_CalculateTax`, and `sp_GenerateInvoice`. They are called in sequence (nested). `sp_ProcessOrders` creates a temp table `#OrderDetails` and a temp variable `@OrderTotal`. `sp_CalculateTax` is called from `sp_ProcessOrders` and needs to access `#OrderDetails`. `sp_GenerateInvoice` is called from `sp_CalculateTax` and needs both `#OrderDetails` and `@OrderTotal`. Will this work? If not, how would you fix it?
+
+**Answer:**
+```sql
+-- Temp tables are accessible in nested procedures (session-scoped)
+-- Temp variables are NOT accessible in nested procedures (local scope only)
+
+-- SOLUTION: Use temp tables for both, or pass as parameters
+
+-- Option 1: Convert temp variable to temp table
+CREATE PROCEDURE sp_ProcessOrders
+AS
+BEGIN
+    CREATE TABLE #OrderDetails (OrderId INT, ProductId INT, Quantity INT);
+    CREATE TABLE #OrderTotal (TotalAmount DECIMAL(10,2));  -- Instead of @OrderTotal variable
+    INSERT INTO #OrderTotal VALUES (0);
+    
+    -- Populate #OrderDetails...
+    
+    EXEC sp_CalculateTax;  -- Can access #OrderDetails and #OrderTotal
+END;
+
+CREATE PROCEDURE sp_CalculateTax
+AS
+BEGIN
+    -- Can access #OrderDetails (temp table)
+    -- Can access #OrderTotal (temp table)
+    
+    UPDATE #OrderTotal SET TotalAmount = TotalAmount * 1.08;  -- Add tax
+    
+    EXEC sp_GenerateInvoice;  -- Can access both temp tables
+END;
+
+CREATE PROCEDURE sp_GenerateInvoice
+AS
+BEGIN
+    -- Can access #OrderDetails and #OrderTotal (both are temp tables)
+    SELECT * FROM #OrderDetails;
+    SELECT * FROM #OrderTotal;
+END;
+
+-- Option 2: Pass values as OUTPUT parameters
+CREATE PROCEDURE sp_ProcessOrders
+AS
+BEGIN
+    DECLARE @OrderTotal DECIMAL(10,2) = 1000;
+    CREATE TABLE #OrderDetails (OrderId INT, ProductId INT, Quantity INT);
+    
+    EXEC sp_CalculateTax @OrderTotal = @OrderTotal OUTPUT;
+    EXEC sp_GenerateInvoice @OrderTotal = @OrderTotal;
+END;
+```
+
+---
+
+### Scenario 2: Deadlock Between Two Concurrent Transactions
+
+**Description:**
+This scenario addresses deadlock issues caused by different lock acquisition orders in concurrent transactions. Deadlocks occur when two transactions wait for each other's locks. The solution requires ensuring all transactions access resources in the same order, implementing retry logic, or using appropriate isolation levels.
+
+**Question:** Your application has two concurrent transactions. Transaction A updates the `Inventory` table first, then the `Order` table. Transaction B updates the `Order` table first, then the `Inventory` table. Users are experiencing deadlock errors. How would you resolve this?
+
+**Answer:**
+```sql
+-- PROBLEM: Different lock order causes deadlock
+-- Transaction A: Inventory -> Order
+-- Transaction B: Order -> Inventory
+
+-- SOLUTION: Always access tables in same order
+-- Both transactions should access: Inventory -> Order
+
+-- Transaction A (already correct)
+BEGIN TRANSACTION;
+UPDATE Inventory SET Quantity = Quantity - 1 WHERE ProductId = 1;
+UPDATE Order SET Status = 'Completed' WHERE OrderId = 101;
+COMMIT;
+
+-- Transaction B (FIXED: Access Inventory first)
+BEGIN TRANSACTION;
+UPDATE Inventory SET Quantity = Quantity - 1 WHERE ProductId = 2;  -- Changed order
+UPDATE Order SET Status = 'Completed' WHERE OrderId = 102;
+COMMIT;
+
+-- ALTERNATIVE: Use application-level retry logic
+-- Catch deadlock exception and retry transaction
+```
+
+---
+
+### Scenario 3: Query Performance Degradation Over Time
+
+**Description:**
+This scenario demonstrates how queries slow down as tables grow without proper indexing and maintenance. Performance degradation typically results from missing indexes, outdated statistics, or table scans. Solutions include creating appropriate indexes, updating statistics, implementing table partitioning, or using filtered indexes for frequently queried date ranges.
+
+**Question:** A query that used to run in 2 seconds now takes 30 seconds. The table has grown from 10,000 to 10 million rows. The query uses `WHERE CreatedDate >= DATEADD(DAY, -30, GETDATE())`. What could be the issue and how would you fix it?
+
+**Answer:**
+```sql
+-- PROBLEM: Missing index on CreatedDate, or outdated statistics
+
+-- Check current execution plan
+SELECT * FROM Orders 
+WHERE CreatedDate >= DATEADD(DAY, -30, GETDATE());
+
+-- SOLUTION 1: Create index on CreatedDate
+CREATE INDEX IX_Orders_CreatedDate ON Orders(CreatedDate);
+
+-- SOLUTION 2: Update statistics
+UPDATE STATISTICS Orders;
+
+-- SOLUTION 3: Partition table by date (for very large tables)
+-- Create partition function
+CREATE PARTITION FUNCTION pf_Orders_Date (DATE)
+AS RANGE RIGHT FOR VALUES ('2024-01-01', '2024-07-01', '2025-01-01');
+
+-- SOLUTION 4: Use filtered index for recent data
+CREATE INDEX IX_Orders_RecentCreatedDate 
+ON Orders(CreatedDate) 
+WHERE CreatedDate >= DATEADD(DAY, -90, GETDATE());
+```
+
+---
+
+### Scenario 4: Duplicate Records After Data Migration
+
+**Description:**
+This scenario covers data quality issues common in migrations, where duplicates exist with minor variations (extra spaces, case differences, formatting). The solution involves identifying fuzzy matches using string functions, ranking records by completeness, merging duplicates while preserving the best data, and updating foreign key references before cleanup.
+
+**Question:** After migrating data from an old system, you notice duplicate customer records. Some customers have 2-3 duplicate entries with slightly different data (e.g., "John Doe" vs "John  Doe" with extra space, or different email formats). How would you identify and clean these duplicates?
+
+**Answer:**
+```sql
+-- Step 1: Identify duplicates using fuzzy matching
+WITH DuplicateCandidates AS (
+    SELECT 
+        CustomerId,
+        CustomerName,
+        Email,
+        LTRIM(RTRIM(CustomerName)) AS CleanName,
+        LOWER(LTRIM(RTRIM(Email))) AS CleanEmail,
+        ROW_NUMBER() OVER (
+            PARTITION BY LTRIM(RTRIM(CustomerName)), LOWER(LTRIM(RTRIM(Email))) 
+            ORDER BY CustomerId
+        ) AS RowNum
+    FROM Customer
+)
+SELECT * FROM DuplicateCandidates WHERE RowNum > 1;
+
+-- Step 2: Merge duplicates (keep most complete record)
+WITH RankedCustomers AS (
+    SELECT *,
+        ROW_NUMBER() OVER (
+            PARTITION BY LTRIM(RTRIM(CustomerName)), LOWER(LTRIM(RTRIM(Email)))
+            ORDER BY 
+                CASE WHEN Email IS NOT NULL THEN 0 ELSE 1 END,  -- Prefer records with email
+                CASE WHEN Phone IS NOT NULL THEN 0 ELSE 1 END,   -- Prefer records with phone
+                CustomerId  -- Keep oldest record
+        ) AS RowNum
+    FROM Customer
+)
+DELETE FROM RankedCustomers WHERE RowNum > 1;
+
+-- Step 3: Update foreign keys in related tables
+-- Before deleting, update Order.CustomerId to point to kept customer
+UPDATE o
+SET o.CustomerId = dc.KeptCustomerId
+FROM Order o
+INNER JOIN (
+    SELECT 
+        CustomerId AS DuplicateId,
+        MIN(CustomerId) OVER (
+            PARTITION BY LTRIM(RTRIM(CustomerName)), LOWER(LTRIM(RTRIM(Email)))
+        ) AS KeptCustomerId
+    FROM Customer
+) dc ON o.CustomerId = dc.DuplicateId
+WHERE dc.DuplicateId <> dc.KeptCustomerId;
+```
+
+---
+
+### Scenario 5: Missing Data After Transaction Rollback
+
+**Description:**
+This scenario tests understanding of transaction scope and audit logging. When transactions rollback, all changes including audit logs are lost. The solution requires logging failed attempts outside the transaction scope using TRY-CATCH blocks, separate connections, or table variables that can survive rollbacks in certain scenarios.
+
+**Question:** A stored procedure inserts data into three tables (`Orders`, `OrderItems`, `Payment`) within a transaction. If the payment fails, the transaction rolls back. However, you need to log the failed attempt in an `AuditLog` table. How would you handle this?
+
+**Answer:**
+```sql
+-- SOLUTION: Use separate transaction for audit, or TRY-CATCH with nested transactions
+
+CREATE PROCEDURE sp_ProcessOrder
+    @OrderId INT,
+    @CustomerId INT,
+    @Amount DECIMAL(10,2)
+AS
+BEGIN
+    BEGIN TRANSACTION;
+    
+    BEGIN TRY
+        -- Insert order
+        INSERT INTO Orders (OrderId, CustomerId, OrderDate, TotalAmount)
+        VALUES (@OrderId, @CustomerId, GETDATE(), @Amount);
+        
+        -- Insert order items
+        INSERT INTO OrderItems (OrderId, ProductId, Quantity)
+        SELECT @OrderId, ProductId, Quantity FROM #TempOrderItems;
+        
+        -- Process payment (might fail)
+        EXEC sp_ProcessPayment @OrderId, @Amount;
+        
+        COMMIT TRANSACTION;
+    END TRY
+    BEGIN CATCH
+        -- Log error before rollback
+        INSERT INTO AuditLog (EventType, EventData, ErrorMessage, LogDate)
+        VALUES (
+            'OrderProcessingFailed',
+            CONCAT('OrderId: ', @OrderId, ', CustomerId: ', @CustomerId),
+            ERROR_MESSAGE(),
+            GETDATE()
+        );
+        
+        ROLLBACK TRANSACTION;
+        THROW;  -- Re-throw error
+    END CATCH
+END;
+
+-- ALTERNATIVE: Use table variable for audit (survives rollback in some cases)
+-- Or use separate connection/transaction for audit logging
+```
+
+---
+
+### Scenario 6: Performance Issue with LIKE Query
+
+**Description:**
+This scenario addresses performance problems with wildcard searches, particularly leading wildcards that prevent index usage. Solutions include implementing full-text search for text queries, using computed columns for suffix searches, considering search engines like Elasticsearch, or restructuring queries to use prefix searches that can leverage indexes.
+
+**Question:** A search feature allows users to search products by name. The query `SELECT * FROM Products WHERE ProductName LIKE '%laptop%'` is very slow on a table with 5 million products. How would you optimize this?
+
+**Answer:**
+```sql
+-- PROBLEM: Leading wildcard prevents index usage
+
+-- SOLUTION 1: Full-Text Search (best for text search)
+CREATE FULLTEXT CATALOG ftCatalog AS DEFAULT;
+CREATE FULLTEXT INDEX ON Products(ProductName) KEY INDEX PK_Products;
+
+-- Query using full-text search
+SELECT * FROM Products
+WHERE CONTAINS(ProductName, 'laptop');
+
+-- SOLUTION 2: Use computed column with reverse string for suffix search
+ALTER TABLE Products
+ADD ProductNameReversed AS REVERSE(ProductName);
+
+CREATE INDEX IX_Products_NameReversed ON Products(ProductNameReversed);
+
+-- For suffix search: WHERE ProductName LIKE '%laptop'
+-- Use: WHERE ProductNameReversed LIKE 'potpal%'
+
+-- SOLUTION 3: Use n-gram approach (store trigrams)
+-- Create table ProductNGrams (ProductId, NGram)
+-- Index on NGram for fast lookup
+
+-- SOLUTION 4: If exact prefix match is acceptable
+-- WHERE ProductName LIKE 'laptop%'  -- This can use index
+CREATE INDEX IX_Products_Name ON Products(ProductName);
+
+-- SOLUTION 5: Use search engine (Elasticsearch, Azure Cognitive Search)
+-- For production applications with complex search requirements
+```
+
+---
+
+### Scenario 7: Incorrect Results from JOIN Query
+
+**Description:**
+This scenario explores common JOIN mistakes that lead to missing data, particularly using INNER JOIN when LEFT JOIN is needed. The issue often arises when assuming all parent records have child records. Solutions involve using appropriate JOIN types, checking for NULL foreign keys, and verifying data integrity between related tables.
+
+**Question:** You're joining `Orders` and `OrderItems` tables. The query returns fewer rows than expected. Some orders appear to be missing. What could be wrong and how would you debug it?
+
+**Answer:**
+```sql
+-- PROBLEM: Using INNER JOIN excludes orders without items
+
+-- Debug: Check what's being excluded
+SELECT 
+    o.OrderId,
+    CASE WHEN oi.OrderId IS NULL THEN 'No Items' ELSE 'Has Items' END AS Status
+FROM Orders o
+LEFT JOIN OrderItems oi ON o.OrderId = oi.OrderId
+WHERE oi.OrderId IS NULL;  -- Find orders without items
+
+-- SOLUTION 1: Use LEFT JOIN if you need all orders
+SELECT o.OrderId, o.OrderDate, oi.ProductId, oi.Quantity
+FROM Orders o
+LEFT JOIN OrderItems oi ON o.OrderId = oi.OrderId;
+
+-- SOLUTION 2: Check for NULL foreign keys
+SELECT * FROM Orders WHERE OrderId NOT IN (SELECT DISTINCT OrderId FROM OrderItems WHERE OrderId IS NOT NULL);
+
+-- SOLUTION 3: Verify data integrity
+-- Check for orphaned records
+SELECT oi.* FROM OrderItems oi
+LEFT JOIN Orders o ON oi.OrderId = o.OrderId
+WHERE o.OrderId IS NULL;  -- OrderItems without parent Order
+
+-- SOLUTION 4: Check JOIN condition (typo in column name?)
+-- Verify: SELECT * FROM Orders o INNER JOIN OrderItems oi ON o.OrderId = oi.OrderId;
+-- Common mistake: o.OrderId = o.OrderId (should be oi.OrderId)
+
+-- SOLUTION 5: Check for data type mismatch
+SELECT 
+    o.OrderId,
+    oi.OrderId,
+    SQL_VARIANT_PROPERTY(o.OrderId, 'BaseType') AS OrdersType,
+    SQL_VARIANT_PROPERTY(oi.OrderId, 'BaseType') AS OrderItemsType
+FROM Orders o
+LEFT JOIN OrderItems oi ON o.OrderId = oi.OrderId
+WHERE o.OrderId IS NULL OR oi.OrderId IS NULL;
+```
+
+---
+
+### Scenario 8: Race Condition in Inventory Update
+
+**Question:** Multiple users can purchase the same product simultaneously. The application checks if quantity is available, then decrements it. Sometimes, the quantity goes negative. How would you prevent this?
+
+**Answer:**
+The solution uses atomic UPDATE operations with WHERE conditions to check and update in a single step, preventing race conditions. Alternative approaches include optimistic locking with version columns or using SERIALIZABLE isolation level to lock rows during read-update operations.
+```sql
+-- PROBLEM: Race condition - check and update are separate operations
+
+-- SOLUTION 1: Use atomic UPDATE with WHERE condition
+CREATE PROCEDURE sp_ReserveInventory
+    @ProductId INT,
+    @QuantityRequested INT
+AS
+BEGIN
+    BEGIN TRANSACTION;
+    
+    -- Atomic update: only succeeds if enough stock
+    UPDATE Inventory
+    SET Quantity = Quantity - @QuantityRequested,
+        LastUpdated = GETDATE()
+    WHERE ProductId = @ProductId
+      AND Quantity >= @QuantityRequested;  -- Critical: check in WHERE
+    
+    IF @@ROWCOUNT = 0
+    BEGIN
+        ROLLBACK TRANSACTION;
+        RAISERROR('Insufficient inventory', 16, 1);
+        RETURN;
+    END
+    
+    COMMIT TRANSACTION;
+END;
+
+-- SOLUTION 2: Use optimistic locking with version column
+ALTER TABLE Inventory ADD Version INT DEFAULT 0;
+
+CREATE PROCEDURE sp_ReserveInventoryOptimistic
+    @ProductId INT,
+    @QuantityRequested INT,
+    @CurrentVersion INT
+AS
+BEGIN
+    BEGIN TRANSACTION;
+    
+    UPDATE Inventory
+    SET Quantity = Quantity - @QuantityRequested,
+        Version = Version + 1
+    WHERE ProductId = @ProductId
+      AND Version = @CurrentVersion  -- Ensures no concurrent modification
+      AND Quantity >= @QuantityRequested;
+    
+    IF @@ROWCOUNT = 0
+    BEGIN
+        ROLLBACK TRANSACTION;
+        RAISERROR('Concurrent modification detected or insufficient stock', 16, 1);
+        RETURN;
+    END
+    
+    COMMIT TRANSACTION;
+END;
+
+-- SOLUTION 3: Use application-level locking (pessimistic)
+-- Lock row at application level before checking/updating
+
+-- SOLUTION 4: Use SERIALIZABLE isolation level
+SET TRANSACTION ISOLATION LEVEL SERIALIZABLE;
+BEGIN TRANSACTION;
+    SELECT Quantity FROM Inventory WHERE ProductId = @ProductId;
+    -- Process...
+    UPDATE Inventory SET Quantity = Quantity - @QuantityRequested WHERE ProductId = @ProductId;
+COMMIT TRANSACTION;
+```
+
+---
+
+### Scenario 9: Slow Query with Multiple OR Conditions
+
+**Question:** A query with multiple OR conditions in the WHERE clause is very slow: `WHERE Status = 'Pending' OR Status = 'Processing' OR Status = 'Completed' OR CustomerId = 123 OR OrderDate > '2024-01-01'`. How would you optimize it?
+
+**Answer:**
+Multiple OR conditions prevent efficient index usage. The solution involves rewriting queries using UNION ALL for different conditions, using IN clause for same-column comparisons, or creating filtered indexes for specific status values to improve query performance.
+```sql
+-- PROBLEM: OR conditions prevent efficient index usage
+
+-- SOLUTION 1: Use UNION ALL (often faster)
+SELECT * FROM Orders WHERE Status = 'Pending'
+UNION ALL
+SELECT * FROM Orders WHERE Status = 'Processing'
+UNION ALL
+SELECT * FROM Orders WHERE Status = 'Completed'
+UNION ALL
+SELECT * FROM Orders WHERE CustomerId = 123
+UNION ALL
+SELECT * FROM Orders WHERE OrderDate > '2024-01-01';
+
+-- SOLUTION 2: Use IN for same column
+SELECT * FROM Orders 
+WHERE Status IN ('Pending', 'Processing', 'Completed')
+   OR CustomerId = 123
+   OR OrderDate > '2024-01-01';
+
+-- SOLUTION 3: Create filtered indexes
+CREATE INDEX IX_Orders_Pending ON Orders(OrderId) WHERE Status = 'Pending';
+CREATE INDEX IX_Orders_Processing ON Orders(OrderId) WHERE Status = 'Processing';
+CREATE INDEX IX_Orders_Completed ON Orders(OrderId) WHERE Status = 'Completed';
+
+-- SOLUTION 4: Rewrite with UNION and DISTINCT if duplicates are concern
+SELECT DISTINCT * FROM (
+    SELECT * FROM Orders WHERE Status IN ('Pending', 'Processing', 'Completed')
+    UNION
+    SELECT * FROM Orders WHERE CustomerId = 123
+    UNION
+    SELECT * FROM Orders WHERE OrderDate > '2024-01-01'
+) AS Combined;
+
+-- SOLUTION 5: If possible, separate into different queries based on business logic
+```
+
+---
+
+### Scenario 10: Data Inconsistency Between Related Tables
+
+**Question:** The `Orders` table shows `TotalAmount = 1000`, but the sum of `OrderItems.Amount` for that order is 950. There's a discrepancy. How would you find all such inconsistencies?
+
+**Answer:**
+Use aggregate queries with GROUP BY and HAVING to compare parent totals with calculated child sums. Fix inconsistencies by creating triggers to auto-update totals on child table changes, or use computed columns to ensure data consistency across related tables.
+```sql
+-- Find orders where TotalAmount doesn't match sum of items
+SELECT 
+    o.OrderId,
+    o.TotalAmount AS OrderTotal,
+    ISNULL(SUM(oi.Amount), 0) AS CalculatedTotal,
+    o.TotalAmount - ISNULL(SUM(oi.Amount), 0) AS Difference
+FROM Orders o
+LEFT JOIN OrderItems oi ON o.OrderId = oi.OrderId
+GROUP BY o.OrderId, o.TotalAmount
+HAVING ABS(o.TotalAmount - ISNULL(SUM(oi.Amount), 0)) > 0.01;  -- Allow small rounding differences
+
+-- Find orders with missing items
+SELECT o.OrderId, o.TotalAmount
+FROM Orders o
+LEFT JOIN OrderItems oi ON o.OrderId = oi.OrderId
+WHERE oi.OrderId IS NULL AND o.TotalAmount > 0;
+
+-- Find items without parent order (orphaned)
+SELECT oi.* FROM OrderItems oi
+LEFT JOIN Orders o ON oi.OrderId = o.OrderId
+WHERE o.OrderId IS NULL;
+
+-- SOLUTION: Create trigger to maintain consistency
+CREATE TRIGGER trg_OrderItems_UpdateTotal
+ON OrderItems
+AFTER INSERT, UPDATE, DELETE
+AS
+BEGIN
+    SET NOCOUNT ON;
+    
+    UPDATE o
+    SET TotalAmount = (
+        SELECT ISNULL(SUM(Amount), 0)
+        FROM OrderItems oi
+        WHERE oi.OrderId = o.OrderId
+    )
+    FROM Orders o
+    INNER JOIN (
+        SELECT DISTINCT OrderId FROM inserted
+        UNION
+        SELECT DISTINCT OrderId FROM deleted
+    ) AS ChangedOrders ON o.OrderId = ChangedOrders.OrderId;
+END;
+
+-- Or use computed column (if TotalAmount can be calculated)
+ALTER TABLE Orders
+ADD CalculatedTotal AS (
+    SELECT ISNULL(SUM(Amount), 0)
+    FROM OrderItems oi
+    WHERE oi.OrderId = Orders.OrderId
+);
+```
+
+---
+
+### Scenario 11: Memory Error with Large Result Set
+
+**Question:** A report query returns 2 million rows, causing memory issues in the application. The query cannot be filtered further as all data is needed. How would you handle this?
+
+**Answer:**
+Implement server-side pagination using batching with TOP and WHERE conditions to process data in chunks. Alternative solutions include exporting to files using BCP/SSIS, using streaming approaches with table-valued functions, or implementing cursor-based pagination in the application layer.
+```sql
+-- SOLUTION 1: Implement server-side pagination/cursor
+DECLARE @BatchSize INT = 10000;
+DECLARE @LastId INT = 0;
+
+WHILE 1 = 1
+BEGIN
+    SELECT TOP (@BatchSize)
+        OrderId, CustomerId, OrderDate, TotalAmount
+    FROM Orders
+    WHERE OrderId > @LastId
+    ORDER BY OrderId;
+    
+    IF @@ROWCOUNT = 0 BREAK;
+    
+    SET @LastId = (SELECT MAX(OrderId) FROM (
+        SELECT TOP (@BatchSize) OrderId FROM Orders WHERE OrderId > @LastId ORDER BY OrderId
+    ) AS Batch);
+    
+    -- Process batch in application
+    -- Continue loop
+END;
+
+-- SOLUTION 2: Export to file instead of returning to application
+-- Use BCP or SQL Server Integration Services (SSIS)
+EXEC xp_cmdshell 'bcp "SELECT * FROM Orders" queryout "C:\Export\Orders.csv" -c -t, -S ServerName -d DatabaseName -T';
+
+-- SOLUTION 3: Use table-valued function with streaming
+CREATE FUNCTION fn_GetOrdersStream(@BatchSize INT)
+RETURNS TABLE
+AS
+RETURN
+(
+    SELECT TOP (@BatchSize) * FROM Orders ORDER BY OrderId
+);
+
+-- SOLUTION 4: Create indexed view for pre-aggregated data
+-- If report shows summaries, pre-aggregate in view
+
+-- SOLUTION 5: Use SQL Server Reporting Services (SSRS) or similar
+-- Let reporting tool handle large datasets
+
+-- SOLUTION 6: Implement change data capture (CDC)
+-- Only export changed data since last export
+```
+
+---
+
+### Scenario 12: Trigger Causing Performance Issues
+
+**Question:** An AFTER INSERT trigger on the `Orders` table updates an `OrderSummary` table. The trigger was fast initially, but now inserts are taking 10 seconds. The `Orders` table has grown to 10 million rows. What's wrong and how would you fix it?
+
+**Answer:**
+The trigger likely performs full table scans or recalculates entire summaries on each insert. Solutions include modifying triggers to only update affected rows using inserted/deleted tables, implementing incremental updates instead of recalculations, or moving summary updates to async background jobs.
+```sql
+-- PROBLEM: Trigger might be doing full table scans or inefficient operations
+
+-- Current trigger (example of bad practice)
+CREATE TRIGGER trg_Orders_UpdateSummary
+ON Orders
+AFTER INSERT
+AS
+BEGIN
+    -- BAD: Full table scan
+    UPDATE OrderSummary
+    SET TotalOrders = (SELECT COUNT(*) FROM Orders),
+        TotalAmount = (SELECT SUM(TotalAmount) FROM Orders);
+END;
+
+-- SOLUTION 1: Only update affected rows
+CREATE TRIGGER trg_Orders_UpdateSummary_Fixed
+ON Orders
+AFTER INSERT, UPDATE, DELETE
+AS
+BEGIN
+    SET NOCOUNT ON;
+    
+    -- Only recalculate for affected customers
+    UPDATE os
+    SET 
+        TotalOrders = (
+            SELECT COUNT(*)
+            FROM Orders o
+            WHERE o.CustomerId = os.CustomerId
+        ),
+        TotalAmount = (
+            SELECT ISNULL(SUM(TotalAmount), 0)
+            FROM Orders o
+            WHERE o.CustomerId = os.CustomerId
+        )
+    FROM OrderSummary os
+    WHERE os.CustomerId IN (
+        SELECT CustomerId FROM inserted
+        UNION
+        SELECT CustomerId FROM deleted
+    );
+END;
+
+-- SOLUTION 2: Use incremental updates
+CREATE TRIGGER trg_Orders_UpdateSummary_Incremental
+ON Orders
+AFTER INSERT, UPDATE, DELETE
+AS
+BEGIN
+    SET NOCOUNT ON;
+    
+    -- Incrementally update summary
+    UPDATE os
+    SET 
+        TotalOrders = os.TotalOrders + 
+            (SELECT COUNT(*) FROM inserted i WHERE i.CustomerId = os.CustomerId) -
+            (SELECT COUNT(*) FROM deleted d WHERE d.CustomerId = os.CustomerId),
+        TotalAmount = os.TotalAmount +
+            (SELECT ISNULL(SUM(TotalAmount), 0) FROM inserted i WHERE i.CustomerId = os.CustomerId) -
+            (SELECT ISNULL(SUM(TotalAmount), 0) FROM deleted d WHERE d.CustomerId = os.CustomerId)
+    FROM OrderSummary os
+    WHERE os.CustomerId IN (
+        SELECT CustomerId FROM inserted
+        UNION
+        SELECT CustomerId FROM deleted
+    );
+END;
+
+-- SOLUTION 3: Move to async processing
+-- Instead of trigger, use queue table and background job
+
+-- SOLUTION 4: Disable trigger and use scheduled job
+-- Update summary table every 5 minutes instead of real-time
+```
+
+---
+
+### Scenario 13: Incorrect Aggregation Results with NULLs
+
+**Question:** A report shows `AVG(Salary)` as NULL for a department that has employees. Some employees have NULL salary. How would you fix the calculation?
+
+**Answer:**
+AVG() returns NULL when all values are NULL, and it ignores NULL values in calculation. Solutions include using COALESCE to convert NULLs to zero, filtering out NULL values explicitly, or displaying COUNT(Salary) alongside AVG(Salary) to show data completeness in the report.
+```sql
+-- PROBLEM: AVG ignores NULLs, but if ALL values are NULL, returns NULL
+
+-- Check the data
+SELECT 
+    Department,
+    COUNT(*) AS TotalEmployees,
+    COUNT(Salary) AS EmployeesWithSalary,
+    AVG(Salary) AS AverageSalary
+FROM Employee
+GROUP BY Department;
+
+-- SOLUTION 1: Use COALESCE to treat NULL as 0 (if business rule allows)
+SELECT 
+    Department,
+    AVG(COALESCE(Salary, 0)) AS AverageSalary
+FROM Employee
+GROUP BY Department;
+
+-- SOLUTION 2: Only calculate for employees with salary
+SELECT 
+    Department,
+    AVG(Salary) AS AverageSalary,
+    COUNT(*) AS TotalEmployees,
+    COUNT(Salary) AS EmployeesWithSalary,
+    CASE 
+        WHEN COUNT(Salary) = 0 THEN 'No salary data'
+        ELSE CAST(AVG(Salary) AS VARCHAR)
+    END AS AverageSalaryDisplay
+FROM Employee
+GROUP BY Department;
+
+-- SOLUTION 3: Use different aggregation logic
+SELECT 
+    Department,
+    AVG(CASE WHEN Salary IS NOT NULL THEN Salary END) AS AverageSalary,
+    SUM(Salary) / NULLIF(COUNT(Salary), 0) AS AverageSalaryAlt  -- Same result
+FROM Employee
+GROUP BY Department;
+
+-- SOLUTION 4: Handle in application layer
+-- Check COUNT(Salary) before displaying AVG(Salary)
+```
+
+---
+
+### Scenario 14: Query Timeout on Production
+
+**Question:** A critical report query times out after 30 seconds in production but runs fine in development (completes in 2 seconds). Both environments have similar data volumes. What could cause this and how would you investigate?
+
+**Answer:**
+Production timeouts despite similar data usually indicate blocking/locks from concurrent users, outdated statistics causing poor execution plans, or missing indexes. Investigate using sys.dm_exec_requests for blocking, compare execution plans between environments, and verify index and statistics consistency.
+```sql
+-- POSSIBLE CAUSES: Locks, different execution plans, statistics, indexes
+
+-- INVESTIGATION STEPS:
+
+-- Step 1: Check for blocking/locks
+SELECT 
+    blocking_session_id,
+    wait_type,
+    wait_time,
+    session_id,
+    command,
+    text
+FROM sys.dm_exec_requests r
+CROSS APPLY sys.dm_exec_sql_text(r.sql_handle) t
+WHERE r.session_id <> @@SPID;
+
+-- Step 2: Compare execution plans
+-- Run in both environments and compare
+SET STATISTICS IO ON;
+SET STATISTICS TIME ON;
+-- Your query here
+SET STATISTICS IO OFF;
+SET STATISTICS TIME OFF;
+
+-- Step 3: Check index differences
+SELECT 
+    OBJECT_NAME(object_id) AS TableName,
+    name AS IndexName,
+    type_desc
+FROM sys.indexes
+WHERE object_id = OBJECT_ID('YourTable')
+ORDER BY name;
+
+-- Step 4: Check statistics freshness
+SELECT 
+    OBJECT_NAME(object_id) AS TableName,
+    name AS StatName,
+    STATS_DATE(object_id, stats_id) AS LastUpdated
+FROM sys.stats
+WHERE object_id = OBJECT_ID('YourTable');
+
+-- Step 5: Check parameter sniffing
+-- If using stored procedure, check if parameters differ
+-- SOLUTION: Use OPTION (RECOMPILE) or OPTION (OPTIMIZE FOR UNKNOWN)
+
+-- Step 6: Check for missing indexes
+-- Review execution plan for "Missing Index" warnings
+
+-- Step 7: Check table/index fragmentation
+SELECT 
+    OBJECT_NAME(object_id) AS TableName,
+    index_id,
+    avg_fragmentation_in_percent
+FROM sys.dm_db_index_physical_stats(
+    DB_ID(), 
+    OBJECT_ID('YourTable'), 
+    NULL, 
+    NULL, 
+    'DETAILED'
+)
+WHERE avg_fragmentation_in_percent > 30;
+
+-- QUICK FIXES:
+-- 1. Update statistics
+UPDATE STATISTICS YourTable WITH FULLSCAN;
+
+-- 2. Rebuild indexes
+ALTER INDEX ALL ON YourTable REBUILD;
+
+-- 3. Add query hint for recompile
+SELECT * FROM YourTable
+OPTION (RECOMPILE);
+
+-- 4. Check for different SQL Server versions/service packs
+SELECT @@VERSION;
+```
+
+---
+
+### Scenario 15: Cascading Delete Causing Unexpected Deletions
+
+**Question:** Deleting a customer record also deletes all their orders due to CASCADE DELETE on the foreign key. However, business rules require that orders should be archived, not deleted. How would you handle this?
+
+**Answer:**
+Replace CASCADE DELETE with soft delete pattern by adding IsDeleted flags, or use INSTEAD OF DELETE triggers to archive data before deletion. Alternative solutions include moving records to archive tables while maintaining referential integrity, or removing CASCADE and handling deletes through stored procedures.
+```sql
+-- PROBLEM: CASCADE DELETE removes child records
+
+-- SOLUTION 1: Remove CASCADE, use soft delete
+-- Step 1: Remove CASCADE DELETE
+ALTER TABLE Orders
+DROP CONSTRAINT FK_Orders_Customer;
+
+-- Step 2: Add IsDeleted flag
+ALTER TABLE Customer ADD IsDeleted BIT DEFAULT 0;
+ALTER TABLE Orders ADD IsDeleted BIT DEFAULT 0;
+
+-- Step 3: Create new foreign key without CASCADE
+ALTER TABLE Orders
+ADD CONSTRAINT FK_Orders_Customer 
+FOREIGN KEY (CustomerId) REFERENCES Customer(CustomerId);
+
+-- Step 4: Use soft delete procedure
+CREATE PROCEDURE sp_DeleteCustomer
+    @CustomerId INT
+AS
+BEGIN
+    BEGIN TRANSACTION;
+    
+    -- Soft delete customer
+    UPDATE Customer SET IsDeleted = 1 WHERE CustomerId = @CustomerId;
+    
+    -- Soft delete related orders
+    UPDATE Orders SET IsDeleted = 1 WHERE CustomerId = @CustomerId;
+    
+    -- Archive orders to archive table
+    INSERT INTO OrdersArchive
+    SELECT * FROM Orders WHERE CustomerId = @CustomerId;
+    
+    COMMIT TRANSACTION;
+END;
+
+-- SOLUTION 2: Use INSTEAD OF DELETE trigger
+CREATE TRIGGER trg_Customer_InsteadOfDelete
+ON Customer
+INSTEAD OF DELETE
+AS
+BEGIN
+    SET NOCOUNT ON;
+    
+    -- Archive orders before soft delete
+    INSERT INTO OrdersArchive
+    SELECT o.* FROM Orders o
+    INNER JOIN deleted d ON o.CustomerId = d.CustomerId;
+    
+    -- Soft delete customer and orders
+    UPDATE Customer SET IsDeleted = 1 
+    WHERE CustomerId IN (SELECT CustomerId FROM deleted);
+    
+    UPDATE Orders SET IsDeleted = 1 
+    WHERE CustomerId IN (SELECT CustomerId FROM deleted);
+END;
+
+-- SOLUTION 3: Move to archive table instead of delete
+CREATE TABLE CustomerArchive (
+    -- Same structure as Customer
+    ArchiveDate DATETIME DEFAULT GETDATE()
+);
+
+CREATE PROCEDURE sp_ArchiveCustomer
+    @CustomerId INT
+AS
+BEGIN
+    BEGIN TRANSACTION;
+    
+    -- Archive customer
+    INSERT INTO CustomerArchive
+    SELECT *, GETDATE() FROM Customer WHERE CustomerId = @CustomerId;
+    
+    -- Archive orders
+    INSERT INTO OrdersArchive
+    SELECT *, GETDATE() FROM Orders WHERE CustomerId = @CustomerId;
+    
+    -- Now safe to delete (or keep with IsDeleted flag)
+    DELETE FROM Orders WHERE CustomerId = @CustomerId;
+    DELETE FROM Customer WHERE CustomerId = @CustomerId;
+    
+    COMMIT TRANSACTION;
+END;
+```
+
+---
+
+### Scenario 16: Stored Procedure Returns Different Results on Each Execution
+
+**Question:** A stored procedure that calculates monthly sales totals returns different results each time it's executed, even with the same input parameters. The procedure uses temp tables and doesn't have ORDER BY in some queries. What could be wrong?
+
+**Answer:**
+Missing ORDER BY clauses cause non-deterministic result ordering, especially with TOP queries. Additionally, using GETDATE(), RAND(), or NEWID() inside procedures makes results non-deterministic. Solutions include adding explicit ORDER BY, passing datetime values as parameters instead of using GETDATE(), and ensuring consistent ordering in all queries.
+```sql
+-- PROBLEM: Missing ORDER BY, or using non-deterministic functions incorrectly
+
+-- EXAMPLE OF PROBLEMATIC PROCEDURE
+CREATE PROCEDURE sp_GetMonthlySales
+    @Month INT,
+    @Year INT
+AS
+BEGIN
+    CREATE TABLE #TempSales (ProductId INT, TotalSales DECIMAL(10,2));
+    
+    -- Missing ORDER BY - results in random order
+    INSERT INTO #TempSales
+    SELECT ProductId, SUM(Amount) AS TotalSales
+    FROM Sales
+    WHERE MONTH(SaleDate) = @Month AND YEAR(SaleDate) = @Year
+    GROUP BY ProductId;  -- No ORDER BY
+    
+    -- Using GETDATE() or RAND() makes results non-deterministic
+    SELECT *, GETDATE() AS ReportDate FROM #TempSales;
+    
+    -- Using TOP without ORDER BY
+    SELECT TOP 10 * FROM #TempSales;  -- Returns random 10 rows
+END;
+
+-- SOLUTION: Add proper ORDER BY and avoid non-deterministic functions
+CREATE PROCEDURE sp_GetMonthlySales_Fixed
+    @Month INT,
+    @Year INT,
+    @ReportDate DATETIME  -- Pass as parameter instead of GETDATE()
+AS
+BEGIN
+    CREATE TABLE #TempSales (
+        ProductId INT, 
+        TotalSales DECIMAL(10,2),
+        RowNum INT IDENTITY(1,1)  -- For consistent ordering
+    );
+    
+    -- Add ORDER BY for consistent results
+    INSERT INTO #TempSales (ProductId, TotalSales)
+    SELECT ProductId, SUM(Amount) AS TotalSales
+    FROM Sales
+    WHERE MONTH(SaleDate) = @Month AND YEAR(SaleDate) = @Year
+    GROUP BY ProductId
+    ORDER BY ProductId;  -- Deterministic ordering
+    
+    -- Use parameter instead of GETDATE()
+    SELECT *, @ReportDate AS ReportDate 
+    FROM #TempSales
+    ORDER BY TotalSales DESC;  -- Consistent ordering
+    
+    -- TOP with ORDER BY
+    SELECT TOP 10 * 
+    FROM #TempSales
+    ORDER BY TotalSales DESC;  -- Always same top 10
+END;
+
+-- COMMON ISSUES:
+-- 1. Missing ORDER BY in SELECT statements
+-- 2. Using GETDATE(), NEWID(), RAND() without seed
+-- 3. TOP without ORDER BY
+-- 4. Window functions without ORDER BY in OVER clause
+-- 5. Non-deterministic functions in computed columns
+```
+
+---
+
+### Scenario 17: Foreign Key Constraint Preventing Legitimate Updates
+
+**Question:** You need to update `CustomerId` in the `Orders` table, but a foreign key constraint prevents it. The new `CustomerId` exists in the `Customer` table. However, you're getting an error. What could be wrong?
+
+**Answer:**
+Common issues include updating to non-existent CustomerIds in batch updates, data type mismatches between foreign and primary keys, or check constraints on the Customer table. Solutions involve validating all target values exist before update, ensuring proper data type casting, and checking for circular references or additional constraints.
+```sql
+-- POSSIBLE ISSUES:
+
+-- Issue 1: Self-referencing update (updating to same value)
+UPDATE Orders SET CustomerId = CustomerId WHERE OrderId = 101;
+-- SQL Server might still check constraint
+
+-- Issue 2: Updating multiple rows where some violate constraint
+UPDATE Orders 
+SET CustomerId = CASE 
+    WHEN OrderId = 101 THEN 999  -- Valid
+    WHEN OrderId = 102 THEN 888  -- Invalid (doesn't exist)
+END
+WHERE OrderId IN (101, 102);
+
+-- SOLUTION: Update in transaction with validation
+BEGIN TRANSACTION;
+
+-- Validate all new CustomerIds exist
+IF EXISTS (
+    SELECT 1 FROM Orders o
+    WHERE o.OrderId IN (101, 102)
+    AND NOT EXISTS (
+        SELECT 1 FROM Customer c 
+        WHERE c.CustomerId = CASE 
+            WHEN o.OrderId = 101 THEN 999
+            WHEN o.OrderId = 102 THEN 888
+        END
+    )
+)
+BEGIN
+    ROLLBACK TRANSACTION;
+    RAISERROR('Invalid CustomerId', 16, 1);
+    RETURN;
+END
+
+-- Now safe to update
+UPDATE Orders 
+SET CustomerId = CASE 
+    WHEN OrderId = 101 THEN 999
+    WHEN OrderId = 102 THEN 888
+END
+WHERE OrderId IN (101, 102);
+
+COMMIT TRANSACTION;
+
+-- Issue 3: Check constraint on Customer table
+-- Customer table might have CHECK constraint preventing certain IDs
+SELECT * FROM sys.check_constraints 
+WHERE parent_object_id = OBJECT_ID('Customer');
+
+-- Issue 4: Data type mismatch
+-- CustomerId in Orders might be INT, but trying to update with VARCHAR
+UPDATE Orders SET CustomerId = '999' WHERE OrderId = 101;  -- Might fail
+
+-- SOLUTION: Cast explicitly
+UPDATE Orders SET CustomerId = CAST('999' AS INT) WHERE OrderId = 101;
+
+-- Issue 5: NULL values if column is NOT NULL
+UPDATE Orders SET CustomerId = NULL WHERE OrderId = 101;
+-- Fails if CustomerId is NOT NULL
+
+-- Issue 6: Circular reference
+-- If Customer also references Orders, might cause issues
+-- Check all foreign key relationships
+SELECT 
+    fk.name AS FKName,
+    OBJECT_NAME(fk.parent_object_id) AS ParentTable,
+    OBJECT_NAME(fk.referenced_object_id) AS ReferencedTable
+FROM sys.foreign_keys fk
+WHERE fk.parent_object_id = OBJECT_ID('Orders')
+   OR fk.referenced_object_id = OBJECT_ID('Orders');
+```
+
+---
+
+### Scenario 18: Query with Date Range Returns No Results
+
+**Question:** A query filtering by date range returns no results: `WHERE OrderDate BETWEEN '2024-01-01' AND '2024-01-31'`. You know there are orders in January 2024. The `OrderDate` column is `DATETIME`. What's wrong?
+
+**Answer:**
+DATETIME columns include time components, so BETWEEN '2024-01-31' means '2024-01-31 00:00:00', excluding all records after midnight on that day. Solutions include using >= and < with next day ('2024-02-01'), adding time to end date (23:59:59), or converting to DATE for comparison, though this prevents index usage.
+```sql
+-- PROBLEM: DATETIME includes time component
+
+-- If OrderDate = '2024-01-31 14:30:00'
+-- BETWEEN '2024-01-01' AND '2024-01-31' 
+-- Becomes: BETWEEN '2024-01-01 00:00:00' AND '2024-01-31 00:00:00'
+-- This excludes '2024-01-31 14:30:00' (it's after midnight)
+
+-- SOLUTION 1: Include time in end date
+SELECT * FROM Orders
+WHERE OrderDate BETWEEN '2024-01-01' AND '2024-01-31 23:59:59.997';
+
+-- SOLUTION 2: Use >= and < (better for DATETIME2)
+SELECT * FROM Orders
+WHERE OrderDate >= '2024-01-01' 
+  AND OrderDate < '2024-02-01';  -- Exclusive upper bound
+
+-- SOLUTION 3: Use DATE functions
+SELECT * FROM Orders
+WHERE CAST(OrderDate AS DATE) BETWEEN '2024-01-01' AND '2024-01-31';
+-- Note: This prevents index usage on OrderDate
+
+-- SOLUTION 4: Use YEAR and MONTH (if index usage is not critical)
+SELECT * FROM Orders
+WHERE YEAR(OrderDate) = 2024 AND MONTH(OrderDate) = 1;
+
+-- SOLUTION 5: Use DATE data type (if possible to change schema)
+ALTER TABLE Orders
+ALTER COLUMN OrderDate DATE;  -- Then BETWEEN works as expected
+
+-- SOLUTION 6: Use EOMONTH function
+SELECT * FROM Orders
+WHERE OrderDate >= '2024-01-01' 
+  AND OrderDate <= EOMONTH('2024-01-31');
+
+-- DEBUG: Check actual data
+SELECT 
+    OrderId,
+    OrderDate,
+    CAST(OrderDate AS DATE) AS OrderDateOnly,
+    DATEPART(HOUR, OrderDate) AS Hour,
+    DATEPART(MINUTE, OrderDate) AS Minute
+FROM Orders
+WHERE OrderDate >= '2024-01-01' AND OrderDate < '2024-02-01'
+ORDER BY OrderDate;
+```
+
+---
+
+### Scenario 19: Duplicate Key Error on INSERT
+
+**Question:** An INSERT statement fails with "Violation of PRIMARY KEY constraint" even though you're using `IDENTITY` column and not specifying the primary key value. The table has an `IDENTITY` seed that should auto-increment. What could cause this?
+
+**Answer:**
+Identity values can get out of sync due to failed transactions, manual inserts with IDENTITY_INSERT ON, or data imports that didn't reseed properly. Solutions include using DBCC CHECKIDENT to reseed the identity column, checking for gaps in sequence, and ensuring previous manual inserts properly incremented the identity counter.
+```sql
+-- POSSIBLE CAUSES:
+
+-- Cause 1: Identity seed/reset issue
+-- Check current identity value
+SELECT IDENT_CURRENT('Orders') AS CurrentIdentity;
+SELECT IDENT_INCR('Orders') AS Increment;
+SELECT IDENT_SEED('Orders') AS Seed;
+
+-- If identity is behind, reset it
+DBCC CHECKIDENT('Orders', RESEED, 1000);
+
+-- Cause 2: Manual insert with explicit ID
+INSERT INTO Orders (OrderId, CustomerId, OrderDate)  -- Explicitly setting OrderId
+VALUES (100, 1, '2024-01-15');
+-- This doesn't increment identity, next auto-insert might conflict
+
+-- SOLUTION: Don't specify identity column, or use SET IDENTITY_INSERT
+SET IDENTITY_INSERT Orders ON;
+INSERT INTO Orders (OrderId, CustomerId, OrderDate)
+VALUES (100, 1, '2024-01-15');
+SET IDENTITY_INSERT Orders OFF;
+
+-- Cause 3: Data imported with identity insert enabled
+-- Previous import might have inserted IDs manually
+
+-- Cause 4: Multiple inserts in transaction, one fails
+BEGIN TRANSACTION;
+    INSERT INTO Orders (CustomerId, OrderDate) VALUES (1, '2024-01-15');  -- Gets ID 100
+    INSERT INTO Orders (CustomerId, OrderDate) VALUES (2, '2024-01-16');  -- Gets ID 101
+    -- Error occurs, transaction rolls back, but identity already incremented
+ROLLBACK;
+-- Next insert will try ID 102, but if 100-101 exist, might conflict
+
+-- SOLUTION: Check for gaps
+SELECT 
+    OrderId,
+    LAG(OrderId) OVER (ORDER BY OrderId) AS PreviousId,
+    OrderId - LAG(OrderId) OVER (ORDER BY OrderId) AS Gap
+FROM Orders
+ORDER BY OrderId;
+
+-- Cause 5: Replication or merge causing conflicts
+-- Check if replication is enabled
+SELECT name, is_published, is_subscribed 
+FROM sys.databases 
+WHERE name = DB_NAME();
+
+-- Cause 6: Composite primary key with non-identity column
+CREATE TABLE Orders (
+    OrderId INT IDENTITY(1,1),
+    OrderNumber VARCHAR(20),
+    PRIMARY KEY (OrderId, OrderNumber)  -- Composite key
+);
+-- If OrderNumber is duplicated, violates constraint
+
+-- SOLUTION: Check for duplicates in composite key
+SELECT OrderId, OrderNumber, COUNT(*) AS DuplicateCount
+FROM Orders
+GROUP BY OrderId, OrderNumber
+HAVING COUNT(*) > 1;
+```
+
+---
+
+### Scenario 20: CTE Referenced Multiple Times Performance
+
+**Question:** A CTE is referenced 5 times in the same query. The query is slow. You notice the execution plan shows the CTE logic executed 5 times. How would you optimize this?
+
+**Answer:**
+CTEs are re-evaluated each time they're referenced, causing performance issues when used multiple times. Solutions include materializing results into temp tables or table variables for single execution, using window functions for aggregates, or restructuring the query to reference CTE once with CROSS JOIN for aggregate values.
+```sql
+-- PROBLEM: CTE is re-evaluated each time it's referenced
+
+-- Example of inefficient CTE usage
+WITH SalesSummary AS (
+    SELECT 
+        CustomerId,
+        SUM(Amount) AS TotalSales,
+        COUNT(*) AS OrderCount
+    FROM Orders
+    WHERE OrderDate >= '2024-01-01'
+    GROUP BY CustomerId
+)
+SELECT 
+    (SELECT AVG(TotalSales) FROM SalesSummary) AS AvgSales,  -- Execution 1
+    (SELECT MAX(TotalSales) FROM SalesSummary) AS MaxSales,   -- Execution 2
+    (SELECT MIN(TotalSales) FROM SalesSummary) AS MinSales,  -- Execution 3
+    (SELECT COUNT(*) FROM SalesSummary) AS CustomerCount,     -- Execution 4
+    ss.TotalSales                                             -- Execution 5
+FROM SalesSummary ss;
+
+-- SOLUTION 1: Use temp table instead of CTE
+CREATE TABLE #SalesSummary (
+    CustomerId INT,
+    TotalSales DECIMAL(10,2),
+    OrderCount INT
+);
+
+INSERT INTO #SalesSummary
+SELECT 
+    CustomerId,
+    SUM(Amount) AS TotalSales,
+    COUNT(*) AS OrderCount
+FROM Orders
+WHERE OrderDate >= '2024-01-01'
+GROUP BY CustomerId;
+
+-- Now reference temp table (executed once)
+SELECT 
+    (SELECT AVG(TotalSales) FROM #SalesSummary) AS AvgSales,
+    (SELECT MAX(TotalSales) FROM #SalesSummary) AS MaxSales,
+    (SELECT MIN(TotalSales) FROM #SalesSummary) AS MinSales,
+    (SELECT COUNT(*) FROM #SalesSummary) AS CustomerCount,
+    ss.TotalSales
+FROM #SalesSummary ss;
+
+DROP TABLE #SalesSummary;
+
+-- SOLUTION 2: Use table variable (for smaller datasets)
+DECLARE @SalesSummary TABLE (
+    CustomerId INT,
+    TotalSales DECIMAL(10,2),
+    OrderCount INT
+);
+
+INSERT INTO @SalesSummary
+SELECT CustomerId, SUM(Amount), COUNT(*)
+FROM Orders
+WHERE OrderDate >= '2024-01-01'
+GROUP BY CustomerId;
+
+SELECT * FROM @SalesSummary;
+
+-- SOLUTION 3: Calculate aggregates in single pass
+WITH SalesSummary AS (
+    SELECT 
+        CustomerId,
+        SUM(Amount) AS TotalSales,
+        COUNT(*) AS OrderCount
+    FROM Orders
+    WHERE OrderDate >= '2024-01-01'
+    GROUP BY CustomerId
+)
+SELECT 
+    AVG(TotalSales) OVER () AS AvgSales,
+    MAX(TotalSales) OVER () AS MaxSales,
+    MIN(TotalSales) OVER () AS MinSales,
+    COUNT(*) OVER () AS CustomerCount,
+    TotalSales
+FROM SalesSummary;
+
+-- SOLUTION 4: Use CROSS JOIN with aggregated CTE once
+WITH SalesSummary AS (
+    SELECT 
+        CustomerId,
+        SUM(Amount) AS TotalSales,
+        COUNT(*) AS OrderCount
+    FROM Orders
+    WHERE OrderDate >= '2024-01-01'
+    GROUP BY CustomerId
+),
+Aggregates AS (
+    SELECT 
+        AVG(TotalSales) AS AvgSales,
+        MAX(TotalSales) AS MaxSales,
+        MIN(TotalSales) AS MinSales,
+        COUNT(*) AS CustomerCount
+    FROM SalesSummary
+)
+SELECT 
+    a.AvgSales,
+    a.MaxSales,
+    a.MinSales,
+    a.CustomerCount,
+    ss.TotalSales
+FROM SalesSummary ss
+CROSS JOIN Aggregates a;
+```
+
+---
+
+### Scenario 21: UNION Removing Valid Duplicates
+
+**Question:** You're using UNION to combine customer lists from two tables. Some customers legitimately appear in both tables and should be shown twice, but UNION is removing them. How would you handle this?
+
+**Answer:**
+UNION automatically removes duplicates by performing a DISTINCT operation. Use UNION ALL to preserve all records including duplicates, or add source identifiers to differentiate between tables. Alternatively, use window functions to count occurrences or FULL OUTER JOIN to identify records existing in both sources.
+```sql
+-- PROBLEM: UNION removes duplicates
+
+-- Current query (removes duplicates)
+SELECT CustomerName, Email FROM CurrentCustomers
+UNION
+SELECT CustomerName, Email FROM ArchivedCustomers;
+-- If same customer in both, appears only once
+
+-- SOLUTION 1: Use UNION ALL to keep duplicates
+SELECT CustomerName, Email FROM CurrentCustomers
+UNION ALL
+SELECT CustomerName, Email FROM ArchivedCustomers;
+-- Shows all customers, including duplicates
+
+-- SOLUTION 2: Add source identifier if you need to track origin
+SELECT CustomerName, Email, 'Current' AS Source FROM CurrentCustomers
+UNION ALL
+SELECT CustomerName, Email, 'Archived' AS Source FROM ArchivedCustomers;
+
+-- SOLUTION 3: If you need duplicates but want to mark them
+WITH AllCustomers AS (
+    SELECT CustomerName, Email, 'Current' AS Source FROM CurrentCustomers
+    UNION ALL
+    SELECT CustomerName, Email, 'Archived' AS Source FROM ArchivedCustomers
+)
+SELECT 
+    CustomerName,
+    Email,
+    Source,
+    COUNT(*) OVER (PARTITION BY CustomerName, Email) AS OccurrenceCount
+FROM AllCustomers
+ORDER BY CustomerName, Email;
+
+-- SOLUTION 4: If business rule: show current customers, then archived (no duplicates)
+SELECT CustomerName, Email, 'Current' AS Source FROM CurrentCustomers
+UNION
+SELECT CustomerName, Email, 'Archived' AS Source FROM ArchivedCustomers
+WHERE NOT EXISTS (
+    SELECT 1 FROM CurrentCustomers c 
+    WHERE c.CustomerName = ArchivedCustomers.CustomerName 
+    AND c.Email = ArchivedCustomers.Email
+);
+
+-- SOLUTION 5: Use FULL OUTER JOIN if you need to see both sources
+SELECT 
+    COALESCE(c.CustomerName, a.CustomerName) AS CustomerName,
+    COALESCE(c.Email, a.Email) AS Email,
+    CASE 
+        WHEN c.CustomerName IS NOT NULL AND a.CustomerName IS NOT NULL THEN 'Both'
+        WHEN c.CustomerName IS NOT NULL THEN 'Current Only'
+        ELSE 'Archived Only'
+    END AS Source
+FROM CurrentCustomers c
+FULL OUTER JOIN ArchivedCustomers a 
+    ON c.CustomerName = a.CustomerName AND c.Email = a.Email;
+```
+
+---
+
+### Scenario 22: Index Not Being Used Despite Existing
+
+**Question:** You created an index on `CustomerEmail` column, but queries with `WHERE CustomerEmail = @Email` still show Table Scan in execution plan. The table has 1 million rows. Why isn't the index being used?
+
+**Answer:**
+Indexes aren't used when there's implicit data type conversion (VARCHAR vs NVARCHAR), functions on indexed columns (UPPER, LOWER), outdated statistics, disabled indexes, or when optimizer determines table scans are cheaper. Solutions include matching data types, avoiding functions on indexed columns, updating statistics, rebuilding indexes, or using computed columns for function-based searches.
+```sql
+-- POSSIBLE REASONS:
+
+-- Reason 1: Implicit data type conversion
+-- CustomerEmail is VARCHAR, but comparing with NVARCHAR
+SELECT * FROM Customer WHERE CustomerEmail = N'test@email.com';  -- NVARCHAR prefix
+-- Index not used due to conversion
+
+-- SOLUTION: Match data types
+SELECT * FROM Customer WHERE CustomerEmail = 'test@email.com';  -- VARCHAR
+
+-- Reason 2: Function on indexed column
+SELECT * FROM Customer WHERE UPPER(CustomerEmail) = 'TEST@EMAIL.COM';
+-- Function prevents index usage
+
+-- SOLUTION: Use case-insensitive collation or computed column
+-- Option A: Case-insensitive collation
+CREATE INDEX IX_Customer_Email ON Customer(CustomerEmail) 
+WITH (IGNORE_DUP_KEY = OFF);
+
+-- Query (if collation is case-insensitive)
+SELECT * FROM Customer WHERE CustomerEmail = 'test@email.com';
+
+-- Option B: Computed column
+ALTER TABLE Customer
+ADD CustomerEmailUpper AS UPPER(CustomerEmail);
+
+CREATE INDEX IX_Customer_EmailUpper ON Customer(CustomerEmailUpper);
+
+SELECT * FROM Customer WHERE CustomerEmailUpper = 'TEST@EMAIL.COM';
+
+-- Reason 3: Statistics are outdated
+-- Check statistics
+DBCC SHOW_STATISTICS('Customer', 'IX_Customer_Email');
+
+-- SOLUTION: Update statistics
+UPDATE STATISTICS Customer WITH FULLSCAN;
+
+-- Reason 4: Index is disabled
+-- Check index status
+SELECT 
+    name,
+    is_disabled,
+    type_desc
+FROM sys.indexes
+WHERE object_id = OBJECT_ID('Customer') AND name = 'IX_Customer_Email';
+
+-- SOLUTION: Rebuild index
+ALTER INDEX IX_Customer_Email ON Customer REBUILD;
+
+-- Reason 5: Query returns too many rows (optimizer chooses scan)
+-- If query returns > 5-10% of table, scan might be faster
+
+-- SOLUTION: Add more selective WHERE conditions
+SELECT * FROM Customer 
+WHERE CustomerEmail = 'test@email.com' 
+  AND IsActive = 1;  -- More selective
+
+-- Create composite index
+CREATE INDEX IX_Customer_Email_IsActive 
+ON Customer(CustomerEmail, IsActive);
+
+-- Reason 6: Parameter sniffing issue
+CREATE PROCEDURE sp_GetCustomer
+    @Email VARCHAR(100)
+AS
+BEGIN
+    -- If @Email is NULL or very common value, might not use index
+    SELECT * FROM Customer WHERE CustomerEmail = @Email;
+END;
+
+-- SOLUTION: Use query hint
+CREATE PROCEDURE sp_GetCustomer_Fixed
+    @Email VARCHAR(100)
+AS
+BEGIN
+    SELECT * FROM Customer 
+    WHERE CustomerEmail = @Email
+    OPTION (RECOMPILE);  -- Recompile with actual parameter value
+END;
+
+-- Reason 7: Index fragmentation
+SELECT 
+    avg_fragmentation_in_percent,
+    page_count
+FROM sys.dm_db_index_physical_stats(
+    DB_ID(), 
+    OBJECT_ID('Customer'), 
+    (SELECT index_id FROM sys.indexes WHERE name = 'IX_Customer_Email'),
+    NULL, 
+    'DETAILED'
+);
+
+-- SOLUTION: Rebuild or reorganize
+ALTER INDEX IX_Customer_Email ON Customer REBUILD;
+-- Or
+ALTER INDEX IX_Customer_Email ON Customer REORGANIZE;
+```
+
+---
+
+### Scenario 23: Recursive Query Hitting Maximum Recursion
+
+**Question:** A recursive CTE for employee hierarchy throws "Maximum recursion limit of 100 has been exhausted" error. The hierarchy has more than 100 levels. How would you fix this?
+
+**Answer:**
+SQL Server limits recursive CTEs to 100 iterations by default to prevent infinite loops. Solutions include using OPTION (MAXRECURSION n) to increase the limit, MAXRECURSION 0 for unlimited recursion (with cycle detection), or implementing iterative WHILE loops with temp tables for very deep hierarchies to avoid CTE limitations.
+```sql
+-- PROBLEM: Default recursion limit is 100
+
+-- Current query (fails for deep hierarchies)
+WITH EmployeeHierarchy AS (
+    -- Anchor
+    SELECT EmployeeId, EmployeeName, ManagerId, 0 AS Level
+    FROM Employee
+    WHERE ManagerId IS NULL
+    
+    UNION ALL
+    
+    -- Recursive
+    SELECT e.EmployeeId, e.EmployeeName, e.ManagerId, h.Level + 1
+    FROM Employee e
+    INNER JOIN EmployeeHierarchy h ON e.ManagerId = h.EmployeeId
+)
+SELECT * FROM EmployeeHierarchy;
+
+-- SOLUTION 1: Increase MAXRECURSION option
+WITH EmployeeHierarchy AS (
+    SELECT EmployeeId, EmployeeName, ManagerId, 0 AS Level
+    FROM Employee
+    WHERE ManagerId IS NULL
+    
+    UNION ALL
+    
+    SELECT e.EmployeeId, e.EmployeeName, e.ManagerId, h.Level + 1
+    FROM Employee e
+    INNER JOIN EmployeeHierarchy h ON e.ManagerId = h.EmployeeId
+)
+SELECT * FROM EmployeeHierarchy
+OPTION (MAXRECURSION 1000);  -- Increase limit
+
+-- SOLUTION 2: Remove limit (use 0 for unlimited - use with caution)
+SELECT * FROM EmployeeHierarchy
+OPTION (MAXRECURSION 0);  -- Unlimited (risky for infinite loops)
+
+-- SOLUTION 3: Detect circular references before recursion
+-- Add check for cycles
+WITH EmployeeHierarchy AS (
+    SELECT 
+        EmployeeId, 
+        EmployeeName, 
+        ManagerId, 
+        0 AS Level,
+        CAST(EmployeeId AS VARCHAR(MAX)) AS Path  -- Track path
+    FROM Employee
+    WHERE ManagerId IS NULL
+    
+    UNION ALL
+    
+    SELECT 
+        e.EmployeeId, 
+        e.EmployeeName, 
+        e.ManagerId, 
+        h.Level + 1,
+        h.Path + '>' + CAST(e.EmployeeId AS VARCHAR(MAX))
+    FROM Employee e
+    INNER JOIN EmployeeHierarchy h ON e.ManagerId = h.EmployeeId
+    WHERE h.Path NOT LIKE '%>' + CAST(e.EmployeeId AS VARCHAR(MAX)) + '>%'  -- Prevent cycles
+      AND h.Level < 1000  -- Safety limit
+)
+SELECT * FROM EmployeeHierarchy
+OPTION (MAXRECURSION 0);
+
+-- SOLUTION 4: Use iterative approach with WHILE loop (for very deep hierarchies)
+DECLARE @Level INT = 0;
+CREATE TABLE #Hierarchy (
+    EmployeeId INT,
+    EmployeeName VARCHAR(100),
+    ManagerId INT,
+    Level INT
+);
+
+-- Insert root level
+INSERT INTO #Hierarchy
+SELECT EmployeeId, EmployeeName, ManagerId, 0
+FROM Employee
+WHERE ManagerId IS NULL;
+
+-- Iteratively add levels
+WHILE @@ROWCOUNT > 0 AND @Level < 1000
+BEGIN
+    SET @Level = @Level + 1;
+    
+    INSERT INTO #Hierarchy
+    SELECT e.EmployeeId, e.EmployeeName, e.ManagerId, @Level
+    FROM Employee e
+    INNER JOIN #Hierarchy h ON e.ManagerId = h.EmployeeId
+    WHERE h.Level = @Level - 1
+      AND e.EmployeeId NOT IN (SELECT EmployeeId FROM #Hierarchy);  -- Avoid duplicates
+END;
+
+SELECT * FROM #Hierarchy ORDER BY Level, EmployeeId;
+DROP TABLE #Hierarchy;
+```
+
+---
+
+### Scenario 24: Bulk Insert Performance Issues
+
+**Question:** Inserting 100,000 rows using individual INSERT statements takes 30 minutes. You need to improve this to under 1 minute. How would you optimize it?
+
+**Answer:**
+Individual row inserts are extremely slow due to transaction overhead per row. Solutions include using set-based INSERT with SELECT, table-valued parameters, BULK INSERT from files, temporarily disabling indexes/triggers during insert, using TABLOCK for minimal logging, or batching inserts in chunks to significantly improve performance from minutes to seconds.
+```sql
+-- PROBLEM: Row-by-row inserts are slow
+
+-- Current slow approach
+DECLARE @i INT = 1;
+WHILE @i <= 100000
+BEGIN
+    INSERT INTO Orders (CustomerId, OrderDate, TotalAmount)
+    VALUES (@i, GETDATE(), 100.00);
+    SET @i = @i + 1;
+END;
+
+-- SOLUTION 1: Batch INSERT (much faster)
+INSERT INTO Orders (CustomerId, OrderDate, TotalAmount)
+SELECT 
+    number AS CustomerId,
+    GETDATE() AS OrderDate,
+    100.00 AS TotalAmount
+FROM master.dbo.spt_values
+WHERE type = 'P' AND number BETWEEN 1 AND 100000;
+
+-- SOLUTION 2: Use table-valued parameter (for application code)
+CREATE TYPE OrderList AS TABLE (
+    CustomerId INT,
+    OrderDate DATETIME,
+    TotalAmount DECIMAL(10,2)
+);
+
+CREATE PROCEDURE sp_BulkInsertOrders
+    @Orders OrderList READONLY
+AS
+BEGIN
+    INSERT INTO Orders (CustomerId, OrderDate, TotalAmount)
+    SELECT CustomerId, OrderDate, TotalAmount
+    FROM @Orders;
+END;
+
+-- SOLUTION 3: Use BULK INSERT from file
+BULK INSERT Orders
+FROM 'C:\Data\Orders.csv'
+WITH (
+    FIELDTERMINATOR = ',',
+    ROWTERMINATOR = '\n',
+    BATCHSIZE = 10000,
+    TABLOCK  -- Table lock for better performance
+);
+
+-- SOLUTION 4: Disable indexes during insert, rebuild after
+-- Disable non-clustered indexes
+ALTER INDEX ALL ON Orders DISABLE;
+
+-- Perform bulk insert
+INSERT INTO Orders (CustomerId, OrderDate, TotalAmount)
+SELECT ... -- Your bulk insert
+
+-- Rebuild indexes
+ALTER INDEX ALL ON Orders REBUILD;
+
+-- SOLUTION 5: Use minimal logging (if recovery model allows)
+ALTER DATABASE YourDatabase SET RECOVERY MODEL BULK_LOGGED;
+
+-- Bulk insert with TABLOCK and minimal logging
+INSERT INTO Orders WITH (TABLOCK)
+SELECT ... -- Your data
+
+ALTER DATABASE YourDatabase SET RECOVERY MODEL FULL;
+
+-- SOLUTION 6: Remove triggers temporarily
+DISABLE TRIGGER ALL ON Orders;
+-- Perform insert
+ENABLE TRIGGER ALL ON Orders;
+
+-- SOLUTION 7: Use bcp utility
+-- bcp DatabaseName.dbo.Orders in Orders.csv -c -t, -S ServerName -T
+
+-- SOLUTION 8: Batch in chunks (if single large insert not possible)
+DECLARE @BatchSize INT = 5000;
+DECLARE @Processed INT = 0;
+
+WHILE @Processed < 100000
+BEGIN
+    INSERT INTO Orders (CustomerId, OrderDate, TotalAmount)
+    SELECT 
+        @Processed + number,
+        GETDATE(),
+        100.00
+    FROM master.dbo.spt_values
+    WHERE type = 'P' 
+      AND number BETWEEN 1 AND @BatchSize
+      AND @Processed + number <= 100000;
+    
+    SET @Processed = @Processed + @BatchSize;
+END;
+```
+
+---
+
+### Scenario 25: Dynamic SQL Injection Risk
+
+**Question:** A stored procedure builds a dynamic SQL query by concatenating user input: `'SELECT * FROM Orders WHERE CustomerName = ''' + @CustomerName + '''`. Security team flagged this as SQL injection risk. How would you fix it while maintaining functionality?
+
+**Answer:**
+String concatenation in dynamic SQL allows SQL injection attacks where malicious input can execute arbitrary commands. Solutions include using sp_executesql with parameterized queries (recommended), QUOTENAME for object names, input validation/sanitization, whitelisting valid values, or avoiding dynamic SQL entirely by using conditional logic in static queries for better security.
+```sql
+-- PROBLEM: SQL injection vulnerability
+
+-- VULNERABLE CODE
+CREATE PROCEDURE sp_GetOrders_Vulnerable
+    @CustomerName VARCHAR(100)
+AS
+BEGIN
+    DECLARE @SQL NVARCHAR(MAX);
+    SET @SQL = 'SELECT * FROM Orders WHERE CustomerName = ''' + @CustomerName + '''';
+    EXEC sp_executesql @SQL;
+    -- If @CustomerName = "'; DROP TABLE Orders; --"
+    -- Query becomes: SELECT * FROM Orders WHERE CustomerName = ''; DROP TABLE Orders; --'
+END;
+
+-- SOLUTION 1: Use parameterized query with sp_executesql (RECOMMENDED)
+CREATE PROCEDURE sp_GetOrders_Safe
+    @CustomerName VARCHAR(100)
+AS
+BEGIN
+    DECLARE @SQL NVARCHAR(MAX);
+    SET @SQL = N'SELECT * FROM Orders WHERE CustomerName = @CustName';
+    
+    EXEC sp_executesql 
+        @SQL,
+        N'@CustName VARCHAR(100)',  -- Parameter definition
+        @CustName = @CustomerName;   -- Parameter value (safe)
+END;
+
+-- SOLUTION 2: Use QUOTENAME for object names (if building object names dynamically)
+CREATE PROCEDURE sp_GetOrdersByTable
+    @TableName SYSNAME,  -- SYSNAME is safer for object names
+    @CustomerName VARCHAR(100)
+AS
+BEGIN
+    DECLARE @SQL NVARCHAR(MAX);
+    SET @SQL = N'SELECT * FROM ' + QUOTENAME(@TableName) + 
+               N' WHERE CustomerName = @CustName';
+    
+    EXEC sp_executesql 
+        @SQL,
+        N'@CustName VARCHAR(100)',
+        @CustName = @CustomerName;
+END;
+
+-- SOLUTION 3: Validate and sanitize input
+CREATE PROCEDURE sp_GetOrders_Validated
+    @CustomerName VARCHAR(100)
+AS
+BEGIN
+    -- Remove dangerous characters
+    SET @CustomerName = REPLACE(@CustomerName, '''', '''''');  -- Escape single quotes
+    SET @CustomerName = REPLACE(@CustomerName, ';', '');       -- Remove semicolons
+    SET @CustomerName = REPLACE(@CustomerName, '--', '');     -- Remove comments
+    SET @CustomerName = REPLACE(@CustomerName, '/*', '');     -- Remove block comments
+    SET @CustomerName = REPLACE(@CustomerName, '*/', '');
+    
+    -- Use parameterized query
+    DECLARE @SQL NVARCHAR(MAX);
+    SET @SQL = N'SELECT * FROM Orders WHERE CustomerName = @CustName';
+    
+    EXEC sp_executesql 
+        @SQL,
+        N'@CustName VARCHAR(100)',
+        @CustName = @CustomerName;
+END;
+
+-- SOLUTION 4: Whitelist validation (if possible)
+CREATE PROCEDURE sp_GetOrders_Whitelist
+    @CustomerName VARCHAR(100)
+AS
+BEGIN
+    -- Validate against known good values
+    IF NOT EXISTS (
+        SELECT 1 FROM Customer 
+        WHERE CustomerName = @CustomerName
+    )
+    BEGIN
+        RAISERROR('Invalid customer name', 16, 1);
+        RETURN;
+    END
+    
+    -- Safe to use directly (no dynamic SQL needed)
+    SELECT * FROM Orders 
+    WHERE CustomerName = @CustomerName;
+END;
+
+-- SOLUTION 5: Use regular stored procedure (avoid dynamic SQL if possible)
+CREATE PROCEDURE sp_GetOrders_Simple
+    @CustomerName VARCHAR(100)
+AS
+BEGIN
+    SELECT * FROM Orders 
+    WHERE CustomerName = @CustomerName;  -- No dynamic SQL needed
+END;
+
+-- SOLUTION 6: For complex dynamic WHERE clauses, use conditional logic
+CREATE PROCEDURE sp_SearchOrders
+    @CustomerName VARCHAR(100) = NULL,
+    @OrderDate DATE = NULL,
+    @MinAmount DECIMAL(10,2) = NULL
+AS
+BEGIN
+    SELECT * FROM Orders
+    WHERE (@CustomerName IS NULL OR CustomerName = @CustomerName)
+      AND (@OrderDate IS NULL OR OrderDate = @OrderDate)
+      AND (@MinAmount IS NULL OR TotalAmount >= @MinAmount);
+    -- No dynamic SQL needed
+END;
+
+-- BEST PRACTICES:
+-- 1. Always use parameterized queries with sp_executesql
+-- 2. Use QUOTENAME for object names
+-- 3. Validate and sanitize user input
+-- 4. Use least privilege (don't grant unnecessary permissions)
+-- 5. Avoid dynamic SQL when possible
+-- 6. Use SYSNAME for object name parameters
+-- 7. Log suspicious input patterns
+```
 
 ---
 
