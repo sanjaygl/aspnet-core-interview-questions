@@ -92,13 +92,41 @@ Use `Distinct()` for simple scenarios or `HashSet` for better performance with l
 
 **Real-time Example:**
 ```csharp
-// Removing duplicate email addresses from mailing list
+// Method 1: Using LINQ Distinct()
 List<string> emails = new List<string> { "a@test.com", "b@test.com", "a@test.com" };
 var uniqueEmails = emails.Distinct().ToList();
 
-// Using HashSet for better performance
-HashSet<int> seen = new HashSet<int>();
-List<int> unique = numbers.Where(n => seen.Add(n)).ToList();
+// Method 2: Using HashSet (better performance, preserves order)
+public List<int> RemoveDuplicatesWithHashSet(List<int> numbers) {
+    HashSet<int> seen = new HashSet<int>();
+    List<int> result = new List<int>();
+    
+    foreach (var num in numbers) {
+        if (seen.Add(num)) { // Add returns false if already exists
+            result.Add(num);
+        }
+    }
+    return result;
+}
+
+// Method 3: Without LINQ or HashSet (Manual logic)
+public List<int> RemoveDuplicatesManual(List<int> numbers) {
+    List<int> result = new List<int>();
+    
+    foreach (var num in numbers) {
+        bool isDuplicate = false;
+        foreach (var existing in result) {
+            if (existing == num) {
+                isDuplicate = true;
+                break;
+            }
+        }
+        if (!isDuplicate) {
+            result.Add(num);
+        }
+    }
+    return result;
+}
 ```
 
 ---
@@ -110,19 +138,38 @@ Use LINQ `OrderByDescending().Skip(1).First()` for simplicity or a single-pass a
 
 **Real-time Example:**
 ```csharp
-// Finding second highest salary in employee list
+// Method 1: Using LINQ (Simple but O(n log n))
 int[] salaries = { 50000, 80000, 60000, 80000, 90000 };
 int secondHighest = salaries.Distinct()
                             .OrderByDescending(x => x)
                             .Skip(1)
                             .First(); // Returns 80000
 
-// Optimal O(n) approach
-int highest = int.MinValue, second = int.MinValue;
-foreach (var num in numbers) {
-    if (num > highest) { second = highest; highest = num; }
-    else if (num > second && num != highest) second = num;
+// Method 2: Optimal O(n) - Single pass without LINQ
+public int FindSecondHighestOptimal(int[] nums) {
+    if (nums == null || nums.Length < 2)
+        throw new ArgumentException("Array must have at least 2 elements");
+    
+    int highest = int.MinValue;
+    int secondHighest = int.MinValue;
+    
+    foreach (var num in nums) {
+        if (num > highest) {
+            secondHighest = highest;
+            highest = num;
+        }
+        else if (num > secondHighest && num != highest) {
+            secondHighest = num;
+        }
+    }
+    
+    if (secondHighest == int.MinValue)
+        throw new InvalidOperationException("No second highest found");
+    
+    return secondHighest;
 }
+
+// Example: [10, 5, 20, 20, 4, 1, 8] → Returns 10
 ```
 
 ---
@@ -134,7 +181,7 @@ Use `GroupBy()` to group collections by one or more properties. Combine with `Se
 
 **Real-time Example:**
 ```csharp
-// Grouping orders by customer and calculating total
+// Method 1: Using LINQ GroupBy
 var customerOrders = orders
     .GroupBy(o => o.CustomerId)
     .Select(g => new {
@@ -143,10 +190,31 @@ var customerOrders = orders
         TotalAmount = g.Sum(o => o.Amount)
     });
 
-// Multi-property grouping
-var stats = employees
-    .GroupBy(e => new { e.Department, e.City })
-    .Select(g => new { g.Key.Department, g.Key.City, Count = g.Count() });
+// Method 2: Without LINQ (Manual grouping logic)
+public Dictionary<int, CustomerOrderSummary> GroupOrdersByCustomer(List<Order> orders) {
+    var result = new Dictionary<int, CustomerOrderSummary>();
+    
+    foreach (var order in orders) {
+        if (!result.ContainsKey(order.CustomerId)) {
+            result[order.CustomerId] = new CustomerOrderSummary {
+                CustomerId = order.CustomerId,
+                TotalOrders = 0,
+                TotalAmount = 0
+            };
+        }
+        
+        result[order.CustomerId].TotalOrders++;
+        result[order.CustomerId].TotalAmount += order.Amount;
+    }
+    
+    return result;
+}
+
+public class CustomerOrderSummary {
+    public int CustomerId { get; set; }
+    public int TotalOrders { get; set; }
+    public decimal TotalAmount { get; set; }
+}
 ```
 
 ---
@@ -158,15 +226,44 @@ Use `SelectMany()` to flatten nested collections into a single collection. It pr
 
 **Real-time Example:**
 ```csharp
-// Flattening all order items from multiple orders
+// Method 1: Using LINQ SelectMany
 var allItems = orders.SelectMany(o => o.Items).ToList();
 
-// With transformation
+// Method 2: Without LINQ (Manual flattening logic)
+public List<OrderItem> FlattenOrderItems(List<Order> orders) {
+    List<OrderItem> result = new List<OrderItem>();
+    
+    foreach (var order in orders) {
+        foreach (var item in order.Items) {
+            result.Add(item);
+        }
+    }
+    
+    return result;
+}
+
+// Method 3: Flatten with transformation using LINQ
 var allProducts = orders
     .SelectMany(o => o.Items)
     .Select(item => item.ProductName)
     .Distinct()
     .ToList();
+
+// Method 4: Manual flatten with transformation
+public List<string> FlattenAndGetProductNames(List<Order> orders) {
+    List<string> products = new List<string>();
+    HashSet<string> seen = new HashSet<string>();
+    
+    foreach (var order in orders) {
+        foreach (var item in order.Items) {
+            if (seen.Add(item.ProductName)) {
+                products.Add(item.ProductName);
+            }
+        }
+    }
+    
+    return products;
+}
 ```
 
 ---
@@ -178,13 +275,38 @@ Use `ToDictionary()` specifying key and value selectors. Handle duplicates using
 
 **Real-time Example:**
 ```csharp
-// Convert product list to dictionary for fast lookup
+// Method 1: Using LINQ ToDictionary
 var productDict = products.ToDictionary(p => p.Id, p => p.Name);
 
-// Handle duplicates by taking last
+// Method 2: Without LINQ (Manual conversion with duplicate handling)
+public Dictionary<int, Product> ConvertToDictionary(List<Product> products) {
+    var dict = new Dictionary<int, Product>();
+    
+    foreach (var product in products) {
+        if (!dict.ContainsKey(product.Id)) {
+            dict.Add(product.Id, product);
+        }
+        // Or to take last: dict[product.Id] = product;
+    }
+    
+    return dict;
+}
+
+// Method 3: Handle duplicates by taking last using LINQ
 var dict = products
     .GroupBy(p => p.Id)
     .ToDictionary(g => g.Key, g => g.Last());
+
+// Method 4: Manual grouping and taking last
+public Dictionary<int, Product> ConvertWithDuplicates(List<Product> products) {
+    var dict = new Dictionary<int, Product>();
+    
+    foreach (var product in products) {
+        dict[product.Id] = product; // Overwrites if duplicate
+    }
+    
+    return dict;
+}
 ```
 
 ---
@@ -276,15 +398,45 @@ Use Dictionary to store character counts. Iterate through string once, increment
 
 **Real-time Example:**
 ```csharp
-// Analyzing text patterns for search optimization
+// Method 1: Using LINQ GroupBy
 public Dictionary<char, int> CountFrequency(string s) {
     return s.GroupBy(c => c)
             .ToDictionary(g => g.Key, g => g.Count());
 }
 
-// Check if two strings are anagrams
+// Method 2: Without LINQ (Manual counting logic)
+public Dictionary<char, int> CountFrequencyManual(string s) {
+    var frequency = new Dictionary<char, int>();
+    
+    foreach (char c in s) {
+        if (frequency.ContainsKey(c)) {
+            frequency[c]++;
+        }
+        else {
+            frequency[c] = 1;
+        }
+    }
+    
+    return frequency;
+}
+
+// Method 3: Check if two strings are anagrams without LINQ
 public bool AreAnagrams(string s1, string s2) {
-    return CountFrequency(s1).SequenceEqual(CountFrequency(s2));
+    if (s1.Length != s2.Length)
+        return false;
+    
+    var freq1 = CountFrequencyManual(s1);
+    var freq2 = CountFrequencyManual(s2);
+    
+    if (freq1.Count != freq2.Count)
+        return false;
+    
+    foreach (var kvp in freq1) {
+        if (!freq2.ContainsKey(kvp.Key) || freq2[kvp.Key] != kvp.Value)
+            return false;
+    }
+    
+    return true;
 }
 ```
 
@@ -707,7 +859,7 @@ Find two numbers in array that add up to target. Use HashMap to store complement
 
 **Real-time Example:**
 ```csharp
-// Finding products that match budget (target price)
+// Method 1: Using Dictionary
 public int[] TwoSum(int[] nums, int target) {
     var map = new Dictionary<int, int>();
     
@@ -720,6 +872,20 @@ public int[] TwoSum(int[] nums, int target) {
     
     return null;
 }
+
+// Method 2: Without Dictionary (Brute force O(n²))
+public int[] TwoSumBruteForce(int[] nums, int target) {
+    for (int i = 0; i < nums.Length; i++) {
+        for (int j = i + 1; j < nums.Length; j++) {
+            if (nums[i] + nums[j] == target) {
+                return new[] { i, j };
+            }
+        }
+    }
+    
+    return null;
+}
+
 // Example: nums=[2,7,11,15], target=9 → returns [0,1]
 ```
 
@@ -908,6 +1074,7 @@ Use query parameters for pagination (page, pageSize) and filtering. Return metad
 
 **Real-time Example:**
 ```csharp
+// Method 1: Using LINQ with EF Core
 [HttpGet]
 public async Task<ActionResult<PagedResult<Product>>> GetProducts(
     [FromQuery] int page = 1,
@@ -939,6 +1106,40 @@ public async Task<ActionResult<PagedResult<Product>>> GetProducts(
         TotalItems = totalItems,
         TotalPages = (int)Math.Ceiling(totalItems / (double)pageSize)
     });
+}
+
+// Method 2: Without LINQ (In-memory pagination)
+public PagedResult<Product> GetProductsPaginated(
+    List<Product> allProducts, 
+    int page, 
+    int pageSize,
+    string category = null) {
+    
+    // Filter manually
+    List<Product> filtered = new List<Product>();
+    foreach (var product in allProducts) {
+        if (string.IsNullOrEmpty(category) || product.Category == category) {
+            filtered.Add(product);
+        }
+    }
+    
+    // Calculate pagination
+    int totalItems = filtered.Count;
+    int skip = (page - 1) * pageSize;
+    
+    // Get page items
+    List<Product> pageItems = new List<Product>();
+    for (int i = skip; i < skip + pageSize && i < filtered.Count; i++) {
+        pageItems.Add(filtered[i]);
+    }
+    
+    return new PagedResult<Product> {
+        Items = pageItems,
+        Page = page,
+        PageSize = pageSize,
+        TotalItems = totalItems,
+        TotalPages = (int)Math.Ceiling(totalItems / (double)pageSize)
+    };
 }
 ```
 
@@ -1063,13 +1264,13 @@ Filter at database level before loading to memory. Use `AsNoTracking()` for read
 
 **Real-time Example:**
 ```csharp
-// ❌ BAD: Loads all customers to memory
+// ❌ BAD: Loads all customers to memory first
 public List<Customer> GetActiveCustomersBad() {
     var all = _context.Customers.ToList(); // Loads everything!
     return all.Where(c => c.IsActive).ToList();
 }
 
-// ✅ GOOD: Filters at database
+// ✅ GOOD: Filters at database using LINQ
 public async Task<List<Customer>> GetActiveCustomersGood() {
     return await _context.Customers
         .AsNoTracking() // Read-only, faster
@@ -1077,7 +1278,7 @@ public async Task<List<Customer>> GetActiveCustomersGood() {
         .ToListAsync();
 }
 
-// ✅ BETTER: Project only needed columns
+// ✅ BETTER: Project only needed columns using LINQ
 public async Task<List<CustomerDto>> GetActiveCustomersOptimized() {
     return await _context.Customers
         .Where(c => c.IsActive)
@@ -1087,6 +1288,19 @@ public async Task<List<CustomerDto>> GetActiveCustomersOptimized() {
             Email = c.Email
         })
         .ToListAsync();
+}
+
+// Alternative: Manual filtering (if not using EF Core)
+public List<Customer> GetActiveCustomersManual(List<Customer> allCustomers) {
+    List<Customer> active = new List<Customer>();
+    
+    foreach (var customer in allCustomers) {
+        if (customer.IsActive) {
+            active.Add(customer);
+        }
+    }
+    
+    return active;
 }
 ```
 
@@ -1111,14 +1325,14 @@ public async Task<List<CustomerDto>> GetCustomersWithOrdersBad() {
     return customers;
 }
 
-// ✅ GOOD: Eager loading with Include
+// ✅ GOOD: Eager loading with Include (LINQ)
 public async Task<List<Customer>> GetCustomersWithOrdersGood() {
     return await _context.Customers
         .Include(c => c.Orders) // Single query with JOIN
         .ToListAsync();
 }
 
-// ✅ BETTER: Projection for specific data
+// ✅ BETTER: Projection for specific data (LINQ)
 public async Task<List<CustomerDto>> GetCustomersOptimized() {
     return await _context.Customers
         .Select(c => new CustomerDto {
@@ -1127,6 +1341,35 @@ public async Task<List<CustomerDto>> GetCustomersOptimized() {
             OrderCount = c.Orders.Count()
         })
         .ToListAsync();
+}
+
+// Alternative: Manual approach to avoid N+1 (without LINQ)
+public List<CustomerWithOrders> GetCustomersWithOrdersManual() {
+    // Load all customers
+    List<Customer> customers = _context.Customers.ToList();
+    
+    // Load all orders in one query
+    List<Order> allOrders = _context.Orders.ToList();
+    
+    // Group orders by customer manually
+    var result = new List<CustomerWithOrders>();
+    
+    foreach (var customer in customers) {
+        var customerOrders = new List<Order>();
+        
+        foreach (var order in allOrders) {
+            if (order.CustomerId == customer.Id) {
+                customerOrders.Add(order);
+            }
+        }
+        
+        result.Add(new CustomerWithOrders {
+            Customer = customer,
+            Orders = customerOrders
+        });
+    }
+    
+    return result; // Total: 2 queries instead of N+1
 }
 ```
 
