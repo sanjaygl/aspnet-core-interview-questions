@@ -25,6 +25,10 @@ The project contains:
 
 - **[🔥 C# / .NET Core - Complete Interview Guide](docs/CSharp-DotNetCore-Complete-Interview-Guide.md)** - **NEW!** Consolidated guide with 143+ questions covering Collections & LINQ, String Manipulation, Date & Time, Async/Multithreading, Thread Safety, Design Patterns, Data Structures & Algorithms, ASP.NET Core Web API, Dependency Injection, Entity Framework Core, SQL & Database, Microservices, Advanced Topics (MediatR, Kafka, Rate Limiting), and System Design with concise answers and real-world examples
 
+### Database & SQL
+
+- **[📊 SQL Interview Questions - Complete Guide](docs/SQL-Interview-Questions-Guide.md)** - **NEW!** 25 comprehensive SQL interview questions covering DDL/DML/DCL/TCL, JOINs, indexes, normalization, stored procedures vs functions, transactions & ACID, locks & deadlocks, performance optimization, execution plans, and practical scenarios with real-world examples for backend developers
+
 ### Frontend Development
 
 - **[Angular Interview Questions 2026 (v16–21+)](docs/Angular-Interview-Questions-Guide.md)** - 143 comprehensive Angular interview questions and answers (Beginner → Senior → Lead) with complete indexing, covering Signals, Standalone Components, SSR, Control Flow, performance optimization, security, and practical coding challenges with code examples
@@ -116,7 +120,7 @@ The project contains:
 - **Object-Oriented Design**: SOLID principles, design patterns (23 GoF patterns), clean architecture
 - **ASP.NET Core**: Web API development, middleware, dependency injection, global exception handling
 - **Entity Framework Core**: LINQ optimization, N+1 problem, eager vs lazy loading
-- **Database & SQL**: Query optimization, stored procedures, indexing strategies
+- **Database & SQL**: DDL/DML/DCL/TCL commands, JOINs, indexes (clustered vs non-clustered), stored procedures vs functions, transactions & ACID, locks & deadlocks, query optimization, execution plans, pagination, NULL handling
 - **Microservices**: Retry patterns with Polly, Circuit Breaker, Saga Pattern, event-driven architecture
 - **Advanced Topics**: MediatR, CQRS, Apache Kafka, rate limiting, idempotent APIs
 - **System Design**: URL Shortener, Order Management, Payment Processing systems
@@ -125,8 +129,8 @@ The project contains:
 
 ## Repository Statistics
 
-- **📚 Total Documents**: 50+ comprehensive guides
-- **❓ Interview Questions**: 500+ questions with detailed answers
-- **💻 Code Examples**: 200+ real-world code snippets
+- **📚 Total Documents**: 51+ comprehensive guides
+- **❓ Interview Questions**: 525+ questions with detailed answers
+- **💻 Code Examples**: 225+ real-world code snippets
 - **🎯 Coverage**: Beginner to Senior/Lead level
 - **📝 Last Updated**: January 2026
