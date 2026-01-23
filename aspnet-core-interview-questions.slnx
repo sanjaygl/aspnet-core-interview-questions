@@ -2,6 +2,7 @@
   <Folder Name="/docs/">
     <File Path="docs/Angular-Interview-Questions-Guide.md" />
     <File Path="docs/Copilot-Interview-Questions-Guide.md" />
+    <File Path="docs/CSharp-100-Senior-Interview-Questions.md" />
     <File Path="docs/CSharp-Boxing-Unboxing-Stack-Heap-Guide.md" />
     <File Path="docs/CSharp-Collections-Complete-Guide.md" />
     <File Path="docs/CSharp-Extension-Methods-Guide.md" />

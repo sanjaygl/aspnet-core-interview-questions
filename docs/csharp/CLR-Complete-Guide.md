@@ -10,9 +10,36 @@
 1. [Quick Reference - CLR Components](#quick-reference)
 2. [Visual Diagrams](#visual-diagrams)
 3. [Detailed Explanations](#detailed-explanations)
-4. [Real-World Scenarios](#real-world-scenarios)
-5. [Performance Tuning](#performance-tuning)
-6. [Interview Q&A](#interview-qa)
+   - What is CLR?
+   - CLS (Common Language Specification)
+   - CTS (Common Type System)
+   - BCL (Base Class Library)
+   - JIT Compiler
+   - Garbage Collector
+   - Exception Manager
+   - Thread Pool
+   - Assembly Loader
+4. [CLR Execution Lifecycle](#clr-execution-lifecycle)
+5. [Real-World Scenarios](#real-world-scenarios)
+6. [Performance Tuning](#performance-tuning)
+7. [Interview Q&A](#interview-qa)
+   - Q1: What happens when you run a .NET application?
+   - Q2: Why use IL instead of native code?
+   - Q3: Tiered Compilation explained
+   - Q4: Server GC vs Workstation GC
+   - Q5: How CLR ensures type safety
+   - Q6: Native AOT vs standard JIT
+   - Q7: GC generational model
+   - Q8: CLS vs CTS differences
+   - Q9: JIT compilation step-by-step
+   - Q10: Boxing and Unboxing
+   - Q11: Thread Pool architecture
+   - Q12: CLR compilation strategies (.NET 10)
+   - Q13: Static class initialization **[NEW]**
+   - Q14: Singleton pattern execution **[NEW]**
+   - Q15: Object lifecycle in CLR **[NEW]**
+   - Q16: ASP.NET Core Kestrel lifecycle **[NEW]**
+   - CLR vs JVM vs V8 comparison
 
 ---
 
@@ -1239,7 +1266,7 @@ alc.Unload();  // Unload assembly and free memory ✓
 
 ---
 
-## 3. CLR Execution Lifecycle (Complete Flow)
+## 3. CLR Execution Lifecycle (Complete Flow) {#clr-execution-lifecycle}
 
 ### Phase 1: Compilation (Development Time)
 ```csharp
@@ -1831,7 +1858,505 @@ new Thread(() => {
 
 ---
 
-### CLR vs JVM vs V8 (Bonus Comparison)
+**Q13: How does CLR handle static class initialization and execution?**
+
+**A:** Static classes and members are initialized by CLR in a special way:
+
+**Static Class Characteristics**:
+```csharp
+// Static class definition
+public static class ConfigurationManager
+{
+    // Static constructor - called ONCE before first use
+    static ConfigurationManager()
+    {
+        Console.WriteLine("Static constructor called");
+        LoadConfiguration();
+    }
+    
+    // Static field - initialized when class is loaded
+    private static readonly Dictionary<string, string> _config = new();
+    
+    public static string GetValue(string key) => _config[key];
+}
+```
+
+**Execution Timeline**:
+```
+1. First Access Trigger
+   └→ var value = ConfigurationManager.GetValue("key");
+        │
+2. CLR Type Loader
+   ├→ Load ConfigurationManager type metadata
+   ├→ Allocate memory for static fields
+   └→ Mark class for initialization
+        │
+3. Static Constructor Execution (Tier 0 JIT)
+   ├→ JIT compiles static constructor
+   ├→ Execute constructor ONCE (thread-safe)
+   ├→ Initialize static fields
+   └→ Mark class as initialized
+        │
+4. Method Execution
+   ├→ JIT compiles GetValue() on first call
+   └→ Execute method (cached for subsequent calls)
+        │
+5. Subsequent Calls
+   └→ Direct method execution (no initialization checks)
+```
+
+**Key Points**:
+- **Lazy Initialization**: Static constructor runs on first access, not at app startup
+- **Thread-Safe**: CLR guarantees only one thread executes static constructor
+- **Lifetime**: Static members live for entire application lifetime (never garbage collected)
+- **Memory**: Stored in Gen 2 heap (long-lived objects)
+
+**Example with Timing**:
+```csharp
+public static class Logger
+{
+    static Logger()
+    {
+        Console.WriteLine($"Logger initialized at {DateTime.Now}");
+        Thread.Sleep(1000);  // Simulate expensive initialization
+    }
+    
+    public static void Log(string message) => Console.WriteLine(message);
+}
+
+// Main method
+Logger.Log("First call");   // Triggers static ctor + method (1050ms)
+Logger.Log("Second call");  // Only method execution (1ms)
+Logger.Log("Third call");   // Only method execution (1ms)
+```
+
+---
+
+**Q14: Explain Singleton pattern execution in CLR - Lazy vs Eager initialization.**
+
+**A:** CLR supports multiple singleton implementation patterns:
+
+**1. Eager Initialization (Pre-.NET 4)**:
+```csharp
+public sealed class DatabaseConnection
+{
+    // Instance created at class load time (eager)
+    private static readonly DatabaseConnection _instance = new DatabaseConnection();
+    
+    private DatabaseConnection() 
+    { 
+        Console.WriteLine("Eager: Connection created at app startup");
+    }
+    
+    public static DatabaseConnection Instance => _instance;
+}
+
+// Execution:
+// - Instance created when class is first referenced
+// - Consumes memory even if never used
+// - Thread-safe (CLR guarantees)
+```
+
+**2. Lazy Initialization (Thread-Safe)**:
+```csharp
+public sealed class CacheManager
+{
+    private static readonly Lazy<CacheManager> _instance = 
+        new Lazy<CacheManager>(() => new CacheManager());
+    
+    private CacheManager() 
+    { 
+        Console.WriteLine("Lazy: Cache created on first access");
+    }
+    
+    public static CacheManager Instance => _instance.Value;
+}
+
+// Execution:
+// - Instance created only when Instance property is first accessed
+// - Thread-safe (Lazy<T> handles locking)
+// - Better memory efficiency
+```
+
+**3. Double-Check Locking (Legacy Pattern)**:
+```csharp
+public sealed class ConfigService
+{
+    private static ConfigService? _instance;
+    private static readonly object _lock = new object();
+    
+    private ConfigService() { }
+    
+    public static ConfigService Instance
+    {
+        get
+        {
+            if (_instance == null)  // First check (no lock)
+            {
+                lock (_lock)  // Acquire lock
+                {
+                    if (_instance == null)  // Second check (with lock)
+                    {
+                        _instance = new ConfigService();
+                    }
+                }
+            }
+            return _instance;
+        }
+    }
+}
+```
+
+**CLR Execution Comparison**:
+
+| Pattern | Created When | Thread-Safe | Performance | Memory |
+|---------|--------------|-------------|-------------|--------|
+| **Eager** | Class load | ✅ (CLR) | Fastest access | Higher (always allocated) |
+| **Lazy<T>** | First access | ✅ (Built-in) | Fast | Lower (on-demand) |
+| **Double-Check** | First access | ✅ (Manual) | Moderate | Lower (on-demand) |
+
+**Recommended (.NET 10)**:
+```csharp
+// Use Lazy<T> - simplest, thread-safe, efficient
+public sealed class ServiceManager
+{
+    private static readonly Lazy<ServiceManager> _instance = new(() => 
+    {
+        Console.WriteLine("ServiceManager initialized");
+        return new ServiceManager();
+    });
+    
+    private ServiceManager() { }
+    
+    public static ServiceManager Instance => _instance.Value;
+}
+```
+
+---
+
+**Q15: What is the complete lifecycle of an object in CLR from creation to garbage collection?**
+
+**A:** Object lifecycle in CLR involves multiple phases:
+
+**Phase 1: Object Creation**
+```csharp
+var person = new Person { Name = "John", Age = 30 };
+
+// CLR Steps:
+// 1. Calculate object size: object header (16 bytes) + fields (8 bytes for Name ref + 4 bytes for Age) = 28 bytes (rounded to 32)
+// 2. Check Gen 0 heap for available space
+// 3. Allocate memory in Gen 0 heap
+// 4. Initialize object header (sync block, type pointer)
+// 5. Call constructor (if exists)
+// 6. Zero-initialize fields (if needed)
+// 7. Return reference to caller
+```
+
+**Phase 2: Object Usage**
+```csharp
+person.Age = 35;              // Modify field
+var name = person.Name;       // Read field
+ProcessPerson(person);        // Pass as parameter
+
+// CLR Tracking:
+// - Object referenced by 'person' variable (GC root)
+// - Object reachable from stack frame
+// - Mark as "live" during GC marking phase
+```
+
+**Phase 3: Object Becomes Unreachable**
+```csharp
+public void CreateTemporaryObject()
+{
+    var temp = new Person { Name = "Temp", Age = 25 };
+    // Use temp...
+} // Method exits → 'temp' goes out of scope → object unreachable
+
+// CLR Behavior:
+// - Stack frame destroyed
+// - Reference to Person object lost
+// - Object becomes garbage (eligible for collection)
+```
+
+**Phase 4: Garbage Collection**
+```
+GC Trigger (Gen 0 full - ~16MB allocated):
+    │
+    ▼
+Mark Phase:
+├→ Start from GC roots (stack, static fields, registers)
+├→ Traverse object graph
+├→ Mark 'person' as REACHABLE (referenced)
+└→ Leave 'temp' as UNMARKED (garbage)
+    │
+    ▼
+Sweep Phase:
+├→ Identify unmarked objects (temp Person)
+└→ Reclaim memory (add to free list)
+    │
+    ▼
+Compact Phase (Optional):
+├→ Move live objects together
+├→ Update references
+└→ Reduce fragmentation
+    │
+    ▼
+Promotion (if survived):
+└→ Move survivors to Gen 1
+```
+
+**Phase 5: Finalization (If Applicable)**
+```csharp
+public class DatabaseConnection : IDisposable
+{
+    ~DatabaseConnection()  // Finalizer
+    {
+        Console.WriteLine("Finalizer called");
+        Cleanup();
+    }
+    
+    public void Dispose()
+    {
+        Cleanup();
+        GC.SuppressFinalize(this);  // Skip finalizer
+    }
+}
+
+// Finalization Queue:
+// 1. Object with finalizer marked for finalization
+// 2. Moved to finalization queue (survives GC)
+// 3. Finalizer thread executes ~DatabaseConnection()
+// 4. Object eligible for collection in NEXT GC cycle
+```
+
+**Complete Timeline Example**:
+```csharp
+public class ObjectLifecycleDemo
+{
+    public void Demonstrate()
+    {
+        // 1. CREATION (time: 0ms)
+        var person = new Person { Name = "Alice" };  // Gen 0 allocation
+        
+        // 2. USAGE (time: 0-100ms)
+        for (int i = 0; i < 1000; i++)
+        {
+            person.Age++;  // Object in use, referenced
+        }
+        
+        // 3. UNREACHABLE (time: 100ms)
+        person = null;  // Last reference removed
+        
+        // 4. GC COLLECTION (time: ~120ms when Gen 0 full)
+        // - GC marks object as garbage
+        // - Memory reclaimed
+        
+        // 5. MEMORY REUSED (time: 125ms+)
+        // - Gen 0 space available for new allocations
+    }
+}
+```
+
+**Memory Layout Over Time**:
+```
+T=0ms:   Gen 0 [person] [obj2] [obj3] ...
+T=100ms: Gen 0 [GARBAGE] [obj2] [obj3] ...  (person unreachable)
+T=120ms: Gen 0 [obj2] [obj3] ...            (after GC, compacted)
+T=125ms: Gen 0 [newObj] [obj2] [obj3] ...   (memory reused)
+```
+
+---
+
+**Q16: Explain ASP.NET Core Kestrel web server execution lifecycle with CLR.**
+
+**A:** Kestrel is a cross-platform web server for ASP.NET Core. Here's the complete lifecycle:
+
+**1. Application Startup (CLR Initialization)**
+```csharp
+// Program.cs
+var builder = WebApplication.CreateBuilder(args);
+builder.Services.AddControllers();
+var app = builder.Build();
+app.MapControllers();
+app.Run();  // Blocks here, starts Kestrel
+
+// CLR Steps:
+// 1. OS loads .NET runtime (coreclr.dll)
+// 2. CLR initializes (GC, Thread Pool, JIT)
+// 3. Load Kestrel assemblies (Microsoft.AspNetCore.Server.Kestrel)
+// 4. Create WebApplication instance
+// 5. Configure DI container
+// 6. Build middleware pipeline
+```
+
+**2. Kestrel Server Initialization**
+```
+app.Run() triggers:
+    │
+    ▼
+┌─────────────────────────────────────────┐
+│ Kestrel Startup                         │
+├─────────────────────────────────────────┤
+│ 1. Create Listener Socket               │
+│    • Bind to port (default: 5000)      │
+│    • Listen for connections             │
+│                                         │
+│ 2. Allocate Thread Pool Threads        │
+│    • I/O threads for async operations   │
+│    • Worker threads for request proc.   │
+│                                         │
+│ 3. Create Connection Manager            │
+│    • Track active connections           │
+│    • Manage connection limits           │
+│                                         │
+│ 4. Initialize Middleware Pipeline       │
+│    • Routing, Auth, CORS, etc.         │
+│    • Ready to process requests          │
+└─────────────────────────────────────────┘
+```
+
+**3. Request Processing Lifecycle**
+```csharp
+// Incoming Request: GET /api/users/123
+
+Step 1: Connection Accept (I/O Thread Pool)
+├→ Client connects to port 5000
+├→ TCP handshake completed
+└→ Kestrel accepts connection (async, no blocking)
+
+Step 2: HTTP Parser (Pooled Memory)
+├→ Read bytes from socket (async)
+├→ Parse HTTP headers (zero-allocation with Span<T>)
+├→ Build HttpContext object (Gen 0)
+└→ Extract: Method=GET, Path=/api/users/123
+
+Step 3: Middleware Pipeline (Worker Thread Pool)
+├→ Thread Pool thread assigned
+├→ Execute middleware chain:
+│   ├→ Routing middleware (match route)
+│   ├→ Authentication (validate token)
+│   ├→ Authorization (check permissions)
+│   └→ Endpoint execution
+└→ Invoke UsersController.GetUser(123)
+
+Step 4: Controller Execution (JIT Compiled)
+[ApiController]
+public class UsersController : ControllerBase
+{
+    [HttpGet("{id}")]
+    public async Task<IActionResult> GetUser(int id)
+    {
+        // First request: JIT compiles this method (Tier 0)
+        // Subsequent: Uses cached native code
+        
+        var user = await _userService.GetUserAsync(id);
+        return Ok(user);  // Serialize to JSON
+    }
+}
+
+Step 5: Response Generation
+├→ Serialize user object to JSON (System.Text.Json)
+├→ Set response headers (Content-Type: application/json)
+├→ Write response to socket (async)
+└→ Flush buffer
+
+Step 6: Connection Management
+├→ Keep-Alive: Connection pooled for reuse
+├→ Or Close: Connection terminated
+└→ Thread returned to Thread Pool
+
+Step 7: Memory Cleanup
+├→ HttpContext object eligible for GC (Gen 0)
+├→ Request/Response buffers returned to ArrayPool
+└→ Minimal GC pressure (pooling strategy)
+```
+
+**4. Performance Optimizations in Kestrel**
+
+```csharp
+// Kestrel uses advanced CLR features:
+
+// 1. Pipe-based I/O (System.IO.Pipelines)
+// - Zero-copy buffer management
+// - Backpressure handling
+// - Memory pooling
+
+var pipe = new Pipe();
+await socket.ReceiveAsync(pipe.Writer.GetMemory());
+await ProcessRequest(pipe.Reader);
+
+// 2. Span<T> for Zero-Allocation Parsing
+ReadOnlySpan<byte> headerBytes = buffer.AsSpan();
+var method = ParseMethod(headerBytes);  // No heap allocation!
+
+// 3. ArrayPool for Buffer Reuse
+byte[] buffer = ArrayPool<byte>.Shared.Rent(4096);
+try
+{
+    // Use buffer
+}
+finally
+{
+    ArrayPool<byte>.Shared.Return(buffer);  // No GC!
+}
+
+// 4. Object Pooling for HttpContext
+// - Reuses HttpContext instances
+// - Reduces Gen 0 allocations by 80%
+```
+
+**5. Request Processing Timeline (Real Numbers)**
+
+```
+Time    Action                          CLR Component
+────────────────────────────────────────────────────────
+0ms     Connection accepted             I/O Thread Pool
+1ms     HTTP parsing                    Span<T> (zero-alloc)
+2ms     Routing match                   JIT (cached)
+3ms     Controller execution            JIT (Tier 0 → Tier 1)
+8ms     Database query                  Thread Pool (async)
+10ms    JSON serialization              Gen 0 allocation
+11ms    Response written                Pooled buffers
+12ms    Complete                        Thread returned
+
+Total: 12ms (Tier 0), 8ms (Tier 1 after optimization)
+GC Pressure: ~2KB Gen 0 (with pooling)
+```
+
+**6. Kestrel Shutdown**
+```
+SIGTERM/SIGINT received:
+    │
+    ▼
+Graceful Shutdown:
+├→ Stop accepting new connections
+├→ Wait for in-flight requests (timeout: 30s)
+├→ Close all connections
+├→ Dispose middleware components
+└→ CLR shutdown (finalizers, GC cleanup)
+```
+
+**Key Kestrel + CLR Features**:
+- **Async I/O**: No threads blocked on I/O operations
+- **Memory Pooling**: Reduces GC pressure by 80%
+- **JIT Tiering**: Hot paths optimized with PGO
+- **Span<T>**: Zero-allocation HTTP parsing
+- **Server GC**: Multi-threaded GC for high throughput
+- **Native AOT**: Optional for ultra-fast cold starts
+
+**Kestrel vs IIS + CLR**:
+
+| Feature | Kestrel | IIS (In-Process) |
+|---------|---------|------------------|
+| **Cross-Platform** | ✅ Yes | ❌ Windows only |
+| **Startup** | Fast (~500ms) | Slower (~1.5s) |
+| **Throughput** | 7M req/s | 5M req/s |
+| **Memory** | Lower | Higher |
+| **Deployment** | Container-friendly | Traditional hosting |
+
+---
+
+### CLR vs JVM vs V8 (Runtime Comparison)
 
 | Feature | CLR (.NET 10) | JVM (Java 21) | V8 (Node.js) |
 |---------|---------------|---------------|--------------|
@@ -1848,20 +2373,44 @@ new Thread(() => {
 
 ## Summary - Key Takeaways
 
-✅ **CLR** is the execution engine managing memory, security, and code execution  
-✅ **IL** provides platform independence and enables runtime optimization  
-✅ **JIT** compiles IL to native code with tiered compilation (Tier 0 → Tier 1 with PGO)  
-✅ **GC** uses generational model (Gen 0/1/2 + LOH) for efficient memory management  
-✅ **CTS** defines all types, **CLS** ensures language interoperability  
-✅ **Thread Pool** reuses threads efficiently for short-lived tasks  
-✅ **.NET 10** offers multiple strategies: JIT, R2R, Native AOT, Hybrid  
-✅ **Type Safety** prevents memory corruption through verification and runtime checks  
+### CLR Fundamentals
+✅ **CLR** - Execution engine managing memory, security, code execution, and type safety  
+✅ **IL/MSIL** - Platform-independent bytecode enabling cross-platform execution  
+✅ **JIT Compilation** - Tiered compilation (Tier 0 → Tier 1 with PGO) for optimal performance  
+
+### Memory Management
+✅ **Garbage Collection** - Generational model (Gen 0/1/2 + LOH) with automatic memory cleanup  
+✅ **Gen 0** - Young objects, collected frequently (~10ms), ~90% mortality rate  
+✅ **Gen 2** - Long-lived objects, collected rarely (~1s), includes static/cached data  
+
+### Type System & Interoperability
+✅ **CTS** - Common Type System defining all .NET types (value/reference types)  
+✅ **CLS** - Common Language Specification ensuring cross-language compatibility  
+✅ **BCL** - Base Class Library providing core functionality (System.*, Collections, IO, LINQ)  
+
+### Performance & Execution
+✅ **Thread Pool** - Reusable worker threads for efficient task execution (I/O and CPU-bound)  
+✅ **.NET 10 Strategies** - JIT (balanced), R2R (fast start), Native AOT (ultra-fast), Hybrid (production)  
+✅ **Kestrel** - High-performance web server using async I/O, memory pooling, and Span<T>  
+
+### Object Lifecycle
+✅ **Static Classes** - Lazy initialization on first access, thread-safe, live for app lifetime  
+✅ **Singleton Pattern** - Use Lazy<T> for thread-safe, on-demand initialization  
+✅ **Object Phases** - Creation (Gen 0) → Usage → Unreachable → GC Collection → Memory Reuse  
+
+### Best Practices
+✅ **Avoid Boxing** - Use generics to prevent value→reference type conversions  
+✅ **Memory Pooling** - Use ArrayPool<T> and ObjectPool<T> to reduce GC pressure  
+✅ **Span<T>** - Zero-allocation memory slicing for high-performance scenarios  
+✅ **Async/Await** - Leverage Thread Pool for scalable I/O operations  
 
 ---
 
-**Document Version**: 1.0  
-**Last Updated**: January 23, 2026  
-**CLR Version**: .NET 10  
-**Author**: Senior .NET Interview Preparation Guide
+**📚 Document Information**
+- **Version**: 1.1
+- **Last Updated**: January 23, 2026
+- **Target Framework**: .NET 10
+- **Question Count**: 16 comprehensive Q&A
+- **Audience**: Senior/Lead .NET Developers & Architects
 
 ---
