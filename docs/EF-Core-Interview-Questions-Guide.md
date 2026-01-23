@@ -32,9 +32,19 @@
 
 ## 1. What is Entity Framework Core?
 
-Entity Framework Core is an open-source, lightweight, extensible, and cross-platform Object-Relational Mapper (ORM) for .NET applications. It enables developers to work with databases using .NET objects, eliminating the need to write most database access code. EF Core supports LINQ queries, change tracking, updates, and schema migrations. It works with SQL Server, Azure SQL Database, SQLite, PostgreSQL, MySQL, and many other databases through provider plugins.
+### What is it?
 
-**Real-time Example:**
+Entity Framework Core (EF Core) is a lightweight, open-source, cross-platform Object-Relational Mapper (ORM) for .NET. It allows developers to work with databases using strongly-typed .NET objects instead of writing raw SQL queries.
+
+### Why do we use it?
+
+EF Core eliminates repetitive ADO.NET code, reduces development time, and provides type safety with compile-time checking. It automatically handles database connections, SQL generation, and object mapping, allowing developers to focus on business logic rather than data access plumbing. It also provides built-in features like migrations, change tracking, and LINQ support.
+
+### When to use it?
+
+Use EF Core in applications where you want rapid development with strong typing, automatic migrations, and complex object relationships. It's ideal for enterprise applications, web APIs, and projects where database schema evolves over time. Avoid it for high-performance scenarios where raw SQL or micro-ORMs like Dapper are better suited.
+
+### Example
 
 ```csharp
 // Without EF Core - Raw ADO.NET
@@ -58,9 +68,19 @@ using (var context = new AppDbContext())
 
 ## 2. What is DbContext and DbSet in EF Core?
 
-**DbContext** is the primary class responsible for interacting with the database in EF Core. It represents a session with the database and provides APIs for querying, saving data, change tracking, and configuration. **DbSet** represents a collection of entities of a specific type that can be queried from the database. Each DbSet corresponds to a table in the database, allowing CRUD operations on that table.
+### What is it?
 
-**Real-time Example:**
+**DbContext** is the primary class that represents a session with the database in EF Core. It manages database connections, tracks entity changes, and provides APIs for querying and saving data. **DbSet** represents a collection of entities (like a table) that can be queried and modified.
+
+### Why do we use it?
+
+DbContext provides a centralized place to configure database connections, entity mappings, and behavior. DbSet abstracts table operations, allowing you to query and modify data using LINQ without writing SQL. Together, they simplify database operations and provide automatic change tracking and transaction management.
+
+### When to use it?
+
+Use DbContext as a unit of work for related operations - create one instance per request in web applications. DbSet is used whenever you need to query or modify a specific entity type. Always dispose DbContext properly using `using` statements to release database connections.
+
+### Example
 
 ```csharp
 public class AppDbContext : DbContext
@@ -92,6 +112,20 @@ using (var context = new AppDbContext())
 
 ## 3. Code First vs Database First Approach
 
+### What is it?
+
+**Code First** starts with C# entity classes, and EF Core generates the database schema from code. **Database First** starts with an existing database, and EF Core scaffolds entity classes from the database schema.
+
+### Why do we use it?
+
+Code First gives developers full control over the domain model with version-controlled migrations, ideal for agile development and domain-driven design. Database First is practical when working with legacy databases or when DBAs control the database design, allowing quick integration with existing systems.
+
+### When to use it?
+
+Use Code First for new projects, greenfield development, or when your team prefers code-over-configuration and wants migration history in source control. Use Database First when integrating with existing databases, working with legacy systems, or when database design is managed separately by DBAs.
+
+### Comparison Table
+
 | **Aspect** | **Code First** | **Database First** |
 |------------|----------------|-------------------|
 | **Starting Point** | Start by writing C# entity classes, database schema is generated from code | Start with existing database, generate entity classes from database schema |
@@ -101,7 +135,7 @@ using (var context = new AppDbContext())
 | **Flexibility** | Easy to refactor code and propagate changes to database | Changes to database require model regeneration |
 | **Version Control** | Easy to track schema changes through migration files | Database changes harder to track in version control |
 
-**Real-time Example - Code First:**
+### Example - Code First
 
 ```csharp
 // Define entity classes first
@@ -134,7 +168,7 @@ public class ShopDbContext : DbContext
 // dotnet ef database update
 ```
 
-**Real-time Example - Database First:**
+### Example - Database First
 
 ```bash
 # Scaffold models from existing database
@@ -145,9 +179,19 @@ dotnet ef dbcontext scaffold "Server=.;Database=ShopDB;Trusted_Connection=True;"
 
 ## 4. What are Migrations in EF Core?
 
-Migrations in EF Core are a way to incrementally update the database schema to keep it in sync with the application's data model while preserving existing data. Migrations create a history of schema changes that can be applied or rolled back. Each migration generates code that describes the changes needed to move from one version of the schema to another. Migrations are essential for team development and deployment scenarios where database schema needs to evolve over time.
+### What is it?
 
-**Real-time Example:**
+Migrations are version control for your database schema. They are code-based scripts that incrementally update the database structure to match your entity model changes while preserving existing data.
+
+### Why do we use it?
+
+Migrations enable safe, trackable database evolution without losing data. They maintain a history of schema changes in source control, making it easy to apply updates across development, staging, and production environments. This ensures all team members and environments stay synchronized with the latest database structure.
+
+### When to use it?
+
+Use migrations whenever you modify entity classes (add/remove properties, change relationships) in a Code First approach. Apply migrations during development, CI/CD pipelines, and production deployments. Avoid migrations when using Database First or when DBAs manage schema changes manually.
+
+### Example
 
 ```csharp
 // Initial Model
@@ -182,9 +226,19 @@ public class Employee
 
 ## 5. What is Change Tracking in EF Core?
 
-Change Tracking is the mechanism by which EF Core monitors changes made to entity instances so it knows what needs to be saved back to the database. When entities are queried from the database, EF Core creates a snapshot of their values. When SaveChanges() is called, EF Core compares the current values with the snapshot to detect modifications, additions, or deletions. This allows EF Core to generate appropriate INSERT, UPDATE, or DELETE SQL statements automatically.
+### What is it?
 
-**Real-time Example:**
+Change Tracking is EF Core's mechanism to monitor changes made to entity instances after they're loaded from the database. It creates snapshots of original values and compares them with current values to detect modifications, additions, and deletions.
+
+### Why do we use it?
+
+Change Tracking enables EF Core to automatically generate the correct INSERT, UPDATE, or DELETE SQL statements when you call `SaveChanges()`. You don't need to explicitly tell EF Core what changed - it figures it out automatically, significantly reducing boilerplate code and potential errors.
+
+### When to use it?
+
+Change tracking is enabled by default for all queries and is essential for update operations. Disable it with `AsNoTracking()` for read-only scenarios where you don't plan to modify data, as tracking consumes memory and CPU resources.
+
+### Example
 
 ```csharp
 using (var context = new AppDbContext())
@@ -215,6 +269,23 @@ using (var context = new AppDbContext())
 
 ## 6. Lazy Loading vs Eager Loading vs Explicit Loading
 
+### What is it?
+
+These are three strategies for loading related entities in EF Core:
+- **Lazy Loading**: Related data loads automatically when accessed (requires `virtual` navigation properties)
+- **Eager Loading**: Related data loads immediately with the main query using `Include()`
+- **Explicit Loading**: Related data loads on-demand when explicitly requested using `Load()`
+
+### Why do we use it?
+
+Each strategy optimizes different scenarios. Eager loading prevents N+1 problems when you always need related data. Lazy loading simplifies code when related data is rarely needed. Explicit loading provides fine-grained control for conditional loading based on business logic.
+
+### When to use it?
+
+Use **Eager Loading** when you know you'll need the related data (most common). Use **Lazy Loading** for convenience when related data is optional and accessed unpredictably. Use **Explicit Loading** when you need conditional logic to decide whether to load related data.
+
+### Comparison Table
+
 | **Aspect** | **Lazy Loading** | **Eager Loading** | **Explicit Loading** |
 |------------|------------------|-------------------|---------------------|
 | **Loading Time** | Related data loaded only when accessed (on-demand) | Related data loaded immediately with main query | Related data loaded explicitly when requested |
@@ -223,7 +294,7 @@ using (var context = new AppDbContext())
 | **Syntax** | Automatic (requires proxies and virtual properties) | Uses `.Include()` method | Uses `.Entry().Collection().Load()` or `.Reference().Load()` |
 | **Use Case** | When related data rarely needed | When related data always needed | When conditionally loading related data |
 
-**Real-time Example:**
+### Example
 
 ```csharp
 // Lazy Loading (requires Microsoft.EntityFrameworkCore.Proxies)
@@ -269,16 +340,19 @@ using (var context = new AppDbContext())
 
 ## 7. What are Tracking vs No-Tracking Queries?
 
-**Tracking queries** are the default behavior in EF Core where the context keeps track of entity instances and their changes. Change tracking consumes memory and processing power but enables automatic update detection. **No-Tracking queries** retrieve data without change tracking, resulting in better performance and lower memory usage. No-tracking queries are ideal for read-only scenarios where you don't intend to update the data. Use `.AsNoTracking()` to explicitly create no-tracking queries.
+### What is it?
 
-**Key Differences:**
-- **Memory Usage**: Tracking queries consume more memory for change tracking snapshots
-- **Performance**: No-tracking queries are faster for read-only operations
-- **Updates**: Tracking queries can be updated and saved; no-tracking queries cannot
-- **Identity Resolution**: Tracking queries ensure single instance per entity; no-tracking may return multiple instances
-- **Use Case**: Use tracking for updates; use no-tracking for read-only display scenarios
+**Tracking queries** (default) make EF Core monitor entity changes by creating snapshots for change detection. **No-Tracking queries** retrieve data without change tracking, using `AsNoTracking()` for better performance.
 
-**Real-time Example:**
+### Why do we use it?
+
+Tracking enables automatic update detection but consumes memory and CPU. No-tracking queries are 30-50% faster for read-only operations since EF Core skips snapshot creation and identity resolution. Use the right approach based on whether you need to update the data.
+
+### When to use it?
+
+Use **Tracking** when you plan to modify and save entities. Use **No-Tracking** for read-only scenarios like displaying lists, reports, dashboards, or API GET endpoints. No-tracking is critical for performance in high-traffic read operations.
+
+### Example
 
 ```csharp
 // Tracking Query (default)
@@ -316,9 +390,19 @@ protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 
 ## 8. How does LINQ work with EF Core?
 
-LINQ (Language Integrated Query) in EF Core allows writing database queries using C# syntax instead of SQL. EF Core translates LINQ expressions into SQL queries and executes them against the database. The translation happens when the query is materialized (using ToList(), FirstOrDefault(), Count(), etc.). LINQ provides IntelliSense support, compile-time checking, and type safety. EF Core supports both query syntax and method syntax, though method syntax is more commonly used.
+### What is it?
 
-**Real-time Example:**
+LINQ (Language Integrated Query) in EF Core allows you to write database queries using C# syntax. EF Core translates LINQ expressions into SQL and executes them against the database when the query materializes (using `ToList()`, `FirstOrDefault()`, etc.).
+
+### Why do we use it?
+
+LINQ provides IntelliSense, compile-time type safety, and refactoring support that raw SQL can't offer. It prevents SQL injection vulnerabilities, reduces syntax errors, and allows you to write database queries using familiar C# constructs. Query translation happens automatically, optimizing developer productivity.
+
+### When to use it?
+
+Use LINQ for all standard database queries in EF Core. It's ideal for filtering, sorting, joining, grouping, and projections. For complex database-specific operations or stored procedures, fall back to raw SQL using `FromSqlRaw()`.
+
+### Example
 
 ```csharp
 using (var context = new AppDbContext())
@@ -367,9 +451,19 @@ using (var context = new AppDbContext())
 
 ## 9. What is the N+1 Problem in EF Core?
 
-The N+1 problem occurs when accessing related entities in a loop causes EF Core to execute one query for the main entity and then N additional queries (one for each related entity). This happens with lazy loading or when not using eager loading properly. For example, loading 10 customers and then accessing their orders in a loop results in 1 query for customers + 10 queries for orders = 11 total queries. This severely impacts performance and can be solved using eager loading with `.Include()` or projection.
+### What is it?
 
-**Problem Demonstration:**
+The N+1 problem occurs when loading a parent entity executes 1 query, then accessing related child entities in a loop executes N additional queries (one per parent). For 100 parent records, this results in 101 database queries instead of 1 or 2.
+
+### Why does it happen?
+
+It happens when using lazy loading or not using eager loading (`Include()`) for related data. Each navigation property access triggers a separate database query, causing severe performance degradation in loops or iterations.
+
+### How to solve it?
+
+Use **Eager Loading** with `.Include()` to load related data in a single query with JOINs, or use **Projections** with `.Select()` to fetch only needed data. Both approaches reduce database round trips from N+1 to 1.
+
+### Example
 
 ```csharp
 // BAD - N+1 Problem
@@ -421,16 +515,19 @@ using (var context = new AppDbContext())
 
 ## 10. What is AsNoTracking and when to use it?
 
-`AsNoTracking()` is a method that returns entities without change tracking enabled, improving query performance and reducing memory consumption. When you use AsNoTracking, EF Core doesn't create snapshots for change detection, making queries faster and more memory-efficient. This is ideal for read-only scenarios like displaying data in reports, dashboards, or grids where you don't plan to update the entities. However, entities returned by no-tracking queries cannot be updated and saved back to the database using the same context instance.
+### What is it?
 
-**When to Use:**
-- Read-only data display (reports, dashboards, lists)
-- Data export operations
-- API GET endpoints that only return data
-- Performance-critical read scenarios
-- When working with large datasets
+`AsNoTracking()` is a LINQ method that tells EF Core to retrieve entities without enabling change tracking. EF Core won't create snapshots or monitor changes, resulting in faster queries with lower memory consumption.
 
-**Real-time Example:**
+### Why do we use it?
+
+No-tracking queries are 30-50% faster than tracked queries because EF Core skips snapshot creation and change detection overhead. For read-only operations like reports or displaying data, tracking is wasteful since you never call `SaveChanges()`. This significantly improves performance for high-volume read scenarios.
+
+### When to use it?
+
+Use `AsNoTracking()` for read-only queries: displaying lists, generating reports, exporting data, or API GET endpoints. Don't use it when you plan to update entities. It's especially important for queries returning large result sets or executed frequently.
+
+### Example
 
 ```csharp
 // Scenario: Generating monthly sales report
@@ -479,9 +576,19 @@ public async Task<IActionResult> GetProducts()
 
 ## 11. How to execute Raw SQL in EF Core?
 
-EF Core provides methods to execute raw SQL queries when LINQ is insufficient or when you need to leverage database-specific features. `FromSqlRaw()` and `FromSqlInterpolated()` are used for queries that return entity types, while `ExecuteSqlRaw()` and `ExecuteSqlInterpolated()` are used for commands that don't return data (INSERT, UPDATE, DELETE). Always use parameterized queries to prevent SQL injection attacks. Raw SQL is useful for stored procedures, complex queries, or performance optimization.
+### What is it?
 
-**Real-time Example:**
+Raw SQL execution allows you to run SQL queries and commands directly against the database when LINQ is insufficient or for database-specific features. EF Core provides `FromSqlRaw()` for queries returning entities and `ExecuteSqlRaw()` for INSERT/UPDATE/DELETE commands.
+
+### Why do we use it?
+
+Raw SQL is necessary for complex queries, stored procedures, database-specific functions, or performance optimization that LINQ can't handle. It provides full control over SQL generation while still mapping results to strongly-typed entities. Always use parameterized queries to prevent SQL injection.
+
+### When to use it?
+
+Use raw SQL for stored procedures, complex joins, window functions, database-specific operations, or when LINQ generates inefficient queries. For routine CRUD operations, stick with LINQ. Always use `FromSqlInterpolated()` or `ExecuteSqlInterpolated()` for automatic parameterization.
+
+### Example
 
 ```csharp
 using (var context = new AppDbContext())
@@ -523,9 +630,19 @@ using (var context = new AppDbContext())
 
 ## 12. How to handle Transactions in EF Core?
 
-Transactions in EF Core ensure that a series of database operations are executed as a single atomic unit - either all succeed or all fail. By default, `SaveChanges()` wraps all changes in a transaction. For explicit transaction control, use `Database.BeginTransaction()` to create a transaction scope across multiple SaveChanges calls or raw SQL commands. This is essential for maintaining data integrity when performing multiple related operations. Transactions support rollback on errors and commit on success.
+### What is it?
 
-**Real-time Example:**
+Transactions ensure that a group of database operations execute as a single atomic unit - either all succeed or all fail together. By default, `SaveChanges()` wraps all changes in a transaction. For explicit control, use `Database.BeginTransaction()` to span multiple SaveChanges calls.
+
+### Why do we use it?
+
+Transactions maintain data integrity and consistency when performing multiple related operations. If any operation fails, all changes are rolled back, preventing partial updates that could corrupt data. This is critical for financial operations, order processing, or any multi-step business process.
+
+### When to use it?
+
+Use explicit transactions when you need multiple `SaveChanges()` calls in a single atomic operation, when combining EF Core operations with raw SQL, or when implementing complex business workflows that must succeed or fail as a unit (e.g., money transfers, order processing).
+
+### Example
 
 ```csharp
 // Scenario: Transfer money between bank accounts
@@ -612,16 +729,19 @@ public async Task<bool> ProcessOrderAsync(Order order)
 
 ## 13. What is Concurrency Handling in EF Core?
 
-Concurrency handling in EF Core manages scenarios where multiple users attempt to update the same data simultaneously. EF Core uses **optimistic concurrency** by default, assuming conflicts are rare and checking for conflicts only when saving. A concurrency token (like RowVersion/Timestamp or specific property) is used to detect if data has changed since it was read. If a conflict is detected, a `DbUpdateConcurrencyException` is thrown. You can configure concurrency tokens using `[ConcurrencyCheck]` attribute or `IsConcurrencyToken()` in fluent API.
+### What is it?
 
-**Concurrency Strategies:**
-- **Optimistic Concurrency**: Check for conflicts when saving (EF Core default)
-- **Pessimistic Concurrency**: Lock records when reading (requires explicit database locks)
-- **Last-Write-Wins**: Latest update overwrites previous (no concurrency control)
-- **First-Write-Wins**: First update succeeds, later updates fail
-- **Merge Changes**: Combine changes from multiple users (complex, application-specific)
+Concurrency handling manages conflicts when multiple users try to update the same data simultaneously. EF Core uses **optimistic concurrency** with concurrency tokens (like `[Timestamp]` or `[ConcurrencyCheck]`) to detect if data changed since it was read.
 
-**Real-time Example:**
+### Why do we use it?
+
+Without concurrency control, the last update wins, potentially overwriting other users' changes silently (lost updates). Concurrency handling prevents data loss by detecting conflicts and allowing you to decide how to resolve them - merge changes, override, or prompt the user.
+
+### When to use it?
+
+Use concurrency handling in multi-user applications where simultaneous updates are possible, especially for critical data like inventory, financial records, or user profiles. It's essential in web applications where multiple users might edit the same record.
+
+### Example
 
 ```csharp
 // Entity with concurrency token
@@ -684,6 +804,20 @@ protected override void OnModelCreating(ModelBuilder modelBuilder)
 
 ## 14. EF Core vs Dapper - Key Differences
 
+### What is it?
+
+**EF Core** is a full-featured ORM with change tracking, LINQ, and migrations. **Dapper** is a lightweight micro-ORM that maps SQL query results to objects with minimal overhead, close to raw ADO.NET performance.
+
+### Why do we use them?
+
+EF Core simplifies complex applications with automatic SQL generation, migrations, and relationship management, reducing development time for CRUD operations. Dapper offers superior performance for read-heavy scenarios and gives full control over SQL, making it ideal for complex queries and performance-critical operations.
+
+### When to use what?
+
+Use **EF Core** for complex domain models, rapid development, teams unfamiliar with SQL, and applications requiring migrations. Use **Dapper** for high-performance scenarios, microservices, simple CRUD with existing SQL, or reporting queries. Many projects use both - EF Core for writes, Dapper for reads.
+
+### Comparison Table
+
 | **Aspect** | **EF Core** | **Dapper** |
 |------------|-------------|------------|
 | **Type** | Full-featured ORM with change tracking and migrations | Micro-ORM, thin wrapper over ADO.NET |
@@ -695,7 +829,7 @@ protected override void OnModelCreating(ModelBuilder modelBuilder)
 | **Query Control** | Less control over generated SQL | Full control over SQL queries |
 | **Maintenance** | Easier for complex domains with auto-migrations | Requires manual SQL maintenance |
 
-**Real-time Example:**
+### Example
 
 ```csharp
 // EF Core Approach
@@ -750,21 +884,19 @@ using (var connection = new SqlConnection(connectionString))
 
 ## 15. Performance Optimization Techniques in EF Core
 
-Performance optimization in EF Core involves multiple strategies to reduce database round trips, minimize data transfer, and improve query efficiency. Key techniques include using no-tracking queries for read-only operations, eager loading to avoid N+1 problems, projections to select only needed columns, compiled queries for frequently executed queries, and split queries for complex includes. Additionally, proper indexing, connection pooling, and async operations significantly improve performance. Always profile and measure performance before and after optimization.
+### What is it?
 
-**Key Optimization Techniques:**
-- Use `AsNoTracking()` for read-only queries
-- Use `Include()` to avoid N+1 problem
-- Use projections (Select) instead of loading full entities
-- Use compiled queries for repeated queries
-- Use `AsSplitQuery()` for multiple collections
-- Batch operations instead of multiple SaveChanges
-- Use async methods (ToListAsync, FirstOrDefaultAsync)
-- Implement proper database indexes
-- Use connection pooling
-- Disable change tracking globally for read-only contexts
+Performance optimization involves strategies to minimize database round trips, reduce data transfer, and improve query efficiency. Key techniques include no-tracking queries, eager loading, projections, compiled queries, and split queries.
 
-**Real-time Example:**
+### Why do we use it?
+
+Poor EF Core performance often stems from N+1 problems, unnecessary change tracking, and loading entire entities when only a few columns are needed. Optimization techniques can improve query performance by 50-90%, reduce memory consumption, and improve application scalability.
+
+### When to use it?
+
+Apply optimizations when profiling reveals performance bottlenecks, when working with large datasets, or in high-traffic scenarios. Always measure before and after optimization. Common hot spots include frequently executed queries, report generation, and data export operations.
+
+### Example
 
 ```csharp
 // BAD - Multiple Performance Issues
@@ -845,9 +977,19 @@ public async Task BulkInsertEmployees(List<Employee> employees)
 
 ## 16. What are Navigation Properties?
 
-Navigation properties are properties on entity classes that define relationships between entities, allowing you to navigate from one entity to related entities. They represent foreign key relationships in the database. Navigation properties can be **reference navigation properties** (single related entity, one-to-one or many-to-one) or **collection navigation properties** (multiple related entities, one-to-many or many-to-many). EF Core uses navigation properties to automatically generate appropriate foreign keys and JOIN operations when querying related data.
+### What is it?
 
-**Real-time Example:**
+Navigation properties are properties on entity classes that reference related entities, representing foreign key relationships. They can be **reference navigation properties** (single related entity) or **collection navigation properties** (multiple related entities).
+
+### Why do we use it?
+
+Navigation properties allow you to navigate from one entity to related entities using C# object references instead of writing JOIN queries. EF Core uses them to automatically generate foreign keys, understand relationships, and create efficient JOIN queries when needed.
+
+### When to use it?
+
+Define navigation properties whenever you have relationships between entities (one-to-many, many-to-one, one-to-one, many-to-many). They're essential for loading related data with `Include()` and for maintaining referential integrity through EF Core's relationship management.
+
+### Example
 
 ```csharp
 // One-to-Many Relationship
@@ -916,9 +1058,19 @@ using (var context = new SchoolDbContext())
 
 ## 17. What is Include() and ThenInclude()?
 
-`Include()` is used for eager loading related entities through navigation properties, preventing the N+1 problem by loading related data in the same query using SQL JOINs. `ThenInclude()` is used to load nested related entities - entities related to the entities loaded by `Include()`. For example, loading Customers with their Orders (Include), and then loading OrderItems for each Order (ThenInclude). These methods are essential for efficiently loading complex object graphs with multiple levels of relationships.
+### What is it?
 
-**Real-time Example:**
+`Include()` is used for eager loading related entities through navigation properties, loading them in the same query with SQL JOINs. `ThenInclude()` loads nested relationships - entities related to the entities loaded by `Include()`.
+
+### Why do we use it?
+
+Include() prevents the N+1 problem by loading related data in a single database query instead of making separate queries for each related entity. ThenInclude() extends this to multi-level relationships, efficiently loading complex object graphs without multiple database round trips.
+
+### When to use it?
+
+Use Include() whenever you need related data and want to avoid N+1 problems. Use ThenInclude() for nested relationships like Customer -> Orders -> OrderItems. For read-only scenarios, combine with AsNoTracking() for better performance.
+
+### Example
 
 ```csharp
 // Single level Include
@@ -981,9 +1133,19 @@ var departments = context.Departments
 
 ## 18. What are Shadow Properties in EF Core?
 
-Shadow properties are properties that exist in the EF Core model but don't exist as CLR properties on the entity class. They are defined in the model configuration and stored in the database, but cannot be directly accessed through entity instances. Shadow properties are useful for foreign keys, timestamps, or audit fields that you don't want to expose in your domain model. You can access shadow properties through the ChangeTracker API using `Entry(entity).Property("PropertyName")`.
+### What is it?
 
-**Real-time Example:**
+Shadow properties exist in the EF Core model and database but don't exist as CLR properties on entity classes. They're defined in model configuration and can only be accessed through the ChangeTracker API.
+
+### Why do we use it?
+
+Shadow properties keep domain models clean by hiding infrastructure concerns like audit timestamps, foreign keys, or tenant IDs that don't belong in the domain model. They're stored in the database but don't clutter entity classes with non-business properties.
+
+### When to use it?
+
+Use shadow properties for audit fields (CreatedDate, ModifiedDate), foreign keys you want to hide, multi-tenancy tenant IDs, or any database column that shouldn't be exposed in the domain model. Access them via `Entry(entity).Property("PropertyName")`.
+
+### Example
 
 ```csharp
 // Entity without audit properties in class definition
@@ -1054,9 +1216,19 @@ using (var context = new AppDbContext())
 
 ## 19. What is Connection Resiliency in EF Core?
 
-Connection resiliency (also called retry logic) is EF Core's ability to automatically retry failed database operations due to transient errors like network issues, timeouts, or temporary database unavailability. This is especially important for cloud-based databases where temporary connectivity issues are more common. EF Core provides built-in execution strategies that automatically retry operations based on configurable policies. You enable it using `EnableRetryOnFailure()` when configuring the database provider. This improves application reliability without requiring manual retry code.
+### What is it?
 
-**Real-time Example:**
+Connection resiliency (retry logic) is EF Core's ability to automatically retry failed database operations due to transient errors like network issues, timeouts, or temporary database unavailability.
+
+### Why do we use it?
+
+Cloud databases and network connections can experience temporary failures. Without retry logic, your application would fail on these transient errors, requiring manual intervention or application restarts. Connection resiliency automatically handles these temporary issues, improving application reliability and user experience.
+
+### When to use it?
+
+Enable connection resiliency when using cloud databases (Azure SQL, AWS RDS), distributed systems, or unreliable network connections. Configure it with `EnableRetryOnFailure()` specifying max retry count and delay. Essential for production applications where high availability is required.
+
+### Example
 
 ```csharp
 // Configure connection resiliency in DbContext
@@ -1137,9 +1309,19 @@ await strategy.ExecuteAsync(async () =>
 
 ## 20. How to implement Soft Delete in EF Core?
 
-Soft delete is a pattern where records are marked as deleted rather than physically removed from the database, allowing data recovery and maintaining referential integrity. Instead of deleting rows, you set an `IsDeleted` flag or `DeletedDate` timestamp. EF Core supports this through global query filters that automatically exclude soft-deleted records from all queries. This is implemented by adding a soft delete property to entities and configuring a global query filter in `OnModelCreating()`. You can still query deleted records explicitly when needed.
+### What is it?
 
-**Real-time Example:**
+Soft delete is a pattern where records are marked as deleted (using an `IsDeleted` flag or `DeletedDate` timestamp) rather than physically removed from the database. Data remains in the database but is hidden from normal queries.
+
+### Why do we use it?
+
+Soft delete preserves historical data, enables data recovery, maintains referential integrity, supports audit requirements, and prevents accidental data loss. It's essential for compliance, reporting, and scenarios where "deleted" data may need restoration.
+
+### When to use it?
+
+Use soft delete for business-critical data, user-generated content, financial records, or when regulatory compliance requires data retention. Implement it with global query filters so deleted records are automatically excluded from queries unless explicitly requested with `IgnoreQueryFilters()`.
+
+### Example
 
 ```csharp
 // Add soft delete property to entities
@@ -1227,9 +1409,19 @@ public class Employee : SoftDeletableEntity
 
 ## 21. What are Value Conversions in EF Core?
 
-Value conversions in EF Core allow you to transform property values when reading from or writing to the database. This enables storing enum values as strings, encrypting sensitive data, converting complex types to JSON, or mapping custom value objects to database columns. Value conversions are configured using `HasConversion()` in the model configuration. They provide a clean way to handle type mismatches between your domain model and database schema without polluting entity classes with database-specific logic.
+### What is it?
 
-**Real-time Example:**
+Value conversions transform property values when reading from or writing to the database. They enable storing enums as strings, encrypting data, converting complex types to JSON, or mapping value objects to database columns.
+
+### Why do we use it?
+
+Value conversions handle type mismatches between your domain model and database schema without cluttering entity classes with database-specific logic. They provide clean separation between how data is represented in code versus how it's stored in the database.
+
+### When to use it?
+
+Use value conversions for storing enums as strings for readability, encrypting sensitive data, persisting value objects, converting DateTimeOffset to UTC, or storing complex objects as JSON. Configure them with `HasConversion()` in OnModelCreating.
+
+### Example
 
 ```csharp
 // Enum stored as string
@@ -1332,9 +1524,19 @@ using (var context = new AppDbContext())
 
 ## 22. What is Split Query in EF Core?
 
-Split Query is a feature in EF Core 5.0+ that splits a single LINQ query with multiple `Include()` statements into multiple separate SQL queries. By default, EF Core uses a single query with multiple JOINs, which can cause cartesian explosion when including multiple collections (dramatically increasing result set size). Split queries execute one query for the main entity and separate queries for each included collection, reducing data duplication and improving performance. Use `.AsSplitQuery()` to enable this behavior or configure it globally.
+### What is it?
 
-**Real-time Example:**
+Split Query (EF Core 5+) executes separate SQL queries for each `Include()` instead of a single query with multiple JOINs. It splits one LINQ query into multiple database queries to avoid cartesian explosion.
+
+### Why do we use it?
+
+When including multiple collections, a single query with JOINs creates cartesian explosion - dramatically increasing result set size due to row multiplication. If a customer has 10 orders and 3 addresses, a single query returns 30 rows instead of 14. Split queries eliminate this data duplication.
+
+### When to use it?
+
+Use split queries (`.AsSplitQuery()`) when including multiple collections that cause cartesian explosion, significantly reducing data transfer. Use single queries (default) when including only reference navigation properties or when you need a consistent snapshot across all data.
+
+### Example
 
 ```csharp
 // Problem: Cartesian Explosion with Single Query
@@ -1408,9 +1610,19 @@ var customers = context.Customers
 
 ## 23. How to handle Owned Types in EF Core?
 
-Owned types (also called value objects) are types that don't have their own identity and are owned by another entity. They are always accessed through their owner entity and share the owner's identity. Owned types allow you to group related properties in your domain model while storing them in the same table or a separate table. Configure owned types using `OwnsOne()` or `OwnsMany()` in fluent API. This is useful for modeling concepts like Address, Money, or DateRange that don't need separate tables.
+### What is it?
 
-**Real-time Example:**
+Owned types (value objects) are types without their own identity that are owned by another entity. They're always accessed through their owner and share the owner's identity. Examples include Address, Money, or DateRange.
+
+### Why do we use it?
+
+Owned types allow grouping related properties in your domain model while storing them in the same table or separate table. They improve code organization, enable reusability, and better represent domain concepts that don't need separate identities or primary keys.
+
+### When to use it?
+
+Use owned types for value objects like Address, Money, PhoneNumber, or DateRange that don't need separate database tables or independent lifecycle management. Configure with `OwnsOne()` for single owned types or `OwnsMany()` for collections.
+
+### Example
 
 ```csharp
 // Owned Type - Address
@@ -1524,9 +1736,19 @@ using (var context = new AppDbContext())
 
 ## 24. What are Global Query Filters?
 
-Global Query Filters are model-level filters that are automatically applied to all queries for a specific entity type. They are defined once in `OnModelCreating()` using `HasQueryFilter()` and automatically added to every LINQ query for that entity. This is commonly used for implementing multi-tenancy (filter by tenant ID), soft deletes (exclude deleted records), or security (filter by user permissions). Filters can be temporarily disabled using `IgnoreQueryFilters()` when you need to query all records including filtered ones.
+### What is it?
 
-**Real-time Example:**
+Global Query Filters are model-level filters automatically applied to all queries for a specific entity type. They're defined once in `OnModelCreating()` using `HasQueryFilter()` and automatically added to every LINQ query.
+
+### Why do we use it?
+
+Global filters eliminate repetitive WHERE clauses across your codebase. Instead of manually filtering by tenant ID or IsDeleted in every query, the filter applies automatically. This prevents bugs from forgetting filters and implements cross-cutting concerns like soft delete or multi-tenancy consistently.
+
+### When to use it?
+
+Use global filters for multi-tenancy (filter by tenant ID), soft deletes (exclude deleted records), security (filter by user permissions), or any filter that should apply to all queries. Bypass filters when needed using `IgnoreQueryFilters()`.
+
+### Example
 
 ```csharp
 // Multi-tenant application scenario
@@ -1625,6 +1847,20 @@ var customers = context.Customers
 
 ## 25. What is the difference between Find() and FirstOrDefault()?
 
+### What is it?
+
+`Find()` retrieves an entity by its primary key value, checking the local context cache first before querying the database. `FirstOrDefault()` retrieves an entity based on any LINQ expression, always querying the database.
+
+### Why use each?
+
+Use `Find()` when searching by primary key - it's faster because it checks the context cache first, avoiding unnecessary database queries for already-loaded entities. Use `FirstOrDefault()` for flexible queries with any condition, complex filters, ordering, or when including related data.
+
+### When to use which?
+
+Use **Find()** for lookups by primary key, especially in update scenarios where the entity might already be tracked. Use **FirstOrDefault()** for searches by non-key properties, complex conditions, or when combining with `Include()`, `Where()`, or `OrderBy()`.
+
+### Comparison Table
+
 | **Aspect** | **Find()** | **FirstOrDefault()** |
 |------------|-----------|---------------------|
 | **Primary Use** | Retrieve entity by primary key | Retrieve entity by any condition |
@@ -1635,7 +1871,7 @@ var customers = context.Customers
 | **Tracking** | Always returns tracked entity | Returns tracked entity by default, can use AsNoTracking() |
 | **Null Return** | Returns null if not found | Returns null if not found |
 
-**Real-time Example:**
+### Example
 
 ```csharp
 // Find() - by primary key
