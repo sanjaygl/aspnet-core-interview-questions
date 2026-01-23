@@ -27,6 +27,21 @@
 23. [How to handle Owned Types in EF Core?](#23-how-to-handle-owned-types-in-ef-core)
 24. [What are Global Query Filters?](#24-what-are-global-query-filters)
 25. [What is the difference between Find() and FirstOrDefault()?](#25-what-is-the-difference-between-find-and-firstordefault)
+26. [How to configure One-to-One relationships in EF Core?](#26-how-to-configure-one-to-one-relationships-in-ef-core)
+27. [How to configure One-to-Many relationships in EF Core?](#27-how-to-configure-one-to-many-relationships-in-ef-core)
+28. [How to configure Many-to-Many relationships in EF Core?](#28-how-to-configure-many-to-many-relationships-in-ef-core)
+29. [What is the difference between Fluent API and Data Annotations?](#29-what-is-the-difference-between-fluent-api-and-data-annotations)
+30. [What is IEntityTypeConfiguration and why use it?](#30-what-is-ientitytypeconfiguration-and-why-use-it)
+31. [How to implement Data Seeding in EF Core?](#31-how-to-implement-data-seeding-in-ef-core)
+32. [How to implement Composite Keys in EF Core?](#32-how-to-implement-composite-keys-in-ef-core)
+33. [How to implement Audit Fields (CreatedDate, UpdatedDate) in EF Core?](#33-how-to-implement-audit-fields-createddate-updateddate-in-ef-core)
+34. [What is Deferred Execution in LINQ and EF Core?](#34-what-is-deferred-execution-in-linq-and-ef-core)
+35. [What is the difference between IQueryable and IEnumerable in EF Core?](#35-what-is-the-difference-between-iqueryable-and-ienumerable-in-ef-core)
+36. [How to handle Migrations in large teams?](#36-how-to-handle-migrations-in-large-teams)
+37. [How to implement Multi-Tenant architecture in EF Core?](#37-how-to-implement-multi-tenant-architecture-in-ef-core)
+38. [What are the key Performance Tuning strategies in EF Core?](#38-what-are-the-key-performance-tuning-strategies-in-ef-core)
+39. [How to handle large datasets efficiently in EF Core?](#39-how-to-handle-large-datasets-efficiently-in-ef-core)
+40. [What are EF Core limitations and when to use alternatives?](#40-what-are-ef-core-limitations-and-when-to-use-alternatives)
 
 ---
 
@@ -1949,6 +1964,2136 @@ using (var context = new AppDbContext())
 // - When you need to include related data
 // - When you need ordering
 // - For read-only scenarios with AsNoTracking()
+```
+
+---
+
+## 26. How to configure One-to-One relationships in EF Core?
+
+### What is it?
+
+A One-to-One relationship means each entity instance relates to exactly one instance of another entity. In EF Core, one side must be the principal (with the primary key) and the other is the dependent (with the foreign key). The dependent entity's foreign key also serves as its primary key, ensuring the one-to-one constraint.
+
+### Why do we use it?
+
+One-to-One relationships separate concerns by splitting entity data across tables while maintaining referential integrity. This is useful for optional data, sensitive information segregation, or performance optimization by keeping frequently accessed columns separate from rarely used ones.
+
+### When to use it?
+
+Use One-to-One when you have optional entity extensions (User and UserProfile), security concerns requiring data segregation (Employee and EmployeeSalary), or performance needs to split large tables. Also useful when modeling IS-A relationships without inheritance.
+
+### Example
+
+```csharp
+// Principal entity
+public class User
+{
+    public int UserId { get; set; }
+    public string Username { get; set; }
+    public string Email { get; set; }
+    
+    // Reference navigation to dependent
+    public UserProfile Profile { get; set; }
+}
+
+// Dependent entity
+public class UserProfile
+{
+    public int UserId { get; set; } // FK and PK
+    public string FirstName { get; set; }
+    public string LastName { get; set; }
+    public string Bio { get; set; }
+    public DateTime DateOfBirth { get; set; }
+    
+    // Reference navigation to principal
+    public User User { get; set; }
+}
+
+// Configuration in OnModelCreating
+protected override void OnModelCreating(ModelBuilder modelBuilder)
+{
+    modelBuilder.Entity<User>()
+        .HasOne(u => u.Profile)
+        .WithOne(p => p.User)
+        .HasForeignKey<UserProfile>(p => p.UserId) // Specify dependent
+        .OnDelete(DeleteBehavior.Cascade);
+}
+
+// Usage
+using (var context = new AppDbContext())
+{
+    var user = new User
+    {
+        Username = "john_doe",
+        Email = "john@example.com",
+        Profile = new UserProfile
+        {
+            FirstName = "John",
+            LastName = "Doe",
+            Bio = "Software Engineer"
+        }
+    };
+    
+    context.Users.Add(user);
+    context.SaveChanges();
+    
+    // Query with profile
+    var userWithProfile = context.Users
+        .Include(u => u.Profile)
+        .FirstOrDefault(u => u.UserId == 1);
+}
+```
+
+---
+
+## 27. How to configure One-to-Many relationships in EF Core?
+
+### What is it?
+
+A One-to-Many relationship means one principal entity relates to multiple dependent entities. The dependent side contains a foreign key pointing to the principal's primary key. EF Core can infer this relationship through navigation properties or you can configure it explicitly using Fluent API.
+
+### Why do we use it?
+
+One-to-Many is the most common relationship pattern in databases, representing hierarchical or grouped data. It maintains referential integrity, enables efficient querying of related data, and accurately models real-world relationships like customers-orders, departments-employees, or categories-products.
+
+### When to use it?
+
+Use One-to-Many for parent-child relationships, master-detail scenarios, hierarchical data, or any case where multiple items belong to a single entity. Examples include blog posts with comments, orders with order items, or departments with employees.
+
+### Example
+
+```csharp
+// Principal entity (One side)
+public class Department
+{
+    public int DepartmentId { get; set; }
+    public string Name { get; set; }
+    public string Location { get; set; }
+    
+    // Collection navigation property
+    public List<Employee> Employees { get; set; }
+}
+
+// Dependent entity (Many side)
+public class Employee
+{
+    public int EmployeeId { get; set; }
+    public string Name { get; set; }
+    public decimal Salary { get; set; }
+    
+    // Foreign key
+    public int DepartmentId { get; set; }
+    
+    // Reference navigation property
+    public Department Department { get; set; }
+}
+
+// Explicit configuration
+protected override void OnModelCreating(ModelBuilder modelBuilder)
+{
+    modelBuilder.Entity<Department>()
+        .HasMany(d => d.Employees)
+        .WithOne(e => e.Department)
+        .HasForeignKey(e => e.DepartmentId)
+        .OnDelete(DeleteBehavior.Restrict); // Prevent cascading deletes
+}
+
+// Usage
+using (var context = new AppDbContext())
+{
+    // Add department with employees
+    var dept = new Department
+    {
+        Name = "Engineering",
+        Location = "Building A",
+        Employees = new List<Employee>
+        {
+            new Employee { Name = "Alice", Salary = 80000 },
+            new Employee { Name = "Bob", Salary = 75000 }
+        }
+    };
+    
+    context.Departments.Add(dept);
+    context.SaveChanges();
+    
+    // Query department with employees
+    var department = context.Departments
+        .Include(d => d.Employees)
+        .FirstOrDefault(d => d.DepartmentId == 1);
+}
+```
+
+---
+
+## 28. How to configure Many-to-Many relationships in EF Core?
+
+### What is it?
+
+A Many-to-Many relationship means entities on both sides can relate to multiple entities on the other side. EF Core 5+ supports automatic join tables (skip navigation), while earlier versions or complex scenarios require explicit join entities. The join table contains foreign keys from both principal tables.
+
+### Why do we use it?
+
+Many-to-Many relationships model real-world scenarios where associations exist between multiple entities on both sides. They eliminate data redundancy, maintain normalization, and accurately represent relationships like students-courses, products-categories, or users-roles without duplicate data.
+
+### When to use it?
+
+Use Many-to-Many for bidirectional multi-entity relationships: students enrolling in multiple courses (and courses having multiple students), products in multiple categories, users with multiple roles, or tags associated with multiple posts.
+
+### Example
+
+```csharp
+// EF Core 5+ Automatic Join Table (No explicit join entity)
+public class Student
+{
+    public int StudentId { get; set; }
+    public string Name { get; set; }
+    
+    // Collection navigation - skip navigation
+    public List<Course> Courses { get; set; }
+}
+
+public class Course
+{
+    public int CourseId { get; set; }
+    public string Title { get; set; }
+    
+    // Collection navigation - skip navigation
+    public List<Student> Students { get; set; }
+}
+
+// Configuration (optional - EF Core auto-configures)
+protected override void OnModelCreating(ModelBuilder modelBuilder)
+{
+    modelBuilder.Entity<Student>()
+        .HasMany(s => s.Courses)
+        .WithMany(c => c.Students)
+        .UsingEntity(j => j.ToTable("StudentCourses")); // Custom join table name
+}
+
+// Explicit Join Entity (for additional properties)
+public class StudentCourse
+{
+    public int StudentId { get; set; }
+    public Student Student { get; set; }
+    
+    public int CourseId { get; set; }
+    public Course Course { get; set; }
+    
+    // Additional properties
+    public DateTime EnrollmentDate { get; set; }
+    public string Grade { get; set; }
+}
+
+public class Student
+{
+    public int StudentId { get; set; }
+    public string Name { get; set; }
+    public List<StudentCourse> StudentCourses { get; set; }
+}
+
+public class Course
+{
+    public int CourseId { get; set; }
+    public string Title { get; set; }
+    public List<StudentCourse> StudentCourses { get; set; }
+}
+
+// Configuration for explicit join entity
+protected override void OnModelCreating(ModelBuilder modelBuilder)
+{
+    modelBuilder.Entity<StudentCourse>()
+        .HasKey(sc => new { sc.StudentId, sc.CourseId }); // Composite key
+    
+    modelBuilder.Entity<StudentCourse>()
+        .HasOne(sc => sc.Student)
+        .WithMany(s => s.StudentCourses)
+        .HasForeignKey(sc => sc.StudentId);
+    
+    modelBuilder.Entity<StudentCourse>()
+        .HasOne(sc => sc.Course)
+        .WithMany(c => c.StudentCourses)
+        .HasForeignKey(sc => sc.CourseId);
+}
+
+// Usage
+using (var context = new AppDbContext())
+{
+    // Add student with courses
+    var student = new Student
+    {
+        Name = "John Doe",
+        Courses = new List<Course>
+        {
+            new Course { Title = "Mathematics" },
+            new Course { Title = "Physics" }
+        }
+    };
+    
+    context.Students.Add(student);
+    context.SaveChanges();
+    
+    // Query with related data
+    var studentWithCourses = context.Students
+        .Include(s => s.Courses)
+        .FirstOrDefault(s => s.StudentId == 1);
+}
+```
+
+---
+
+## 29. What is the difference between Fluent API and Data Annotations?
+
+### What is it?
+
+Data Annotations are attributes applied directly to entity classes for configuration, while Fluent API is a code-based configuration approach using method chaining in `OnModelCreating()`. Fluent API is more powerful and takes precedence over Data Annotations. Both configure entity mappings, relationships, constraints, and database schema.
+
+### Why do we use them?
+
+Data Annotations keep configuration close to entity definitions and are simpler for basic scenarios. Fluent API separates configuration from entity classes (cleaner domain models), supports advanced scenarios that attributes can't handle, and provides centralized configuration management. Fluent API is preferred for complex configurations and when keeping entities clean.
+
+### When to use each?
+
+Use **Data Annotations** for simple configurations, validation rules, or when you prefer configuration co-located with entities. Use **Fluent API** for complex relationships, composite keys, shadow properties, value conversions, or when you want clean POCOs without infrastructure concerns. Many projects use both strategically.
+
+### Example
+
+```csharp
+// Data Annotations Approach
+[Table("Products")]
+[Index(nameof(SKU), IsUnique = true)]
+public class Product
+{
+    [Key]
+    [Column("product_id")]
+    public int ProductId { get; set; }
+    
+    [Required]
+    [MaxLength(100)]
+    public string Name { get; set; }
+    
+    [Column(TypeName = "decimal(18,2)")]
+    [Range(0.01, 999999.99)]
+    public decimal Price { get; set; }
+    
+    [StringLength(50)]
+    public string SKU { get; set; }
+    
+    [ForeignKey("CategoryId")]
+    public Category Category { get; set; }
+    
+    public int CategoryId { get; set; }
+}
+
+// Fluent API Approach - Clean POCO
+public class Product
+{
+    public int ProductId { get; set; }
+    public string Name { get; set; }
+    public decimal Price { get; set; }
+    public string SKU { get; set; }
+    public int CategoryId { get; set; }
+    public Category Category { get; set; }
+}
+
+// Configuration in OnModelCreating
+protected override void OnModelCreating(ModelBuilder modelBuilder)
+{
+    modelBuilder.Entity<Product>(entity =>
+    {
+        entity.ToTable("Products");
+        
+        entity.HasKey(p => p.ProductId);
+        entity.Property(p => p.ProductId)
+            .HasColumnName("product_id");
+        
+        entity.Property(p => p.Name)
+            .IsRequired()
+            .HasMaxLength(100);
+        
+        entity.Property(p => p.Price)
+            .HasColumnType("decimal(18,2)")
+            .IsRequired();
+        
+        entity.Property(p => p.SKU)
+            .HasMaxLength(50)
+            .IsRequired();
+        
+        entity.HasIndex(p => p.SKU)
+            .IsUnique();
+        
+        entity.HasOne(p => p.Category)
+            .WithMany(c => c.Products)
+            .HasForeignKey(p => p.CategoryId)
+            .OnDelete(DeleteBehavior.Restrict);
+    });
+}
+
+// Advanced Fluent API features not available in Data Annotations
+protected override void OnModelCreating(ModelBuilder modelBuilder)
+{
+    // Shadow property
+    modelBuilder.Entity<Product>()
+        .Property<DateTime>("LastModified");
+    
+    // Value conversion
+    modelBuilder.Entity<Product>()
+        .Property(p => p.Status)
+        .HasConversion<string>();
+    
+    // Global query filter
+    modelBuilder.Entity<Product>()
+        .HasQueryFilter(p => !p.IsDeleted);
+    
+    // Composite key
+    modelBuilder.Entity<OrderItem>()
+        .HasKey(oi => new { oi.OrderId, oi.ProductId });
+}
+```
+
+---
+
+## 30. What is IEntityTypeConfiguration and why use it?
+
+### What is it?
+
+`IEntityTypeConfiguration<TEntity>` is an interface that allows you to extract entity configuration from `OnModelCreating()` into separate, dedicated configuration classes. Each entity gets its own configuration class implementing this interface, promoting separation of concerns and better organization.
+
+### Why do we use it?
+
+As applications grow, `OnModelCreating()` becomes bloated with hundreds of lines of configuration code. `IEntityTypeConfiguration` separates each entity's configuration into its own file, improving maintainability, testability, and code organization. It follows Single Responsibility Principle and makes configurations easier to locate and modify.
+
+### When to use it?
+
+Use `IEntityTypeConfiguration` in medium to large projects with many entities, when you want clean and organized configuration, in team environments where different developers work on different entities, or when following Clean Architecture/DDD principles with separate configuration assemblies.
+
+### Example
+
+```csharp
+// Entity
+public class Order
+{
+    public int OrderId { get; set; }
+    public DateTime OrderDate { get; set; }
+    public decimal TotalAmount { get; set; }
+    public int CustomerId { get; set; }
+    public Customer Customer { get; set; }
+    public List<OrderItem> OrderItems { get; set; }
+}
+
+// Separate configuration class
+public class OrderConfiguration : IEntityTypeConfiguration<Order>
+{
+    public void Configure(EntityTypeBuilder<Order> builder)
+    {
+        // Table name
+        builder.ToTable("Orders");
+        
+        // Primary key
+        builder.HasKey(o => o.OrderId);
+        
+        // Properties
+        builder.Property(o => o.OrderDate)
+            .IsRequired();
+        
+        builder.Property(o => o.TotalAmount)
+            .HasColumnType("decimal(18,2)")
+            .IsRequired();
+        
+        // Relationships
+        builder.HasOne(o => o.Customer)
+            .WithMany(c => c.Orders)
+            .HasForeignKey(o => o.CustomerId)
+            .OnDelete(DeleteBehavior.Restrict);
+        
+        builder.HasMany(o => o.OrderItems)
+            .WithOne(oi => oi.Order)
+            .HasForeignKey(oi => oi.OrderId)
+            .OnDelete(DeleteBehavior.Cascade);
+        
+        // Indexes
+        builder.HasIndex(o => o.OrderDate);
+        builder.HasIndex(o => o.CustomerId);
+    }
+}
+
+// Another entity configuration
+public class ProductConfiguration : IEntityTypeConfiguration<Product>
+{
+    public void Configure(EntityTypeBuilder<Product> builder)
+    {
+        builder.ToTable("Products");
+        
+        builder.HasKey(p => p.ProductId);
+        
+        builder.Property(p => p.Name)
+            .HasMaxLength(200)
+            .IsRequired();
+        
+        builder.Property(p => p.Price)
+            .HasColumnType("decimal(18,2)");
+        
+        builder.HasIndex(p => p.SKU)
+            .IsUnique();
+    }
+}
+
+// DbContext - Apply all configurations
+public class AppDbContext : DbContext
+{
+    public DbSet<Order> Orders { get; set; }
+    public DbSet<Product> Products { get; set; }
+    
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        // Apply individual configurations
+        modelBuilder.ApplyConfiguration(new OrderConfiguration());
+        modelBuilder.ApplyConfiguration(new ProductConfiguration());
+        
+        // OR apply all configurations from assembly
+        modelBuilder.ApplyConfigurationsFromAssembly(typeof(AppDbContext).Assembly);
+    }
+}
+```
+
+---
+
+## 31. How to implement Data Seeding in EF Core?
+
+### What is it?
+
+Data seeding populates database tables with initial or default data during migrations. EF Core provides `HasData()` method in `OnModelCreating()` to seed data that gets included in migrations. This ensures consistent initial data across all environments (development, staging, production).
+
+### Why do we use it?
+
+Data seeding provides initial lookup data, default configurations, test data for development, or reference data required for application functionality. It ensures databases start with necessary data, supports automated testing, and maintains consistency across deployments without manual data entry scripts.
+
+### When to use it?
+
+Use data seeding for lookup tables (countries, states, categories), default admin users, configuration settings, role definitions, or any reference data required for application startup. Seed data should be static or rarely changing - don't seed transactional data.
+
+### Example
+
+```csharp
+// Entities
+public class Department
+{
+    public int DepartmentId { get; set; }
+    public string Name { get; set; }
+    public List<Employee> Employees { get; set; }
+}
+
+public class Employee
+{
+    public int EmployeeId { get; set; }
+    public string Name { get; set; }
+    public decimal Salary { get; set; }
+    public int DepartmentId { get; set; }
+    public Department Department { get; set; }
+}
+
+// Seeding in OnModelCreating
+protected override void OnModelCreating(ModelBuilder modelBuilder)
+{
+    // Seed Departments
+    modelBuilder.Entity<Department>().HasData(
+        new Department { DepartmentId = 1, Name = "Engineering" },
+        new Department { DepartmentId = 2, Name = "Sales" },
+        new Department { DepartmentId = 3, Name = "HR" }
+    );
+    
+    // Seed Employees
+    modelBuilder.Entity<Employee>().HasData(
+        new Employee 
+        { 
+            EmployeeId = 1, 
+            Name = "John Doe", 
+            Salary = 80000, 
+            DepartmentId = 1 
+        },
+        new Employee 
+        { 
+            EmployeeId = 2, 
+            Name = "Jane Smith", 
+            Salary = 75000, 
+            DepartmentId = 1 
+        },
+        new Employee 
+        { 
+            EmployeeId = 3, 
+            Name = "Bob Johnson", 
+            Salary = 65000, 
+            DepartmentId = 2 
+        }
+    );
+}
+
+// Complex seeding with relationships
+protected override void OnModelCreating(ModelBuilder modelBuilder)
+{
+    // Seed roles
+    var adminRoleId = Guid.NewGuid();
+    var userRoleId = Guid.NewGuid();
+    
+    modelBuilder.Entity<Role>().HasData(
+        new Role { RoleId = adminRoleId, Name = "Admin" },
+        new Role { RoleId = userRoleId, Name = "User" }
+    );
+    
+    // Seed users
+    var adminUserId = Guid.NewGuid();
+    
+    modelBuilder.Entity<User>().HasData(
+        new User 
+        { 
+            UserId = adminUserId, 
+            Username = "admin", 
+            Email = "admin@example.com" 
+        }
+    );
+    
+    // Seed many-to-many relationship
+    modelBuilder.Entity<UserRole>().HasData(
+        new UserRole 
+        { 
+            UserId = adminUserId, 
+            RoleId = adminRoleId 
+        }
+    );
+}
+
+// Alternative: Seeding via migration or custom method
+public static class DataSeeder
+{
+    public static void SeedData(AppDbContext context)
+    {
+        // Check if data already exists
+        if (!context.Departments.Any())
+        {
+            var departments = new[]
+            {
+                new Department { Name = "Engineering" },
+                new Department { Name = "Sales" },
+                new Department { Name = "HR" }
+            };
+            
+            context.Departments.AddRange(departments);
+            context.SaveChanges();
+        }
+    }
+}
+
+// Usage in Program.cs or Startup
+using (var scope = app.Services.CreateScope())
+{
+    var context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+    DataSeeder.SeedData(context);
+}
+```
+
+---
+
+## 32. How to implement Composite Keys in EF Core?
+
+### What is it?
+
+A composite key is a primary key consisting of two or more columns that together uniquely identify a record. In EF Core, composite keys cannot be configured using Data Annotations - you must use Fluent API with `HasKey()` specifying multiple properties.
+
+### Why do we use it?
+
+Composite keys represent natural business keys where multiple properties combine to form uniqueness, commonly in join tables for many-to-many relationships or when modeling real-world constraints. They enforce business rules at the database level and eliminate the need for artificial surrogate keys in certain scenarios.
+
+### When to use it?
+
+Use composite keys for many-to-many join tables, when natural business keys span multiple columns (e.g., OrderId + ProductId for OrderItems), temporal tables with entity + date keys, or when modeling domain requirements that naturally have multi-column uniqueness constraints.
+
+### Example
+
+```csharp
+// Join table for many-to-many with composite key
+public class StudentCourse
+{
+    public int StudentId { get; set; }
+    public Student Student { get; set; }
+    
+    public int CourseId { get; set; }
+    public Course Course { get; set; }
+    
+    public DateTime EnrollmentDate { get; set; }
+    public string Grade { get; set; }
+}
+
+// Configuration
+protected override void OnModelCreating(ModelBuilder modelBuilder)
+{
+    modelBuilder.Entity<StudentCourse>()
+        .HasKey(sc => new { sc.StudentId, sc.CourseId });
+    
+    modelBuilder.Entity<StudentCourse>()
+        .HasOne(sc => sc.Student)
+        .WithMany(s => s.StudentCourses)
+        .HasForeignKey(sc => sc.StudentId);
+    
+    modelBuilder.Entity<StudentCourse>()
+        .HasOne(sc => sc.Course)
+        .WithMany(c => c.StudentCourses)
+        .HasForeignKey(sc => sc.CourseId);
+}
+
+// Natural business composite key example
+public class ProductInventory
+{
+    public int ProductId { get; set; }
+    public Product Product { get; set; }
+    
+    public int WarehouseId { get; set; }
+    public Warehouse Warehouse { get; set; }
+    
+    public int Quantity { get; set; }
+    public DateTime LastUpdated { get; set; }
+}
+
+protected override void OnModelCreating(ModelBuilder modelBuilder)
+{
+    // Composite key on ProductId and WarehouseId
+    modelBuilder.Entity<ProductInventory>()
+        .HasKey(pi => new { pi.ProductId, pi.WarehouseId });
+    
+    modelBuilder.Entity<ProductInventory>()
+        .Property(pi => pi.Quantity)
+        .IsRequired();
+}
+
+// Usage
+using (var context = new AppDbContext())
+{
+    // Add with composite key
+    var inventory = new ProductInventory
+    {
+        ProductId = 1,
+        WarehouseId = 5,
+        Quantity = 100,
+        LastUpdated = DateTime.Now
+    };
+    
+    context.ProductInventories.Add(inventory);
+    context.SaveChanges();
+    
+    // Find by composite key
+    var item = context.ProductInventories
+        .Find(1, 5); // ProductId = 1, WarehouseId = 5
+    
+    // Update
+    if (item != null)
+    {
+        item.Quantity += 50;
+        context.SaveChanges();
+    }
+    
+    // Query
+    var warehouseInventory = context.ProductInventories
+        .Where(pi => pi.WarehouseId == 5)
+        .Include(pi => pi.Product)
+        .ToList();
+}
+```
+
+---
+
+## 33. How to implement Audit Fields (CreatedDate, UpdatedDate) in EF Core?
+
+### What is it?
+
+Audit fields automatically track when records are created, modified, and by whom. Common audit fields include CreatedDate, UpdatedDate, CreatedBy, and UpdatedBy. These are implemented by overriding `SaveChanges()` or `SaveChangesAsync()` to automatically populate audit properties based on entity state before saving.
+
+### Why do we use it?
+
+Audit fields provide automatic tracking for compliance, debugging, data history, and accountability without manually setting these values in every operation. They support regulatory requirements, help troubleshoot issues, enable temporal queries, and provide transparency in data modifications across the application.
+
+### When to use it?
+
+Implement audit fields in applications requiring compliance tracking, multi-user systems needing accountability, when debugging data issues requires modification history, or when business requirements mandate knowing who changed what and when. Essential for financial, healthcare, or regulated industries.
+
+### Example
+
+```csharp
+// Base entity with audit fields
+public abstract class AuditableEntity
+{
+    public DateTime CreatedDate { get; set; }
+    public string CreatedBy { get; set; }
+    public DateTime? UpdatedDate { get; set; }
+    public string UpdatedBy { get; set; }
+}
+
+// Domain entity inheriting audit fields
+public class Product : AuditableEntity
+{
+    public int ProductId { get; set; }
+    public string Name { get; set; }
+    public decimal Price { get; set; }
+}
+
+public class Order : AuditableEntity
+{
+    public int OrderId { get; set; }
+    public DateTime OrderDate { get; set; }
+    public decimal TotalAmount { get; set; }
+}
+
+// DbContext with automatic audit tracking
+public class AppDbContext : DbContext
+{
+    private readonly IHttpContextAccessor _httpContextAccessor;
+    
+    public AppDbContext(
+        DbContextOptions<AppDbContext> options,
+        IHttpContextAccessor httpContextAccessor)
+        : base(options)
+    {
+        _httpContextAccessor = httpContextAccessor;
+    }
+    
+    public DbSet<Product> Products { get; set; }
+    public DbSet<Order> Orders { get; set; }
+    
+    public override int SaveChanges()
+    {
+        ApplyAuditInformation();
+        return base.SaveChanges();
+    }
+    
+    public override async Task<int> SaveChangesAsync(
+        CancellationToken cancellationToken = default)
+    {
+        ApplyAuditInformation();
+        return await base.SaveChangesAsync(cancellationToken);
+    }
+    
+    private void ApplyAuditInformation()
+    {
+        var currentUser = _httpContextAccessor.HttpContext?.User?.Identity?.Name 
+            ?? "System";
+        var currentTime = DateTime.UtcNow;
+        
+        var entries = ChangeTracker.Entries<AuditableEntity>()
+            .Where(e => e.State == EntityState.Added || 
+                       e.State == EntityState.Modified);
+        
+        foreach (var entry in entries)
+        {
+            if (entry.State == EntityState.Added)
+            {
+                entry.Entity.CreatedDate = currentTime;
+                entry.Entity.CreatedBy = currentUser;
+            }
+            
+            if (entry.State == EntityState.Modified)
+            {
+                entry.Entity.UpdatedDate = currentTime;
+                entry.Entity.UpdatedBy = currentUser;
+                
+                // Prevent modification of creation audit fields
+                entry.Property(x => x.CreatedDate).IsModified = false;
+                entry.Property(x => x.CreatedBy).IsModified = false;
+            }
+        }
+    }
+}
+
+// Usage - audit fields populated automatically
+using (var context = new AppDbContext(options, httpContextAccessor))
+{
+    // Add new product - CreatedDate and CreatedBy set automatically
+    var product = new Product
+    {
+        Name = "Laptop",
+        Price = 999.99m
+    };
+    
+    context.Products.Add(product);
+    context.SaveChanges();
+    // product.CreatedDate = 2026-01-23 10:30:00
+    // product.CreatedBy = "john.doe@example.com"
+    
+    // Update product - UpdatedDate and UpdatedBy set automatically
+    product.Price = 899.99m;
+    context.SaveChanges();
+    // product.UpdatedDate = 2026-01-23 11:45:00
+    // product.UpdatedBy = "john.doe@example.com"
+    
+    // Query by audit fields
+    var recentProducts = context.Products
+        .Where(p => p.CreatedDate >= DateTime.UtcNow.AddDays(-7))
+        .ToList();
+}
+```
+
+---
+
+## 34. What is Deferred Execution in LINQ and EF Core?
+
+### What is it?
+
+Deferred execution means LINQ queries are not executed when defined - they execute only when enumerated (ToList(), FirstOrDefault(), Count(), foreach, etc.). The query definition creates an expression tree that EF Core translates to SQL only at enumeration time, allowing query composition and optimization before database execution.
+
+### Why is it important?
+
+Deferred execution enables query composition (building queries incrementally), allows EF Core to optimize the final SQL, and prevents unnecessary database calls. However, it can cause issues like multiple enumerations executing the query repeatedly, queries executing outside of context scope, or unintended lazy evaluation in loops.
+
+### When to be careful?
+
+Be careful when returning IQueryable from methods (queries execute after method returns, potentially outside context scope), enumerating queries multiple times (each enumeration executes a new query), or using queries in loops. Always materialize queries with ToList() when appropriate to control execution timing.
+
+### Example
+
+```csharp
+using (var context = new AppDbContext())
+{
+    // Query definition - NOT executed yet
+    var query = context.Employees
+        .Where(e => e.Salary > 50000);
+    // No SQL executed at this point
+    
+    // Add more filters - still not executed
+    query = query.Where(e => e.Department == "IT");
+    // Still no SQL executed
+    
+    // Execution happens here at ToList()
+    var employees = query.ToList();
+    // SQL executed: SELECT * FROM Employees 
+    //               WHERE Salary > 50000 AND Department = 'IT'
+}
+
+// PROBLEM: Multiple enumerations
+using (var context = new AppDbContext())
+{
+    var query = context.Orders.Where(o => o.TotalAmount > 1000);
+    
+    // First enumeration - executes query
+    var count = query.Count();
+    
+    // Second enumeration - executes query AGAIN!
+    var orders = query.ToList();
+    
+    // SOLUTION: Materialize once
+    var materializedQuery = query.ToList();
+    var count2 = materializedQuery.Count; // No database hit
+    var orders2 = materializedQuery; // No database hit
+}
+
+// PROBLEM: Query execution outside context scope
+public IQueryable<Product> GetExpensiveProducts()
+{
+    var context = new AppDbContext();
+    return context.Products.Where(p => p.Price > 1000);
+    // Query NOT executed yet, context will be disposed
+} // Context disposed here
+
+// Usage
+var products = GetExpensiveProducts().ToList();
+// ERROR: Context already disposed when query executes
+
+// SOLUTION 1: Return materialized list
+public List<Product> GetExpensiveProducts()
+{
+    using (var context = new AppDbContext())
+    {
+        return context.Products
+            .Where(p => p.Price > 1000)
+            .ToList(); // Execute within context scope
+    }
+}
+
+// SOLUTION 2: Accept context as parameter
+public IQueryable<Product> GetExpensiveProducts(AppDbContext context)
+{
+    return context.Products.Where(p => p.Price > 1000);
+    // Caller controls execution and context lifetime
+}
+
+// PROBLEM: Query in loop (N+1 problem variant)
+using (var context = new AppDbContext())
+{
+    var departments = context.Departments.ToList();
+    
+    foreach (var dept in departments)
+    {
+        // Each iteration executes a new query!
+        var empCount = context.Employees
+            .Count(e => e.DepartmentId == dept.DepartmentId);
+    }
+    
+    // SOLUTION: Single query with grouping
+    var employeeCounts = context.Employees
+        .GroupBy(e => e.DepartmentId)
+        .Select(g => new { DepartmentId = g.Key, Count = g.Count() })
+        .ToDictionary(x => x.DepartmentId, x => x.Count);
+}
+
+// Practical example showing deferred execution benefits
+using (var context = new AppDbContext())
+{
+    IQueryable<Order> query = context.Orders;
+    
+    // Build query conditionally
+    if (startDate.HasValue)
+        query = query.Where(o => o.OrderDate >= startDate.Value);
+    
+    if (endDate.HasValue)
+        query = query.Where(o => o.OrderDate <= endDate.Value);
+    
+    if (!string.IsNullOrEmpty(customerName))
+        query = query.Where(o => o.Customer.Name.Contains(customerName));
+    
+    // Execute once with all conditions combined
+    var results = query.ToList();
+    // Single optimized SQL query with all WHERE clauses
+}
+```
+
+---
+
+## 35. What is the difference between IQueryable and IEnumerable in EF Core?
+
+### What is it?
+
+`IQueryable<T>` represents a query that hasn't been executed against the database yet - operations are translated to SQL and executed on the database server. `IEnumerable<T>` represents data already loaded into memory - further operations execute in memory using LINQ-to-Objects. IQueryable derives from IEnumerable but has different execution semantics.
+
+### Why does it matter?
+
+Using IQueryable allows EF Core to translate all operations to SQL, executing filtering, sorting, and projections on the database server. Using IEnumerable after loading data means subsequent operations run in memory, potentially loading large datasets and performing inefficient processing. The choice significantly impacts performance and database load.
+
+### When to use each?
+
+Use **IQueryable** when building queries that should execute on the database, when you want EF Core to optimize the SQL, or when working with large datasets. Use **IEnumerable** when working with already-loaded data, when operations can't be translated to SQL, or when processing small in-memory collections.
+
+### Example
+
+```csharp
+using (var context = new AppDbContext())
+{
+    // IQueryable - operations translated to SQL
+    IQueryable<Employee> queryable = context.Employees;
+    
+    queryable = queryable.Where(e => e.Salary > 50000); // Not executed
+    queryable = queryable.OrderBy(e => e.Name); // Not executed
+    
+    var employees = queryable.Take(10).ToList(); // Single SQL query
+    // SQL: SELECT TOP 10 * FROM Employees 
+    //      WHERE Salary > 50000 ORDER BY Name
+}
+
+// PROBLEM: Converting to IEnumerable too early
+using (var context = new AppDbContext())
+{
+    // AsEnumerable() forces subsequent operations to memory
+    IEnumerable<Employee> enumerable = context.Employees
+        .AsEnumerable(); // ALL employees loaded into memory!
+    
+    // This filter runs IN MEMORY, not in database
+    var highEarners = enumerable
+        .Where(e => e.Salary > 50000)
+        .ToList();
+    
+    // BAD: Loaded all employees just to filter in memory
+}
+
+// CORRECT: Keep as IQueryable
+using (var context = new AppDbContext())
+{
+    IQueryable<Employee> queryable = context.Employees;
+    
+    // All operations run on database
+    var highEarners = queryable
+        .Where(e => e.Salary > 50000)
+        .ToList();
+    
+    // SQL: SELECT * FROM Employees WHERE Salary > 50000
+    // Only filtered results loaded into memory
+}
+
+// When you NEED IEnumerable (operations not translatable to SQL)
+using (var context = new AppDbContext())
+{
+    var employees = context.Employees
+        .Where(e => e.IsActive) // IQueryable - runs on DB
+        .ToList(); // Materialize to memory
+    
+    // Custom logic not translatable to SQL
+    var processed = employees
+        .Where(e => ComplexBusinessLogic(e)) // Runs in memory
+        .OrderBy(e => CustomSorting(e)) // Runs in memory
+        .ToList();
+}
+
+// Real-world example showing performance difference
+// SLOW - loads 1 million employees into memory first
+using (var context = new AppDbContext())
+{
+    var allEmployees = context.Employees.ToList(); // IEnumerable
+    var itDepartment = allEmployees
+        .Where(e => e.Department == "IT")
+        .Take(10)
+        .ToList();
+    // Loaded 1,000,000 rows to get 10!
+}
+
+// FAST - filters in database
+using (var context = new AppDbContext())
+{
+    var itDepartment = context.Employees // IQueryable
+        .Where(e => e.Department == "IT")
+        .Take(10)
+        .ToList();
+    // SQL: SELECT TOP 10 * FROM Employees WHERE Department = 'IT'
+    // Only 10 rows loaded
+}
+
+// Method return types impact
+public IQueryable<Product> GetProductsQueryable(AppDbContext context)
+{
+    return context.Products.Where(p => p.IsActive);
+    // Caller can add more filters that run on database
+}
+
+public IEnumerable<Product> GetProductsEnumerable(AppDbContext context)
+{
+    return context.Products.Where(p => p.IsActive).ToList();
+    // All data already loaded, caller operations run in memory
+}
+
+// Usage
+using (var context = new AppDbContext())
+{
+    // Can add database filters
+    var expensive = GetProductsQueryable(context)
+        .Where(p => p.Price > 1000)
+        .ToList();
+    // SQL: WHERE IsActive = 1 AND Price > 1000
+    
+    // Filters run in memory
+    var expensive2 = GetProductsEnumerable(context)
+        .Where(p => p.Price > 1000)
+        .ToList();
+    // All active products loaded, then filtered in memory
+}
+```
+
+---
+
+## 36. How to handle Migrations in large teams?
+
+### What is it?
+
+Managing migrations in large teams requires strategies to avoid merge conflicts, maintain migration order, and ensure consistency across branches. Challenges include multiple developers creating migrations simultaneously, maintaining migration history, and coordinating database updates across environments. Teams use branching strategies, migration naming conventions, and coordination practices.
+
+### Why is it challenging?
+
+Concurrent migrations from different developers can conflict when merged, causing broken migration history or database schema inconsistencies. Migration timestamps create merge conflicts, and applying migrations out of order can fail. Large teams need processes to prevent duplicate migrations, resolve conflicts, and maintain a single source of truth for schema.
+
+### When to implement strategies?
+
+Implement migration strategies when you have 3+ developers working on database changes, when using feature branches that modify the database, when deployments happen frequently, or when experiencing migration conflicts. Critical for CI/CD pipelines and distributed teams working on different features simultaneously.
+
+### Example
+
+```csharp
+// PROBLEM: Two developers create migrations simultaneously
+// Developer A (feature/add-products)
+// Timestamp: 20260123_120000
+public partial class AddProductTable : Migration
+{
+    protected override void Up(MigrationBuilder migrationBuilder)
+    {
+        migrationBuilder.CreateTable(
+            name: "Products",
+            columns: table => new
+            {
+                ProductId = table.Column<int>(),
+                Name = table.Column<string>()
+            });
+    }
+}
+
+// Developer B (feature/add-customers)  
+// Timestamp: 20260123_120500 (5 minutes later)
+public partial class AddCustomerTable : Migration
+{
+    protected override void Up(MigrationBuilder migrationBuilder)
+    {
+        migrationBuilder.CreateTable(
+            name: "Customers",
+            columns: table => new
+            {
+                CustomerId = table.Column<int>(),
+                Name = table.Column<string>()
+            });
+    }
+}
+
+// When merged to main: CONFLICT! Both think they're the latest migration
+
+// SOLUTION 1: Rebase and recreate migration
+// Developer A merges first to main
+// Developer B:
+// 1. Pull latest main (includes AddProductTable migration)
+// 2. Delete their migration file and remove from ModelSnapshot
+// 3. Run: dotnet ef migrations add AddCustomerTable
+//    (Gets new timestamp AFTER AddProductTable)
+
+// SOLUTION 2: Use migration coordination (team process)
+// Before creating migration:
+// 1. Pull latest changes
+// 2. Check for pending migrations from others
+// 3. Create migration with descriptive name
+// 4. Merge quickly to avoid conflicts
+
+// SOLUTION 3: Feature-based migration naming
+protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+{
+    optionsBuilder.UseSqlServer(
+        connectionString,
+        x => x.MigrationsHistoryTable("__EFMigrationsHistory", "migrations"));
+}
+
+// SOLUTION 4: Idempotent migrations script for CI/CD
+// Generate script that can run multiple times safely
+// dotnet ef migrations script --idempotent --output migration.sql
+
+// SOLUTION 5: Environment-specific migration tracking
+public class AppDbContext : DbContext
+{
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    {
+        optionsBuilder.UseSqlServer(
+            connectionString,
+            options => options.MigrationsAssembly("Infrastructure"));
+    }
+}
+
+// SOLUTION 6: Pre-merge checks in CI pipeline
+// .github/workflows/check-migrations.yml
+// - name: Check for migration conflicts
+//   run: |
+//     dotnet ef migrations list
+//     # Fail if multiple migrations with same timestamp exist
+
+// Best Practice: Migration Coordination Workflow
+// 1. Create feature branch
+// 2. Make entity changes
+// 3. Before creating migration:
+//    - Pull latest from main
+//    - Apply any new migrations
+//    - Check ModelSnapshot for conflicts
+// 4. Create migration: dotnet ef migrations add [DescriptiveName]
+// 5. Review generated SQL
+// 6. Commit migration files
+// 7. Create PR and merge quickly
+// 8. Team members pull and apply migration immediately
+
+// Handling merge conflicts in ModelSnapshot
+// If conflict occurs:
+// 1. Accept incoming changes (main branch version)
+// 2. Delete your migration file
+// 3. Revert changes to DbContext/entities
+// 4. Pull latest
+// 5. Reapply your entity changes
+// 6. Create new migration with new timestamp
+
+// Production deployment strategy
+public class DatabaseMigrator
+{
+    public static void MigrateDatabase(IApplicationBuilder app)
+    {
+        using (var scope = app.ApplicationServices.CreateScope())
+        {
+            var context = scope.ServiceProvider
+                .GetRequiredService<AppDbContext>();
+            
+            try
+            {
+                // Get pending migrations
+                var pendingMigrations = context.Database
+                    .GetPendingMigrations();
+                
+                if (pendingMigrations.Any())
+                {
+                    Console.WriteLine($"Applying {pendingMigrations.Count()} migrations...");
+                    
+                    // Apply migrations
+                    context.Database.Migrate();
+                    
+                    Console.WriteLine("Migrations applied successfully");
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Migration failed: {ex.Message}");
+                throw;
+            }
+        }
+    }
+}
+```
+
+---
+
+## 37. How to implement Multi-Tenant architecture in EF Core?
+
+### What is it?
+
+Multi-tenancy allows a single application instance to serve multiple tenants (customers/organizations) with data isolation. EF Core supports different strategies: separate databases per tenant, separate schemas per tenant, or shared database with discriminator columns. Global query filters automatically isolate tenant data in queries.
+
+### Why do we use it?
+
+Multi-tenancy reduces infrastructure costs, simplifies maintenance (single codebase/deployment), enables easier scaling, and provides logical data isolation between tenants. It's essential for SaaS applications where each customer needs their own isolated data while sharing the same application infrastructure.
+
+### When to use each strategy?
+
+Use **separate databases** for strong isolation, compliance requirements, or per-tenant scaling. Use **separate schemas** for moderate isolation with shared infrastructure. Use **discriminator column** for many small tenants with simple isolation needs. Choice depends on isolation requirements, scale, compliance, and performance needs.
+
+### Example
+
+```csharp
+// STRATEGY 1: Discriminator Column (Shared Database)
+// Entity with TenantId
+public class Order
+{
+    public int OrderId { get; set; }
+    public DateTime OrderDate { get; set; }
+    public decimal TotalAmount { get; set; }
+    public string TenantId { get; set; } // Tenant discriminator
+}
+
+// Tenant service
+public interface ITenantService
+{
+    string GetCurrentTenantId();
+}
+
+public class TenantService : ITenantService
+{
+    private readonly IHttpContextAccessor _httpContextAccessor;
+    
+    public TenantService(IHttpContextAccessor httpContextAccessor)
+    {
+        _httpContextAccessor = httpContextAccessor;
+    }
+    
+    public string GetCurrentTenantId()
+    {
+        // Get from claims, header, subdomain, etc.
+        return _httpContextAccessor.HttpContext?.User
+            ?.FindFirst("TenantId")?.Value ?? throw new Exception("No tenant");
+    }
+}
+
+// DbContext with global query filter
+public class AppDbContext : DbContext
+{
+    private readonly ITenantService _tenantService;
+    
+    public AppDbContext(
+        DbContextOptions<AppDbContext> options,
+        ITenantService tenantService) : base(options)
+    {
+        _tenantService = tenantService;
+    }
+    
+    public DbSet<Order> Orders { get; set; }
+    public DbSet<Product> Products { get; set; }
+    
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        // Global query filter for tenant isolation
+        modelBuilder.Entity<Order>()
+            .HasQueryFilter(o => o.TenantId == _tenantService.GetCurrentTenantId());
+        
+        modelBuilder.Entity<Product>()
+            .HasQueryFilter(p => p.TenantId == _tenantService.GetCurrentTenantId());
+        
+        // Index for performance
+        modelBuilder.Entity<Order>()
+            .HasIndex(o => o.TenantId);
+    }
+    
+    public override int SaveChanges()
+    {
+        // Automatically set TenantId on new entities
+        var tenantId = _tenantService.GetCurrentTenantId();
+        
+        foreach (var entry in ChangeTracker.Entries()
+            .Where(e => e.State == EntityState.Added))
+        {
+            var tenantProperty = entry.Entity.GetType()
+                .GetProperty("TenantId");
+            
+            if (tenantProperty != null)
+            {
+                tenantProperty.SetValue(entry.Entity, tenantId);
+            }
+        }
+        
+        return base.SaveChanges();
+    }
+}
+
+// STRATEGY 2: Separate Database Per Tenant
+public class TenantDbContext : DbContext
+{
+    private readonly string _tenantConnectionString;
+    
+    public TenantDbContext(string tenantConnectionString)
+    {
+        _tenantConnectionString = tenantConnectionString;
+    }
+    
+    public DbSet<Order> Orders { get; set; }
+    
+    protected override void OnConfiguring(
+        DbContextOptionsBuilder optionsBuilder)
+    {
+        optionsBuilder.UseSqlServer(_tenantConnectionString);
+    }
+}
+
+// Tenant connection resolver
+public interface ITenantConnectionResolver
+{
+    string GetConnectionString(string tenantId);
+}
+
+public class TenantConnectionResolver : ITenantConnectionResolver
+{
+    private readonly IConfiguration _configuration;
+    
+    public TenantConnectionResolver(IConfiguration configuration)
+    {
+        _configuration = configuration;
+    }
+    
+    public string GetConnectionString(string tenantId)
+    {
+        // Get from configuration, database, cache, etc.
+        return _configuration
+            .GetConnectionString($"Tenant_{tenantId}");
+    }
+}
+
+// DbContext factory for multi-tenant
+public class TenantDbContextFactory
+{
+    private readonly ITenantService _tenantService;
+    private readonly ITenantConnectionResolver _connectionResolver;
+    
+    public TenantDbContextFactory(
+        ITenantService tenantService,
+        ITenantConnectionResolver connectionResolver)
+    {
+        _tenantService = tenantService;
+        _connectionResolver = connectionResolver;
+    }
+    
+    public AppDbContext CreateDbContext()
+    {
+        var tenantId = _tenantService.GetCurrentTenantId();
+        var connectionString = _connectionResolver
+            .GetConnectionString(tenantId);
+        
+        var optionsBuilder = new DbContextOptionsBuilder<AppDbContext>();
+        optionsBuilder.UseSqlServer(connectionString);
+        
+        return new AppDbContext(optionsBuilder.Options);
+    }
+}
+
+// Registration in Program.cs
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddScoped<ITenantService, TenantService>();
+builder.Services.AddScoped<ITenantConnectionResolver, TenantConnectionResolver>();
+builder.Services.AddScoped<TenantDbContextFactory>();
+
+// STRATEGY 3: Separate Schema Per Tenant
+protected override void OnModelCreating(ModelBuilder modelBuilder)
+{
+    var tenantId = _tenantService.GetCurrentTenantId();
+    var schema = $"tenant_{tenantId}";
+    
+    modelBuilder.Entity<Order>().ToTable("Orders", schema);
+    modelBuilder.Entity<Product>().ToTable("Products", schema);
+}
+
+// Usage in controller
+[ApiController]
+[Route("api/[controller]")]
+public class OrdersController : ControllerBase
+{
+    private readonly AppDbContext _context;
+    
+    public OrdersController(AppDbContext context)
+    {
+        _context = context;
+    }
+    
+    [HttpGet]
+    public async Task<IActionResult> GetOrders()
+    {
+        // Automatically filtered by tenant
+        var orders = await _context.Orders.ToListAsync();
+        return Ok(orders);
+    }
+    
+    [HttpPost]
+    public async Task<IActionResult> CreateOrder(Order order)
+    {
+        // TenantId set automatically in SaveChanges
+        _context.Orders.Add(order);
+        await _context.SaveChangesAsync();
+        return Ok(order);
+    }
+}
+```
+
+---
+
+## 38. What are the key Performance Tuning strategies in EF Core?
+
+### What is it?
+
+Performance tuning in EF Core involves optimizing query execution, reducing database round trips, minimizing data transfer, and improving memory usage. Key strategies include query optimization, proper indexing, connection pooling, compiled queries, batch operations, and profiling. Performance problems often stem from N+1 queries, over-fetching data, or inefficient query patterns.
+
+### Why is it critical?
+
+Poor EF Core performance leads to slow application response times, high database load, increased costs, and poor user experience. A single inefficient query can impact entire application performance. Performance optimization can improve response times by 10-100x, reduce server costs, and improve scalability from hundreds to thousands of concurrent users.
+
+### When to optimize?
+
+Optimize during development for known hot paths, after profiling reveals bottlenecks, when performance tests show degradation, or when monitoring indicates high database load. Focus on frequently executed queries, report generation, data export, and high-traffic endpoints. Always measure before and after optimization.
+
+### Example
+
+```csharp
+// PROBLEM 1: N+1 Query Problem
+// BAD - executes N+1 queries
+public async Task<List<OrderDto>> GetOrdersSlow()
+{
+    var orders = await _context.Orders.ToListAsync(); // 1 query
+    
+    foreach (var order in orders) // N queries
+    {
+        order.Customer = await _context.Customers
+            .FindAsync(order.CustomerId);
+    }
+    
+    return orders;
+}
+
+// GOOD - single query with Include
+public async Task<List<OrderDto>> GetOrdersFast()
+{
+    return await _context.Orders
+        .Include(o => o.Customer)
+        .ToListAsync(); // 1 query with JOIN
+}
+
+// PROBLEM 2: Loading entire entities when only few columns needed
+// BAD - loads all columns
+public async Task<List<ProductSummary>> GetProductsSlow()
+{
+    var products = await _context.Products.ToListAsync();
+    
+    return products.Select(p => new ProductSummary
+    {
+        Name = p.Name,
+        Price = p.Price
+    }).ToList();
+}
+
+// GOOD - projection with Select (only needed columns)
+public async Task<List<ProductSummary>> GetProductsFast()
+{
+    return await _context.Products
+        .Select(p => new ProductSummary
+        {
+            Name = p.Name,
+            Price = p.Price
+        })
+        .ToListAsync();
+    // SQL: SELECT Name, Price FROM Products (not SELECT *)
+}
+
+// PROBLEM 3: Tracking entities for read-only operations
+// BAD - unnecessary tracking overhead
+public async Task<List<Order>> GetOrdersForReportSlow()
+{
+    return await _context.Orders
+        .Include(o => o.Customer)
+        .ToListAsync();
+}
+
+// GOOD - no tracking for read-only
+public async Task<List<Order>> GetOrdersForReportFast()
+{
+    return await _context.Orders
+        .AsNoTracking()
+        .Include(o => o.Customer)
+        .ToListAsync();
+    // 30-50% faster, less memory
+}
+
+// PROBLEM 4: Cartesian explosion with multiple collections
+// BAD - single query causes cartesian explosion
+public async Task<List<Customer>> GetCustomersSlow()
+{
+    return await _context.Customers
+        .Include(c => c.Orders) // 10 orders
+        .Include(c => c.Addresses) // 3 addresses
+        .ToListAsync();
+    // Returns 30 rows for 1 customer (10 * 3)!
+}
+
+// GOOD - split query
+public async Task<List<Customer>> GetCustomersFast()
+{
+    return await _context.Customers
+        .Include(c => c.Orders)
+        .Include(c => c.Addresses)
+        .AsSplitQuery() // Separate queries for each collection
+        .ToListAsync();
+    // Query 1: Customers
+    // Query 2: Orders for these customers
+    // Query 3: Addresses for these customers
+}
+
+// PROBLEM 5: Repeated identical queries
+// BAD - same query executed multiple times
+public async Task<decimal> CalculateTotalsSlow()
+{
+    var total1 = await _context.Orders.SumAsync(o => o.TotalAmount);
+    var total2 = await _context.Orders.SumAsync(o => o.TotalAmount);
+    var total3 = await _context.Orders.SumAsync(o => o.TotalAmount);
+    
+    return total1 + total2 + total3;
+}
+
+// GOOD - compiled query for repeated execution
+private static readonly Func<AppDbContext, Task<decimal>> _getOrderTotal =
+    EF.CompileAsyncQuery((AppDbContext context) =>
+        context.Orders.Sum(o => o.TotalAmount));
+
+public async Task<decimal> CalculateTotalsFast()
+{
+    var total1 = await _getOrderTotal(_context);
+    var total2 = await _getOrderTotal(_context);
+    var total3 = await _getOrderTotal(_context);
+    
+    return total1 + total2 + total3;
+}
+
+// PROBLEM 6: Multiple SaveChanges in loop
+// BAD - N database round trips
+public async Task AddProductsSlow(List<Product> products)
+{
+    foreach (var product in products)
+    {
+        _context.Products.Add(product);
+        await _context.SaveChangesAsync(); // Separate DB call each time
+    }
+}
+
+// GOOD - batch operation
+public async Task AddProductsFast(List<Product> products)
+{
+    await _context.Products.AddRangeAsync(products);
+    await _context.SaveChangesAsync(); // Single DB call
+}
+
+// PROBLEM 7: Loading entire table to count
+// BAD - loads all records into memory
+public async Task<int> GetProductCountSlow()
+{
+    var products = await _context.Products.ToListAsync();
+    return products.Count;
+}
+
+// GOOD - COUNT query on database
+public async Task<int> GetProductCountFast()
+{
+    return await _context.Products.CountAsync();
+    // SQL: SELECT COUNT(*) FROM Products
+}
+
+// Comprehensive performance optimization example
+public class OptimizedOrderService
+{
+    private readonly AppDbContext _context;
+    
+    public OptimizedOrderService(AppDbContext context)
+    {
+        _context = context;
+    }
+    
+    public async Task<List<OrderDto>> GetOrdersOptimized(
+        DateTime startDate, DateTime endDate)
+    {
+        return await _context.Orders
+            .AsNoTracking() // No tracking needed for read-only
+            .Where(o => o.OrderDate >= startDate && o.OrderDate <= endDate)
+            .Include(o => o.Customer) // Eager load to avoid N+1
+            .AsSplitQuery() // Prevent cartesian explosion
+            .Select(o => new OrderDto // Project only needed data
+            {
+                OrderId = o.OrderId,
+                OrderDate = o.OrderDate,
+                TotalAmount = o.TotalAmount,
+                CustomerName = o.Customer.Name,
+                ItemCount = o.OrderItems.Count
+            })
+            .ToListAsync(); // Execute asynchronously
+    }
+}
+
+// Enable query logging to identify slow queries
+protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+{
+    optionsBuilder
+        .UseSqlServer(connectionString)
+        .LogTo(Console.WriteLine, LogLevel.Information)
+        .EnableSensitiveDataLogging() // Development only
+        .EnableDetailedErrors();
+}
+
+// Use execution strategy for connection resiliency
+protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+{
+    optionsBuilder.UseSqlServer(
+        connectionString,
+        options => options.EnableRetryOnFailure(
+            maxRetryCount: 3,
+            maxRetryDelay: TimeSpan.FromSeconds(5),
+            errorNumbersToAdd: null));
+}
+```
+
+---
+
+## 39. How to handle large datasets efficiently in EF Core?
+
+### What is it?
+
+Handling large datasets requires techniques to avoid loading everything into memory. Strategies include pagination, streaming with `AsAsyncEnumerable()`, batching operations, using projections to reduce data size, and executing operations directly on the database with `ExecuteUpdate()`/`ExecuteDelete()` (EF Core 7+).
+
+### Why is it important?
+
+Loading large datasets into memory causes OutOfMemoryException, high memory consumption, slow query execution, and application crashes. Processing millions of records requires streaming, batching, or server-side processing to maintain acceptable performance and memory usage. Improper handling can crash production applications.
+
+### When to use these techniques?
+
+Use pagination for user-facing lists, streaming for background processing or data export, batching for bulk operations, and ExecuteUpdate/ExecuteDelete for mass updates. Apply these when dealing with thousands+ records, generating reports, migrating data, or processing queues.
+
+### Example
+
+```csharp
+// PROBLEM: Loading millions of records into memory
+// BAD - OutOfMemoryException!
+public async Task ProcessAllOrdersSlow()
+{
+    var orders = await _context.Orders.ToListAsync(); // Loads millions!
+    
+    foreach (var order in orders)
+    {
+        ProcessOrder(order);
+    }
+}
+
+// SOLUTION 1: Pagination
+public async Task<PagedResult<Order>> GetOrdersPaged(int page, int pageSize)
+{
+    var totalCount = await _context.Orders.CountAsync();
+    
+    var orders = await _context.Orders
+        .OrderBy(o => o.OrderId)
+        .Skip((page - 1) * pageSize)
+        .Take(pageSize)
+        .ToListAsync();
+    
+    return new PagedResult<Order>
+    {
+        Items = orders,
+        TotalCount = totalCount,
+        Page = page,
+        PageSize = pageSize
+    };
+}
+
+// SOLUTION 2: Streaming with AsAsyncEnumerable
+public async Task ProcessAllOrdersStreaming()
+{
+    await foreach (var order in _context.Orders.AsAsyncEnumerable())
+    {
+        ProcessOrder(order);
+        // Each order processed immediately, not loaded all at once
+    }
+}
+
+// SOLUTION 3: Batched processing
+public async Task ProcessOrdersInBatches(int batchSize = 1000)
+{
+    var totalOrders = await _context.Orders.CountAsync();
+    var batches = (int)Math.Ceiling((double)totalOrders / batchSize);
+    
+    for (int i = 0; i < batches; i++)
+    {
+        var batch = await _context.Orders
+            .OrderBy(o => o.OrderId)
+            .Skip(i * batchSize)
+            .Take(batchSize)
+            .ToListAsync();
+        
+        foreach (var order in batch)
+        {
+            ProcessOrder(order);
+        }
+        
+        // Optional: Clear tracked entities to free memory
+        _context.ChangeTracker.Clear();
+    }
+}
+
+// SOLUTION 4: ExecuteUpdate for bulk updates (EF Core 7+)
+// BAD - loads all records, updates in memory, saves back
+public async Task IncreaseAllPricesSlow(decimal percentage)
+{
+    var products = await _context.Products.ToListAsync();
+    
+    foreach (var product in products)
+    {
+        product.Price *= (1 + percentage);
+    }
+    
+    await _context.SaveChangesAsync();
+}
+
+// GOOD - single UPDATE statement on database
+public async Task IncreaseAllPricesFast(decimal percentage)
+{
+    await _context.Products
+        .ExecuteUpdateAsync(setters => setters
+            .SetProperty(p => p.Price, p => p.Price * (1 + percentage)));
+    
+    // SQL: UPDATE Products SET Price = Price * 1.1
+}
+
+// SOLUTION 5: ExecuteDelete for bulk deletes (EF Core 7+)
+// BAD - loads all records, deletes each
+public async Task DeleteOldOrdersSlow(DateTime cutoffDate)
+{
+    var oldOrders = await _context.Orders
+        .Where(o => o.OrderDate < cutoffDate)
+        .ToListAsync();
+    
+    _context.Orders.RemoveRange(oldOrders);
+    await _context.SaveChangesAsync();
+}
+
+// GOOD - single DELETE statement
+public async Task DeleteOldOrdersFast(DateTime cutoffDate)
+{
+    await _context.Orders
+        .Where(o => o.OrderDate < cutoffDate)
+        .ExecuteDeleteAsync();
+    
+    // SQL: DELETE FROM Orders WHERE OrderDate < @cutoffDate
+}
+
+// Real-world example: Export large dataset to CSV
+public async Task ExportOrdersToCsv(string filePath)
+{
+    using (var writer = new StreamWriter(filePath))
+    {
+        await writer.WriteLineAsync("OrderId,OrderDate,TotalAmount,Customer");
+        
+        // Stream orders instead of loading all
+        await foreach (var order in _context.Orders
+            .AsNoTracking()
+            .Include(o => o.Customer)
+            .AsAsyncEnumerable())
+        {
+            await writer.WriteLineAsync(
+                $"{order.OrderId},{order.OrderDate:yyyy-MM-dd}," +
+                $"{order.TotalAmount},{order.Customer.Name}");
+        }
+    }
+}
+
+// Processing with progress reporting
+public async Task ProcessLargeDatasetWithProgress(
+    IProgress<int> progress)
+{
+    var totalCount = await _context.Orders.CountAsync();
+    var processed = 0;
+    var batchSize = 1000;
+    
+    for (int skip = 0; skip < totalCount; skip += batchSize)
+    {
+        var batch = await _context.Orders
+            .AsNoTracking()
+            .OrderBy(o => o.OrderId)
+            .Skip(skip)
+            .Take(batchSize)
+            .ToListAsync();
+        
+        foreach (var order in batch)
+        {
+            ProcessOrder(order);
+            processed++;
+            
+            if (processed % 100 == 0)
+            {
+                progress.Report((processed * 100) / totalCount);
+            }
+        }
+    }
+}
+
+// Cursor-based pagination (better for real-time data)
+public async Task<List<Order>> GetOrdersAfterCursor(
+    int lastOrderId, int pageSize)
+{
+    return await _context.Orders
+        .Where(o => o.OrderId > lastOrderId)
+        .OrderBy(o => o.OrderId)
+        .Take(pageSize)
+        .ToListAsync();
+}
+```
+
+---
+
+## 40. What are EF Core limitations and when to use alternatives?
+
+### What is it?
+
+EF Core has limitations in complex queries, bulk operations, performance-critical scenarios, and database-specific features. Understanding these limitations helps you make informed decisions about when to use raw SQL, stored procedures, Dapper, or other tools alongside EF Core.
+
+### Why acknowledge limitations?
+
+No tool is perfect for every scenario. EF Core prioritizes developer productivity and maintainability over raw performance. Recognizing its limitations prevents forcing EF Core into inappropriate use cases, allows hybrid approaches, and helps set realistic performance expectations. Better to use the right tool for each job.
+
+### When to consider alternatives?
+
+Consider alternatives for complex reporting with multiple aggregations, bulk operations on millions of records, database-specific features (window functions, full-text search), extreme performance requirements, or when generated SQL is inefficient. Many successful projects use EF Core for CRUD and Dapper/raw SQL for complex queries.
+
+### Example
+
+```csharp
+// LIMITATION 1: Complex aggregations and window functions
+// EF Core struggles with complex SQL features
+// BAD - not well supported in EF Core
+public async Task<List<SalesRanking>> GetSalesRankingSlow()
+{
+    // EF Core doesn't natively support ROW_NUMBER(), RANK(), etc.
+    // Would require loading all data and ranking in memory
+    var sales = await _context.Sales
+        .Include(s => s.Employee)
+        .ToListAsync();
+    
+    // Ranking in memory - inefficient
+    return sales
+        .OrderByDescending(s => s.Amount)
+        .Select((s, index) => new SalesRanking
+        {
+            EmployeeName = s.Employee.Name,
+            Amount = s.Amount,
+            Rank = index + 1
+        })
+        .ToList();
+}
+
+// GOOD - use raw SQL or Dapper
+public async Task<List<SalesRanking>> GetSalesRankingFast()
+{
+    var sql = @"
+        SELECT 
+            e.Name AS EmployeeName,
+            s.Amount,
+            ROW_NUMBER() OVER (ORDER BY s.Amount DESC) AS Rank
+        FROM Sales s
+        INNER JOIN Employees e ON s.EmployeeId = e.EmployeeId";
+    
+    return await _context.Database
+        .SqlQueryRaw<SalesRanking>(sql)
+        .ToListAsync();
+}
+
+// LIMITATION 2: Bulk operations on large datasets
+// EF Core loads entities, tracks changes, generates individual statements
+// BAD - slow for large datasets
+public async Task UpdateProductPricesSlow(
+    Dictionary<int, decimal> priceUpdates)
+{
+    foreach (var kvp in priceUpdates)
+    {
+        var product = await _context.Products.FindAsync(kvp.Key);
+        if (product != null)
+        {
+            product.Price = kvp.Value;
+        }
+    }
+    
+    await _context.SaveChangesAsync();
+    // Generates separate UPDATE for each product
+}
+
+// GOOD - use bulk update library or raw SQL
+public async Task UpdateProductPricesFast(
+    Dictionary<int, decimal> priceUpdates)
+{
+    // EF Core 7+ ExecuteUpdate
+    foreach (var kvp in priceUpdates)
+    {
+        await _context.Products
+            .Where(p => p.ProductId == kvp.Key)
+            .ExecuteUpdateAsync(s => s
+                .SetProperty(p => p.Price, kvp.Value));
+    }
+    
+    // OR use bulk update library like EFCore.BulkExtensions
+    // await _context.BulkUpdateAsync(products);
+}
+
+// LIMITATION 3: Complex joins that EF Core doesn't translate well
+// BAD - EF Core generates inefficient SQL
+public async Task<List<OrderSummary>> GetComplexReportSlow()
+{
+    return await _context.Orders
+        .Include(o => o.OrderItems)
+        .ThenInclude(oi => oi.Product)
+        .Include(o => o.Customer)
+        .Where(o => o.OrderDate.Year == 2026)
+        .Select(o => new OrderSummary
+        {
+            OrderId = o.OrderId,
+            CustomerName = o.Customer.Name,
+            TotalItems = o.OrderItems.Count,
+            TotalAmount = o.OrderItems.Sum(oi => oi.Quantity * oi.UnitPrice)
+        })
+        .ToListAsync();
+    // May generate suboptimal SQL with multiple subqueries
+}
+
+// GOOD - hand-crafted SQL for complex reports
+public async Task<List<OrderSummary>> GetComplexReportFast()
+{
+    var sql = @"
+        SELECT 
+            o.OrderId,
+            c.Name AS CustomerName,
+            COUNT(oi.OrderItemId) AS TotalItems,
+            SUM(oi.Quantity * oi.UnitPrice) AS TotalAmount
+        FROM Orders o
+        INNER JOIN Customers c ON o.CustomerId = c.CustomerId
+        INNER JOIN OrderItems oi ON o.OrderId = oi.OrderId
+        WHERE YEAR(o.OrderDate) = 2026
+        GROUP BY o.OrderId, c.Name";
+    
+    return await _context.Database
+        .SqlQueryRaw<OrderSummary>(sql)
+        .ToListAsync();
+}
+
+// LIMITATION 4: Database-specific features
+// EF Core abstracts database differences, limiting access to specific features
+// Example: SQL Server Full-Text Search
+public async Task<List<Product>> SearchProductsFullText(string searchTerm)
+{
+    // Can't use CONTAINS() or FREETEXT() through LINQ
+    var sql = @"
+        SELECT * FROM Products
+        WHERE CONTAINS((Name, Description), @searchTerm)";
+    
+    return await _context.Products
+        .FromSqlRaw(sql, searchTerm)
+        .ToListAsync();
+}
+
+// LIMITATION 5: Stored procedures with complex output
+// EF Core can call stored procedures but has limitations with complex outputs
+public async Task<List<MonthlyReport>> GetMonthlyReportFromStoredProc()
+{
+    // Stored procedure: EXEC sp_GetMonthlyReport @Year, @Month
+    return await _context.Set<MonthlyReport>()
+        .FromSqlRaw("EXEC sp_GetMonthlyReport @Year = {0}, @Month = {1}", 
+            2026, 1)
+        .ToListAsync();
+}
+
+// LIMITATION 6: Transactions spanning multiple contexts or databases
+// EF Core transactions limited to single context
+// Use distributed transactions or application-level coordination
+
+// LIMITATION 7: Dynamic queries with many optional parameters
+// BAD - many optional parameters make EF Core queries complex
+public async Task<List<Product>> SearchProducts(
+    string name, decimal? minPrice, decimal? maxPrice,
+    int? categoryId, bool? inStock, string sortBy)
+{
+    IQueryable<Product> query = _context.Products;
+    
+    if (!string.IsNullOrEmpty(name))
+        query = query.Where(p => p.Name.Contains(name));
+    
+    if (minPrice.HasValue)
+        query = query.Where(p => p.Price >= minPrice);
+    
+    if (maxPrice.HasValue)
+        query = query.Where(p => p.Price <= maxPrice);
+    
+    // ... many more conditions
+    
+    return await query.ToListAsync();
+}
+
+// Consider using specification pattern or dynamic query builder
+
+// Hybrid approach: Use both EF Core and Dapper
+public class ProductService
+{
+    private readonly AppDbContext _context;
+    private readonly IDbConnection _connection;
+    
+    // Use EF Core for writes and simple queries
+    public async Task<Product> CreateProduct(Product product)
+    {
+        _context.Products.Add(product);
+        await _context.SaveChangesAsync();
+        return product;
+    }
+    
+    // Use Dapper for complex read queries
+    public async Task<List<ProductSalesReport>> GetSalesReport()
+    {
+        var sql = @"
+            SELECT 
+                p.ProductId,
+                p.Name,
+                SUM(oi.Quantity) AS TotalSold,
+                SUM(oi.Quantity * oi.UnitPrice) AS Revenue
+            FROM Products p
+            LEFT JOIN OrderItems oi ON p.ProductId = oi.ProductId
+            GROUP BY p.ProductId, p.Name
+            ORDER BY Revenue DESC";
+        
+        return (await _connection.QueryAsync<ProductSalesReport>(sql))
+            .ToList();
+    }
+}
+
+// When to use what?
+// EF Core: CRUD operations, simple to moderate queries, need change tracking
+// Raw SQL: Complex queries, database-specific features, optimal performance
+// Dapper: Read-heavy scenarios, simple mapping, better performance than EF Core
+// Stored Procedures: Complex business logic, security, reusability across apps
 ```
 
 ---
