@@ -25,6 +25,10 @@ The project contains:
 
 - **[🔥 C# / .NET Core - Complete Interview Guide](docs/CSharp-DotNetCore-Complete-Interview-Guide.md)** - **NEW!** Consolidated guide with 143+ questions covering Collections & LINQ, String Manipulation, Date & Time, Async/Multithreading, Thread Safety, Design Patterns, Data Structures & Algorithms, ASP.NET Core Web API, Dependency Injection, Entity Framework Core, SQL & Database, Microservices, Advanced Topics (MediatR, Kafka, Rate Limiting), and System Design with concise answers and real-world examples
 
+### REST API Development
+
+- **[🌐 REST API Interview Questions - Complete Guide](docs/REST-API-Interview-Questions-Guide.md)** - **NEW!** 50 comprehensive REST API interview questions covering REST fundamentals, HTTP methods, idempotency, statelessness, authentication (JWT, OAuth 2.0, API keys), authorization, security best practices, rate limiting, API versioning, CORS, pagination, caching strategies, webhooks vs polling, error handling, PUT vs POST, synchronous vs asynchronous APIs, API Gateway pattern, throttling, API documentation, monitoring & observability, monolithic vs microservices, GraphQL vs REST, idempotency in distributed systems, HTTP status codes (2xx, 3xx, 4xx, 5xx), file uploads, API testing (unit, integration, contract, performance, security), mobile vs web API design, common API design mistakes, and backwards compatibility strategies with real-world HTTP examples and best practices for production environments
+
 ### Database & SQL
 
 - **[📊 SQL Interview Questions - Complete Guide](docs/SQL-Interview-Questions-Guide.md)** - **NEW!** 50 comprehensive SQL interview questions (25 core concepts + 25 real-world scenarios) covering DDL/DML/DCL/TCL, JOINs, indexes, normalization, stored procedures vs functions, transactions & ACID, locks & deadlocks, performance optimization, execution plans, and practical troubleshooting scenarios including deadlocks, race conditions, query timeouts, data migration issues, SQL injection prevention, and bulk insert optimization with detailed explanations
@@ -115,6 +119,7 @@ The project contains:
 - **Data Structures**: Array manipulation, duplicate detection, LRU Cache, Tree traversals
 - **C# Core Concepts**: Interface vs Abstract Class, Collections, Boxing/Unboxing, Memory Management
 - **Advanced C#**: Extension Methods, ref/out/in keywords, LINQ operations
+- **REST API Development**: HTTP methods, idempotency, authentication (JWT, OAuth 2.0), authorization, security, rate limiting, versioning, CORS, pagination, caching, webhooks, error handling, API Gateway, GraphQL vs REST, file uploads, API testing, mobile optimization, backwards compatibility
 - **Async & Multithreading**: Task vs Thread, async/await patterns, thread safety
 - **Memory Management**: Value types, reference types, boxing/unboxing, stack/heap allocation
 - **Parameter Passing**: ref, out, in modifiers and their use cases
@@ -130,8 +135,8 @@ The project contains:
 
 ## Repository Statistics
 
-- **📚 Total Documents**: 52+ comprehensive guides
-- **❓ Interview Questions**: 575+ questions with detailed answers
-- **💻 Code Examples**: 275+ real-world code snippets
+- **📚 Total Documents**: 53+ comprehensive guides
+- **❓ Interview Questions**: 625+ questions with detailed answers
+- **💻 Code Examples**: 350+ real-world code snippets
 - **🎯 Coverage**: Beginner to Senior/Lead level
 - **📝 Last Updated**: January 2026
