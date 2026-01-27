@@ -23,6 +23,7 @@ The project contains:
 ### Core C# Concepts
 
 - **[⚙️ CLR (Common Language Runtime) - Complete Guide](docs/csharp/CLR-Complete-Guide.md)** - **NEW!** Comprehensive CLR reference covering architecture, execution flow, JIT compilation (Tiered JIT with PGO), Garbage Collection (generational model), CTS/CLS, BCL, Thread Pool, Assembly Loader, Exception Manager, Type Checker, real-world scenarios (Web API, high-performance data processing), performance tuning (.NET 10 strategies: JIT, R2R, Native AOT), 12 interview Q&A, and CLR vs JVM vs V8 comparison with visual diagrams, code examples, and best practices for senior-level interviews
+- **[🎯 C# Delegates - Complete Guide](docs/csharp/CSharp-Delegates-Complete-Guide.md)** - **NEW!** Professional interview-oriented guide covering delegates as type-safe function pointers, basic delegate syntax, real-world calculator example (Add, Subtract, Multiply, Divide), multicast delegates with += and -= operators, invocation list concept, return value handling, practical use cases (event handling, callbacks, logging pipelines), Delegates vs Interfaces comparison, built-in delegates (Action, Func, Predicate), 7 common interview questions with answers, and real-world code examples for intermediate .NET developers
 - [C# Interface vs Abstract Class Guide](docs/csharp/CSharp-Interface-vs-AbstractClass-Guide.md) - Comprehensive guide with 40+ interview questions and answers about interfaces and abstract classes in C#
 - [C# Collections Complete Guide](docs/csharp/CSharp-Collections-Complete-Guide.md) - 70 interview questions covering all C# collection types with concise 3-4 line answers, real-time examples, and performance analysis
 - [C# Boxing, Unboxing, Stack & Heap Guide](docs/csharp/CSharp-Boxing-Unboxing-Stack-Heap-Guide.md) - Complete guide to value types, reference types, boxing/unboxing, and memory management with performance considerations
@@ -116,9 +117,9 @@ The project contains:
 
 - **Algorithms**: Factorial calculation, Fibonacci sequence, palindrome detection
 - **Data Structures**: Array manipulation, duplicate detection, LRU Cache, Tree traversals
-- **C# Core Concepts**: Interface vs Abstract Class, Collections, Boxing/Unboxing, Memory Management, Extension Methods, ref/out/in keywords
+- **C# Core Concepts**: Interface vs Abstract Class, Collections, Boxing/Unboxing, Memory Management, Extension Methods, ref/out/in keywords, Delegates (type-safe function pointers, multicast delegates, events)
 - **CLR & Runtime**: CLR architecture, JIT compilation (Tiered JIT, PGO), Garbage Collection (Gen 0/1/2, LOH), CTS/CLS, BCL, Thread Pool, Assembly Loader, Exception Manager, Type Checker, IL/MSIL, Managed vs Unmanaged code, .NET 10 compilation strategies (JIT, R2R, Native AOT)
-- **Advanced C#**: Extension Methods, ref/out/in keywords, LINQ operations
+- **Advanced C#**: Extension Methods, ref/out/in keywords, LINQ operations, Delegates, Action/Func/Predicate
 - **REST API Development**: HTTP methods, idempotency, authentication (JWT, OAuth 2.0), authorization, security, rate limiting, versioning, CORS, pagination, caching, webhooks, error handling, API Gateway, GraphQL vs REST, file uploads, API testing, mobile optimization, backwards compatibility
 - **Async & Multithreading**: Task vs Thread, async/await patterns, thread safety
 - **Memory Management**: Value types, reference types, boxing/unboxing, stack/heap allocation, GC performance tuning
