@@ -25,6 +25,14 @@ Your business logic should not depend on ASP.NET Core, Entity Framework, or any 
 
 ## High-Level Architecture Diagram
 
+### Visual Representation
+
+![Clean Architecture Diagram](https://github.com/ardalis/CleanArchitecture/raw/main/docs/images/clean-architecture.png)
+
+*Image Credit: [Clean Architecture by Uncle Bob](https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html)*
+
+### Simplified Layer View (ASCII)
+
 ```
 ┌─────────────────────────────────────────────────────────────┐
 │                      Presentation Layer                      │
@@ -46,6 +54,8 @@ Your business logic should not depend on ASP.NET Core, Entity Framework, or any 
 │              (Entities, Value Objects, Rules)                │
 └─────────────────────────────────────────────────────────────┘
 ```
+
+**Key Insight:** Dependencies flow inward (from outer circles to inner circles). The Domain layer is the most stable and has zero dependencies.
 
 ---
 
