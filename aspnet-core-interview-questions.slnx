@@ -11,12 +11,7 @@
     <File Path="docs/SQL-Interview-Questions-Guide.md" />
   </Folder>
   <Folder Name="/docs/clean-architecture/">
-    <File Path="docs/clean-architecture/dependency-rule.md" />
-    <File Path="docs/clean-architecture/folder-structure-dotnet.md" />
-    <File Path="docs/clean-architecture/index.md" />
-    <File Path="docs/clean-architecture/overview.md" />
-    <File Path="docs/clean-architecture/pitfalls-and-best-practices.md" />
-    <File Path="docs/clean-architecture/sample-project-walkthrough.md" />
+    <File Path="docs/clean-architecture/Implementing-Clean-Architecture-ASPNET-Core.md" />
   </Folder>
   <Folder Name="/docs/design-patterns/">
     <File Path="docs/design-patterns/CSharp-Design-Patterns-Complete-Guide.md" />

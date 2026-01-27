@@ -30,6 +30,8 @@
 
             SecondHighestInArray.FindSecondHighest(new int[] { 10, 5, 8, 12, 7 });
 
+            FlattenNestedCollections.FlattenAndPrint();
+
             Console.ReadLine();
         }
 
