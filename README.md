@@ -4,11 +4,11 @@
 
 This is a C# coding practice repository containing various programming problems and ## Repository Statistics
 
-- **📚 Total Documents**: 45+ comprehensive guides
-- **❓ Interview Questions**: 665+ questions with detailed answers
-- **💻 Code Examples**: 385+ real-world code snippets
+- **📚 Total Documents**: 56+ comprehensive guides
+- **❓ Interview Questions**: 687+ questions with detailed answers
+- **💻 Code Examples**: 400+ real-world code snippets
 - **🎯 Coverage**: Beginner to Senior/Lead level (11+ years experience)
-- **🔥 Latest Additions**: Clean Architecture Implementation Guide, CLR Complete Guide, C# 100 Senior Interview Questions
+- **🔥 Latest Additions**: Kestrel Web Server Guide, Middleware Complete Guide, CLR Complete Guide
 - **📝 Last Updated**: January 2026 (.NET 10)s. The project includes implementations of common algorithms and data structure problems, along with comprehensive documentation about C# concepts.
 
 ## Project Structure
@@ -44,6 +44,12 @@ The project contains:
 
 - **[📊 SQL Interview Questions - Complete Guide](docs/SQL-Interview-Questions-Guide.md)** - **NEW!** 50 comprehensive SQL interview questions (25 core concepts + 25 real-world scenarios) covering DDL/DML/DCL/TCL, JOINs, indexes, normalization, stored procedures vs functions, transactions & ACID, locks & deadlocks, performance optimization, execution plans, and practical troubleshooting scenarios including deadlocks, race conditions, query timeouts, data migration issues, SQL injection prevention, and bulk insert optimization with detailed explanations
 - **[🗃️ Entity Framework Core - Complete Interview Guide](docs/EF-Core-Interview-Questions-Guide.md)** - **NEW!** 25 comprehensive EF Core interview questions covering DbContext & DbSet, Code First vs Database First, Migrations, Change Tracking, Lazy/Eager/Explicit Loading, Tracking vs No-Tracking queries, LINQ, N+1 problem, AsNoTracking, Raw SQL, Transactions, Concurrency handling, EF Core vs Dapper, Performance optimization, Navigation Properties, Shadow Properties, Connection Resiliency, Soft Delete, Value Conversions, Split Query, Owned Types, Global Query Filters, and Find() vs FirstOrDefault() with real-world examples
+
+### ASP.NET Core
+
+- **[🌐 Kestrel Web Server in ASP.NET Core - Architecture, Hosting & Real Use Cases](docs/ASP.NET%20Core/Kestrel-Web-Server-Guide.md)** - **NEW!** Comprehensive guide covering Kestrel fundamentals (cross-platform, high-performance web server), why Kestrel was introduced (IIS limitations, cross-platform benefits), how Kestrel works with ASCII request flow diagram (Client → Reverse Proxy → Kestrel → Middleware → Controllers), three hosting models (Kestrel with IIS, Kestrel with Nginx, Kestrel as edge server), In-Process vs Out-of-Process hosting comparison (performance, stability, use cases), Kestrel configuration (ports, HTTP/HTTPS, limits, timeouts) with code examples, SSL termination strategies (reverse proxy vs Kestrel), performance characteristics (async I/O, non-blocking, HTTP/2 support), common production scenarios (Windows/IIS, Linux/Nginx, Kubernetes microservices), Kestrel vs IIS comparison table (platform, performance, security), and 12 interview questions covering production deployment, reverse proxy usage, and real-world hosting decisions
+
+- **[⚙️ Middleware in ASP.NET Core - Complete Guide with Custom Middleware](docs/ASP.NET%20Core/Middleware-Complete-Guide.md)** - **NEW!** Professional interview-oriented guide covering middleware fundamentals (request-response pipeline), how middleware pipeline works with ASCII flow diagram, built-in middleware (UseRouting, UseAuthentication, UseAuthorization, UseEndpoints), critical middleware ordering rules (wrong vs correct order examples), step-by-step custom middleware creation (RequestDelegate, InvokeAsync implementation), real-world Request Logging Middleware example with HTTP method/path/status code/duration tracking, middleware registration in Program.cs with extension methods, short-circuiting the pipeline (API Key Authentication example), real-world use cases (logging, exception handling, authentication, request/response modification, rate limiting), Middleware vs Filters comparison table (scope, execution level, use cases), and 10 common interview questions with detailed answers for practical ASP.NET Core development
 
 ### Frontend Development
 
@@ -121,6 +127,7 @@ The project contains:
 - **CLR & Runtime**: CLR architecture, JIT compilation (Tiered JIT, PGO), Garbage Collection (Gen 0/1/2, LOH), CTS/CLS, BCL, Thread Pool, Assembly Loader, Exception Manager, Type Checker, IL/MSIL, Managed vs Unmanaged code, .NET 10 compilation strategies (JIT, R2R, Native AOT)
 - **Advanced C#**: Extension Methods, ref/out/in keywords, LINQ operations, Delegates, Action/Func/Predicate
 - **REST API Development**: HTTP methods, idempotency, authentication (JWT, OAuth 2.0), authorization, security, rate limiting, versioning, CORS, pagination, caching, webhooks, error handling, API Gateway, GraphQL vs REST, file uploads, API testing, mobile optimization, backwards compatibility
+- **ASP.NET Core**: Kestrel web server (cross-platform hosting, reverse proxy setup, In-Process vs Out-of-Process, SSL termination, production scenarios), Middleware (request-response pipeline, built-in middleware, custom middleware creation, middleware ordering, short-circuiting, Middleware vs Filters), dependency injection, Web API development, global exception handling
 - **Async & Multithreading**: Task vs Thread, async/await patterns, thread safety
 - **Memory Management**: Value types, reference types, boxing/unboxing, stack/heap allocation, GC performance tuning
 - **Parameter Passing**: ref, out, in modifiers and their use cases
@@ -136,9 +143,9 @@ The project contains:
 
 ## Repository Statistics
 
-- **📚 Total Documents**: 54+ comprehensive guides
-- **❓ Interview Questions**: 650+ questions with detailed answers
-- **💻 Code Examples**: 375+ real-world code snippets
+- **📚 Total Documents**: 56+ comprehensive guides
+- **❓ Interview Questions**: 687+ questions with detailed answers
+- **💻 Code Examples**: 400+ real-world code snippets
 - **🎯 Coverage**: Beginner to Senior/Lead level (11+ years experience)
-- **� Latest Additions**: CLR Complete Guide, C# 100 Senior Interview Questions
-- **�📝 Last Updated**: January 2026 (.NET 10)
+- **🔥 Latest Additions**: Kestrel Web Server Guide, Middleware Complete Guide, CLR Complete Guide
+- **📝 Last Updated**: January 2026 (.NET 10)
