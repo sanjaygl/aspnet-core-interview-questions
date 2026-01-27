@@ -2,7 +2,14 @@
 
 ## About This Project
 
-This is a C# coding practice repository containing various programming problems and solutions. The project includes implementations of common algorithms and data structure problems, along with comprehensive documentation about C# concepts.
+This is a C# coding practice repository containing various programming problems and ## Repository Statistics
+
+- **📚 Total Documents**: 45+ comprehensive guides
+- **❓ Interview Questions**: 665+ questions with detailed answers
+- **💻 Code Examples**: 385+ real-world code snippets
+- **🎯 Coverage**: Beginner to Senior/Lead level (11+ years experience)
+- **🔥 Latest Additions**: Clean Architecture Implementation Guide, CLR Complete Guide, C# 100 Senior Interview Questions
+- **📝 Last Updated**: January 2026 (.NET 10)s. The project includes implementations of common algorithms and data structure problems, along with comprehensive documentation about C# concepts.
 
 ## Project Structure
 
@@ -96,18 +103,7 @@ The project contains:
 
 ### Clean Architecture
 
-- [Clean Architecture Index](docs/clean-architecture/index.md) - Complete guide to Clean Architecture principles, implementation in .NET, and best practices
-- [Clean Architecture Overview](docs/clean-architecture/overview.md) - Introduction to Clean Architecture and its core concepts
-- [Dependency Rule](docs/clean-architecture/dependency-rule.md) - Understanding and implementing the dependency rule
-- [Folder Structure for .NET](docs/clean-architecture/folder-structure-dotnet.md) - Practical folder organization for Clean Architecture in .NET projects
-- [Sample Project Walkthrough](docs/clean-architecture/sample-project-walkthrough.md) - Step-by-step implementation guide
-- [Pitfalls and Best Practices](docs/clean-architecture/pitfalls-and-best-practices.md) - Common mistakes and how to avoid them
-
-#### **Clean Architecture Layers**
-- [Entities Layer](docs/clean-architecture/layers/entities.md) - Core business objects and enterprise rules
-- [Use Cases Layer](docs/clean-architecture/layers/use-cases.md) - Application-specific business rules
-- [Interface Adapters Layer](docs/clean-architecture/layers/interface-adapters.md) - Controllers, presenters, and gateways
-- [Frameworks and Drivers Layer](docs/clean-architecture/layers/frameworks-and-drivers.md) - External frameworks, databases, and UI
+- **[🏛️ Implementing Clean Architecture / Onion Architecture in ASP.NET Core](docs/clean-architecture/Implementing-Clean-Architecture-ASPNET-Core.md)** - **NEW!** Complete professional guide covering Clean Architecture and Onion Architecture implementation in ASP.NET Core with core principles (Dependency Rule, Separation of Concerns, Framework Independence), ASCII architecture diagrams, typical project structure, layer-by-layer explanation (Domain, Application, Infrastructure, API layers), dependency flow, real-world Order Management example with Entity/Repository/Service/Controller implementations, Dependency Injection setup, testing benefits (unit vs integration), common mistakes developers make, Clean vs Onion Architecture comparison table, and 10 interview Q&As with concise answers for mid-to-senior level .NET developers
 
 ## Getting Started
 
