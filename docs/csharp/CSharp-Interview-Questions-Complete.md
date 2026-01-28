@@ -67,6 +67,26 @@ A. `var` is implicitly typed, meaning the compiler infers the type at compile-ti
 **Q9. What is the difference between `var` and `dynamic`?**  
 A. `var` is resolved at compile-time (statically typed). `dynamic` is resolved at runtime (dynamically typed), bypassing compile-time type checking. Use `dynamic` for interop or reflection scenarios.
 
+```csharp
+var a = 123;          // Compiler infers type as int (compile-time)
+var b = "abc";        // Compiler infers type as string (compile-time)
+var c = null;         // ❌ Compile-time error: var requires a concrete type, and null provides no type information
+a = b;                // ❌ Compile-time error: cannot assign string to int
+
+dynamic d = 123;      // d is dynamic; runtime type is int
+dynamic e = "abc";    // e is dynamic; runtime type is string
+dynamic f = null;     // Valid: dynamic can be null (no type at runtime yet)
+d = e;                // ✅ Allowed; after this assignment, d's runtime type becomes string
+
+```
+
+var is statically typed and resolved at compile time. The compiler infers the type and enforces full compile-time type checking.
+
+dynamic is dynamically typed and resolved at runtime, bypassing compile-time type checking. Errors surface only at runtime.
+
+Usage guidance:
+Use var for readability when the type is obvious. Use dynamic only for interop, reflection, COM, or dynamic language integration where the type is not known at compile time.
+
 **Q10. What is the `object` type?**  
 A. `object` is the base class for all types in C#. It can hold any value but requires explicit casting to retrieve the original type. Boxing occurs when assigning value types to `object`.
 
