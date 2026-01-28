@@ -26,6 +26,8 @@ The project contains:
 
 ### Core C# Concepts
 
+- [C# Interview Questions - Complete Guide (150 Questions)](docs/CSharp/CSharp-Interview-Questions-Complete.md) - 150 interview questions covering C# basics to advanced topics: access modifiers, OOP, value/reference types, ref/out/in, readonly/const, var/dynamic/object, exception handling, collections, generics, LINQ, delegates/events, async/await, memory management, GC, DI basics, CLR/CTS/CLS, reflection, and more
+
 - [C# Delegates - Complete Guide](docs/CSharp/CSharp-Delegates-Complete-Guide.md) - Type-safe function pointers, multicast delegates, Action/Func/Predicate, and real-world use cases with 7 interview questions
 - [C# Interface vs Abstract Class Guide](docs/CSharp/CSharp-Interface-vs-AbstractClass-Guide.md) - 40+ interview questions about interfaces and abstract classes in C#
 - [C# Collections Complete Guide](docs/CSharp/CSharp-Collections-Complete-Guide.md) - 70 interview questions covering all C# collection types with performance analysis
@@ -152,6 +154,7 @@ The project contains:
 - **Algorithms**: Factorial calculation, Fibonacci sequence, palindrome detection
 - **Data Structures**: Array manipulation, duplicate detection, LRU Cache, Tree traversals
 - **C# Core Concepts**: Interface vs Abstract Class, Collections, Boxing/Unboxing, Memory Management, Extension Methods, ref/out/in keywords, Delegates (type-safe function pointers, multicast delegates, events)
+- **C# Interview Questions**: 150 comprehensive Q&A covering access modifiers, OOP principles (encapsulation/inheritance/polymorphism/abstraction), value/reference types, ref/out/in keywords, readonly/const, var/dynamic/object, exception handling, collections/generics, LINQ, delegates/events/Func/Action, async/await/Task, memory management/GC/IDisposable, DI basics, CLR/JIT/CTS/CLS, reflection, attributes, serialization, pattern matching, nullable reference types
 - **CLR & Runtime**: CLR architecture, JIT compilation (Tiered JIT, PGO), Garbage Collection (Gen 0/1/2, LOH), CTS/CLS, BCL, Thread Pool, Assembly Loader, Exception Manager, Type Checker, IL/MSIL, Managed vs Unmanaged code, .NET 10 compilation strategies (JIT, R2R, Native AOT)
 - **Advanced C#**: Extension Methods, ref/out/in keywords, LINQ operations, Delegates, Action/Func/Predicate
 - **REST API Development**: HTTP methods, idempotency, authentication (JWT, OAuth 2.0), authorization, security, rate limiting, versioning, CORS, pagination, caching, webhooks, error handling, API Gateway, GraphQL vs REST, file uploads, API testing, mobile optimization, backwards compatibility
@@ -171,9 +174,9 @@ The project contains:
 
 ## Repository Statistics
 
-- **📚 Total Documents**: 69+ comprehensive guides
-- **❓ Interview Questions**: 817+ questions with detailed answers
-- **💻 Code Examples**: 650+ real-world code snippets
+- **📚 Total Documents**: 70+ comprehensive guides
+- **❓ Interview Questions**: 967+ questions with detailed answers
+- **💻 Code Examples**: 670+ real-world code snippets
 - **🎯 Coverage**: Beginner to Senior/Lead level (11+ years experience)
-- **🔥 Latest Additions**: Deployment & Hosting Guide, Caching Guide, Rate Limiting Guide
+- **🔥 Latest Additions**: C# Interview Questions Complete (150 Q&A), Deployment & Hosting Guide, Caching Guide
 - **📝 Last Updated**: January 2026 (.NET 10)
