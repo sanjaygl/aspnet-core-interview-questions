@@ -22,18 +22,18 @@ The project contains:
 
 ### .NET Runtime & CLR
 
-- [CLR (Common Language Runtime) - Complete Guide](docs/CSharp/CLR-Complete-Guide.md) - Comprehensive CLR architecture, JIT compilation, GC, execution flow, and performance tuning with 12 interview Q&A
+- [CLR (Common Language Runtime) - Complete Guide](docs/csharp/CLR-Complete-Guide.md) - Comprehensive CLR architecture, JIT compilation, GC, execution flow, and performance tuning with 12 interview Q&A
 
 ### Core C# Concepts
 
-- [C# Interview Questions - Complete Guide (154 Questions)](docs/CSharp/CSharp-Interview-Questions-Complete.md) - 154 interview questions covering C# basics to advanced topics: access modifiers, OOP, value/reference types, ref/out/in, readonly/const, var/dynamic/object, exception handling, collections, generics, LINQ, delegates/events, async/await, memory management, GC, DI basics, CLR/CTS/CLS, reflection, and more. **NEW**: Includes why/when to use static, sealed, private, and protected constructors
+- [C# Interview Questions - Complete Guide (154 Questions)](docs/csharp/CSharp-Interview-Questions-Complete.md) - 154 interview questions covering C# basics to advanced topics: access modifiers, OOP, value/reference types, ref/out/in, readonly/const, var/dynamic/object, exception handling, collections, generics, LINQ, delegates/events, async/await, memory management, GC, DI basics, CLR/CTS/CLS, reflection, and more. **NEW**: Includes why/when to use static, sealed, private, and protected constructors
 
-- [C# Delegates - Complete Guide](docs/CSharp/CSharp-Delegates-Complete-Guide.md) - Type-safe function pointers, multicast delegates, Action/Func/Predicate, and real-world use cases with 7 interview questions
-- [C# Interface vs Abstract Class Guide](docs/CSharp/CSharp-Interface-vs-AbstractClass-Guide.md) - 40+ interview questions about interfaces and abstract classes in C#
-- [C# Collections Complete Guide](docs/CSharp/CSharp-Collections-Complete-Guide.md) - 70 interview questions covering all C# collection types with performance analysis
-- [C# Boxing, Unboxing, Stack & Heap Guide](docs/CSharp/CSharp-Boxing-Unboxing-Stack-Heap-Guide.md) - Value/reference types, boxing/unboxing, and memory management
-- [C# ref and out Keywords Guide](docs/CSharp/CSharp-Ref-Out-Keywords-Guide.md) - Parameter passing with ref, out, in modifiers and real-world examples
-- [C# Extension Methods Guide](docs/CSharp/CSharp-Extension-Methods-Guide.md) - Extension method syntax, best practices, and 25+ interview questions
+- [C# Delegates - Complete Guide](docs/csharp/CSharp-Delegates-Complete-Guide.md) - Type-safe function pointers, multicast delegates, Action/Func/Predicate, and real-world use cases with 7 interview questions
+- [C# Interface vs Abstract Class Guide](docs/csharp/CSharp-Interface-vs-AbstractClass-Guide.md) - 40+ interview questions about interfaces and abstract classes in C#
+- [C# Collections Complete Guide](docs/csharp/CSharp-Collections-Complete-Guide.md) - 70 interview questions covering all C# collection types with performance analysis
+- [C# Boxing, Unboxing, Stack & Heap Guide](docs/csharp/CSharp-Boxing-Unboxing-Stack-Heap-Guide.md) - Value/reference types, boxing/unboxing, and memory management
+- [C# ref and out Keywords Guide](docs/csharp/CSharp-Ref-Out-Keywords-Guide.md) - Parameter passing with ref, out, in modifiers and real-world examples
+- [C# Extension Methods Guide](docs/csharp/CSharp-Extension-Methods-Guide.md) - Extension method syntax, best practices, and 25+ interview questions
 
 ### Complete Interview Guides (10+ Years Experience)
 
