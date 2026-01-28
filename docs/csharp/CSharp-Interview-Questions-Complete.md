@@ -18,7 +18,45 @@ A. `class`, `interface`, `delegate`, `object`, `string`, `array`. They are store
 A. `string` is immutable (every modification creates a new object). `StringBuilder` is mutable (modifies the same object), making it efficient for multiple concatenations.
 
 **Q6. What is the difference between `==` and `Equals()` for strings?**  
-A. For strings, both compare values (content) because `string` overrides `Equals()` and implements `==` operator to compare content, not references.
+A. For strings, both == and Equals() compare values (content) because string overrides Equals() and overloads the == operator to perform value comparison instead of reference comparison.
+
+== is null-safe, while calling Equals() on a null object throws a NullReferenceException.
+
+For reference types (custom objects), both == and Equals() compare references by default, unless Equals() and/or == are explicitly overridden.
+
+```csharp
+public class Program
+{
+	public static void Main(string[] args)
+	{
+      var p1 = new Person { Name = "Sanjay" };
+      var p2 = new Person { Name = "Sanjay" };
+      
+      Console.WriteLine(p1 == p2);        // false (different references)
+      Console.WriteLine(p1.Equals(p2));   // false (same as == by default)
+      
+	  string a = "Hello";
+      string b = "Hello";
+      string c = null;
+      
+      Console.WriteLine(a == b);          // true
+      Console.WriteLine(a.Equals(b));     // true
+      
+      Console.WriteLine(a == c);          // false
+      Console.WriteLine(c == null);       // true
+      
+      Console.WriteLine(c.Equals(a));     // ❌ NullReferenceException
+	}
+}
+
+class Person
+{
+      public string Name { get; set; }
+}
+```
+Key Clarification (One-liner)
+Objects → reference comparison by default
+Strings → value comparison (special case)
 
 **Q7. What is boxing and unboxing?**  
 A. Boxing converts a value type to reference type (object). Unboxing converts reference type back to value type. Both have performance overhead due to heap allocation and type checking.
