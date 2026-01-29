@@ -91,6 +91,35 @@ Use var for readability when the type is obvious. Use dynamic only for interop, 
 **Q1.10. What is the `object` type?**  
 A. `object` is the base class for all types in C#. It can hold any value but requires explicit casting to retrieve the original type. Boxing occurs when assigning value types to `object` .
 
+**Q1.11. What is the yield keyword and how does it work?**  
+A. The yield keyword is used to create custom iterators that return elements one at a time. It works by having the compiler generate a state machine that preserves execution state between calls. When yield return is encountered, the method returns the value and pauses execution. When the next element is requested, execution resumes from where it left off.
+
+**Q1.12. What is the difference between `yield return` and `yield break`?**  
+A. `yield return` returns the next element in the iteration and pauses execution until the next element is requested. `yield break` immediately terminates the iteration, similar to a `return` statement but for iterators.
+
+**Q1.13. What are the benefits of using `yield` keyword?**  
+A. 
+1. **Lazy Evaluation**: Values are generated on-demand, not all at once
+2. **Memory Efficiency**: Doesn't require creating entire collection in memory
+3. **Infinite Sequences**: Can create infinite sequences (e.g., Fibonacci)
+4. **Simplified Code**: Compiler generates complex state machine automatically
+5. **Performance**: No need to allocate large arrays/lists upfront
+
+**Q1.14. What is deferred execution with `yield`?**  
+A. Code inside a method using `yield` doesn't execute until the collection is enumerated (e.g., in a `foreach` loop or `.ToList()`). This allows building query pipelines that execute only when results are actually needed.
+
+**Q1.15. Can you use `yield` with `return` or `try-catch` blocks?**  
+A. You cannot use `yield return` inside a `try-catch` block, but you can use it in a `try-finally` block. You cannot use regular `return` statement in a method that uses `yield`. You must use `yield break` to exit early.
+
+**Q1.16. What is the difference between returning `List<T>` and `IEnumerable<T>` with `yield`?**  
+A. Returning `List<T>` creates the entire collection in memory immediately (eager evaluation). Using `IEnumerable<T>` with `yield` creates elements on-demand (lazy evaluation), consuming less memory and allowing early termination.
+
+**Q1.17. Can you use `yield` in async methods?**  
+A. No, you cannot use `yield return` in `async` methods. However, you can use `IAsyncEnumerable<T>` with `await foreach` in C# 8+ to create asynchronous streams.
+
+**Q15.14. Can you use `yield` with generic methods?**  
+A. Yes, `yield` works perfectly with generic methods. The return type should be `IEnumerable<T>` or `IEnumerator<T>`.
+
 ---
 
 ## Access Modifiers
