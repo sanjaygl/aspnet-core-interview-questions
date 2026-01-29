@@ -30,6 +30,8 @@
 
             FlattenNestedCollections.FlattenAndPrint();
 
+            Yield.Test();
+
             Console.ReadLine();
         }
     }

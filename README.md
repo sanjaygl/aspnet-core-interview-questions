@@ -21,6 +21,8 @@ The project contains:
 
 * [C# Access Modifiers - Complete Guide](docs/csharp/CSharp-Access-Modifiers-Complete-Guide.md) - Comprehensive guide on all 6 access modifiers (public, private, protected, internal, protected internal, private protected) with comparison tables, practical examples, interview Q&A, common mistakes, and decision trees. Includes working code examples in ClassLibraryA project
 
+* [C# yield Keyword - Complete Guide with Iterators & Lazy Evaluation](docs/csharp/CSharp-Yield-Keyword-Complete-Guide.md) - Comprehensive guide on yield keyword for creating custom iterators: yield return vs yield break, lazy evaluation, deferred execution, memory efficiency, infinite sequences, yield with try-catch-finally, relationship with LINQ, IAsyncEnumerable for async scenarios, real-world use cases (file processing, database pagination, tree traversal), performance considerations, 15 interview Q&A, and best practices
+
 * [C# Interview Questions - Complete Guide (154 Questions)](docs/csharp/CSharp-Interview-Questions-Complete.md) - 154 interview questions covering C# basics to advanced topics: access modifiers, OOP, value/reference types, ref/out/in, readonly/const, var/dynamic/object, exception handling, collections, generics, LINQ, delegates/events, async/await, memory management, GC, DI basics, CLR/CTS/CLS, reflection, and more. **NEW**: Includes why/when to use static, sealed, private, and protected constructors
 
 * [C# Delegates - Complete Guide](docs/csharp/CSharp-Delegates-Complete-Guide.md) - Type-safe function pointers, multicast delegates, Action/Func/Predicate, and real-world use cases with 7 interview questions
@@ -156,8 +158,8 @@ The project contains:
 
 * **Algorithms**: Factorial calculation, Fibonacci sequence, palindrome detection
 * **Data Structures**: Array manipulation, duplicate detection, LRU Cache, Tree traversals
-* **C# Core Concepts**: Interface vs Abstract Class, Collections, Boxing/Unboxing, Memory Management, Extension Methods, ref/out/in keywords, Delegates (type-safe function pointers, multicast delegates, events)
-* **C# Interview Questions**: 150 comprehensive Q&A covering access modifiers, OOP principles (encapsulation/inheritance/polymorphism/abstraction), value/reference types, ref/out/in keywords, readonly/const, var/dynamic/object, exception handling, collections/generics, LINQ, delegates/events/Func/Action, async/await/Task, memory management/GC/IDisposable, DI basics, CLR/JIT/CTS/CLS, reflection, attributes, serialization, pattern matching, nullable reference types
+* **C# Core Concepts**: Interface vs Abstract Class, Collections, Boxing/Unboxing, Memory Management, Extension Methods, ref/out/in keywords, Delegates (type-safe function pointers, multicast delegates, events), yield keyword (iterators, lazy evaluation, deferred execution, infinite sequences, IAsyncEnumerable)
+* **C# Interview Questions**: 154 comprehensive Q&A covering access modifiers, OOP principles (encapsulation/inheritance/polymorphism/abstraction), value/reference types, ref/out/in keywords, readonly/const, var/dynamic/object, exception handling, collections/generics, LINQ, delegates/events/Func/Action, async/await/Task, memory management/GC/IDisposable, DI basics, CLR/JIT/CTS/CLS, reflection, attributes, serialization, pattern matching, nullable reference types
 * **CLR & Runtime**: CLR architecture, JIT compilation (Tiered JIT, PGO), Garbage Collection (Gen 0/1/2, LOH), CTS/CLS, BCL, Thread Pool, Assembly Loader, Exception Manager, Type Checker, IL/MSIL, Managed vs Unmanaged code, .NET 10 compilation strategies (JIT, R2R, Native AOT)
 * **Advanced C#**: Extension Methods, ref/out/in keywords, LINQ operations, Delegates, Action/Func/Predicate
 * **REST API Development**: HTTP methods, idempotency, authentication (JWT, OAuth 2.0), authorization, security, rate limiting, versioning, CORS, pagination, caching, webhooks, error handling, API Gateway, GraphQL vs REST, file uploads, API testing, mobile optimization, backwards compatibility
@@ -178,9 +180,9 @@ The project contains:
 
 ## Repository Statistics
 
-* **📚 Total Documents**: 72+ comprehensive guides
-* **❓ Interview Questions**: 1,086+ questions with detailed answers
-* **💻 Code Examples**: 720+ real-world code snippets
+* **📚 Total Documents**: 73+ comprehensive guides
+* **❓ Interview Questions**: 1,101+ questions with detailed answers
+* **💻 Code Examples**: 750+ real-world code snippets
 * **🎯 Coverage**: Beginner to Senior/Lead level (11+ years experience)
-* **🔥 Latest Additions**: C# Access Modifiers Complete Guide, ASP.NET MVC (100 Q&A), C# Interview Questions (154 Q&A)
+* **🔥 Latest Additions**: C# yield Keyword Complete Guide, C# Access Modifiers Complete Guide, ASP.NET MVC (100 Q&A)
 * **📝 Last Updated**: January 2026 (.NET 10)
