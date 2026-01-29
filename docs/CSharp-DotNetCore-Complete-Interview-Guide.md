@@ -1,4 +1,4 @@
-# C# / .NET Core - Complete Interview Guide
+# C# / . NET Core - Complete Interview Guide
 
 > **Quick Reference for Interview Preparation** | Concise Answers | Real-World Examples | 10+ Years Experience
 
@@ -7,6 +7,7 @@
 ## 📑 Table of Contents
 
 ### [1. Collections & LINQ](#1-collections--linq)
+
 1.1 [Remove duplicates from a list](#11-remove-duplicates-from-a-list)  
 1.2 [Find second highest number](#12-find-second-highest-number)  
 1.3 [Group objects using LINQ](#13-group-objects-using-linq)  
@@ -14,63 +15,75 @@
 1.5 [Convert List to Dictionary](#15-convert-list-to-dictionary)
 
 ### [2. String Manipulation](#2-string-manipulation)
+
 2.1 [Reverse a string](#21-reverse-a-string)  
 2.2 [Check palindrome](#22-check-palindrome)  
 2.3 [Find first non-repeating character](#23-find-first-non-repeating-character)  
 2.4 [Count character frequency](#24-count-character-frequency)
 
 ### [3. Date & Time](#3-date--time)
+
 3.1 [Calculate age from DOB](#31-calculate-age-from-dob)  
 3.2 [Find overlapping date ranges](#32-find-overlapping-date-ranges)  
 3.3 [Convert UTC to local time](#33-convert-utc-to-local-time)
 
 ### [4. Async & Multithreading](#4-async--multithreading)
+
 4.1 [Convert sync to async](#41-convert-sync-to-async)  
 4.2 [Task vs Thread](#42-task-vs-thread)  
 4.3 [What happens if you don't await?](#43-what-happens-if-you-dont-await)
 
 ### [5. Thread Safety](#5-thread-safety)
+
 5.1 [Thread-safe Singleton](#51-thread-safe-singleton)  
 5.2 [Lock vs SemaphoreSlim vs ConcurrentDictionary](#52-lock-vs-semaphoreslim-vs-concurrentdictionary)
 
 ### [6. Design Patterns](#6-design-patterns)
+
 6.1 [Factory Pattern](#61-factory-pattern)  
 6.2 [Strategy Pattern](#62-strategy-pattern)  
 6.3 [SOLID Principles](#63-solid-principles)  
 6.4 [Immutable Class](#64-immutable-class)
 
 ### [7. Data Structures & Algorithms](#7-data-structures--algorithms)
+
 7.1 [Find missing number](#71-find-missing-number)  
 7.2 [Two-Sum problem](#72-two-sum-problem)  
 7.3 [Valid parentheses](#73-valid-parentheses)  
 7.4 [LRU Cache implementation](#74-lru-cache-implementation)
 
-### [8. ASP.NET Core Web API](#8-aspnet-core-web-api)
+### [8. ASP. NET Core Web API](#8-aspnet-core-web-api)
+
 8.1 [REST API with proper status codes](#81-rest-api-with-proper-status-codes)  
 8.2 [Global exception handling](#82-global-exception-handling)  
 8.3 [Pagination & filtering](#83-pagination--filtering)  
 8.4 [Custom middleware](#84-custom-middleware)
 
 ### [9. Dependency Injection](#9-dependency-injection)
+
 9.1 [Scoped vs Singleton vs Transient](#91-scoped-vs-singleton-vs-transient)  
 9.2 [Custom service registration](#92-custom-service-registration)
 
 ### [10. Entity Framework Core](#10-entity-framework-core)
+
 10.1 [Optimized LINQ queries](#101-optimized-linq-queries)  
 10.2 [N+1 problem](#102-n1-problem)  
 10.3 [Eager vs Lazy loading](#103-eager-vs-lazy-loading)
 
 ### [11. SQL & Database](#11-sql--database)
+
 11.1 [Find 2nd highest salary](#111-find-2nd-highest-salary)  
 11.2 [Remove duplicate records](#112-remove-duplicate-records)  
 11.3 [Pagination query](#113-pagination-query)
 
 ### [12. Microservices](#12-microservices)
+
 12.1 [Retry with Polly](#121-retry-with-polly)  
 12.2 [Circuit Breaker](#122-circuit-breaker)  
 12.3 [Saga Pattern](#123-saga-pattern)
 
 ### [13. Advanced Topics](#13-advanced-topics)
+
 13.1 [MediatR Pattern](#131-mediatr-pattern)  
 13.2 [MediatR vs Traditional Handler Pattern](#132-mediatr-vs-traditional-handler-pattern)  
 13.3 [CQRS Pattern](#133-cqrs-pattern)  
@@ -81,14 +94,17 @@
 13.8 [Idempotent API](#138-idempotent-api)
 
 ### [14. SQL Advanced](#14-sql-advanced)
+
 14.1 [Magic Tables (inserted/deleted)](#141-magic-tables-inserteddeleted)  
 14.2 [Nested Stored Procedures with Temp Tables](#142-nested-stored-procedures-with-temp-tables)
 
 ### [15. Deployment & Build](#15-deployment--build)
+
 15.1 [Production Build Commands](#151-production-build-commands)  
 15.2 [Deployment Best Practices](#152-deployment-best-practices)
 
 ### [16. System Design](#16-system-design)
+
 16.1 [URL Shortener](#161-url-shortener)  
 16.2 [Order Management System](#162-order-management-system)  
 16.3 [Payment Processing System](#163-payment-processing-system)
@@ -103,6 +119,7 @@
 Use `Distinct()` for simple scenarios or `HashSet` for better performance with large datasets. Both preserve the order of first occurrence.
 
 **Real-time Example:**
+
 ```csharp
 // Method 1: Using LINQ Distinct()
 List<string> emails = new List<string> { "a@test.com", "b@test.com", "a@test.com" };
@@ -149,6 +166,7 @@ public List<int> RemoveDuplicatesManual(List<int> numbers) {
 Use LINQ `OrderByDescending().Skip(1).First()` for simplicity or a single-pass algorithm for O(n) performance. Handle edge cases like arrays with less than 2 unique elements.
 
 **Real-time Example:**
+
 ```csharp
 // Method 1: Using LINQ (Simple but O(n log n))
 int[] salaries = { 50000, 80000, 60000, 80000, 90000 };
@@ -192,6 +210,7 @@ public int FindSecondHighestOptimal(int[] nums) {
 Use `GroupBy()` to group collections by one or more properties. Combine with `Select()` for aggregations like count, sum, or average.
 
 **Real-time Example:**
+
 ```csharp
 // Method 1: Using LINQ GroupBy
 var customerOrders = orders
@@ -237,6 +256,7 @@ public class CustomerOrderSummary {
 Use `SelectMany()` to flatten nested collections into a single collection. It projects each element to an `IEnumerable<T>` and flattens the results.
 
 **Real-time Example:**
+
 ```csharp
 // Method 1: Using LINQ SelectMany
 var allItems = orders.SelectMany(o => o.Items).ToList();
@@ -286,6 +306,7 @@ public List<string> FlattenAndGetProductNames(List<Order> orders) {
 Use `ToDictionary()` specifying key and value selectors. Handle duplicates using `GroupBy()` first or `DistinctBy()` to take first/last occurrence.
 
 **Real-time Example:**
+
 ```csharp
 // Method 1: Using LINQ ToDictionary
 var productDict = products.ToDictionary(p => p.Id, p => p.Name);
@@ -331,6 +352,7 @@ public Dictionary<int, Product> ConvertWithDuplicates(List<Product> products) {
 Convert string to char array, reverse it, and convert back. Or use two-pointer technique for in-place reversal with O(n) time complexity.
 
 **Real-time Example:**
+
 ```csharp
 // Reversing URL path for certain routing logic
 public string ReverseString(string input) {
@@ -359,6 +381,7 @@ public string ReverseTwoPointer(string s) {
 Use two-pointer technique comparing characters from both ends. For case-insensitive or alphanumeric-only checks, normalize the string first.
 
 **Real-time Example:**
+
 ```csharp
 // Validating palindrome for promo codes
 public bool IsPalindrome(string s) {
@@ -385,6 +408,7 @@ public bool IsValidPalindrome(string s) {
 Use a Dictionary to count character frequencies in first pass, then iterate again to find the first character with count 1. Time complexity: O(n).
 
 **Real-time Example:**
+
 ```csharp
 // Finding first unique character in log messages
 public char? FindFirstNonRepeating(string s) {
@@ -409,6 +433,7 @@ public char? FindFirstNonRepeating(string s) {
 Use Dictionary to store character counts. Iterate through string once, incrementing count for each character. O(n) time, O(k) space where k is unique characters.
 
 **Real-time Example:**
+
 ```csharp
 // Method 1: Using LINQ GroupBy
 public Dictionary<char, int> CountFrequency(string s) {
@@ -462,6 +487,7 @@ public bool AreAnagrams(string s1, string s2) {
 Subtract birth year from current year, then adjust if birthday hasn't occurred yet this year. Handle leap years and edge cases properly.
 
 **Real-time Example:**
+
 ```csharp
 // Calculating customer age for insurance premium
 public int CalculateAge(DateTime birthDate) {
@@ -490,9 +516,10 @@ public (int years, int months, int days) CalculateDetailedAge(DateTime dob) {
 ### 3.2 Find overlapping date ranges
 
 **Answer:**  
-Two ranges overlap if start of one is before end of other AND vice versa. Formula: `range1.Start <= range2.End && range2.Start <= range1.End`.
+Two ranges overlap if start of one is before end of other AND vice versa. Formula: `range1.Start <= range2.End && range2.Start <= range1.End` .
 
 **Real-time Example:**
+
 ```csharp
 // Checking hotel room availability
 public bool DoRangesOverlap(DateRange range1, DateRange range2) {
@@ -516,6 +543,7 @@ public DateRange GetOverlap(DateRange r1, DateRange r2) {
 Always store dates in UTC in database. Use `TimeZoneInfo.ConvertTimeFromUtc()` for conversion. Use `DateTimeOffset` for precision and to avoid ambiguity during DST transitions.
 
 **Real-time Example:**
+
 ```csharp
 // Converting server time to user's timezone for display
 public DateTime ConvertUtcToTimeZone(DateTime utcTime, string timeZoneId) {
@@ -538,9 +566,10 @@ public DateTimeOffset ConvertToUserTimeZone(DateTimeOffset utc, string tzId) {
 ### 4.1 Convert sync to async
 
 **Answer:**  
-Add `async` keyword to method, change return type to `Task<T>`, replace blocking calls with async versions using `await`, and add `Async` suffix to method name.
+Add `async` keyword to method, change return type to `Task<T>` , replace blocking calls with async versions using `await` , and add `Async` suffix to method name.
 
 **Real-time Example:**
+
 ```csharp
 // Before: Synchronous database call
 public User GetUser(int id) {
@@ -576,6 +605,7 @@ public async Task<Result> GetAggregatedDataAsync() {
 Task is high-level abstraction from TPL using thread pool, lightweight and composable. Thread is low-level OS thread with higher overhead but more control. Always prefer Task for async/await patterns.
 
 **Real-time Example:**
+
 ```csharp
 // Using Task (Recommended) - Thread pool managed
 public async Task ProcessDataAsync() {
@@ -606,6 +636,7 @@ public void LongRunningOperation() {
 Method continues executing without waiting, potential exceptions are unobserved, execution order becomes unpredictable, and you lose benefits of async/await like synchronization context.
 
 **Real-time Example:**
+
 ```csharp
 // ❌ BAD: Fire and forget - exceptions lost
 public void ProcessOrder(int orderId) {
@@ -640,6 +671,7 @@ public void SendNotification(string message) {
 Use `Lazy<T>` for simple thread-safe lazy initialization. It's thread-safe by default, simple, and recommended for modern C#. Alternative: double-check locking or static constructor.
 
 **Real-time Example:**
+
 ```csharp
 // Recommended: Lazy<T> approach
 public sealed class ConfigurationManager {
@@ -667,6 +699,7 @@ public void ConfigureServices(IServiceCollection services) {
 `lock` for simple synchronization, `SemaphoreSlim` for limiting concurrent access with async support, `ConcurrentDictionary` for thread-safe dictionary operations without explicit locking.
 
 **Real-time Example:**
+
 ```csharp
 // 1. Lock - Simple synchronization
 private readonly object _lock = new object();
@@ -705,6 +738,7 @@ public User GetOrAddUser(int id) {
 Factory pattern encapsulates object creation logic. Use it when object creation is complex or you want to decouple creation from usage. Common in creating database connections, loggers, or payment processors.
 
 **Real-time Example:**
+
 ```csharp
 // Payment processor factory
 public interface IPaymentProcessor {
@@ -736,6 +770,7 @@ await processor.ProcessPayment(100.00m);
 Strategy pattern defines family of algorithms, encapsulates each one, and makes them interchangeable. Use for different behaviors that can be selected at runtime like compression, sorting, or validation strategies.
 
 **Real-time Example:**
+
 ```csharp
 // Shipping cost calculator with different strategies
 public interface IShippingStrategy {
@@ -771,6 +806,7 @@ public class OrderProcessor {
 **S**ingle Responsibility, **O**pen/Closed, **L**iskov Substitution, **I**nterface Segregation, **D**ependency Inversion. Each principle promotes maintainable, scalable, and testable code.
 
 **Real-time Example:**
+
 ```csharp
 // Single Responsibility - One class, one purpose
 public class UserService {
@@ -808,6 +844,7 @@ public class OrderService {
 Immutable class has read-only properties set only through constructor. Once created, state cannot change. Benefits: thread-safe, safe for caching, predictable behavior. Use records in C# 9+ for concise syntax.
 
 **Real-time Example:**
+
 ```csharp
 // Traditional immutable class
 public sealed class Address {
@@ -843,6 +880,7 @@ var config = new AppConfig("Production", "connectionString");
 Given array of n-1 numbers from 1 to n, find missing number. Use sum formula: `n*(n+1)/2 - sum_of_array` or XOR approach for O(n) time, O(1) space.
 
 **Real-time Example:**
+
 ```csharp
 // Finding missing transaction ID in sequence
 public int FindMissingNumber(int[] nums) {
@@ -870,6 +908,7 @@ public int FindMissingXOR(int[] nums) {
 Find two numbers in array that add up to target. Use HashMap to store complement (target - num) while iterating. O(n) time, O(n) space solution.
 
 **Real-time Example:**
+
 ```csharp
 // Method 1: Using Dictionary
 public int[] TwoSum(int[] nums, int target) {
@@ -909,6 +948,7 @@ public int[] TwoSumBruteForce(int[] nums, int target) {
 Check if string has valid bracket pairing using Stack. Push opening brackets, pop and match on closing brackets. Stack empty at end means valid.
 
 **Real-time Example:**
+
 ```csharp
 // Validating JSON structure or expression syntax
 public bool IsValid(string s) {
@@ -940,6 +980,7 @@ public bool IsValid(string s) {
 Least Recently Used Cache evicts least recently used item when full. Implement using Dictionary for O(1) lookup and LinkedList for O(1) reordering. Move accessed items to front.
 
 **Real-time Example:**
+
 ```csharp
 // API response caching with size limit
 public class LRUCache<TKey, TValue> {
@@ -989,7 +1030,7 @@ public class LRUCache<TKey, TValue> {
 
 ---
 
-## 8. ASP.NET Core Web API
+## 8. ASP. NET Core Web API
 
 ### 8.1 REST API with proper status codes
 
@@ -997,6 +1038,7 @@ public class LRUCache<TKey, TValue> {
 Return appropriate HTTP status codes: 200 (OK), 201 (Created), 204 (No Content), 400 (Bad Request), 404 (Not Found), 500 (Server Error). Use `ActionResult<T>` for flexible responses.
 
 **Real-time Example:**
+
 ```csharp
 [ApiController]
 [Route("api/[controller]")]
@@ -1037,6 +1079,7 @@ public class ProductsController : ControllerBase {
 Use middleware or exception filters to catch unhandled exceptions globally. Log errors, return consistent error responses, hide sensitive details in production.
 
 **Real-time Example:**
+
 ```csharp
 // Exception handling middleware
 public class ExceptionMiddleware {
@@ -1085,6 +1128,7 @@ app.UseMiddleware<ExceptionMiddleware>();
 Use query parameters for pagination (page, pageSize) and filtering. Return metadata (totalCount, totalPages). Apply filters before pagination for efficiency.
 
 **Real-time Example:**
+
 ```csharp
 // Method 1: Using LINQ with EF Core
 [HttpGet]
@@ -1160,9 +1204,10 @@ public PagedResult<Product> GetProductsPaginated(
 ### 8.4 Custom middleware
 
 **Answer:**  
-Middleware components handle HTTP requests/responses in pipeline. Implement `InvokeAsync` method, call `await _next(context)` to pass control, and register in `Program.cs`.
+Middleware components handle HTTP requests/responses in pipeline. Implement `InvokeAsync` method, call `await _next(context)` to pass control, and register in `Program.cs` .
 
 **Real-time Example:**
+
 ```csharp
 // Request logging middleware
 public class RequestLoggingMiddleware {
@@ -1203,6 +1248,7 @@ app.UseMiddleware<RequestLoggingMiddleware>();
 **Transient**: New instance every time. **Scoped**: One instance per request. **Singleton**: Single instance for application lifetime. Choose based on state requirements and lifecycle needs.
 
 **Real-time Example:**
+
 ```csharp
 public void ConfigureServices(IServiceCollection services) {
     // Transient - New every time (stateless, lightweight services)
@@ -1237,6 +1283,7 @@ public class OrderController : ControllerBase {
 Create extension methods for clean, reusable service registration. Group related services together and use `IServiceCollection` extensions.
 
 **Real-time Example:**
+
 ```csharp
 public static class ServiceCollectionExtensions {
     public static IServiceCollection AddApplicationServices(
@@ -1275,6 +1322,7 @@ builder.Services
 Filter at database level before loading to memory. Use `AsNoTracking()` for read-only queries. Avoid `ToList()` before filtering. Use projections with `Select()` to load only needed columns.
 
 **Real-time Example:**
+
 ```csharp
 // ❌ BAD: Loads all customers to memory first
 public List<Customer> GetActiveCustomersBad() {
@@ -1321,9 +1369,10 @@ public List<Customer> GetActiveCustomersManual(List<Customer> allCustomers) {
 ### 10.2 N+1 problem
 
 **Answer:**  
-N+1 occurs when loading related data in loop (1 query for parent + N queries for children). Fix with `Include()` for eager loading or projection with `Select()`.
+N+1 occurs when loading related data in loop (1 query for parent + N queries for children). Fix with `Include()` for eager loading or projection with `Select()` .
 
 **Real-time Example:**
+
 ```csharp
 // ❌ BAD: N+1 Problem
 public async Task<List<CustomerDto>> GetCustomersWithOrdersBad() {
@@ -1390,9 +1439,10 @@ public List<CustomerWithOrders> GetCustomersWithOrdersManual() {
 ### 10.3 Eager vs Lazy loading
 
 **Answer:**  
-**Eager loading** (`Include`) loads related data immediately in single query. **Lazy loading** loads on-access but causes N+1. **Explicit loading** (`Load()`) loads on demand with control.
+**Eager loading** ( `Include` ) loads related data immediately in single query. **Lazy loading** loads on-access but causes N+1. **Explicit loading** ( `Load()` ) loads on demand with control.
 
 **Real-time Example:**
+
 ```csharp
 // Eager loading - Load everything upfront
 public async Task<Order> GetOrderWithDetails(int id) {
@@ -1429,9 +1479,10 @@ public async Task<Order> GetOrderExplicit(int id) {
 ### 11.1 Find 2nd highest salary
 
 **Answer:**  
-Use `DISTINCT` with `ORDER BY` and `OFFSET`/`FETCH` or subquery with `MAX()`. Handle case where no second salary exists.
+Use `DISTINCT` with `ORDER BY` and `OFFSET` / `FETCH` or subquery with `MAX()` . Handle case where no second salary exists.
 
 **Real-time Example:**
+
 ```sql
 -- Method 1: Using OFFSET FETCH (SQL Server, PostgreSQL)
 SELECT DISTINCT Salary
@@ -1463,6 +1514,7 @@ WHERE Rank = 2;
 Use CTE with `ROW_NUMBER()` to identify duplicates, then delete rows where RowNum > 1. Partition by columns that define uniqueness.
 
 **Real-time Example:**
+
 ```sql
 -- Remove duplicate emails, keep oldest record
 WITH CTE AS (
@@ -1492,9 +1544,10 @@ DELETE FROM CTE WHERE RowNum > 1;
 ### 11.3 Pagination query
 
 **Answer:**  
-Use `OFFSET` and `FETCH NEXT` for server-side pagination. Calculate offset as `(pageNumber - 1) * pageSize`. Always include `ORDER BY` for consistent results.
+Use `OFFSET` and `FETCH NEXT` for server-side pagination. Calculate offset as `(pageNumber - 1) * pageSize` . Always include `ORDER BY` for consistent results.
 
 **Real-time Example:**
+
 ```sql
 -- SQL Server / PostgreSQL
 DECLARE @PageNumber INT = 2;
@@ -1531,9 +1584,10 @@ LIMIT @PageSize OFFSET ((@PageNumber - 1) * @PageSize);
 ### 12.1 Retry with Polly
 
 **Answer:**  
-Polly provides resilience patterns like retry, circuit breaker, timeout. Use exponential backoff for retries to avoid overwhelming failing services. Combine policies with `WrapAsync`.
+Polly provides resilience patterns like retry, circuit breaker, timeout. Use exponential backoff for retries to avoid overwhelming failing services. Combine policies with `WrapAsync` .
 
 **Real-time Example:**
+
 ```csharp
 // Install: Install-Package Polly
 // Install: Install-Package Microsoft.Extensions.Http.Polly
@@ -1579,6 +1633,7 @@ public class ApiService {
 Circuit breaker prevents cascading failures by stopping calls to failing services. States: Closed (normal), Open (failing), Half-Open (testing). Configure failure threshold and duration.
 
 **Real-time Example:**
+
 ```csharp
 private static IAsyncPolicy<HttpResponseMessage> GetCircuitBreakerPolicy() {
     return Policy<HttpResponseMessage>
@@ -1613,6 +1668,7 @@ services.AddHttpClient("ResilientClient")
 Saga manages distributed transactions across microservices using sequence of local transactions with compensating actions for rollback. Two types: Choreography (events) and Orchestration (coordinator).
 
 **Real-time Example:**
+
 ```csharp
 // Orchestration-based Saga for Order Processing
 public class OrderSagaOrchestrator {
@@ -1669,6 +1725,7 @@ public class OrderSagaOrchestrator {
 MediatR implements the **Mediator Pattern** for in-process messaging. It decouples requests from handlers, promotes single responsibility, and enables cross-cutting concerns (logging, validation, etc.) through pipeline behaviors.
 
 **Real-time Example:**
+
 ```csharp
 // Install: Install-Package MediatR
 // Install: Install-Package MediatR.Extensions.Microsoft.DependencyInjection
@@ -1829,15 +1886,15 @@ public class OrdersController : ControllerBase {
 ```
 
 **When to use MediatR:**
-- ✅ Microservices/Clean Architecture
-- ✅ CQRS implementation
-- ✅ Need cross-cutting concerns (validation, logging)
-- ✅ Complex applications with many handlers
+* ✅ Microservices/Clean Architecture
+* ✅ CQRS implementation
+* ✅ Need cross-cutting concerns (validation, logging)
+* ✅ Complex applications with many handlers
 
 **When to use Traditional Handlers:**
-- ✅ Simple CRUD applications
-- ✅ Small team unfamiliar with MediatR
-- ✅ Performance-critical scenarios (MediatR adds minimal overhead)
+* ✅ Simple CRUD applications
+* ✅ Small team unfamiliar with MediatR
+* ✅ Performance-critical scenarios (MediatR adds minimal overhead)
 
 ---
 
@@ -1847,12 +1904,13 @@ public class OrdersController : ControllerBase {
 **CQRS (Command Query Responsibility Segregation)** separates read operations (Queries) from write operations (Commands). This allows independent scaling, optimization, and different data models for reads vs writes.
 
 **Key Concepts:**
-- **Command**: Changes state, returns void or ID (Write operation)
-- **Query**: Returns data, never modifies state (Read operation)
-- **Separate Models**: Read model optimized for queries, Write model for business logic
-- **Eventual Consistency**: Read model may lag behind write model
+* **Command**: Changes state, returns void or ID (Write operation)
+* **Query**: Returns data, never modifies state (Read operation)
+* **Separate Models**: Read model optimized for queries, Write model for business logic
+* **Eventual Consistency**: Read model may lag behind write model
 
 **Real-time Example:**
+
 ```csharp
 // ==================== WRITE SIDE (Commands) ====================
 
@@ -1976,15 +2034,15 @@ public class OrderView {
 ```
 
 **Benefits:**
-- ✅ **Scalability**: Scale reads and writes independently
-- ✅ **Performance**: Optimize read models for specific queries
-- ✅ **Flexibility**: Different databases for read/write (SQL + MongoDB)
-- ✅ **Simplicity**: Simple queries without complex joins
+* ✅ **Scalability**: Scale reads and writes independently
+* ✅ **Performance**: Optimize read models for specific queries
+* ✅ **Flexibility**: Different databases for read/write (SQL + MongoDB)
+* ✅ **Simplicity**: Simple queries without complex joins
 
 **Trade-offs:**
-- ⚠️ **Complexity**: More code, more infrastructure
-- ⚠️ **Eventual Consistency**: Read model may be slightly behind
-- ⚠️ **Data Synchronization**: Need to keep models in sync
+* ⚠️ **Complexity**: More code, more infrastructure
+* ⚠️ **Eventual Consistency**: Read model may be slightly behind
+* ⚠️ **Data Synchronization**: Need to keep models in sync
 
 ---
 
@@ -1996,13 +2054,14 @@ public class OrderView {
 **NuGet Package:** `Confluent.Kafka`
 
 **Key Concepts:**
-- **Producer**: Publishes messages to Kafka topics
-- **Consumer**: Subscribes to topics and processes messages
-- **Topic**: Category/feed name to which records are published
-- **Partition**: Topics are split into partitions for parallel processing
-- **Consumer Group**: Multiple consumers working together to process a topic
+* **Producer**: Publishes messages to Kafka topics
+* **Consumer**: Subscribes to topics and processes messages
+* **Topic**: Category/feed name to which records are published
+* **Partition**: Topics are split into partitions for parallel processing
+* **Consumer Group**: Multiple consumers working together to process a topic
 
 **Real-time Example:**
+
 ```csharp
 // ==================== INSTALLATION ====================
 // Install-Package Confluent.Kafka
@@ -2207,7 +2266,7 @@ Apache Kafka is ideal for scenarios requiring high-throughput, fault-tolerant, s
 
 | Use Case | Description | Example |
 |----------|-------------|---------|
-| **Event-Driven Microservices** | Decouple services via async events | Order service publishes `OrderCreated`, Payment service consumes |
+| **Event-Driven Microservices** | Decouple services via async events | Order service publishes `OrderCreated` , Payment service consumes |
 | **Real-Time Analytics** | Stream data for real-time processing | User activity tracking, clickstream analysis |
 | **Log Aggregation** | Centralized logging from multiple services | All microservices send logs to Kafka → Elasticsearch |
 | **Change Data Capture (CDC)** | Capture database changes | Sync data between databases, update search indexes |
@@ -2217,6 +2276,7 @@ Apache Kafka is ideal for scenarios requiring high-throughput, fault-tolerant, s
 | **Notification System** | Send emails/SMS/push notifications | User activity triggers → Notification service consumes |
 
 **Real-time Example:**
+
 ```csharp
 // Use Case: Order Processing System with Kafka
 
@@ -2290,31 +2350,31 @@ public class NotificationConsumerService : BackgroundService {
 ```
 
 **When to Use Kafka:**
-- ✅ High throughput (millions of messages/sec)
-- ✅ Need message replay capability
-- ✅ Multiple consumers for same events
-- ✅ Event-driven architecture
-- ✅ Real-time stream processing
+* ✅ High throughput (millions of messages/sec)
+* ✅ Need message replay capability
+* ✅ Multiple consumers for same events
+* ✅ Event-driven architecture
+* ✅ Real-time stream processing
 
 **When NOT to Use Kafka:**
-- ❌ Simple request-response patterns (use REST/gRPC)
-- ❌ Low-latency requirements (<5ms)
-- ❌ Small-scale applications
-- ❌ Complex routing logic (use RabbitMQ)
+* ❌ Simple request-response patterns (use REST/gRPC)
+* ❌ Low-latency requirements (<5ms)
+* ❌ Small-scale applications
+* ❌ Complex routing logic (use RabbitMQ)
 
 ---
 
 ### 13.6 Kafka Consumer Project Types
 
 **Answer:**  
-Kafka consumers can be implemented in different .NET project types depending on your architecture and requirements.
+Kafka consumers can be implemented in different . NET project types depending on your architecture and requirements.
 
 **Project Types:**
 
 | Project Type | Use Case | Pros | Cons |
 |--------------|----------|------|------|
 | **Worker Service** | Dedicated consumer app | Isolated, easy scaling | Separate deployment |
-| **ASP.NET Core Web API** | Consumer + API in same app | Single deployment | Couples concerns |
+| **ASP. NET Core Web API** | Consumer + API in same app | Single deployment | Couples concerns |
 | **Console Application** | Simple consumers, scripts | Lightweight, simple | Manual lifetime management |
 | **Azure Functions** | Serverless event processing | Auto-scaling, serverless | Azure-specific |
 | **Background Service (IHostedService)** | Part of existing app | Shared infrastructure | Same process as API |
@@ -2464,10 +2524,10 @@ public static async Task Run(
 ```
 
 **Recommendation:**
-- **Production Microservices**: Use **Worker Service** (dedicated, scalable)
-- **Monolithic App**: Use **ASP.NET Core with IHostedService**
-- **Simple Scenarios**: Use **Console App**
-- **Cloud/Serverless**: Use **Azure Functions**
+* **Production Microservices**: Use **Worker Service** (dedicated, scalable)
+* **Monolithic App**: Use **ASP. NET Core with IHostedService**
+* **Simple Scenarios**: Use **Console App**
+* **Cloud/Serverless**: Use **Azure Functions**
 
 ---
 
@@ -2479,6 +2539,7 @@ public static async Task Run(
 Rate limiting controls API request rate per client. Prevents abuse and ensures fair usage. Implement using sliding window, token bucket, or fixed window algorithms.
 
 **Real-time Example:**
+
 ```csharp
 // Install: Install-Package AspNetCoreRateLimit
 
@@ -2550,6 +2611,7 @@ public class RateLimiter {
 Idempotent API produces same result when called multiple times with same input. Essential for retry scenarios. Use unique request IDs, check for duplicates before processing.
 
 **Real-time Example:**
+
 ```csharp
 // Idempotent payment processing
 [ApiController]
@@ -2621,16 +2683,17 @@ public class OrderService {
 ### 14.1 Magic Tables (inserted/deleted)
 
 **Answer:**  
-**Magic tables** (`inserted` and `deleted`) are special **temporary tables** automatically created by SQL Server during DML operations (INSERT, UPDATE, DELETE) within triggers. They store the **before** and **after** values of affected rows.
+**Magic tables** ( `inserted` and `deleted` ) are special **temporary tables** automatically created by SQL Server during DML operations (INSERT, UPDATE, DELETE) within triggers. They store the **before** and **after** values of affected rows.
 
 **Key Points:**
-- **`inserted`**: Contains new values (used in INSERT and UPDATE triggers)
-- **`deleted`**: Contains old values (used in DELETE and UPDATE triggers)
-- **UPDATE trigger**: Has access to BOTH `inserted` (new values) and `deleted` (old values)
-- **Scope**: Only accessible within the trigger context
-- **Structure**: Same schema as the table that fired the trigger
+* **`inserted`**: Contains new values (used in INSERT and UPDATE triggers)
+* **`deleted`**: Contains old values (used in DELETE and UPDATE triggers)
+* **UPDATE trigger**: Has access to BOTH `inserted` (new values) and `deleted` (old values)
+* **Scope**: Only accessible within the trigger context
+* **Structure**: Same schema as the table that fired the trigger
 
 **Real-time Example:**
+
 ```sql
 -- ==================== CREATE TABLES ====================
 CREATE TABLE Product (
@@ -2787,11 +2850,12 @@ END;
 ### 14.2 Nested Stored Procedures with Temp Tables
 
 **Answer:**  
-**Nested stored procedures** are stored procedures that call other stored procedures. **Temp tables** (`#TempTable`) and **table variables** (`@TableVariable`) have different scopes:
-- **Temp Tables (#)**: Visible to current session and all nested stored procedures
-- **Table Variables (@)**: Local to the current stored procedure only (NOT visible to nested calls)
+**Nested stored procedures** are stored procedures that call other stored procedures. **Temp tables** ( `#TempTable` ) and **table variables** ( `@TableVariable` ) have different scopes:
+* **Temp Tables (#)**: Visible to current session and all nested stored procedures
+* **Table Variables (@)**: Local to the current stored procedure only (NOT visible to nested calls)
 
 **Real-time Example:**
+
 ```sql
 -- ==================== CREATE BASE TABLES ====================
 CREATE TABLE Orders (
@@ -3042,6 +3106,7 @@ docker run -d -p 8080:80 --name mywebapi-container mywebapi:latest
 ```
 
 **Production-Ready Dockerfile:**
+
 ```dockerfile
 # Build stage
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
@@ -3065,6 +3130,7 @@ ENTRYPOINT ["dotnet", "MyWebApi.dll"]
 ```
 
 **Build Configuration in .csproj:**
+
 ```xml
 <Project Sdk="Microsoft.NET.Sdk.Web">
   <PropertyGroup>
@@ -3248,16 +3314,16 @@ echo "Deployment completed successfully!"
 ```
 
 **Key Deployment Checklist:**
-- ✅ Use `dotnet publish -c Release`
-- ✅ Environment-specific `appsettings.{Environment}.json`
-- ✅ Secure secrets with Azure Key Vault/AWS Secrets Manager
-- ✅ Enable health checks
-- ✅ Configure logging (Serilog, Application Insights)
-- ✅ Set up monitoring and alerts
-- ✅ Use Blue-Green or Canary deployment strategies
-- ✅ Automated rollback plan
-- ✅ Load testing before production
-- ✅ Database migration strategy
+* ✅ Use `dotnet publish -c Release`
+* ✅ Environment-specific `appsettings.{Environment}.json`
+* ✅ Secure secrets with Azure Key Vault/AWS Secrets Manager
+* ✅ Enable health checks
+* ✅ Configure logging (Serilog, Application Insights)
+* ✅ Set up monitoring and alerts
+* ✅ Use Blue-Green or Canary deployment strategies
+* ✅ Automated rollback plan
+* ✅ Load testing before production
+* ✅ Database migration strategy
 
 ---
 
@@ -3269,6 +3335,7 @@ echo "Deployment completed successfully!"
 Design includes: unique short code generation (base62 encoding), URL storage with mapping, redirection service, analytics tracking. Consider collision handling, expiration, and scale with distributed caching.
 
 **Real-time Example:**
+
 ```csharp
 public class UrlShortenerService {
     private readonly AppDbContext _context;
@@ -3366,6 +3433,7 @@ public class UrlController : ControllerBase {
 Design includes: order creation, state machine for order status, inventory management, payment processing, notification system. Use events for communication between services, implement saga pattern for distributed transactions.
 
 **Real-time Example:**
+
 ```csharp
 // Order state machine
 public enum OrderStatus {
@@ -3449,6 +3517,7 @@ public class OrderService {
 Design includes: multiple payment gateways (Strategy pattern), transaction logging, idempotency, retry mechanism, webhook handling for async updates, PCI compliance for card data, reconciliation for accounting.
 
 **Real-time Example:**
+
 ```csharp
 // Payment gateway abstraction
 public interface IPaymentGateway {
@@ -3565,50 +3634,54 @@ public class PaymentWebhookController : ControllerBase {
 ## 🎯 Interview Preparation Checklist
 
 ### Must Know (Core Skills)
-- ✅ LINQ operations (Distinct, GroupBy, SelectMany, Join)
-- ✅ Async/await patterns and understanding
-- ✅ Thread safety mechanisms
-- ✅ SOLID principles with examples
-- ✅ Common design patterns (Factory, Strategy, Singleton)
-- ✅ Entity Framework optimization
-- ✅ REST API best practices
-- ✅ Dependency Injection lifetimes (Scoped, Singleton, Transient)
+
+* ✅ LINQ operations (Distinct, GroupBy, SelectMany, Join)
+* ✅ Async/await patterns and understanding
+* ✅ Thread safety mechanisms
+* ✅ SOLID principles with examples
+* ✅ Common design patterns (Factory, Strategy, Singleton)
+* ✅ Entity Framework optimization
+* ✅ REST API best practices
+* ✅ Dependency Injection lifetimes (Scoped, Singleton, Transient)
 
 ### Important (Mid-Level)
-- ✅ N+1 problem and solutions
-- ✅ Global exception handling
-- ✅ Pagination and filtering
-- ✅ Custom middleware
-- ✅ SQL query optimization
-- ✅ Retry and circuit breaker patterns (Polly)
-- ✅ Rate limiting
-- ✅ Idempotent APIs
-- ✅ Magic tables in SQL (inserted/deleted)
-- ✅ Stored procedures with temp tables
+
+* ✅ N+1 problem and solutions
+* ✅ Global exception handling
+* ✅ Pagination and filtering
+* ✅ Custom middleware
+* ✅ SQL query optimization
+* ✅ Retry and circuit breaker patterns (Polly)
+* ✅ Rate limiting
+* ✅ Idempotent APIs
+* ✅ Magic tables in SQL (inserted/deleted)
+* ✅ Stored procedures with temp tables
 
 ### Advanced (Senior Level)
-- ✅ **MediatR Pattern** (in-process messaging)
-- ✅ **MediatR vs Traditional Handler Pattern**
-- ✅ **CQRS Pattern** (Command Query Responsibility Segregation)
-- ✅ **Apache Kafka integration** (Producer/Consumer)
-- ✅ **Kafka use cases** (Event-driven, real-time streaming)
-- ✅ **Kafka consumer project types** (Worker Service, Background Service)
-- ✅ Microservices patterns (Saga, Event Sourcing)
-- ✅ Event-driven architecture
-- ✅ System design problems
-- ✅ Performance optimization
-- ✅ Distributed caching
-- ✅ **Production build commands** (dotnet publish)
-- ✅ **Deployment best practices**
-- ✅ Container orchestration basics
+
+* ✅ **MediatR Pattern** (in-process messaging)
+* ✅ **MediatR vs Traditional Handler Pattern**
+* ✅ **CQRS Pattern** (Command Query Responsibility Segregation)
+* ✅ **Apache Kafka integration** (Producer/Consumer)
+* ✅ **Kafka use cases** (Event-driven, real-time streaming)
+* ✅ **Kafka consumer project types** (Worker Service, Background Service)
+* ✅ Microservices patterns (Saga, Event Sourcing)
+* ✅ Event-driven architecture
+* ✅ System design problems
+* ✅ Performance optimization
+* ✅ Distributed caching
+* ✅ **Production build commands** (dotnet publish)
+* ✅ **Deployment best practices**
+* ✅ Container orchestration basics
 
 ### SQL & Database
-- ✅ Magic tables (inserted/deleted in triggers)
-- ✅ Nested stored procedures with temp tables vs table variables
-- ✅ 2nd highest salary query
-- ✅ Remove duplicate records
-- ✅ Pagination in SQL
-- ✅ Query optimization techniques
+
+* ✅ Magic tables (inserted/deleted in triggers)
+* ✅ Nested stored procedures with temp tables vs table variables
+* ✅ 2nd highest salary query
+* ✅ Remove duplicate records
+* ✅ Pagination in SQL
+* ✅ Query optimization techniques
 
 ---
 
@@ -3628,42 +3701,48 @@ public class PaymentWebhookController : ControllerBase {
 ## 📚 Quick Reference
 
 ### Time Complexities
-- Array access: O(1)
-- List.Add(): O(1) amortized
-- Dictionary lookup: O(1) average
-- List.Contains(): O(n)
-- Sorting: O(n log n)
-- HashSet operations: O(1) average
+
+* Array access: O(1)
+* List. Add(): O(1) amortized
+* Dictionary lookup: O(1) average
+* List. Contains(): O(n)
+* Sorting: O(n log n)
+* HashSet operations: O(1) average
 
 ### Common Patterns
-- **Repository**: Data access abstraction
-- **Unit of Work**: Transaction management
-- **Factory**: Object creation
-- **Strategy**: Algorithm selection
-- **Observer**: Event notification
-- **Singleton**: Single instance
-- **Decorator**: Add functionality
+
+* **Repository**: Data access abstraction
+* **Unit of Work**: Transaction management
+* **Factory**: Object creation
+* **Strategy**: Algorithm selection
+* **Observer**: Event notification
+* **Singleton**: Single instance
+* **Decorator**: Add functionality
 
 ### HTTP Status Codes
-- 200 OK, 201 Created, 204 No Content
-- 400 Bad Request, 401 Unauthorized, 403 Forbidden, 404 Not Found
-- 500 Internal Server Error, 503 Service Unavailable
+
+* 200 OK, 201 Created, 204 No Content
+* 400 Bad Request, 401 Unauthorized, 403 Forbidden, 404 Not Found
+* 500 Internal Server Error, 503 Service Unavailable
 
 ---
 
 ## ❓ Frequently Asked Questions (Quick Answers)
 
 ### Q1: What NuGet package is used for Kafka?
+
 **Answer:** `Confluent.Kafka`
+
 ```bash
 dotnet add package Confluent.Kafka
 ```
 
 ### Q2: Which project type is used for Kafka consumer?
+
 **Answer:** 
-- **Worker Service** (recommended for dedicated consumers)
-- **ASP.NET Core with IHostedService/BackgroundService** (when combined with APIs)
-- **Console Application** (for simple scenarios)
+* **Worker Service** (recommended for dedicated consumers)
+* **ASP. NET Core with IHostedService/BackgroundService** (when combined with APIs)
+* **Console Application** (for simple scenarios)
 
 ```bash
 # Create Worker Service
@@ -3671,21 +3750,25 @@ dotnet new worker -n KafkaConsumerWorker
 ```
 
 ### Q3: What is the MediatR pattern and how is it different from handler pattern?
+
 **Answer:**
-- **MediatR**: Implements mediator pattern for in-process messaging. Single dependency (`IMediator`) in controllers.
-- **Traditional Handler**: Direct handler dependencies for each operation.
+* **MediatR**: Implements mediator pattern for in-process messaging. Single dependency (`IMediator`) in controllers.
+* **Traditional Handler**: Direct handler dependencies for each operation.
 
 **Key Difference**: MediatR decouples controllers from handlers, supports pipeline behaviors (logging, validation), and enables cleaner architecture.
 
 See [Section 13.1 (MediatR)](#131-mediatr-pattern) and [Section 13.2 (Comparison)](#132-mediatr-vs-traditional-handler-pattern)
 
 ### Q4: What is the CQRS pattern?
+
 **Answer:** **Command Query Responsibility Segregation** - Separates read (Query) and write (Command) operations with different models. Enables independent scaling and optimization.
 
 See [Section 13.3 (CQRS)](#133-cqrs-pattern)
 
 ### Q5: How to consume Kafka topic?
+
 **Answer:**
+
 ```csharp
 // Create Consumer with BackgroundService
 public class KafkaConsumer : BackgroundService {
@@ -3702,43 +3785,49 @@ public class KafkaConsumer : BackgroundService {
 See [Section 13.4 (Kafka Integration)](#134-apache-kafka-integration)
 
 ### Q6: What are Producer and Consumer in Kafka?
+
 **Answer:**
-- **Producer**: Publishes messages to Kafka topics
-- **Consumer**: Subscribes to topics and processes messages
-- Producers push data, Consumers pull data from topics
+* **Producer**: Publishes messages to Kafka topics
+* **Consumer**: Subscribes to topics and processes messages
+* Producers push data, Consumers pull data from topics
 
 See [Section 13.4 (Kafka Integration)](#134-apache-kafka-integration)
 
-### Q7: What types of Dependency Injection in .NET Core?
+### Q7: What types of Dependency Injection in . NET Core?
+
 **Answer:**
-- **Transient**: New instance every time (lightweight, stateless services)
-- **Scoped**: One instance per HTTP request (DbContext, request-specific services)
-- **Singleton**: Single instance for application lifetime (caching, logging)
+* **Transient**: New instance every time (lightweight, stateless services)
+* **Scoped**: One instance per HTTP request (DbContext, request-specific services)
+* **Singleton**: Single instance for application lifetime (caching, logging)
 
 See [Section 9.1 (DI Lifetimes)](#91-scoped-vs-singleton-vs-transient)
 
 ### Q8: What are use cases of Kafka?
+
 **Answer:**
-- Event-driven microservices communication
-- Real-time analytics and stream processing
-- Log aggregation
-- Change Data Capture (CDC)
-- Event sourcing
-- Notification systems
+* Event-driven microservices communication
+* Real-time analytics and stream processing
+* Log aggregation
+* Change Data Capture (CDC)
+* Event sourcing
+* Notification systems
 
 See [Section 13.5 (Kafka Use Cases)](#135-kafka-use-cases)
 
 ### Q9: What are magic tables in SQL?
+
 **Answer:** Special temporary tables in SQL Server triggers:
-- **`inserted`**: Contains new/after values (INSERT, UPDATE)
-- **`deleted`**: Contains old/before values (DELETE, UPDATE)
+* **`inserted`**: Contains new/after values (INSERT, UPDATE)
+* **`deleted`**: Contains old/before values (DELETE, UPDATE)
 
 Used for audit trails and data validation in triggers.
 
 See [Section 14.1 (Magic Tables)](#141-magic-tables-inserteddeleted)
 
-### Q10: What is the production build command in .NET?
+### Q10: What is the production build command in . NET?
+
 **Answer:**
+
 ```bash
 # Basic production build
 dotnet publish -c Release -o ./publish
@@ -3753,9 +3842,10 @@ dotnet publish -c Release --self-contained false -o ./publish
 See [Section 15.1 (Build Commands)](#151-production-build-commands)
 
 ### Q11: Nested stored procedures with temp tables - will temp table and variable be accessible in 3rd SP?
+
 **Answer:**
-- **Temp Table (#)**: ✅ YES - Accessible in all nested stored procedures
-- **Table Variable (@)**: ❌ NO - Only accessible in the SP where it was declared
+* **Temp Table (#)**: ✅ YES - Accessible in all nested stored procedures
+* **Table Variable (@)**: ❌ NO - Only accessible in the SP where it was declared
 
 See [Section 14.2 (Nested Stored Procedures)](#142-nested-stored-procedures-with-temp-tables)
 

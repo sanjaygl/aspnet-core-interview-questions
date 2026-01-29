@@ -1,6 +1,7 @@
 # Open/Closed Principle (OCP)
 
 ## Definition / Intent
+
 **Open/Closed Principle (OCP)** states that "software entities such as classes, modules, functions, etc. should be open for extension, but closed for modification".
 
 Which means, any new functionality should be implemented by adding new classes, attributes and methods, instead of changing the current ones or existing ones.
@@ -16,6 +17,7 @@ Another way is to allow client to access the original class with an abstract int
 So, at any given point of time when there is a requirement change instead of touching the existing functionality, it's always suggested to create new classes and leave the original implementation untouched.
 
 ## Problem Statement
+
 If you need to change existing code to add new features, you risk introducing bugs and breaking existing functionality. This is common when using large switch/case or if/else blocks.
 
 ### Pitfalls of NOT Following OCP
@@ -66,6 +68,7 @@ namespace OpenClosedDemo
 ```
 
 **Usage:**
+
 ```csharp
 using System;
 
@@ -89,11 +92,11 @@ namespace OpenClosedDemo
 ```
 
 **Problems with this approach:**
-- Every time a new employee type is added (Contract, Intern, Executive), the `CalculateBonus` method must be modified
-- Existing code is at risk of breaking with each change
-- Violates OCP because the class is NOT closed for modification
-- Testing burden increases with each new employee type
-- The `EmployeeType` string comparison is error-prone
+* Every time a new employee type is added (Contract, Intern, Executive), the `CalculateBonus` method must be modified
+* Existing code is at risk of breaking with each change
+* Violates OCP because the class is NOT closed for modification
+* Testing burden increases with each new employee type
+* The `EmployeeType` string comparison is error-prone
 
 ## Code Example – Correct Implementation
 
@@ -176,6 +179,7 @@ namespace OpenClosedDemo
 ```
 
 **Usage:**
+
 ```csharp
 using System;
 
@@ -217,11 +221,11 @@ namespace OpenClosedDemo
 4. **No If/Else or Switch**: Type-specific logic is encapsulated in derived classes
 
 **Benefits:**
-- Adding a new employee type (e.g., `InternEmployee`) requires only creating a new class
-- Existing classes are never touched, reducing risk of bugs
-- Each class has a single responsibility
-- Easy to test each employee type independently
-- Follows both OCP and SRP
+* Adding a new employee type (e.g.,  `InternEmployee`) requires only creating a new class
+* Existing classes are never touched, reducing risk of bugs
+* Each class has a single responsibility
+* Easy to test each employee type independently
+* Follows both OCP and SRP
 
 ## Alternative Implementation Using Interface
 
@@ -267,20 +271,21 @@ public class Employee
 ## When to Use / When NOT to Overuse
 
 **Use OCP when:**
-- Requirements change frequently or new types are expected
-- You have if/else or switch statements based on type
-- Adding new functionality requires modifying existing classes
-- You need to support plugin architectures
+* Requirements change frequently or new types are expected
+* You have if/else or switch statements based on type
+* Adding new functionality requires modifying existing classes
+* You need to support plugin architectures
 
 **Don't Overuse:**
-- Avoid excessive abstraction for simple, stable logic
-- Don't create complex hierarchies for one-time requirements
-- Balance between flexibility and simplicity
+* Avoid excessive abstraction for simple, stable logic
+* Don't create complex hierarchies for one-time requirements
+* Balance between flexibility and simplicity
 
 ## Real-world / Enterprise Use Case
 
-### ASP.NET Core Middleware
-In ASP.NET Core, middleware and filters are open for extension via DI, not by modifying framework code.
+### ASP. NET Core Middleware
+
+In ASP. NET Core, middleware and filters are open for extension via DI, not by modifying framework code.
 
 ```csharp
 // ✅ Extend functionality without modifying existing code
@@ -302,6 +307,7 @@ public class CustomAuthenticationMiddleware
 ```
 
 ### Payment Gateway Integration
+
 ```csharp
 public interface IPaymentProcessor
 {
@@ -338,11 +344,12 @@ public class RazorpayPaymentProcessor : IPaymentProcessor
 
 1. **Switch/Case Proliferation**: Relying on switch/case for extensible logic
 2. **God Classes**: Modifying core classes for every new requirement
-3. **Type Checking**: Using `typeof`, `is`, or `GetType()` to determine behavior
+3. **Type Checking**: Using `typeof`,  `is`, or `GetType()` to determine behavior
 4. **String-Based Type Discrimination**: Using string properties to determine type
 5. **Premature Abstraction**: Creating complex hierarchies before they're needed
 
 **Example of Anti-Pattern:**
+
 ```csharp
 // ❌ Bad: Adding new types requires modifying this method
 public decimal CalculateDiscount(string customerType)
@@ -360,32 +367,32 @@ public decimal CalculateDiscount(string customerType)
 ## Performance & Maintainability Impact
 
 **Maintainability:** ✅ Significantly increases
-- New features require less risk
-- Changes are isolated to new classes
-- Easier code reviews
+* New features require less risk
+* Changes are isolated to new classes
+* Easier code reviews
 
 **Testability:** ✅ Improves dramatically
-- Each class can be tested independently
-- No need to test entire functionality for new additions
+* Each class can be tested independently
+* No need to test entire functionality for new additions
 
 **Performance:** ➡️ Slight overhead
-- Virtual method calls have minimal overhead
-- Benefits far outweigh any performance cost
+* Virtual method calls have minimal overhead
+* Benefits far outweigh any performance cost
 
 **Development Speed:** ✅ Faster over time
-- Initial setup takes longer
-- Adding new features becomes trivial
-- Less regression testing needed
+* Initial setup takes longer
+* Adding new features becomes trivial
+* Less regression testing needed
 
 ## Relation to Design Patterns
 
 OCP is fundamental to many design patterns:
 
-- **Strategy Pattern**: Define a family of algorithms, encapsulate each one
-- **Decorator Pattern**: Add responsibilities without modifying objects
-- **Template Method Pattern**: Define skeleton, let subclasses override
-- **Factory Pattern**: Create objects without specifying exact class
-- **Plugin Architecture**: Add functionality through plugins
+* **Strategy Pattern**: Define a family of algorithms, encapsulate each one
+* **Decorator Pattern**: Add responsibilities without modifying objects
+* **Template Method Pattern**: Define skeleton, let subclasses override
+* **Factory Pattern**: Create objects without specifying exact class
+* **Plugin Architecture**: Add functionality through plugins
 
 ## Interview Cross-Questions with Answers
 
@@ -401,9 +408,9 @@ OCP is fundamental to many design patterns:
 
 **Q: What's the difference between OCP and SRP?**  
 **A:** 
-- **SRP**: A class should have one reason to change
-- **OCP**: A class should be open for extension but closed for modification
-- OCP helps maintain SRP by preventing classes from accumulating responsibilities
+* **SRP**: A class should have one reason to change
+* **OCP**: A class should be open for extension but closed for modification
+* OCP helps maintain SRP by preventing classes from accumulating responsibilities
 
 **Q: Can you have OCP without interfaces or abstract classes?**  
 **A:** Technically yes, through composition and delegation, but interfaces/abstract classes are the most common and idiomatic approach in C#.
@@ -413,10 +420,10 @@ OCP is fundamental to many design patterns:
 
 **Q: What are the signs that OCP is being violated?**  
 **A:** 
-- Frequent modifications to existing classes for new features
-- Long if/else or switch statements based on type
-- Many methods with similar structure but different behavior
-- Commenting out or modifying existing code for new requirements
+* Frequent modifications to existing classes for new features
+* Long if/else or switch statements based on type
+* Many methods with similar structure but different behavior
+* Commenting out or modifying existing code for new requirements
 
 **Q: Why is OCP considered the most important principle by Bob Martin?**  
 **A:** Because it directly addresses the core problem of software maintenance: change. Code that follows OCP is resilient to change, reducing bugs and making the system more maintainable over time.
@@ -433,6 +440,7 @@ OCP is fundamental to many design patterns:
 ✅ **Foundation for many design patterns (Strategy, Decorator, etc.)**
 
 ### Key Takeaway
+
 **"Software entities should be open for extension but closed for modification."** - Bertrand Meyer
 
 When you need to add new functionality, you should be able to do so by adding new code, not by changing existing code that already works.

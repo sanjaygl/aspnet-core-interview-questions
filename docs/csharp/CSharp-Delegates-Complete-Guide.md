@@ -2,7 +2,7 @@
 
 ## Introduction
 
-Delegates in C# are type-safe function pointers that allow you to pass methods as parameters, store them in variables, and invoke them dynamically. They are fundamental to event-driven programming, callbacks, and implementing flexible architectures. Understanding delegates is essential for any .NET developer, especially when working with events, LINQ, and asynchronous programming.
+Delegates in C# are type-safe function pointers that allow you to pass methods as parameters, store them in variables, and invoke them dynamically. They are fundamental to event-driven programming, callbacks, and implementing flexible architectures. Understanding delegates is essential for any . NET developer, especially when working with events, LINQ, and asynchronous programming.
 
 ## What is a Delegate?
 
@@ -38,9 +38,9 @@ public class DelegateBasics
 ```
 
 **Syntax Breakdown:**
-- `delegate void MessageDelegate(string message)` – Declares a delegate type that can reference methods returning `void` and accepting a `string` parameter.
-- `MessageDelegate del = PrintMessage` – Creates a delegate instance pointing to the `PrintMessage` method.
-- `del("Hello, Delegates!")` – Invokes the method through the delegate.
+* `delegate void MessageDelegate(string message)` – Declares a delegate type that can reference methods returning `void` and accepting a `string` parameter.
+* `MessageDelegate del = PrintMessage` – Creates a delegate instance pointing to the `PrintMessage` method.
+* `del("Hello, Delegates!")` – Invokes the method through the delegate.
 
 ## Real Example: Calculator Using Delegates
 
@@ -105,22 +105,22 @@ public class Calculator
 ```
 
 **Key Points:**
-- The same delegate variable `operation` can reference different methods.
-- All methods must match the delegate signature: `int MethodName(int, int)`.
-- This allows dynamic method selection at runtime.
+* The same delegate variable `operation` can reference different methods.
+* All methods must match the delegate signature: `int MethodName(int, int)`.
+* This allows dynamic method selection at runtime.
 
 ## What are Multicast Delegates?
 
 A **multicast delegate** is a delegate that holds references to multiple methods. When invoked, it calls all the methods in its invocation list, in the order they were added.
 
 **Key Operators:**
-- `+=` – Adds a method to the invocation list
-- `-=` – Removes a method from the invocation list
+* `+=` – Adds a method to the invocation list
+* `-=` – Removes a method from the invocation list
 
 **Important Notes:**
-- All methods in the invocation list are executed sequentially.
-- If the delegate has a return value, only the return value of the **last method** in the list is returned.
-- If any method throws an exception, subsequent methods in the list are not executed.
+* All methods in the invocation list are executed sequentially.
+* If the delegate has a return value, only the return value of the **last method** in the list is returned.
+* If any method throws an exception, subsequent methods in the list are not executed.
 
 ## Example: Multicast Delegate
 
@@ -169,6 +169,7 @@ public class NotificationSystem
 ```
 
 **Output:**
+
 ```
 Sending notification...
 
@@ -340,19 +341,19 @@ public class LoggingDemo
 | **Multicast** | Yes (can chain multiple methods) | No |
 | **Syntax** | Simple, concise | Requires class/struct implementation |
 | **Best For** | Event handling, short-lived operations | Long-lived objects with behavior contracts |
-| **Example** | `Action<string>`, event handlers | `IComparable`, `IEnumerable` |
+| **Example** | `Action<string>` , event handlers | `IComparable` , `IEnumerable` |
 
 **When to Use Delegates:**
-- You need to pass a single method as a parameter
-- Building event-driven systems
-- Creating callback mechanisms
-- Chaining multiple method calls (multicast)
+* You need to pass a single method as a parameter
+* Building event-driven systems
+* Creating callback mechanisms
+* Chaining multiple method calls (multicast)
 
 **When to Use Interfaces:**
-- You need to define multiple related methods
-- Creating contracts for classes to implement
-- Building complex polymorphic hierarchies
-- When you need properties, events, and methods together
+* You need to define multiple related methods
+* Creating contracts for classes to implement
+* Building complex polymorphic hierarchies
+* When you need properties, events, and methods together
 
 ## Built-in Delegates (Quick Reference)
 
@@ -375,48 +376,55 @@ Console.WriteLine(isEven(4)); // Output: True
 ## Common Interview Questions
 
 ### Q1: What is a delegate?
+
 **Answer:** A delegate is a type-safe function pointer in C# that references methods with a specific signature. It allows methods to be passed as parameters, stored in variables, and invoked dynamically. Delegates are the foundation for events and callback mechanisms.
 
 ### Q2: What is a multicast delegate?
-**Answer:** A multicast delegate is a delegate that can reference multiple methods. You can add methods using the `+=` operator and remove them using `-=`. When invoked, all methods in the invocation list are called sequentially. If the delegate returns a value, only the last method's return value is captured.
+
+**Answer:** A multicast delegate is a delegate that can reference multiple methods. You can add methods using the `+=` operator and remove them using `-=` . When invoked, all methods in the invocation list are called sequentially. If the delegate returns a value, only the last method's return value is captured.
 
 ### Q3: Can delegates have return values?
+
 **Answer:** Yes, delegates can have return values. However, in multicast delegates, only the return value of the last method in the invocation list is returned. All methods execute, but previous return values are discarded. For scenarios requiring all return values, use `GetInvocationList()` to manually invoke each delegate.
 
 ### Q4: How are delegates used in events?
-**Answer:** Events in C# are built on top of delegates. An event is essentially a multicast delegate with restricted access—only the declaring class can invoke the event, while external classes can only subscribe (`+=`) or unsubscribe (`-=`). This encapsulation makes events safer than raw delegates for implementing the observer pattern.
 
-### Q5: What's the difference between `Func`, `Action`, and custom delegates?
-**Answer:** `Func<T>` and `Action<T>` are built-in generic delegates provided by .NET. `Action` represents methods that return `void`, while `Func` represents methods that return a value. Custom delegates are needed when you want more descriptive names or when working with legacy code, but for most scenarios, `Func` and `Action` are preferred for their simplicity.
+**Answer:** Events in C# are built on top of delegates. An event is essentially a multicast delegate with restricted access—only the declaring class can invoke the event, while external classes can only subscribe ( `+=` ) or unsubscribe ( `-=` ). This encapsulation makes events safer than raw delegates for implementing the observer pattern.
+
+### Q5: What's the difference between `Func` , `Action` , and custom delegates?
+
+**Answer:** `Func<T>` and `Action<T>` are built-in generic delegates provided by . NET. `Action` represents methods that return `void` , while `Func` represents methods that return a value. Custom delegates are needed when you want more descriptive names or when working with legacy code, but for most scenarios, `Func` and `Action` are preferred for their simplicity.
 
 ### Q6: Can a delegate reference instance methods and static methods?
+
 **Answer:** Yes, a delegate can reference both static and instance methods, as long as they match the delegate's signature. For instance methods, the delegate maintains a reference to the object instance, while static methods don't require an instance.
 
 ### Q7: What happens if a method in a multicast delegate throws an exception?
+
 **Answer:** If any method in a multicast delegate throws an exception, the remaining methods in the invocation list are not executed. To handle this, you can use `GetInvocationList()` to invoke each delegate individually within a try-catch block.
 
 ## Summary
 
 **Key Takeaways:**
 
-- **Delegates are type-safe function pointers** that enable passing methods as parameters, providing flexibility and decoupling in your code.
+* **Delegates are type-safe function pointers** that enable passing methods as parameters, providing flexibility and decoupling in your code.
 
-- **Multicast delegates** allow chaining multiple methods using `+=` and `-=` operators, making them perfect for event systems and notification pipelines.
+* **Multicast delegates** allow chaining multiple methods using `+=` and `-=` operators, making them perfect for event systems and notification pipelines.
 
-- **Return values in multicast delegates** only capture the last method's result—use `GetInvocationList()` if you need all return values.
+* **Return values in multicast delegates** only capture the last method's result—use `GetInvocationList()` if you need all return values.
 
-- **Real-world applications** include event handling, callbacks, logging systems, and implementing flexible architectures where behavior needs to be passed dynamically.
+* **Real-world applications** include event handling, callbacks, logging systems, and implementing flexible architectures where behavior needs to be passed dynamically.
 
-- **Use delegates for single-method scenarios** and callbacks; use interfaces when you need to define complete contracts with multiple members and properties.
+* **Use delegates for single-method scenarios** and callbacks; use interfaces when you need to define complete contracts with multiple members and properties.
 
 ---
 
 **📚 Related Topics:**
-- Events in C#
-- Action, Func, and Predicate
-- Anonymous Methods and Lambda Expressions
-- Asynchronous Programming with Delegates
+* Events in C#
+* Action, Func, and Predicate
+* Anonymous Methods and Lambda Expressions
+* Asynchronous Programming with Delegates
 
 ---
 
-*Written for intermediate .NET developers preparing for technical interviews.*
+*Written for intermediate . NET developers preparing for technical interviews.*

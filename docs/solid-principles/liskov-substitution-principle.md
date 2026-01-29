@@ -1,6 +1,7 @@
 # Liskov Substitution Principle (LSP)
 
 ## Definition / Intent
+
 **Liskov Substitution Principle (LSP)** states that, in a computer program, if S is a Subtype of T, then objects of type T may be replaced with objects of type S.
 
 Which means, **Derived types must be completely substitutable for their base types**.
@@ -116,6 +117,7 @@ namespace OpenClosedDemo
 ```
 
 **Usage that breaks:**
+
 ```csharp
 using System;
 
@@ -149,11 +151,11 @@ namespace OpenClosedDemo
 ```
 
 **Problems with this approach:**
-- `ContractEmployee` cannot be substituted for `Employee` without causing runtime errors
-- Client code (Main method) cannot safely treat all employees polymorphically
-- Violates LSP guideline: "No new exceptions can be thrown by the subtype"
-- Forces client code to check employee type before calling `CalculateBonus`
-- Breaks the promise of the `Employee` contract
+* `ContractEmployee` cannot be substituted for `Employee` without causing runtime errors
+* Client code (Main method) cannot safely treat all employees polymorphically
+* Violates LSP guideline: "No new exceptions can be thrown by the subtype"
+* Forces client code to check employee type before calling `CalculateBonus`
+* Breaks the promise of the `Employee` contract
 
 ## Code Example – Correct Implementation
 
@@ -368,6 +370,7 @@ namespace LSPDemoConsole
 1. **Interface Segregation**: Split functionality into `IEmployee` (common) and `IEmployeeBonus` (bonus-specific)
 2. **Proper Hierarchy**: 
    - `Employee` abstract class implements both `IEmployee` and `IEmployeeBonus`
+
    - `ContractEmployee` only implements `IEmployee` (no bonus capability)
 3. **Type Safety**: Compiler prevents adding `ContractEmployee` to `List<Employee>`
 4. **Substitutability**: 
@@ -376,11 +379,11 @@ namespace LSPDemoConsole
 5. **No Runtime Exceptions**: No `NotImplementedException` or type checking needed
 
 **Benefits:**
-- ✅ `PermanentEmployee` and `TemporaryEmployee` are fully substitutable for `Employee`
-- ✅ `ContractEmployee` doesn't violate any contract it implements
-- ✅ Compile-time safety prevents invalid operations
-- ✅ Client code knows exactly what operations are available
-- ✅ No runtime surprises or exceptions
+* ✅ `PermanentEmployee` and `TemporaryEmployee` are fully substitutable for `Employee`
+* ✅ `ContractEmployee` doesn't violate any contract it implements
+* ✅ Compile-time safety prevents invalid operations
+* ✅ Client code knows exactly what operations are available
+* ✅ No runtime surprises or exceptions
 
 ## Classic LSP Violation: Rectangle-Square Problem
 
@@ -405,6 +408,7 @@ rect.Height = 10; // ❌ Unexpected: both width and height become 10
 ```
 
 **Correct Implementation:**
+
 ```csharp
 // ✅ Proper abstraction
 public abstract class Shape
@@ -429,20 +433,21 @@ public class Square : Shape
 ## When to Use / When NOT to Overuse
 
 **Use LSP when:**
-- Designing class hierarchies for polymorphic use
-- Creating base classes or interfaces
-- Subclasses have different capabilities than the base class
-- You need to ensure runtime substitutability
+* Designing class hierarchies for polymorphic use
+* Creating base classes or interfaces
+* Subclasses have different capabilities than the base class
+* You need to ensure runtime substitutability
 
 **Don't Overuse:**
-- Don't force inheritance where composition is better
-- Avoid deep inheritance hierarchies
-- Don't create abstract methods that not all subclasses can implement
+* Don't force inheritance where composition is better
+* Avoid deep inheritance hierarchies
+* Don't create abstract methods that not all subclasses can implement
 
 ## Real-world / Enterprise Use Case
 
-### ASP.NET Core Middleware
-In ASP.NET Core, custom middleware and filters should not break the contract of the base types they extend.
+### ASP. NET Core Middleware
+
+In ASP. NET Core, custom middleware and filters should not break the contract of the base types they extend.
 
 ```csharp
 // ✅ All middleware must follow the same contract
@@ -465,6 +470,7 @@ public class CustomAuthMiddleware
 ```
 
 ### Repository Pattern
+
 ```csharp
 public interface IRepository<T>
 {
@@ -511,6 +517,7 @@ public class ReadOnlyRepository<T> : IRepository<T>
 6. **Empty Implementations**: Methods that do nothing when they should do something
 
 **Example of Type Checking (Anti-pattern):**
+
 ```csharp
 // ❌ If you need to check types, LSP is violated
 if (employee is ContractEmployee)
@@ -526,57 +533,57 @@ else
 ## Performance & Maintainability Impact
 
 **Maintainability:** ✅ Significantly increases
-- Contracts are preserved and reliable
-- No unexpected runtime behavior
-- Easier to reason about code
+* Contracts are preserved and reliable
+* No unexpected runtime behavior
+* Easier to reason about code
 
 **Testability:** ✅ Greatly improves
-- Ensures mocks and stubs behave like real objects
-- Polymorphic code can be tested with any subtype
-- No special cases needed
+* Ensures mocks and stubs behave like real objects
+* Polymorphic code can be tested with any subtype
+* No special cases needed
 
 **Reliability:** ✅ Enhanced
-- Compile-time safety prevents many errors
-- No runtime surprises
-- Predictable behavior
+* Compile-time safety prevents many errors
+* No runtime surprises
+* Predictable behavior
 
 **Performance:** ➡️ Neutral
-- No performance overhead from following LSP
-- Actually may improve performance by avoiding type checks
+* No performance overhead from following LSP
+* Actually may improve performance by avoiding type checks
 
 ## Relation to Design Patterns
 
 LSP is fundamental to these patterns:
 
-- **Factory Method**: Factory creates substitutable objects
-- **Template Method**: Subclasses extend without breaking template
-- **Adapter**: Adapts interfaces while maintaining contracts
-- **Strategy**: Different strategies are substitutable
-- **Decorator**: Decorators preserve the interface contract
+* **Factory Method**: Factory creates substitutable objects
+* **Template Method**: Subclasses extend without breaking template
+* **Adapter**: Adapts interfaces while maintaining contracts
+* **Strategy**: Different strategies are substitutable
+* **Decorator**: Decorators preserve the interface contract
 
 ## Interview Cross-Questions with Answers
 
 **Q: How do you detect LSP violations?**  
 **A:** Look for:
-- Subclasses throwing `NotImplementedException` or new exceptions
-- Type checking (`is`, `as`, `typeof`) before method calls
-- Empty or no-op implementations of base methods
-- Subclasses that can't be used in place of base class without errors
+* Subclasses throwing `NotImplementedException` or new exceptions
+* Type checking (`is`,  `as`,  `typeof`) before method calls
+* Empty or no-op implementations of base methods
+* Subclasses that can't be used in place of base class without errors
 
 **Q: Why is LSP important for unit testing?**  
 **A:** It ensures mocks and stubs behave like real objects. If LSP is violated, mocks may not accurately represent real implementations, leading to false test results.
 
 **Q: What's the difference between LSP and OCP?**  
 **A:** 
-- **OCP**: Software should be open for extension but closed for modification
-- **LSP**: Subtypes must be substitutable for base types
-- LSP ensures that extensions (OCP) don't break existing functionality
+* **OCP**: Software should be open for extension but closed for modification
+* **LSP**: Subtypes must be substitutable for base types
+* LSP ensures that extensions (OCP) don't break existing functionality
 
 **Q: How does LSP relate to Design by Contract?**  
 **A:** LSP is based on Design by Contract principles:
-- Preconditions cannot be strengthened in subclass
-- Postconditions cannot be weakened in subclass
-- Invariants must be preserved in subclass
+* Preconditions cannot be strengthened in subclass
+* Postconditions cannot be weakened in subclass
+* Invariants must be preserved in subclass
 
 **Q: Can you violate LSP without using inheritance?**  
 **A:** No, LSP specifically deals with subtyping relationships. However, similar issues can occur with interface implementations.
@@ -600,6 +607,7 @@ LSP is fundamental to these patterns:
 ✅ **Enables reliable polymorphism and testing**
 
 ### Key Takeaway
+
 **"Derived types must be completely substitutable for their base types without altering the correctness of the program."** - Barbara Liskov
 
 If you find yourself checking types or catching exceptions from subtypes, you're likely violating LSP!

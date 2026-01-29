@@ -1,25 +1,29 @@
 ﻿# Generative AI & GitHub Copilot – Advanced Interview Questions (100+)
 
 ## 1. What is Generative AI (GenAI)?
+
 Generative AI refers to AI systems that can **create new content** such as text, code, images, or audio using learned patterns from large datasets.
 
 **Example:**
-- Writing C# code from a natural language prompt
-- Generating unit tests automatically
+* Writing C# code from a natural language prompt
+* Generating unit tests automatically
 
 ---
 
 ## 2. Is GitHub Copilot a Generative AI tool?
+
 Yes. GitHub Copilot uses **Large Language Models (LLMs)** to generate new code, comments, tests, and explanations.
 
 ---
 
 ## 3. What type of AI model powers Copilot?
+
 Copilot is powered by **LLMs (Large Language Models)** trained and fine-tuned for **software development tasks**.
 
 ---
 
 ## 4. How is Copilot different from IntelliSense?
+
 | IntelliSense | Copilot |
 |-------------|---------|
 | Rule-based | GenAI-based |
@@ -29,64 +33,76 @@ Copilot is powered by **LLMs (Large Language Models)** trained and fine-tuned fo
 ---
 
 ## 5. What is an LLM?
+
 An LLM is a deep learning model trained on massive text/code data to understand and generate human-like responses.
 
 ---
 
 ## 6. What data is Copilot trained on?
-- Publicly available code
-- Open-source repositories
-- Documentation and programming patterns
+
+* Publicly available code
+* Open-source repositories
+* Documentation and programming patterns
 
 ---
 
 ## 7. Does Copilot understand project context?
+
 Yes. Copilot reads:
-- Open files
-- File structure
-- Imports
-- Naming conventions
+* Open files
+* File structure
+* Imports
+* Naming conventions
 
 ---
 
 ## 8. What are Copilot modes?
-- **Ask** – Explain & answer
-- **Edit** – Modify selected code
-- **Agent** – Multi-file autonomous tasks
+
+* **Ask** – Explain & answer
+* **Edit** – Modify selected code
+* **Agent** – Multi-file autonomous tasks
 
 ---
 
 ## 9. What is Copilot Ask mode?
+
 Ask mode provides **read-only explanations** without modifying code.
 
 **Example:**
+
 > Explain this LINQ query
 
 ---
 
 ## 10. What is Copilot Edit mode?
+
 Edit mode applies **targeted changes** to selected code.
 
 **Example:**
+
 > Refactor this method to async
 
 ---
 
 ## 11. What is Copilot Agent mode?
+
 Agent mode can:
-- Analyze the project
-- Plan changes
-- Modify multiple files
+* Analyze the project
+* Plan changes
+* Modify multiple files
 
 **Example:**
+
 > Apply Clean Architecture to this API
 
 ---
 
 ## 12. Can Copilot write unit tests?
+
 Yes.
 
 **Example:**
+
 ```csharp
 // Prompt: Generate NUnit tests for this service
 ```
@@ -94,11 +110,12 @@ Yes.
 ---
 
 ## 13. What is MCP (Model Context Protocol) in GitHub Copilot?
+
 MCP is a protocol that enables Copilot to **connect to external data sources and tools** beyond the local workspace. It allows:
-- Integration with external APIs
-- Database connections for schema awareness
-- Custom tool integrations
-- Real-time data fetching
+* Integration with external APIs
+* Database connections for schema awareness
+* Custom tool integrations
+* Real-time data fetching
 
 **Use Case:**
 Connect Copilot to your production database schema so it can generate accurate Entity Framework models based on actual table structures.
@@ -106,6 +123,7 @@ Connect Copilot to your production database schema so it can generate accurate E
 ---
 
 ## 14. How do you configure MCP servers in Copilot?
+
 MCP servers are configured in the Copilot settings JSON:
 
 ```json
@@ -127,6 +145,7 @@ MCP servers are configured in the Copilot settings JSON:
 ---
 
 ## 15. What is the difference between GPT-3.5-turbo and GPT-4 in Copilot context?
+
 | Aspect | GPT-3.5-turbo | GPT-4 |
 |--------|---------------|-------|
 | Response Speed | Faster (1-2s) | Slower (3-5s) |
@@ -136,21 +155,23 @@ MCP servers are configured in the Copilot settings JSON:
 | Reasoning | Basic | Advanced reasoning |
 
 **When to use GPT-4:**
-- Complex refactoring
-- Architecture decisions
-- Multi-step problem solving
+* Complex refactoring
+* Architecture decisions
+* Multi-step problem solving
 
 ---
 
 ## 16. How does token counting work in Copilot, and why does it matter?
+
 Tokens are pieces of text (roughly 4 characters). Copilot has a **context window limit**:
-- GPT-3.5: ~4,000-16,000 tokens
-- GPT-4: ~8,000-32,000 tokens
+* GPT-3.5: ~4, 000-16, 000 tokens
+* GPT-4: ~8, 000-32, 000 tokens
 
 **Why it matters:**
 If your prompt + context exceeds the limit, Copilot will truncate older context, potentially losing important information.
 
 **Example calculation:**
+
 ```
 Input file: 500 lines × 50 chars/line = 25,000 chars ≈ 6,250 tokens
 Your prompt: 100 chars ≈ 25 tokens
@@ -160,18 +181,20 @@ Total: ~6,275 tokens (fits in GPT-4, might truncate in GPT-3.5)
 ---
 
 ## 17. Explain the role of temperature and top_p in Copilot's model settings
+
 **Temperature (0.0 - 1.0):**
-- Controls randomness/creativity
-- 0.0 = Deterministic, same output every time
-- 0.7 = Balanced
-- 1.0 = Very creative, unpredictable
+* Controls randomness/creativity
+* 0.0 = Deterministic, same output every time
+* 0.7 = Balanced
+* 1.0 = Very creative, unpredictable
 
 **Top_p (0.0 - 1.0) - Nucleus Sampling:**
-- Controls diversity by probability mass
-- 0.1 = Only top 10% probable tokens considered
-- 0.9 = Top 90% considered
+* Controls diversity by probability mass
+* 0.1 = Only top 10% probable tokens considered
+* 0.9 = Top 90% considered
 
 **Best practices:**
+
 ```json
 {
   "github.copilot.advanced": {
@@ -186,11 +209,13 @@ For unit tests or documentation, you might use higher temperature (0.5-0.7) for 
 ---
 
 ## 18. What is the max_tokens setting in Copilot, and how do you optimize it?
+
 **max_tokens** limits the length of Copilot's response.
 
 **Default:** Usually 1000-2000 tokens
 
 **Optimization strategies:**
+
 ```json
 {
   "github.copilot.advanced": {
@@ -200,28 +225,31 @@ For unit tests or documentation, you might use higher temperature (0.5-0.7) for 
 ```
 
 **When to increase:**
-- Generating entire classes
-- Complex refactoring
-- Multiple method generation
+* Generating entire classes
+* Complex refactoring
+* Multiple method generation
 
 **When to decrease:**
-- Inline completions
-- Simple fixes
-- Faster response times
+* Inline completions
+* Simple fixes
+* Faster response times
 
 ---
 
-## 19. How do you handle Copilot suggestions that use deprecated .NET APIs?
-**Scenario:** Copilot suggests `WebClient` instead of `HttpClient` in .NET code.
+## 19. How do you handle Copilot suggestions that use deprecated . NET APIs?
+
+**Scenario:** Copilot suggests `WebClient` instead of `HttpClient` in . NET code.
 
 **Solutions:**
 1. **Explicit context in comments:**
+
 ```csharp
 // Use HttpClient (not WebClient) to fetch data from API
 // Follow .NET 6+ best practices
 ```
 
 2. **Provide modern example:**
+
 ```csharp
 // Example: Use HttpClient with dependency injection
 private readonly HttpClient _httpClient;
@@ -236,6 +264,7 @@ public UserService(HttpClient httpClient)
 Open recent code files using current patterns so Copilot learns from them.
 
 4. **Configure settings to prefer newer models:**
+
 ```json
 {
   "github.copilot.advanced": {
@@ -247,6 +276,7 @@ Open recent code files using current patterns so Copilot learns from them.
 ---
 
 ## 20. Describe a scenario where Copilot's context window limitation caused issues and how you resolved it
+
 **Scenario:**
 Working on a large service class (800 lines) and asking Copilot to refactor a method. Copilot generated code that broke dependencies because it couldn't see private fields defined earlier.
 
@@ -257,12 +287,14 @@ Working on a large service class (800 lines) and asking Copilot to refactor a me
    - Finally: Merge back
 
 2. **Use @workspace + specific instructions:**
+
 ```
 @workspace Consider the ILogger and IConfiguration dependencies 
 when refactoring this method
 ```
 
 3. **Provide explicit context:**
+
 ```csharp
 // Available dependencies:
 // - private readonly ILogger<UserService> _logger;
@@ -276,6 +308,7 @@ public async Task<User> GetUserAsync(int id) { ... }
 ---
 
 ## 21. What are embeddings in the context of Copilot, and how do they improve suggestions?
+
 **Embeddings** are vector representations of code that capture semantic meaning.
 
 **How Copilot uses them:**
@@ -284,6 +317,7 @@ public async Task<User> GetUserAsync(int id) { ... }
 3. Ranks suggestions by vector similarity
 
 **Example:**
+
 ```csharp
 // Copilot embeds this comment:
 // "Calculate user's age from birthdate"
@@ -297,6 +331,7 @@ public async Task<User> GetUserAsync(int id) { ... }
 
 **Advanced usage:**
 Use semantically rich comments to get better suggestions:
+
 ```csharp
 // BETTER: "Implement exponential backoff retry logic with 3 attempts"
 // WORSE: "Add retry"
@@ -305,22 +340,25 @@ Use semantically rich comments to get better suggestions:
 ---
 
 ## 22. How does Copilot handle multi-repository context in a monorepo setup?
+
 **Challenge:** Copilot's context is limited to open files and workspace indexing.
 
 **Strategies for monorepo:**
 
 1. **Use workspace symbols:**
+
 ```
 @workspace How is authentication implemented across all microservices?
 ```
 
 2. **Open relevant files:**
 Before asking, open key files from different services:
-- `auth-service/AuthController.cs`
-- `user-service/UserController.cs`
-- `shared/SecurityMiddleware.cs`
+* `auth-service/AuthController.cs`
+* `user-service/UserController.cs`
+* `shared/SecurityMiddleware.cs`
 
 3. **Explicit cross-service references:**
+
 ```csharp
 // This service follows the same auth pattern as 
 // ../auth-service/Controllers/AuthController.cs
@@ -333,6 +371,7 @@ Configure an MCP server that maintains a searchable index of all services.
 ---
 
 ## 23. Explain how Copilot's fine-tuning works in enterprise scenarios
+
 **Standard Copilot:** Trained on public code only.
 
 **Copilot Enterprise with custom models:**
@@ -344,12 +383,13 @@ Configure an MCP server that maintains a searchable index of all services.
 3. **Deployment:** Custom model endpoint for your organization
 
 **Benefits:**
-- Suggests company-specific patterns
-- Uses internal framework names
-- Follows organizational coding standards
-- Understands proprietary APIs
+* Suggests company-specific patterns
+* Uses internal framework names
+* Follows organizational coding standards
+* Understands proprietary APIs
 
 **Example:**
+
 ```csharp
 // If your company has an internal framework "AcmeAuth"
 // Standard Copilot: Suggests generic auth
@@ -359,6 +399,7 @@ Configure an MCP server that maintains a searchable index of all services.
 ---
 
 ## 24. What is the difference between Copilot's completion engine and chat engine?
+
 | Aspect | Completion Engine | Chat Engine |
 |--------|-------------------|-------------|
 | Trigger | Typing code | Explicit chat prompt |
@@ -368,26 +409,30 @@ Configure an MCP server that maintains a searchable index of all services.
 | Token budget | Lower (faster) | Higher (detailed) |
 
 **Internal architecture:**
-- **Completion:** Uses lighter model (Codex/GPT-3.5) with aggressive caching
-- **Chat:** Can use GPT-4 with broader context
+* **Completion:** Uses lighter model (Codex/GPT-3.5) with aggressive caching
+* **Chat:** Can use GPT-4 with broader context
 
 ---
 
 ## 25. How do you debug why Copilot is giving poor suggestions for your code?
+
 **Diagnostic steps:**
 
 1. **Check context visibility:**
+
 ```
 Open Copilot output panel (View → Output → GitHub Copilot)
 Look for: "Context: [list of files considered]"
 ```
 
 2. **Verify token usage:**
+
 ```
 If context shows truncation warnings, reduce open files or use more specific prompts
 ```
 
 3. **Test prompt variations:**
+
 ```csharp
 // Poor: "make this better"
 // Better: "refactor to async/await pattern with cancellation token"
@@ -395,6 +440,7 @@ If context shows truncation warnings, reduce open files or use more specific pro
 ```
 
 4. **Check model selection:**
+
 ```json
 {
   "github.copilot.advanced": {
@@ -406,6 +452,7 @@ If context shows truncation warnings, reduce open files or use more specific pro
 
 5. **Analyze training data bias:**
 If Copilot consistently suggests outdated patterns, it may have been trained on older code. Use explicit version constraints:
+
 ```csharp
 // Use .NET 8 minimal API pattern (not controller-based)
 ```
@@ -413,6 +460,7 @@ If Copilot consistently suggests outdated patterns, it may have been trained on 
 ---
 
 ## 26. Describe how Copilot's ranking algorithm prioritizes suggestions
+
 **Ranking factors (in order):**
 
 1. **Syntax validity** (40%): Does it compile?
@@ -422,6 +470,7 @@ If Copilot consistently suggests outdated patterns, it may have been trained on 
 5. **Recency bias** (5%): Prefers recently typed patterns
 
 **Example:**
+
 ```csharp
 public class UserService
 {
@@ -439,6 +488,7 @@ public class UserService
 ---
 
 ## 27. What is Copilot's approach to handling PII (Personally Identifiable Information)?
+
 **Detection mechanisms:**
 1. Pattern matching for:
    - Email addresses
@@ -447,6 +497,7 @@ public class UserService
    - API keys (regex patterns)
 
 2. **Content filtering:**
+
 ```csharp
 // Copilot will AVOID suggesting:
 var apiKey = "sk-1234567890abcdef";  // Looks like real key
@@ -459,12 +510,13 @@ var ssn = user.SocialSecurityNumber;   // From variable
 
 3. **Telemetry filtering:**
 Even with telemetry enabled, Microsoft filters:
-- Secrets
-- PII
-- Proprietary business logic patterns
+* Secrets
+* PII
+* Proprietary business logic patterns
 
 **Best practice:**
 Never commit real credentials. Use:
+
 ```json
 {
   "github.copilot.advanced": {
@@ -476,11 +528,13 @@ Never commit real credentials. Use:
 ---
 
 ## 28. How does Copilot handle code completion in polyglot projects (e.g., C# + TypeScript)?
+
 **Context switching:}
 
 Copilot maintains **separate context windows** per file type:
 
 **Example project:**
+
 ```
 /backend (C#)
   - UserController.cs
@@ -489,7 +543,8 @@ Copilot maintains **separate context windows** per file type:
   - user.service.ts
 ```
 
-**When editing `user.service.ts`:**
+**When editing `user.service.ts` :**
+
 ```typescript
 // Copilot sees:
 // 1. Current TypeScript file
@@ -503,6 +558,7 @@ Copilot maintains **separate context windows** per file type:
 ```
 
 **Cross-language awareness:**
+
 ```typescript
 // Fetch user from C# API endpoint /api/users/{id}
 // Backend UserController.GetUser returns: { id, name, email, createdDate }
@@ -517,6 +573,7 @@ async getUser(id: number) {
 ---
 
 ## 29. What is the role of the `github.copilot.advanced.inlineSuggestCount` setting?
+
 **Purpose:** Controls how many alternative suggestions Copilot generates.
 
 ```json
@@ -528,9 +585,9 @@ async getUser(id: number) {
 ```
 
 **Behavior:**
-- Default: 1 (show best suggestion)
-- 3: Generate 3 alternatives, rank them, show best
-- 10: More options (slower but potentially better)
+* Default: 1 (show best suggestion)
+* 3: Generate 3 alternatives, rank them, show best
+* 10: More options (slower but potentially better)
 
 **Trade-offs:**
 | Count | Latency | Quality | Use Case |
@@ -540,15 +597,17 @@ async getUser(id: number) {
 | 10 | ~4s | Best | Complex algorithms |
 
 **Cycling through suggestions:**
-- `Alt + ]` - Next suggestion
-- `Alt + [` - Previous suggestion
+* `Alt + ]` - Next suggestion
+* `Alt + [` - Previous suggestion
 
 ---
 
 ## 30. How do you configure Copilot to respect your team's coding standards?
+
 **Multi-layered approach:**
 
 **1. EditorConfig:**
+
 ```ini
 # .editorconfig
 [*.cs]
@@ -562,6 +621,7 @@ dotnet_naming_rule.private_fields.style = underscore_prefix
 Copilot reads `.editorconfig` and adapts formatting.
 
 **2. Code examples in workspace:**
+
 ```csharp
 // Keep exemplar files open that demonstrate standards
 // Copilot learns from them
@@ -586,6 +646,7 @@ public class ExampleService : IExampleService
 ```
 
 **3. Instruction comments:**
+
 ```csharp
 // TEAM STANDARD: All public methods must have XML comments
 // TEAM STANDARD: Use Result<T> for error handling, not exceptions
@@ -601,6 +662,7 @@ public async Task<Result<User>> CreateUserAsync(CreateUserDto dto)
 ```
 
 **4. Custom Copilot instructions (if using Enterprise):**
+
 ```json
 {
   "github.copilot.instructions": [
@@ -615,9 +677,11 @@ public async Task<Result<User>> CreateUserAsync(CreateUserDto dto)
 ---
 
 ## 31. Explain Copilot's behavior with test-driven development (TDD)
+
 **TDD workflow with Copilot:**
 
 **Step 1: Write the test first**
+
 ```csharp
 [Test]
 public async Task CreateUser_WithValidData_ReturnsSuccess()
@@ -636,6 +700,7 @@ public async Task CreateUser_WithValidData_ReturnsSuccess()
 ```
 
 **Step 2: Ask Copilot to generate implementation**
+
 ```csharp
 // Copilot Chat: @workspace Implement UserService.CreateUserAsync to make this test pass
 
@@ -655,6 +720,7 @@ public async Task<Result<User>> CreateUserAsync(CreateUserDto dto)
 ```
 
 **Advanced TDD technique:**
+
 ```csharp
 // Write multiple test cases first
 [TestCase("", false)]  // Empty name should fail
@@ -671,14 +737,16 @@ public async Task CreateUser_ValidatesNameLength(string name, bool expectedSucce
 ---
 
 ## 32. What is Copilot's approach to handling breaking changes in dependencies?
-**Scenario:** Your project upgrades from .NET 6 to .NET 8.
+
+**Scenario:** Your project upgrades from . NET 6 to . NET 8.
 
 **Copilot's limitations:**
-- May suggest .NET 6 patterns if most training data is older
-- Doesn't automatically know your `TargetFramework`
+* May suggest . NET 6 patterns if most training data is older
+* Doesn't automatically know your `TargetFramework`
 
 **Solutions:**
 **1. Explicit version context:**
+
 ```csharp
 // Using .NET 8 features
 // Target: .NET 8.0
@@ -693,7 +761,8 @@ public class OrderService
 ```
 
 **2. Open migration guides:**
-Open a file with .NET 8 migration notes:
+Open a file with . NET 8 migration notes:
+
 ```markdown
 # .NET 8 Migration Notes
 - Use TimeProvider instead of ISystemClock
@@ -702,6 +771,7 @@ Open a file with .NET 8 migration notes:
 ```
 
 **3. Show examples:**
+
 ```csharp
 // .NET 8 example - Use this pattern for all services
 var builder = WebApplication.CreateBuilder(args);
@@ -714,9 +784,11 @@ builder.Services.AddSingleton(TimeProvider.System);
 ---
 
 ## 33. How does Copilot's caching mechanism work, and how can you leverage it?
+
 **Caching layers:**
 
 **1. Local completion cache (30s-2m):**
+
 ```csharp
 // If you type the same pattern twice quickly:
 public void Method1() { var x = 1; }
@@ -724,6 +796,7 @@ public void Method2() { var x = 1; } // ← Served from cache, instant
 ```
 
 **2. Context hash cache:**
+
 ```
 When context (open files + recent edits) remains same:
 - Hash: abc123def456
@@ -735,6 +808,7 @@ When context (open files + recent edits) remains same:
 Similar prompts across users (anonymized) may share cache.
 
 **Leveraging cache for speed:**
+
 ```csharp
 // Generate multiple similar methods:
 public async Task<User> GetUserAsync(int id) { }
@@ -745,19 +819,21 @@ public async Task<Product> GetProductAsync(int id) { } // Very fast (cache hit)
 ```
 
 **Cache invalidation:**
-- File edit
-- Different context window
-- Model version update
-- Explicit clear: Reload VS Code window
+* File edit
+* Different context window
+* Model version update
+* Explicit clear: Reload VS Code window
 
 ---
 
 ## 34. Describe how to use Copilot for legacy code modernization at scale
-**Real-world scenario:** Modernize 100+ files from .NET Framework to .NET 8
+
+**Real-world scenario:** Modernize 100+ files from . NET Framework to . NET 8
 
 **Systematic approach:**
 
 **Step 1: Create migration template**
+
 ```csharp
 // BEFORE (.NET Framework)
 using System.Web.Mvc;
@@ -792,6 +868,7 @@ public class UserController : ControllerBase
 ```
 
 **Step 2: Use Copilot Agent for batch processing**
+
 ```
 @workspace /agent Migrate all controllers in /Controllers folder 
 from .NET Framework MVC to .NET 8 Web API following the pattern 

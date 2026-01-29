@@ -1,6 +1,7 @@
 # Interface Segregation Principle (ISP)
 
 ## Definition / Intent
+
 **Interface Segregation Principle (ISP)** states that "no client should be forced to depend on methods it does not use". 
 
 This means, instead of one fat interface, many small interfaces are preferred based on groups of methods with each one serving one sub-module.
@@ -10,27 +11,30 @@ The ISP was first used and formulated by Robert C. Martin while consulting for X
 ## Case Study: Xerox Printer Systems
 
 ### Problem
+
 Xerox Corporation manufactures printer systems. In their development process of new systems, Xerox had created a new printer system that could perform a variety of tasks such as **stapling** and **faxing** along with the regular **printing** task.
 
 The software for this system was created from the ground up. As the software grew for Xerox, making modifications became more and more difficult so that even the smallest change would take a **redeployment cycle of an hour**, which made development nearly impossible.
 
 **The design problem was:**
-- A single `Job` class was used by almost all of the tasks
-- Whenever a print job or a stapling job needed to be performed, a call was made to the Job class
-- This resulted in a **'fat' class** with multitudes of methods specific to a variety of different clients
-- Because of this design, a staple job would know about all the methods of the print job, even though there was no use for them
+* A single `Job` class was used by almost all of the tasks
+* Whenever a print job or a stapling job needed to be performed, a call was made to the Job class
+* This resulted in a **'fat' class** with multitudes of methods specific to a variety of different clients
+* Because of this design, a staple job would know about all the methods of the print job, even though there was no use for them
 
 ### Solution
+
 To overcome this problem, Robert C. Martin suggested a solution which is called the **Interface Segregation Principle**.
 
 Instead of one fat interface, many small interfaces are preferred based on groups of methods with each one serving one sub-module.
 
 ## Problem Statement
+
 Fat interfaces force implementers to provide unnecessary or irrelevant method implementations, leading to fragile and confusing code. Classes are forced to implement methods they don't need, resulting in:
-- Empty implementations
-- Throwing `NotImplementedException`
-- Unnecessary coupling
-- Difficult maintenance
+* Empty implementations
+* Throwing `NotImplementedException`
+* Unnecessary coupling
+* Difficult maintenance
 
 ## Code Example – Violation
 
@@ -51,6 +55,7 @@ namespace ISPDemoConsole
 ```
 
 **Problem 1: High-End Printer (Forced to implement everything)**
+
 ```csharp
 namespace ISPDemoConsole.Client
 {
@@ -90,6 +95,7 @@ namespace ISPDemoConsole.Client
 ```
 
 **Problem 2: Basic Printer (Forced to implement unsupported features)**
+
 ```csharp
 namespace ISPDemoConsole.Client
 {
@@ -128,10 +134,10 @@ namespace ISPDemoConsole.Client
 ```
 
 **Issues with this design:**
-- `CannonMG2470` is forced to implement `FaxContent` and `PrintDuplexContent` even though it doesn't support these features
-- The interface is too "fat" - it contains methods not relevant to all implementations
-- Violates ISP because clients depend on methods they don't use
-- Makes the code fragile and harder to maintain
+* `CannonMG2470` is forced to implement `FaxContent` and `PrintDuplexContent` even though it doesn't support these features
+* The interface is too "fat" - it contains methods not relevant to all implementations
+* Violates ISP because clients depend on methods they don't use
+* Makes the code fragile and harder to maintain
 
 ## Code Example – Correct Implementation
 
@@ -163,6 +169,7 @@ namespace ISPDemoConsole
 ```
 
 **Implementation 1: High-End Printer (Implements all features it supports)**
+
 ```csharp
 namespace ISPDemoConsole.Client
 {
@@ -202,6 +209,7 @@ namespace ISPDemoConsole.Client
 ```
 
 **Implementation 2: Basic Printer (Only implements what it supports)**
+
 ```csharp
 namespace ISPDemoConsole.Client
 {
@@ -239,28 +247,29 @@ The fat interface `IPrintTasks` is split into three focused interfaces:
 3. **`IPrintDuplex`**: Duplex printing capability
 
 **Benefits:**
-- `HPLaserJet` implements all three interfaces because it supports all features
-- `CannonMG2470` only implements `IPrintScanContent` because it only supports basic features
-- No class is forced to implement methods it doesn't need
-- Each interface is cohesive and focused on a specific capability
-- Easy to add new printer models with different feature sets
+* `HPLaserJet` implements all three interfaces because it supports all features
+* `CannonMG2470` only implements `IPrintScanContent` because it only supports basic features
+* No class is forced to implement methods it doesn't need
+* Each interface is cohesive and focused on a specific capability
+* Easy to add new printer models with different feature sets
 
 ## When to Use / When NOT to Overuse
 
 **Use ISP when:**
-- Interfaces are growing and contain many methods
-- Different clients use different subsets of the interface
-- You find classes with empty implementations or throwing `NotImplementedException`
-- Unrelated classes are implementing the same interface
+* Interfaces are growing and contain many methods
+* Different clients use different subsets of the interface
+* You find classes with empty implementations or throwing `NotImplementedException`
+* Unrelated classes are implementing the same interface
 
 **Don't Overuse:**
-- Avoid creating too many trivial one-method interfaces
-- Don't split interfaces if all clients need all methods
-- Balance between cohesion and over-fragmentation
+* Avoid creating too many trivial one-method interfaces
+* Don't split interfaces if all clients need all methods
+* Balance between cohesion and over-fragmentation
 
 ## Real-world / Enterprise Use Case
 
-### ASP.NET Core Example
+### ASP. NET Core Example
+
 Use separate interfaces for repositories, services, and background jobs to avoid bloated contracts.
 
 ```csharp
@@ -295,6 +304,7 @@ public interface IBulkRepository<T>
 ```
 
 ### Microservices Example
+
 ```csharp
 // Each service only depends on what it needs
 public class OrderService
@@ -324,40 +334,40 @@ public class DataMigrationService
 ## Performance & Maintainability Impact
 
 **Maintainability:** ✅ Significantly increases
-- Code is easier to understand
-- Changes are isolated to specific interfaces
-- Less risk of breaking implementations
+* Code is easier to understand
+* Changes are isolated to specific interfaces
+* Less risk of breaking implementations
 
 **Testability:** ✅ Improves
-- Easier to mock smaller interfaces
-- Tests are more focused
+* Easier to mock smaller interfaces
+* Tests are more focused
 
 **Flexibility:** ✅ Enhanced
-- New implementations can pick and choose capabilities
-- Easy to extend with new interfaces
+* New implementations can pick and choose capabilities
+* Easy to extend with new interfaces
 
 **Performance:** ➡️ Neutral
-- No runtime performance impact
-- Slightly more interfaces to manage at compile time
+* No runtime performance impact
+* Slightly more interfaces to manage at compile time
 
 ## Relation to Design Patterns
 
 ISP works well with many design patterns:
 
-- **Decorator Pattern**: Decorators can implement specific interfaces
-- **Adapter Pattern**: Adapters can convert between segregated interfaces
-- **Proxy Pattern**: Proxies can implement only needed interfaces
-- **Strategy Pattern**: Different strategies implement focused interfaces
-- **Dependency Injection**: Clients depend on minimal interfaces
+* **Decorator Pattern**: Decorators can implement specific interfaces
+* **Adapter Pattern**: Adapters can convert between segregated interfaces
+* **Proxy Pattern**: Proxies can implement only needed interfaces
+* **Strategy Pattern**: Different strategies implement focused interfaces
+* **Dependency Injection**: Clients depend on minimal interfaces
 
 ## Interview Cross-Questions with Answers
 
 **Q: How do you identify when to apply ISP?**  
 **A:** Look for:
-- Classes implementing interfaces with empty or fake implementations
-- Methods throwing `NotImplementedException`
-- Interface methods that are only used by some implementers
-- Different clients using different subsets of an interface
+* Classes implementing interfaces with empty or fake implementations
+* Methods throwing `NotImplementedException`
+* Interface methods that are only used by some implementers
+* Different clients using different subsets of an interface
 
 **Q: How do you refactor a fat interface?**  
 **A:** 
@@ -371,9 +381,9 @@ ISP works well with many design patterns:
 
 **Q: What's the difference between ISP and SRP?**  
 **A:** 
-- **SRP** focuses on classes having one responsibility (one reason to change)
-- **ISP** focuses on interfaces not forcing clients to depend on unused methods
-- SRP is about implementation; ISP is about contracts
+* **SRP** focuses on classes having one responsibility (one reason to change)
+* **ISP** focuses on interfaces not forcing clients to depend on unused methods
+* SRP is about implementation; ISP is about contracts
 
 **Q: Can ISP lead to too many interfaces?**  
 **A:** Yes, if overused. Balance is key. Group cohesive methods together. Don't create a separate interface for every single method.
@@ -389,7 +399,8 @@ ISP works well with many design patterns:
 ✅ **Avoid forcing classes to implement unused methods**  
 ✅ **Leads to cleaner, more maintainable, and flexible code**  
 ✅ **Historical origin: Robert C. Martin's work with Xerox printer systems**  
-✅ **Prevents empty implementations and `NotImplementedException`**
+✅ **Prevents empty implementations and `NotImplementedException` **
 
 ### Key Takeaway
+
 **"Clients should not be forced to depend on interfaces they do not use."** - Robert C. Martin

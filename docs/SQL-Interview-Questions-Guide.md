@@ -4,15 +4,15 @@
 
 ### Core Concepts (1-25)
 
-1. [What is SQL?](#1-what-is-sql)
-2. [DDL, DML, DCL, and TCL Commands](#2-ddl-dml-dcl-and-tcl-commands)
-3. [Primary Key vs Foreign Key](#3-primary-key-vs-foreign-key)
-4. [DELETE vs TRUNCATE vs DROP](#4-delete-vs-truncate-vs-drop)
-5. [WHERE vs HAVING](#5-where-vs-having)
-6. [INNER JOIN vs LEFT JOIN vs RIGHT JOIN vs FULL JOIN](#6-inner-join-vs-left-join-vs-right-join-vs-full-join)
-7. [UNION vs UNION ALL](#7-union-vs-union-all)
-8. [What are Indexes and Why Use Them?](#8-what-are-indexes-and-why-use-them)
-9. [Clustered vs Non-Clustered Index](#9-clustered-vs-non-clustered-index)
+01. [What is SQL?](#1-what-is-sql)
+02. [DDL, DML, DCL, and TCL Commands](#2-ddl-dml-dcl-and-tcl-commands)
+03. [Primary Key vs Foreign Key](#3-primary-key-vs-foreign-key)
+04. [DELETE vs TRUNCATE vs DROP](#4-delete-vs-truncate-vs-drop)
+05. [WHERE vs HAVING](#5-where-vs-having)
+06. [INNER JOIN vs LEFT JOIN vs RIGHT JOIN vs FULL JOIN](#6-inner-join-vs-left-join-vs-right-join-vs-full-join)
+07. [UNION vs UNION ALL](#7-union-vs-union-all)
+08. [What are Indexes and Why Use Them?](#8-what-are-indexes-and-why-use-them)
+09. [Clustered vs Non-Clustered Index](#9-clustered-vs-non-clustered-index)
 10. [Subquery vs CTE (Common Table Expression)](#10-subquery-vs-cte-common-table-expression)
 11. [Normalization vs Denormalization](#11-normalization-vs-denormalization)
 12. [Stored Procedures vs Functions](#12-stored-procedures-vs-functions)
@@ -63,6 +63,7 @@
 ## 1. What is SQL?
 
 ### Description
+
 SQL (Structured Query Language) is a standard programming language specifically designed for managing and manipulating relational databases. It allows developers to create, read, update, and delete (CRUD) data stored in database tables. SQL is declarative, meaning you specify *what* you want, not *how* to get it. In interviews, understanding SQL demonstrates your ability to work with data persistence, which is fundamental to backend development. Modern applications rely heavily on SQL databases like SQL Server, PostgreSQL, MySQL, and Oracle.
 
 ### Real-Time Example
@@ -93,6 +94,7 @@ WHERE Department = 'Engineering';
 ## 2. DDL, DML, DCL, and TCL Commands
 
 ### Description
+
 SQL commands are categorized into four main types based on their functionality. DDL (Data Definition Language) deals with database structure, DML (Data Manipulation Language) handles data operations, DCL (Data Control Language) manages permissions, and TCL (Transaction Control Language) controls transactions. Understanding these categories helps in interviews when discussing database design, security, and transaction management. Each category serves a specific purpose in database management and is essential for building robust backend systems.
 
 ### Command Categories
@@ -135,6 +137,7 @@ COMMIT;
 ## 3. Primary Key vs Foreign Key
 
 ### Description
+
 Primary Key and Foreign Key are fundamental constraints that establish data integrity and relationships in relational databases. A Primary Key uniquely identifies each record in a table and cannot contain NULL values. A Foreign Key creates a link between two tables by referencing the Primary Key of another table. In interviews, this topic tests your understanding of database normalization and relational design. Proper use of these keys ensures data consistency and enables efficient joins across tables.
 
 ### Comparison
@@ -186,6 +189,7 @@ INNER JOIN Order o ON c.CustomerId = o.CustomerId;
 ## 4. DELETE vs TRUNCATE vs DROP
 
 ### Description
+
 DELETE, TRUNCATE, and DROP are three different commands for removing data, each with distinct behaviors and use cases. DELETE removes specific rows based on a condition and can be rolled back. TRUNCATE removes all rows quickly without logging individual deletions. DROP removes the entire table structure along with data. In interviews, understanding these differences demonstrates knowledge of data management strategies and transaction safety. Choosing the right command impacts performance, recoverability, and data integrity.
 
 ### Comparison
@@ -233,6 +237,7 @@ DROP TABLE Employee;
 ## 5. WHERE vs HAVING
 
 ### Description
+
 WHERE and HAVING are both filtering clauses, but they operate at different stages of query execution. WHERE filters individual rows before grouping occurs, while HAVING filters grouped results after aggregation. In interviews, this distinction is crucial for demonstrating understanding of query processing order and aggregate functions. WHERE is used with regular columns, whereas HAVING is specifically designed for aggregate functions like COUNT, SUM, AVG. Using the wrong clause can lead to errors or incorrect results.
 
 ### Comparison
@@ -292,6 +297,7 @@ HAVING COUNT(*) >= 2;  -- Filter groups
 ## 6. INNER JOIN vs LEFT JOIN vs RIGHT JOIN vs FULL JOIN
 
 ### Description
+
 JOINs combine rows from two or more tables based on related columns, and understanding the different types is essential for backend developers. INNER JOIN returns only matching rows from both tables. LEFT JOIN returns all rows from the left table plus matching rows from right. RIGHT JOIN is the opposite of LEFT JOIN. FULL JOIN returns all rows from both tables. In interviews, JOIN questions test your ability to retrieve related data and handle missing relationships. Choosing the correct JOIN type impacts query results and application logic.
 
 ### Comparison
@@ -353,6 +359,7 @@ FULL OUTER JOIN Order o ON c.CustomerId = o.CustomerId;
 ## 7. UNION vs UNION ALL
 
 ### Description
+
 UNION and UNION ALL combine result sets from multiple SELECT statements into a single result. UNION removes duplicate rows and sorts the result, while UNION ALL includes all rows including duplicates. In interviews, this topic tests understanding of set operations and performance considerations. UNION is useful when you need distinct combined results, but UNION ALL is faster when duplicates are acceptable or you know there won't be duplicates. Both require the same number and compatible data types of columns in each SELECT statement.
 
 ### Comparison
@@ -416,6 +423,7 @@ SELECT EmployeeName, 'Former' AS Status FROM FormerEmployees WHERE Department = 
 ## 8. What are Indexes and Why Use Them?
 
 ### Description
+
 An index is a database object that improves the speed of data retrieval operations on a table at the cost of additional storage and slower write operations. Indexes work similarly to a book's index, allowing the database to find rows quickly without scanning the entire table. In interviews, understanding indexes demonstrates knowledge of performance optimization. While indexes dramatically improve SELECT query performance, they add overhead to INSERT, UPDATE, and DELETE operations. Proper index strategy is crucial for building scalable applications that handle large datasets efficiently.
 
 ### Real-Time Example
@@ -459,18 +467,19 @@ EXEC sp_helpindex 'Employee';
 ```
 
 **When to Use Indexes:**
-- ? Columns frequently used in WHERE clauses
-- ? Columns used in JOIN conditions
-- ? Columns used in ORDER BY or GROUP BY
-- ? Foreign key columns
-- ? Avoid on tables with frequent INSERT/UPDATE/DELETE
-- ? Avoid on columns with low selectivity (few distinct values)
+* ? Columns frequently used in WHERE clauses
+* ? Columns used in JOIN conditions
+* ? Columns used in ORDER BY or GROUP BY
+* ? Foreign key columns
+* ? Avoid on tables with frequent INSERT/UPDATE/DELETE
+* ? Avoid on columns with low selectivity (few distinct values)
 
 ---
 
 ## 9. Clustered vs Non-Clustered Index
 
 ### Description
+
 Clustered and Non-Clustered indexes are the two fundamental types of indexes in SQL databases. A Clustered Index determines the physical order of data in a table, and each table can have only one clustered index (usually the primary key). A Non-Clustered Index creates a separate structure that points to the actual data rows. In interviews, this topic tests deep understanding of database internals and performance tuning. The choice between clustered and non-clustered indexes significantly impacts query performance, storage, and data modification speed.
 
 ### Comparison
@@ -535,14 +544,15 @@ WHERE OwnerId = 42;
 ```
 
 **Decision Guide:**
-- **Clustered Index:** Primary key, unique identifier, frequently used for range queries
-- **Non-Clustered Index:** Foreign keys, frequently searched columns, columns in WHERE/JOIN clauses
+* **Clustered Index:** Primary key, unique identifier, frequently used for range queries
+* **Non-Clustered Index:** Foreign keys, frequently searched columns, columns in WHERE/JOIN clauses
 
 ---
 
 ## 10. Subquery vs CTE (Common Table Expression)
 
 ### Description
+
 Subqueries and CTEs (Common Table Expressions) are both methods to write complex queries by breaking them into manageable parts. A subquery is a query nested inside another query, while a CTE is a temporary named result set defined using WITH clause. In interviews, this topic demonstrates ability to write maintainable and readable SQL code. CTEs are generally preferred for complex queries due to better readability and ability to reference the same result set multiple times. CTEs can also be recursive, which subqueries cannot.
 
 ### Comparison
@@ -627,6 +637,7 @@ ORDER BY Level, EmployeeId;
 ## 11. Normalization vs Denormalization
 
 ### Description
+
 Normalization is the process of organizing database tables to reduce redundancy and improve data integrity, while denormalization intentionally introduces redundancy to improve read performance. Normalization follows forms (1NF, 2NF, 3NF, BCNF) to eliminate data anomalies. Denormalization is used in data warehousing and reporting systems where read performance is critical. In interviews, this demonstrates understanding of database design trade-offs. The choice depends on whether the system is OLTP (transaction-heavy, prefer normalization) or OLAP (analytics-heavy, prefer denormalization).
 
 ### Comparison
@@ -725,14 +736,15 @@ ORDER BY OrderDate;
 ```
 
 **Decision Guide:**
-- **Normalization:** OLTP systems, frequent updates, data integrity critical
-- **Denormalization:** Data warehouses, reporting systems, read-heavy workloads
+* **Normalization:** OLTP systems, frequent updates, data integrity critical
+* **Denormalization:** Data warehouses, reporting systems, read-heavy workloads
 
 ---
 
 ## 12. Stored Procedures vs Functions
 
 ### Description
+
 Stored Procedures and Functions are both precompiled SQL code blocks stored in the database, but they serve different purposes. Stored Procedures are used for performing actions and can modify database state, while Functions are designed to compute and return values without side effects. In interviews, this topic tests understanding of database programming and when to use each construct. Stored Procedures can return multiple values via output parameters, execute DML statements, and use transactions. Functions must return a single value or table and cannot modify database state.
 
 ### Comparison
@@ -837,14 +849,15 @@ CROSS APPLY dbo.GetCustomerOrders(c.CustomerId) o;
 ```
 
 **When to Use:**
-- **Stored Procedure:** Complex business logic, data modifications, transaction management
-- **Function:** Calculations, data transformations, reusable computations in queries
+* **Stored Procedure:** Complex business logic, data modifications, transaction management
+* **Function:** Calculations, data transformations, reusable computations in queries
 
 ---
 
 ## 13. What are Transactions and ACID Properties?
 
 ### Description
+
 A transaction is a logical unit of work that contains one or more SQL statements, executed as a single unit that either completely succeeds or completely fails. ACID (Atomicity, Consistency, Isolation, Durability) properties ensure data integrity in concurrent database operations. In interviews, understanding transactions demonstrates knowledge of data consistency and reliability. Proper transaction management is critical for financial systems, inventory management, and any scenario where data integrity cannot be compromised. Transactions prevent partial updates that could leave data in an inconsistent state.
 
 ### ACID Properties
@@ -945,16 +958,17 @@ COMMIT TRANSACTION;
 ```
 
 **Transaction Isolation Levels:**
-1. **READ UNCOMMITTED**: Lowest isolation, allows dirty reads
-2. **READ COMMITTED**: Default, prevents dirty reads
-3. **REPEATABLE READ**: Prevents non-repeatable reads
-4. **SERIALIZABLE**: Highest isolation, prevents phantom reads
+01. **READ UNCOMMITTED**: Lowest isolation, allows dirty reads
+02. **READ COMMITTED**: Default, prevents dirty reads
+03. **REPEATABLE READ**: Prevents non-repeatable reads
+04. **SERIALIZABLE**: Highest isolation, prevents phantom reads
 
 ---
 
 ## 14. Locks and Deadlocks
 
 ### Description
+
 Locks are mechanisms that prevent concurrent transactions from conflicting with each other, ensuring data consistency. A deadlock occurs when two or more transactions are waiting for each other to release locks, creating a circular dependency. In interviews, this topic demonstrates understanding of concurrency control and database performance under load. SQL Server automatically detects deadlocks and kills one transaction (deadlock victim) to resolve the issue. Proper indexing, short transactions, and accessing resources in consistent order help prevent deadlocks.
 
 ### Lock Types
@@ -1063,17 +1077,18 @@ WHERE resource_database_id = DB_ID();
 ```
 
 **Best Practices to Avoid Deadlocks:**
-- ? Keep transactions short
-- ? Access tables in same order across transactions
-- ? Use appropriate isolation levels
-- ? Create proper indexes to reduce lock duration
-- ? Avoid user interaction during transactions
+* ? Keep transactions short
+* ? Access tables in same order across transactions
+* ? Use appropriate isolation levels
+* ? Create proper indexes to reduce lock duration
+* ? Avoid user interaction during transactions
 
 ---
 
 ## 15. How to Find Duplicate Records?
 
 ### Description
+
 Finding duplicate records is a common interview question that tests knowledge of GROUP BY, HAVING, and aggregate functions. Duplicates can occur due to data entry errors, missing unique constraints, or data integration issues. In real applications, identifying duplicates is crucial for data quality, reporting accuracy, and maintaining database integrity. The solution typically involves grouping by the columns that should be unique and using HAVING COUNT(*) > 1 to filter groups with duplicates.
 
 ### Real-Time Example
@@ -1165,17 +1180,18 @@ HAVING COUNT(*) > 1;
 ```
 
 **Common Interview Variations:**
-1. Find duplicates in a specific column
-2. Find duplicates based on multiple columns
-3. Delete duplicates keeping first/last occurrence
-4. Count total number of duplicate records
-5. Find records that appear exactly N times
+01. Find duplicates in a specific column
+02. Find duplicates based on multiple columns
+03. Delete duplicates keeping first/last occurrence
+04. Count total number of duplicate records
+05. Find records that appear exactly N times
 
 ---
 
 ## 16. Pagination using OFFSET and LIMIT
 
 ### Description
+
 Pagination is essential for handling large datasets in web applications by retrieving data in smaller chunks or pages. The OFFSET and FETCH NEXT (SQL Server) or LIMIT (MySQL, PostgreSQL) clauses allow efficient pagination without loading all records into memory. In interviews, this demonstrates understanding of performance optimization and user experience. Proper pagination improves application responsiveness and reduces server load. For very large datasets, keyset pagination (using WHERE clause with last seen ID) is more efficient than OFFSET.
 
 ### Real-Time Example
@@ -1284,17 +1300,18 @@ FETCH NEXT @PageSize ROWS ONLY;
 ```
 
 **Pagination Best Practices:**
-- ? Always include ORDER BY with OFFSET
-- ? Use indexed columns in ORDER BY for performance
-- ? Consider keyset pagination for large datasets
-- ? Return total count for UI (calculate total pages)
-- ? Avoid OFFSET for very large offsets (slow)
+* ? Always include ORDER BY with OFFSET
+* ? Use indexed columns in ORDER BY for performance
+* ? Consider keyset pagination for large datasets
+* ? Return total count for UI (calculate total pages)
+* ? Avoid OFFSET for very large offsets (slow)
 
 ---
 
 ## 17. SQL Performance Optimization Techniques
 
 ### Description
+
 SQL performance optimization involves identifying and resolving bottlenecks to improve query execution speed and reduce resource consumption. Common techniques include proper indexing, query refactoring, avoiding SELECT *, and analyzing execution plans. In interviews, this topic demonstrates practical experience with production databases and ability to troubleshoot performance issues. Performance problems often manifest as slow page loads, timeouts, and high CPU usage. Understanding optimization is crucial for building scalable applications that handle growing data volumes.
 
 ### Optimization Techniques
@@ -1413,19 +1430,20 @@ INSERT INTO Log VALUES
 ```
 
 **Quick Performance Checklist:**
-1. ? Check for missing indexes using execution plans
-2. ? Avoid SELECT * in production code
-3. ? Use WHERE clause to limit rows early
-4. ? Keep transactions short
-5. ? Avoid cursors (use set-based operations)
-6. ? Monitor slow query logs
-7. ? Regular index maintenance (rebuild/reorganize)
+01. ? Check for missing indexes using execution plans
+02. ? Avoid SELECT * in production code
+03. ? Use WHERE clause to limit rows early
+04. ? Keep transactions short
+05. ? Avoid cursors (use set-based operations)
+06. ? Monitor slow query logs
+07. ? Regular index maintenance (rebuild/reorganize)
 
 ---
 
 ## 18. What is a Self Join?
 
 ### Description
+
 A self join is when a table is joined with itself, treating it as two separate tables using aliases. This is useful for hierarchical data or when comparing rows within the same table. Common use cases include employee-manager relationships, finding pairs or duplicates, and comparing time-series data. In interviews, self joins demonstrate understanding of advanced JOIN concepts and ability to work with hierarchical data structures. Self joins are particularly valuable in organizational charts, bill of materials, and any parent-child relationship within a single table.
 
 ### Real-Time Example
@@ -1529,17 +1547,18 @@ ORDER BY e1.DepartmentName;
 ```
 
 **Common Self Join Use Cases:**
-- ?? Employee-Manager relationships
-- ?? Organizational hierarchies
-- ?? Route/network connections
-- ?? Comparing rows within same table
-- ?? Finding related items (recommendations)
+* ?? Employee-Manager relationships
+* ?? Organizational hierarchies
+* ?? Route/network connections
+* ?? Comparing rows within same table
+* ?? Finding related items (recommendations)
 
 ---
 
 ## 19. RANK() vs DENSE_RANK() vs ROW_NUMBER()
 
 ### Description
+
 RANK(), DENSE_RANK(), and ROW_NUMBER() are window functions that assign ranking values to rows based on specified ordering. ROW_NUMBER() assigns unique sequential numbers, RANK() assigns ranks with gaps after ties, and DENSE_RANK() assigns ranks without gaps. In interviews, this tests knowledge of analytical functions and handling duplicate values. These functions are commonly used in reports, leaderboards, and finding top-N records per group. Understanding the differences is crucial for correct ranking logic in business scenarios like sales rankings or exam results.
 
 ### Comparison
@@ -1663,15 +1682,16 @@ WHERE Rank = 2;
 ```
 
 **Decision Guide:**
-- **ROW_NUMBER()**: Use for unique identifiers, pagination
-- **RANK()**: Use for Olympic-style rankings (1st, 2nd, 2nd, 4th)
-- **DENSE_RANK()**: Use for consecutive rankings (1st, 2nd, 2nd, 3rd)
+* **ROW_NUMBER()**: Use for unique identifiers, pagination
+* **RANK()**: Use for Olympic-style rankings (1st, 2nd, 2nd, 4th)
+* **DENSE_RANK()**: Use for consecutive rankings (1st, 2nd, 2nd, 3rd)
 
 ---
 
 ## 20. What are Triggers?
 
 ### Description
+
 A trigger is a special type of stored procedure that automatically executes when a specific event occurs on a table or view (INSERT, UPDATE, DELETE). Triggers are used for enforcing business rules, auditing changes, maintaining data integrity, and cascading operations. In interviews, triggers demonstrate understanding of database automation and event-driven logic. While powerful, triggers should be used judiciously as they can impact performance and make debugging complex. Modern applications often prefer application-level logic over triggers for better maintainability and testability.
 
 ### Real-Time Example
@@ -1828,22 +1848,23 @@ DROP TRIGGER trg_Product_AuditPriceChange;
 ```
 
 **Trigger Types:**
-- **AFTER/FOR**: Executes after the triggering operation completes
-- **INSTEAD OF**: Replaces the triggering operation
-- **DDL**: Responds to schema changes (CREATE, ALTER, DROP)
+* **AFTER/FOR**: Executes after the triggering operation completes
+* **INSTEAD OF**: Replaces the triggering operation
+* **DDL**: Responds to schema changes (CREATE, ALTER, DROP)
 
 **Best Practices:**
-- ? Keep trigger logic simple and fast
-- ? Use for audit trails and critical validations
-- ? Avoid complex business logic in triggers
-- ? Avoid recursive triggers
-- ? Document triggers clearly (they're hidden logic)
+* ? Keep trigger logic simple and fast
+* ? Use for audit trails and critical validations
+* ? Avoid complex business logic in triggers
+* ? Avoid recursive triggers
+* ? Document triggers clearly (they're hidden logic)
 
 ---
 
 ## 21. What is a View and Materialized View?
 
 ### Description
+
 A View is a virtual table based on a SELECT query that doesn't store data itself but presents data from underlying tables. A Materialized View stores the query result physically, improving performance but requiring periodic refresh. In interviews, views demonstrate understanding of data abstraction and security. Views simplify complex queries, hide sensitive columns, and provide a consistent interface even if underlying schema changes. Materialized views are used in reporting and analytics where real-time data isn't required and query performance is critical.
 
 ### Real-Time Example
@@ -1964,10 +1985,10 @@ DROP VIEW vw_EmployeeBasicInfo;
 ```
 
 **View Benefits:**
-- ?? Security: Hide sensitive columns
-- ?? Simplification: Hide complex JOINs
-- ?? Abstraction: Insulate applications from schema changes
-- ?? Reusability: Centralize common queries
+* ?? Security: Hide sensitive columns
+* ?? Simplification: Hide complex JOINs
+* ?? Abstraction: Insulate applications from schema changes
+* ?? Reusability: Centralize common queries
 
 **View vs Materialized View:**
 
@@ -1983,6 +2004,7 @@ DROP VIEW vw_EmployeeBasicInfo;
 ## 22. Correlated vs Non-Correlated Subquery
 
 ### Description
+
 A subquery is a query nested inside another query. Non-Correlated Subqueries execute independently and once, while Correlated Subqueries reference the outer query and execute repeatedly for each row. In interviews, this tests understanding of query execution and performance implications. Non-correlated subqueries are generally faster as they execute only once. Correlated subqueries are useful for row-by-row comparisons but can be slow on large datasets. Converting correlated subqueries to JOINs or CTEs often improves performance.
 
 ### Comparison
@@ -2127,16 +2149,17 @@ WHERE SalaryRank = 1;
 ```
 
 **Performance Tips:**
-- ? Use JOINs or window functions instead of correlated subqueries when possible
-- ? Use EXISTS instead of COUNT(*) in correlated subqueries
-- ? Non-correlated subqueries with IN are efficient for small result sets
-- ? Avoid correlated subqueries in SELECT list (runs for every row)
+* ? Use JOINs or window functions instead of correlated subqueries when possible
+* ? Use EXISTS instead of COUNT(*) in correlated subqueries
+* ? Non-correlated subqueries with IN are efficient for small result sets
+* ? Avoid correlated subqueries in SELECT list (runs for every row)
 
 ---
 
 ## 23. What is the N+1 Query Problem?
 
 ### Description
+
 The N+1 query problem occurs when an application makes one query to fetch N records, then makes N additional queries to fetch related data for each record. This results in N+1 total queries instead of efficiently fetching all data with JOINs. In interviews, this demonstrates understanding of ORM behavior and database performance. The problem commonly occurs with ORMs like Entity Framework or Hibernate when lazy loading is enabled. The solution is using eager loading (JOINs) or batch loading to reduce round trips to the database.
 
 ### Real-Time Example
@@ -2252,23 +2275,24 @@ ORDER BY p.PostId, c.CommentDate;
 ```
 
 **How to Identify N+1:**
-1. ?? High number of database queries for simple operations
-2. ?? Repeated similar queries with only ID parameter changing
-3. ?? Slow page load despite simple data display
-4. ?? Database connection pool exhaustion
+01. ?? High number of database queries for simple operations
+02. ?? Repeated similar queries with only ID parameter changing
+03. ?? Slow page load despite simple data display
+04. ?? Database connection pool exhaustion
 
 **Prevention:**
-- ? Use eager loading (JOINs) instead of lazy loading
-- ? Use batch/bulk loading for related data
-- ? Monitor and profile database queries
-- ? Use ORM query analysis tools
-- ? Implement caching for frequently accessed data
+* ? Use eager loading (JOINs) instead of lazy loading
+* ? Use batch/bulk loading for related data
+* ? Monitor and profile database queries
+* ? Use ORM query analysis tools
+* ? Implement caching for frequently accessed data
 
 ---
 
 ## 24. How to Handle NULL Values in SQL?
 
 ### Description
+
 NULL represents missing or unknown data in SQL. Handling NULLs correctly is crucial as they behave differently from regular values (NULL != NULL, arithmetic with NULL returns NULL). In interviews, NULL handling tests understanding of three-valued logic and data quality. Common scenarios include default values, NULL checks in WHERE clauses, and NULL-safe aggregations. Functions like COALESCE, ISNULL, and NULLIF help manage NULL values. Proper NULL handling prevents bugs and ensures accurate query results.
 
 ### Real-Time Example
@@ -2409,13 +2433,13 @@ VALUES (5, 'Tom Brown', NULLIF('', ''), 55000);  -- Empty string becomes NULL
 ```
 
 **NULL Best Practices:**
-- ? Use IS NULL / IS NOT NULL for checks (not = NULL)
-- ? Use COALESCE for default values
-- ? Be aware of NULL behavior in aggregations
-- ? Consider NOT NULL constraints where appropriate
-- ? Document columns that allow NULL
-- ? Avoid nullable foreign keys when possible
-- ? Don't use NULL for empty strings ('')
+* ? Use IS NULL / IS NOT NULL for checks (not = NULL)
+* ? Use COALESCE for default values
+* ? Be aware of NULL behavior in aggregations
+* ? Consider NOT NULL constraints where appropriate
+* ? Document columns that allow NULL
+* ? Avoid nullable foreign keys when possible
+* ? Don't use NULL for empty strings ('')
 
 **Common NULL Functions:**
 
@@ -2431,6 +2455,7 @@ VALUES (5, 'Tom Brown', NULLIF('', ''), 55000);  -- Empty string becomes NULL
 ## 25. What are Execution Plans?
 
 ### Description
+
 An execution plan is a roadmap showing how SQL Server will execute a query, including which indexes to use, join methods, and estimated costs. Analyzing execution plans is essential for performance tuning and identifying bottlenecks. In interviews, this demonstrates advanced database optimization skills. Execution plans reveal table scans (slow), index seeks (fast), missing indexes, and expensive operations. Both estimated (before execution) and actual (after execution) plans provide insights. Understanding execution plans separates junior developers from senior performance-focused engineers.
 
 ### Real-Time Example
@@ -2575,14 +2600,14 @@ ORDER BY avg_cpu_time DESC;
 ```
 
 **Execution Plan Optimization Checklist:**
-1. ? Look for Table Scans ? Add indexes
-2. ? Check for Missing Index warnings ? Consider creating them
-3. ? Identify Key Lookups ? Create covering indexes
-4. ? Review Sort operations ? Add index on ORDER BY columns
-5. ? Compare Estimated vs Actual rows ? Update statistics
-6. ? Avoid functions on indexed columns
-7. ? Ensure correct data types (avoid implicit conversion)
-8. ? Use specific columns instead of SELECT *
+01. ? Look for Table Scans ? Add indexes
+02. ? Check for Missing Index warnings ? Consider creating them
+03. ? Identify Key Lookups ? Create covering indexes
+04. ? Review Sort operations ? Add index on ORDER BY columns
+05. ? Compare Estimated vs Actual rows ? Update statistics
+06. ? Avoid functions on indexed columns
+07. ? Ensure correct data types (avoid implicit conversion)
+08. ? Use specific columns instead of SELECT *
 
 **Common Execution Plan Operators:**
 
@@ -2607,7 +2632,7 @@ This section contains 25 real-world scenario-based questions that test your prac
 **Description:**
 This scenario tests your understanding of variable and temp table scope in nested stored procedures. Temp tables are session-scoped and accessible across nested procedures, while temp variables are local-scoped and only accessible within the procedure where they're declared. The solution involves either converting temp variables to temp tables or passing values as parameters.
 
-**Question:** You have three stored procedures: `sp_ProcessOrders`, `sp_CalculateTax`, and `sp_GenerateInvoice`. They are called in sequence (nested). `sp_ProcessOrders` creates a temp table `#OrderDetails` and a temp variable `@OrderTotal`. `sp_CalculateTax` is called from `sp_ProcessOrders` and needs to access `#OrderDetails`. `sp_GenerateInvoice` is called from `sp_CalculateTax` and needs both `#OrderDetails` and `@OrderTotal`. Will this work? If not, how would you fix it?
+**Question:** You have three stored procedures: `sp_ProcessOrders` , `sp_CalculateTax` , and `sp_GenerateInvoice` . They are called in sequence (nested). `sp_ProcessOrders` creates a temp table `#OrderDetails` and a temp variable `@OrderTotal` . `sp_CalculateTax` is called from `sp_ProcessOrders` and needs to access `#OrderDetails` . `sp_GenerateInvoice` is called from `sp_CalculateTax` and needs both `#OrderDetails` and `@OrderTotal` . Will this work? If not, how would you fix it?
 
 **Answer:**
 Temp tables are session-scoped and accessible across nested procedures, while temp variables are local-scoped and only accessible within the procedure where they're declared. The solution involves either converting temp variables to temp tables or passing values as OUTPUT parameters.
@@ -2699,7 +2724,7 @@ COMMIT;
 
 ### Scenario 3: Query Performance Degradation Over Time
 
-**Question:** A query that used to run in 2 seconds now takes 30 seconds. The table has grown from 10,000 to 10 million rows. The query uses `WHERE CreatedDate >= DATEADD(DAY, -30, GETDATE())`. What could be the issue and how would you fix it?
+**Question:** A query that used to run in 2 seconds now takes 30 seconds. The table has grown from 10, 000 to 10 million rows. The query uses `WHERE CreatedDate >= DATEADD(DAY, -30, GETDATE())` . What could be the issue and how would you fix it?
 
 **Answer:**
 Performance degradation with table growth typically results from missing indexes, outdated statistics, or table scans. Solutions include creating indexes on the filtered column, updating statistics, implementing table partitioning for very large tables, or using filtered indexes for frequently queried date ranges.
@@ -2788,7 +2813,7 @@ WHERE dc.DuplicateId <> dc.KeptCustomerId;
 
 ### Scenario 5: Missing Data After Transaction Rollback
 
-**Question:** A stored procedure inserts data into three tables (`Orders`, `OrderItems`, `Payment`) within a transaction. If the payment fails, the transaction rolls back. However, you need to log the failed attempt in an `AuditLog` table. How would you handle this?
+**Question:** A stored procedure inserts data into three tables ( `Orders` , `OrderItems` , `Payment` ) within a transaction. If the payment fails, the transaction rolls back. However, you need to log the failed attempt in an `AuditLog` table. How would you handle this?
 
 **Answer:**
 When transactions rollback, all changes including audit logs are lost. The solution requires logging failed attempts outside the transaction scope using autonomous transactions (separate BEGIN TRANSACTION for logging), TRY-CATCH blocks, or table variables that persist beyond rollback.
@@ -2935,6 +2960,7 @@ WHERE o.OrderId IS NULL OR oi.OrderId IS NULL;
 
 **Answer:**
 The solution uses atomic UPDATE operations with WHERE conditions to check and update in a single step, preventing race conditions. Alternative approaches include optimistic locking with version columns or using SERIALIZABLE isolation level to lock rows during read-update operations.
+
 ```sql
 -- PROBLEM: Race condition - check and update are separate operations
 
@@ -3007,10 +3033,11 @@ COMMIT TRANSACTION;
 
 ### Scenario 9: Slow Query with Multiple OR Conditions
 
-**Question:** A query with multiple OR conditions in the WHERE clause is very slow: `WHERE Status = 'Pending' OR Status = 'Processing' OR Status = 'Completed' OR CustomerId = 123 OR OrderDate > '2024-01-01'`. How would you optimize it?
+**Question:** A query with multiple OR conditions in the WHERE clause is very slow: `WHERE Status = 'Pending' OR Status = 'Processing' OR Status = 'Completed' OR CustomerId = 123 OR OrderDate > '2024-01-01'` . How would you optimize it?
 
 **Answer:**
 Multiple OR conditions prevent efficient index usage. The solution involves rewriting queries using UNION ALL for different conditions, using IN clause for same-column comparisons, or creating filtered indexes for specific status values to improve query performance.
+
 ```sql
 -- PROBLEM: OR conditions prevent efficient index usage
 
@@ -3052,10 +3079,11 @@ SELECT DISTINCT * FROM (
 
 ### Scenario 10: Data Inconsistency Between Related Tables
 
-**Question:** The `Orders` table shows `TotalAmount = 1000`, but the sum of `OrderItems.Amount` for that order is 950. There's a discrepancy. How would you find all such inconsistencies?
+**Question:** The `Orders` table shows `TotalAmount = 1000` , but the sum of `OrderItems.Amount` for that order is 950. There's a discrepancy. How would you find all such inconsistencies?
 
 **Answer:**
 Use aggregate queries with GROUP BY and HAVING to compare parent totals with calculated child sums. Fix inconsistencies by creating triggers to auto-update totals on child table changes, or use computed columns to ensure data consistency across related tables.
+
 ```sql
 -- Find orders where TotalAmount doesn't match sum of items
 SELECT 
@@ -3118,6 +3146,7 @@ ADD CalculatedTotal AS (
 
 **Answer:**
 Implement server-side pagination using batching with TOP and WHERE conditions to process data in chunks. Alternative solutions include exporting to files using BCP/SSIS, using streaming approaches with table-valued functions, or implementing cursor-based pagination in the application layer.
+
 ```sql
 -- SOLUTION 1: Implement server-side pagination/cursor
 DECLARE @BatchSize INT = 10000;
@@ -3172,6 +3201,7 @@ RETURN
 
 **Answer:**
 The trigger likely performs full table scans or recalculates entire summaries on each insert. Solutions include modifying triggers to only update affected rows using inserted/deleted tables, implementing incremental updates instead of recalculations, or moving summary updates to async background jobs.
+
 ```sql
 -- PROBLEM: Trigger might be doing full table scans or inefficient operations
 
@@ -3256,6 +3286,7 @@ END;
 
 **Answer:**
 AVG() returns NULL when all values are NULL, and it ignores NULL values in calculation. Solutions include using COALESCE to convert NULLs to zero, filtering out NULL values explicitly, or displaying COUNT(Salary) alongside AVG(Salary) to show data completeness in the report.
+
 ```sql
 -- PROBLEM: AVG ignores NULLs, but if ALL values are NULL, returns NULL
 
@@ -3308,6 +3339,7 @@ GROUP BY Department;
 
 **Answer:**
 Production timeouts despite similar data usually indicate blocking/locks from concurrent users, outdated statistics causing poor execution plans, or missing indexes. Investigate using sys.dm_exec_requests for blocking, compare execution plans between environments, and verify index and statistics consistency.
+
 ```sql
 -- POSSIBLE CAUSES: Locks, different execution plans, statistics, indexes
 
@@ -3394,6 +3426,7 @@ SELECT @@VERSION;
 
 **Answer:**
 Replace CASCADE DELETE with soft delete pattern by adding IsDeleted flags, or use INSTEAD OF DELETE triggers to archive data before deletion. Alternative solutions include moving records to archive tables while maintaining referential integrity, or removing CASCADE and handling deletes through stored procedures.
+
 ```sql
 -- PROBLEM: CASCADE DELETE removes child records
 
@@ -3488,6 +3521,7 @@ END;
 
 **Answer:**
 Missing ORDER BY clauses cause non-deterministic result ordering, especially with TOP queries. Additionally, using GETDATE(), RAND(), or NEWID() inside procedures makes results non-deterministic. Solutions include adding explicit ORDER BY, passing datetime values as parameters instead of using GETDATE(), and ensuring consistent ordering in all queries.
+
 ```sql
 -- PROBLEM: Missing ORDER BY, or using non-deterministic functions incorrectly
 
@@ -3561,6 +3595,7 @@ END;
 
 **Answer:**
 Common issues include updating to non-existent CustomerIds in batch updates, data type mismatches between foreign and primary keys, or check constraints on the Customer table. Solutions involve validating all target values exist before update, ensuring proper data type casting, and checking for circular references or additional constraints.
+
 ```sql
 -- POSSIBLE ISSUES:
 
@@ -3639,10 +3674,11 @@ WHERE fk.parent_object_id = OBJECT_ID('Orders')
 
 ### Scenario 18: Query with Date Range Returns No Results
 
-**Question:** A query filtering by date range returns no results: `WHERE OrderDate BETWEEN '2024-01-01' AND '2024-01-31'`. You know there are orders in January 2024. The `OrderDate` column is `DATETIME`. What's wrong?
+**Question:** A query filtering by date range returns no results: `WHERE OrderDate BETWEEN '2024-01-01' AND '2024-01-31'` . You know there are orders in January 2024. The `OrderDate` column is `DATETIME` . What's wrong?
 
 **Answer:**
 DATETIME columns include time components, so BETWEEN '2024-01-31' means '2024-01-31 00:00:00', excluding all records after midnight on that day. Solutions include using >= and < with next day ('2024-02-01'), adding time to end date (23:59:59), or converting to DATE for comparison, though this prevents index usage.
+
 ```sql
 -- PROBLEM: DATETIME includes time component
 
@@ -3698,6 +3734,7 @@ ORDER BY OrderDate;
 
 **Answer:**
 Identity values can get out of sync due to failed transactions, manual inserts with IDENTITY_INSERT ON, or data imports that didn't reseed properly. Solutions include using DBCC CHECKIDENT to reseed the identity column, checking for gaps in sequence, and ensuring previous manual inserts properly incremented the identity counter.
+
 ```sql
 -- POSSIBLE CAUSES:
 
@@ -3769,6 +3806,7 @@ HAVING COUNT(*) > 1;
 
 **Answer:**
 CTEs are re-evaluated each time they're referenced, causing performance issues when used multiple times. Solutions include materializing results into temp tables or table variables for single execution, using window functions for aggregates, or restructuring the query to reference CTE once with CROSS JOIN for aggregate values.
+
 ```sql
 -- PROBLEM: CTE is re-evaluated each time it's referenced
 
@@ -3886,6 +3924,7 @@ CROSS JOIN Aggregates a;
 
 **Answer:**
 UNION automatically removes duplicates by performing a DISTINCT operation. Use UNION ALL to preserve all records including duplicates, or add source identifiers to differentiate between tables. Alternatively, use window functions to count occurrences or FULL OUTER JOIN to identify records existing in both sources.
+
 ```sql
 -- PROBLEM: UNION removes duplicates
 
@@ -3952,6 +3991,7 @@ FULL OUTER JOIN ArchivedCustomers a
 
 **Answer:**
 Indexes aren't used when there's implicit data type conversion (VARCHAR vs NVARCHAR), functions on indexed columns (UPPER, LOWER), outdated statistics, disabled indexes, or when optimizer determines table scans are cheaper. Solutions include matching data types, avoiding functions on indexed columns, updating statistics, rebuilding indexes, or using computed columns for function-based searches.
+
 ```sql
 -- POSSIBLE REASONS:
 
@@ -4059,6 +4099,7 @@ ALTER INDEX IX_Customer_Email ON Customer REORGANIZE;
 
 **Answer:**
 SQL Server limits recursive CTEs to 100 iterations by default to prevent infinite loops. Solutions include using OPTION (MAXRECURSION n) to increase the limit, MAXRECURSION 0 for unlimited recursion (with cycle detection), or implementing iterative WHILE loops with temp tables for very deep hierarchies to avoid CTE limitations.
+
 ```sql
 -- PROBLEM: Default recursion limit is 100
 
@@ -4161,10 +4202,11 @@ DROP TABLE #Hierarchy;
 
 ### Scenario 24: Bulk Insert Performance Issues
 
-**Question:** Inserting 100,000 rows using individual INSERT statements takes 30 minutes. You need to improve this to under 1 minute. How would you optimize it?
+**Question:** Inserting 100, 000 rows using individual INSERT statements takes 30 minutes. You need to improve this to under 1 minute. How would you optimize it?
 
 **Answer:**
 Individual row inserts are extremely slow due to transaction overhead per row. Solutions include using set-based INSERT with SELECT, table-valued parameters, BULK INSERT from files, temporarily disabling indexes/triggers during insert, using TABLOCK for minimal logging, or batching inserts in chunks to significantly improve performance from minutes to seconds.
+
 ```sql
 -- PROBLEM: Row-by-row inserts are slow
 
@@ -4264,10 +4306,11 @@ END;
 
 ### Scenario 25: Dynamic SQL Injection Risk
 
-**Question:** A stored procedure builds a dynamic SQL query by concatenating user input: `'SELECT * FROM Orders WHERE CustomerName = ''' + @CustomerName + '''`. Security team flagged this as SQL injection risk. How would you fix it while maintaining functionality?
+**Question:** A stored procedure builds a dynamic SQL query by concatenating user input: `'SELECT * FROM Orders WHERE CustomerName = ''' + @CustomerName + '''` . Security team flagged this as SQL injection risk. How would you fix it while maintaining functionality?
 
 **Answer:**
 String concatenation in dynamic SQL allows SQL injection attacks where malicious input can execute arbitrary commands. Solutions include using sp_executesql with parameterized queries (recommended), QUOTENAME for object names, input validation/sanitization, whitelisting valid values, or avoiding dynamic SQL entirely by using conditional logic in static queries for better security.
+
 ```sql
 -- PROBLEM: SQL injection vulnerability
 
@@ -4395,42 +4438,42 @@ END;
 This SQL interview preparation guide covers 25 essential topics that every backend developer should master:
 
 **Core Concepts:**
-- SQL fundamentals and command types (DDL, DML, DCL, TCL)
-- Keys, constraints, and relationships
-- Data manipulation operations
+* SQL fundamentals and command types (DDL, DML, DCL, TCL)
+* Keys, constraints, and relationships
+* Data manipulation operations
 
 **Comparison Topics:**
-- DELETE vs TRUNCATE vs DROP
-- WHERE vs HAVING
-- JOINs (INNER, LEFT, RIGHT, FULL)
-- UNION vs UNION ALL
-- Clustered vs Non-Clustered Index
-- Normalization vs Denormalization
-- Stored Procedures vs Functions
-- Subquery vs CTE
-- Correlated vs Non-Correlated Subqueries
+* DELETE vs TRUNCATE vs DROP
+* WHERE vs HAVING
+* JOINs (INNER, LEFT, RIGHT, FULL)
+* UNION vs UNION ALL
+* Clustered vs Non-Clustered Index
+* Normalization vs Denormalization
+* Stored Procedures vs Functions
+* Subquery vs CTE
+* Correlated vs Non-Correlated Subqueries
 
 **Advanced Topics:**
-- Indexes and performance optimization
-- Transactions and ACID properties
-- Locks and deadlocks
-- Window functions (RANK, DENSE_RANK, ROW_NUMBER)
-- Triggers and Views
-- Execution plans and performance tuning
+* Indexes and performance optimization
+* Transactions and ACID properties
+* Locks and deadlocks
+* Window functions (RANK, DENSE_RANK, ROW_NUMBER)
+* Triggers and Views
+* Execution plans and performance tuning
 
 **Practical Skills:**
-- Finding duplicate records
-- Pagination strategies
-- NULL handling
-- Self joins
-- Avoiding N+1 query problem
+* Finding duplicate records
+* Pagination strategies
+* NULL handling
+* Self joins
+* Avoiding N+1 query problem
 
 **Key Takeaways for Interviews:**
-1. ? Understand not just "what" but "why" and "when to use"
-2. ? Be ready with real-world examples
-3. ? Know performance implications of your choices
-4. ? Demonstrate optimization mindset
-5. ? Practice writing queries on paper/whiteboard
+01. ? Understand not just "what" but "why" and "when to use"
+02. ? Be ready with real-world examples
+03. ? Know performance implications of your choices
+04. ? Demonstrate optimization mindset
+05. ? Practice writing queries on paper/whiteboard
 
 This guide prepares you for SQL-related questions in backend, full-stack, and data engineering interviews. Practice these concepts with real databases to build confidence and muscle memory.
 

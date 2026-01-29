@@ -2,15 +2,15 @@
 
 ## Table of Contents
 
-1. [What is Entity Framework Core?](#1-what-is-entity-framework-core)
-2. [What is DbContext and DbSet in EF Core?](#2-what-is-dbcontext-and-dbset-in-ef-core)
-3. [Code First vs Database First Approach](#3-code-first-vs-database-first-approach)
-4. [What are Migrations in EF Core?](#4-what-are-migrations-in-ef-core)
-5. [What is Change Tracking in EF Core?](#5-what-is-change-tracking-in-ef-core)
-6. [Lazy Loading vs Eager Loading vs Explicit Loading](#6-lazy-loading-vs-eager-loading-vs-explicit-loading)
-7. [What are Tracking vs No-Tracking Queries?](#7-what-are-tracking-vs-no-tracking-queries)
-8. [How does LINQ work with EF Core?](#8-how-does-linq-work-with-ef-core)
-9. [What is the N+1 Problem in EF Core?](#9-what-is-the-n1-problem-in-ef-core)
+01. [What is Entity Framework Core?](#1-what-is-entity-framework-core)
+02. [What is DbContext and DbSet in EF Core?](#2-what-is-dbcontext-and-dbset-in-ef-core)
+03. [Code First vs Database First Approach](#3-code-first-vs-database-first-approach)
+04. [What are Migrations in EF Core?](#4-what-are-migrations-in-ef-core)
+05. [What is Change Tracking in EF Core?](#5-what-is-change-tracking-in-ef-core)
+06. [Lazy Loading vs Eager Loading vs Explicit Loading](#6-lazy-loading-vs-eager-loading-vs-explicit-loading)
+07. [What are Tracking vs No-Tracking Queries?](#7-what-are-tracking-vs-no-tracking-queries)
+08. [How does LINQ work with EF Core?](#8-how-does-linq-work-with-ef-core)
+09. [What is the N+1 Problem in EF Core?](#9-what-is-the-n1-problem-in-ef-core)
 10. [What is AsNoTracking and when to use it?](#10-what-is-asnotracking-and-when-to-use-it)
 11. [How to execute Raw SQL in EF Core?](#11-how-to-execute-raw-sql-in-ef-core)
 12. [How to handle Transactions in EF Core?](#12-how-to-handle-transactions-in-ef-core)
@@ -49,11 +49,11 @@
 
 ### What is it?
 
-Entity Framework Core (EF Core) is a lightweight, open-source, cross-platform Object-Relational Mapper (ORM) for .NET. It allows developers to work with databases using strongly-typed .NET objects instead of writing raw SQL queries.
+Entity Framework Core (EF Core) is a lightweight, open-source, cross-platform Object-Relational Mapper (ORM) for . NET. It allows developers to work with databases using strongly-typed . NET objects instead of writing raw SQL queries.
 
 ### Why do we use it?
 
-EF Core eliminates repetitive ADO.NET code, reduces development time, and provides type safety with compile-time checking. It automatically handles database connections, SQL generation, and object mapping, allowing developers to focus on business logic rather than data access plumbing. It also provides built-in features like migrations, change tracking, and LINQ support.
+EF Core eliminates repetitive ADO. NET code, reduces development time, and provides type safety with compile-time checking. It automatically handles database connections, SQL generation, and object mapping, allowing developers to focus on business logic rather than data access plumbing. It also provides built-in features like migrations, change tracking, and LINQ support.
 
 ### When to use it?
 
@@ -247,7 +247,7 @@ Change Tracking is EF Core's mechanism to monitor changes made to entity instanc
 
 ### Why do we use it?
 
-Change Tracking enables EF Core to automatically generate the correct INSERT, UPDATE, or DELETE SQL statements when you call `SaveChanges()`. You don't need to explicitly tell EF Core what changed - it figures it out automatically, significantly reducing boilerplate code and potential errors.
+Change Tracking enables EF Core to automatically generate the correct INSERT, UPDATE, or DELETE SQL statements when you call `SaveChanges()` . You don't need to explicitly tell EF Core what changed - it figures it out automatically, significantly reducing boilerplate code and potential errors.
 
 ### When to use it?
 
@@ -287,9 +287,9 @@ using (var context = new AppDbContext())
 ### What is it?
 
 These are three strategies for loading related entities in EF Core:
-- **Lazy Loading**: Related data loads automatically when accessed (requires `virtual` navigation properties)
-- **Eager Loading**: Related data loads immediately with the main query using `Include()`
-- **Explicit Loading**: Related data loads on-demand when explicitly requested using `Load()`
+* **Lazy Loading**: Related data loads automatically when accessed (requires `virtual` navigation properties)
+* **Eager Loading**: Related data loads immediately with the main query using `Include()`
+* **Explicit Loading**: Related data loads on-demand when explicitly requested using `Load()`
 
 ### Why do we use it?
 
@@ -407,7 +407,7 @@ protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 
 ### What is it?
 
-LINQ (Language Integrated Query) in EF Core allows you to write database queries using C# syntax. EF Core translates LINQ expressions into SQL and executes them against the database when the query materializes (using `ToList()`, `FirstOrDefault()`, etc.).
+LINQ (Language Integrated Query) in EF Core allows you to write database queries using C# syntax. EF Core translates LINQ expressions into SQL and executes them against the database when the query materializes (using `ToList()` , `FirstOrDefault()` , etc.).
 
 ### Why do we use it?
 
@@ -415,7 +415,7 @@ LINQ provides IntelliSense, compile-time type safety, and refactoring support th
 
 ### When to use it?
 
-Use LINQ for all standard database queries in EF Core. It's ideal for filtering, sorting, joining, grouping, and projections. For complex database-specific operations or stored procedures, fall back to raw SQL using `FromSqlRaw()`.
+Use LINQ for all standard database queries in EF Core. It's ideal for filtering, sorting, joining, grouping, and projections. For complex database-specific operations or stored procedures, fall back to raw SQL using `FromSqlRaw()` .
 
 ### Example
 
@@ -472,7 +472,7 @@ The N+1 problem occurs when loading a parent entity executes 1 query, then acces
 
 ### Why does it happen?
 
-It happens when using lazy loading or not using eager loading (`Include()`) for related data. Each navigation property access triggers a separate database query, causing severe performance degradation in loops or iterations.
+It happens when using lazy loading or not using eager loading ( `Include()` ) for related data. Each navigation property access triggers a separate database query, causing severe performance degradation in loops or iterations.
 
 ### How to solve it?
 
@@ -536,7 +536,7 @@ using (var context = new AppDbContext())
 
 ### Why do we use it?
 
-No-tracking queries are 30-50% faster than tracked queries because EF Core skips snapshot creation and change detection overhead. For read-only operations like reports or displaying data, tracking is wasteful since you never call `SaveChanges()`. This significantly improves performance for high-volume read scenarios.
+No-tracking queries are 30-50% faster than tracked queries because EF Core skips snapshot creation and change detection overhead. For read-only operations like reports or displaying data, tracking is wasteful since you never call `SaveChanges()` . This significantly improves performance for high-volume read scenarios.
 
 ### When to use it?
 
@@ -746,7 +746,7 @@ public async Task<bool> ProcessOrderAsync(Order order)
 
 ### What is it?
 
-Concurrency handling manages conflicts when multiple users try to update the same data simultaneously. EF Core uses **optimistic concurrency** with concurrency tokens (like `[Timestamp]` or `[ConcurrencyCheck]`) to detect if data changed since it was read.
+Concurrency handling manages conflicts when multiple users try to update the same data simultaneously. EF Core uses **optimistic concurrency** with concurrency tokens (like `[Timestamp]` or `[ConcurrencyCheck]` ) to detect if data changed since it was read.
 
 ### Why do we use it?
 
@@ -821,7 +821,7 @@ protected override void OnModelCreating(ModelBuilder modelBuilder)
 
 ### What is it?
 
-**EF Core** is a full-featured ORM with change tracking, LINQ, and migrations. **Dapper** is a lightweight micro-ORM that maps SQL query results to objects with minimal overhead, close to raw ADO.NET performance.
+**EF Core** is a full-featured ORM with change tracking, LINQ, and migrations. **Dapper** is a lightweight micro-ORM that maps SQL query results to objects with minimal overhead, close to raw ADO. NET performance.
 
 ### Why do we use them?
 
@@ -835,8 +835,8 @@ Use **EF Core** for complex domain models, rapid development, teams unfamiliar w
 
 | **Aspect** | **EF Core** | **Dapper** |
 |------------|-------------|------------|
-| **Type** | Full-featured ORM with change tracking and migrations | Micro-ORM, thin wrapper over ADO.NET |
-| **Performance** | Slower due to change tracking and feature overhead | Faster, minimal overhead, close to raw ADO.NET |
+| **Type** | Full-featured ORM with change tracking and migrations | Micro-ORM, thin wrapper over ADO. NET |
+| **Performance** | Slower due to change tracking and feature overhead | Faster, minimal overhead, close to raw ADO. NET |
 | **Learning Curve** | Steeper, requires understanding of ORM concepts | Easier, straightforward SQL mapping |
 | **Features** | LINQ queries, migrations, change tracking, lazy loading | Manual SQL queries, simple object mapping |
 | **Code Generation** | Generates SQL from LINQ expressions | Write SQL manually |
@@ -1075,7 +1075,7 @@ using (var context = new SchoolDbContext())
 
 ### What is it?
 
-`Include()` is used for eager loading related entities through navigation properties, loading them in the same query with SQL JOINs. `ThenInclude()` loads nested relationships - entities related to the entities loaded by `Include()`.
+`Include()` is used for eager loading related entities through navigation properties, loading them in the same query with SQL JOINs. `ThenInclude()` loads nested relationships - entities related to the entities loaded by `Include()` .
 
 ### Why do we use it?
 
@@ -1158,7 +1158,7 @@ Shadow properties keep domain models clean by hiding infrastructure concerns lik
 
 ### When to use it?
 
-Use shadow properties for audit fields (CreatedDate, ModifiedDate), foreign keys you want to hide, multi-tenancy tenant IDs, or any database column that shouldn't be exposed in the domain model. Access them via `Entry(entity).Property("PropertyName")`.
+Use shadow properties for audit fields (CreatedDate, ModifiedDate), foreign keys you want to hide, multi-tenancy tenant IDs, or any database column that shouldn't be exposed in the domain model. Access them via `Entry(entity).Property("PropertyName")` .
 
 ### Example
 
@@ -1334,7 +1334,7 @@ Soft delete preserves historical data, enables data recovery, maintains referent
 
 ### When to use it?
 
-Use soft delete for business-critical data, user-generated content, financial records, or when regulatory compliance requires data retention. Implement it with global query filters so deleted records are automatically excluded from queries unless explicitly requested with `IgnoreQueryFilters()`.
+Use soft delete for business-critical data, user-generated content, financial records, or when regulatory compliance requires data retention. Implement it with global query filters so deleted records are automatically excluded from queries unless explicitly requested with `IgnoreQueryFilters()` .
 
 ### Example
 
@@ -1549,7 +1549,7 @@ When including multiple collections, a single query with JOINs creates cartesian
 
 ### When to use it?
 
-Use split queries (`.AsSplitQuery()`) when including multiple collections that cause cartesian explosion, significantly reducing data transfer. Use single queries (default) when including only reference navigation properties or when you need a consistent snapshot across all data.
+Use split queries ( `.AsSplitQuery()` ) when including multiple collections that cause cartesian explosion, significantly reducing data transfer. Use single queries (default) when including only reference navigation properties or when you need a consistent snapshot across all data.
 
 ### Example
 
@@ -1761,7 +1761,7 @@ Global filters eliminate repetitive WHERE clauses across your codebase. Instead 
 
 ### When to use it?
 
-Use global filters for multi-tenancy (filter by tenant ID), soft deletes (exclude deleted records), security (filter by user permissions), or any filter that should apply to all queries. Bypass filters when needed using `IgnoreQueryFilters()`.
+Use global filters for multi-tenancy (filter by tenant ID), soft deletes (exclude deleted records), security (filter by user permissions), or any filter that should apply to all queries. Bypass filters when needed using `IgnoreQueryFilters()` .
 
 ### Example
 
@@ -1872,7 +1872,7 @@ Use `Find()` when searching by primary key - it's faster because it checks the c
 
 ### When to use which?
 
-Use **Find()** for lookups by primary key, especially in update scenarios where the entity might already be tracked. Use **FirstOrDefault()** for searches by non-key properties, complex conditions, or when combining with `Include()`, `Where()`, or `OrderBy()`.
+Use **Find()** for lookups by primary key, especially in update scenarios where the entity might already be tracked. Use **FirstOrDefault()** for searches by non-key properties, complex conditions, or when combining with `Include()` , `Where()` , or `OrderBy()` .
 
 ### Comparison Table
 
@@ -2245,7 +2245,7 @@ using (var context = new AppDbContext())
 
 ### What is it?
 
-Data Annotations are attributes applied directly to entity classes for configuration, while Fluent API is a code-based configuration approach using method chaining in `OnModelCreating()`. Fluent API is more powerful and takes precedence over Data Annotations. Both configure entity mappings, relationships, constraints, and database schema.
+Data Annotations are attributes applied directly to entity classes for configuration, while Fluent API is a code-based configuration approach using method chaining in `OnModelCreating()` . Fluent API is more powerful and takes precedence over Data Annotations. Both configure entity mappings, relationships, constraints, and database schema.
 
 ### Why do we use them?
 
@@ -3681,7 +3681,7 @@ protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 
 ### What is it?
 
-Handling large datasets requires techniques to avoid loading everything into memory. Strategies include pagination, streaming with `AsAsyncEnumerable()`, batching operations, using projections to reduce data size, and executing operations directly on the database with `ExecuteUpdate()`/`ExecuteDelete()` (EF Core 7+).
+Handling large datasets requires techniques to avoid loading everything into memory. Strategies include pagination, streaming with `AsAsyncEnumerable()` , batching operations, using projections to reduce data size, and executing operations directly on the database with `ExecuteUpdate()` / `ExecuteDelete()` (EF Core 7+).
 
 ### Why is it important?
 
@@ -4134,15 +4134,15 @@ public class Employee
 
 ### Performance Best Practices Summary
 
-1. **Use AsNoTracking() for read-only queries**
-2. **Use Include() to avoid N+1 problems**
-3. **Use projections (Select) to load only needed data**
-4. **Use async methods for I/O operations**
-5. **Batch operations with AddRange/UpdateRange**
-6. **Use compiled queries for repeated operations**
-7. **Use AsSplitQuery() for multiple collections**
-8. **Disable change tracking globally for read-only contexts**
-9. **Use proper database indexes**
+01. **Use AsNoTracking() for read-only queries**
+02. **Use Include() to avoid N+1 problems**
+03. **Use projections (Select) to load only needed data**
+04. **Use async methods for I/O operations**
+05. **Batch operations with AddRange/UpdateRange**
+06. **Use compiled queries for repeated operations**
+07. **Use AsSplitQuery() for multiple collections**
+08. **Disable change tracking globally for read-only contexts**
+09. **Use proper database indexes**
 10. **Profile queries with logging and analysis tools**
 
 ### EF Core Logging Configuration
@@ -4162,4 +4162,4 @@ protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 
 **End of Document**
 
-*This guide covers the most important Entity Framework Core interview questions and concepts. Practice these examples and understand the underlying principles to ace your .NET interviews.*
+*This guide covers the most important Entity Framework Core interview questions and concepts. Practice these examples and understand the underlying principles to ace your . NET interviews.*

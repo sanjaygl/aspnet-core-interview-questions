@@ -1,12 +1,13 @@
 # CLR (Common Language Runtime) - Complete Guide
 
-> **Target Audience**: Senior .NET Developers & Architects  
-> **Last Updated**: January 2026 (.NET 10)  
+> **Target Audience**: Senior . NET Developers & Architects  
+> **Last Updated**: January 2026 (. NET 10)  
 > **Purpose**: Comprehensive CLR reference for interviews and deep understanding
 
 ---
 
 ## Table of Contents
+
 1. [Quick Reference - CLR Components](#quick-reference)
 2. [Visual Diagrams](#visual-diagrams)
 3. [Detailed Explanations](#detailed-explanations)
@@ -23,7 +24,7 @@
 5. [Real-World Scenarios](#real-world-scenarios)
 6. [Performance Tuning](#performance-tuning)
 7. [Interview Q&A](#interview-qa)
-   - Q1: What happens when you run a .NET application?
+   - Q1: What happens when you run a . NET application?
    - Q2: Why use IL instead of native code?
    - Q3: Tiered Compilation explained
    - Q4: Server GC vs Workstation GC
@@ -34,11 +35,11 @@
    - Q9: JIT compilation step-by-step
    - Q10: Boxing and Unboxing
    - Q11: Thread Pool architecture
-   - Q12: CLR compilation strategies (.NET 10)
+   - Q12: CLR compilation strategies (. NET 10)
    - Q13: Static class initialization **[NEW]**
    - Q14: Singleton pattern execution **[NEW]**
    - Q15: Object lifecycle in CLR **[NEW]**
-   - Q16: ASP.NET Core Kestrel lifecycle **[NEW]**
+   - Q16: ASP. NET Core Kestrel lifecycle **[NEW]**
    - CLR vs JVM vs V8 comparison
 
 ---
@@ -49,17 +50,17 @@
 
 | Component | Purpose | Key Point |
 |-----------|---------|-----------|
-| **CLR** | Execution engine of .NET | Manages memory, security, and code execution |
+| **CLR** | Execution engine of . NET | Manages memory, security, and code execution |
 | **IL/MSIL** | Platform-independent intermediate code | Converted to native code by JIT at runtime |
 | **JIT Compiler** | Converts IL → Native code at runtime | Compiles methods on first call, then caches |
-| **CTS** | Common Type System | Defines all .NET types and ensures type safety |
+| **CTS** | Common Type System | Defines all . NET types and ensures type safety |
 | **CLS** | Common Language Specification | Rules for cross-language interoperability |
 | **GC** | Garbage Collector | Automatic memory management (Gen 0, 1, 2) |
 | **BCL** | Base Class Library | Core classes (System.*, Collections, IO, etc.) |
 | **Metadata** | Type/assembly information | Used for reflection, security, execution |
-| **Managed Code** | CLR-controlled code | C#, VB.NET, F# with automatic memory management |
+| **Managed Code** | CLR-controlled code | C#, VB. NET, F# with automatic memory management |
 | **Unmanaged Code** | Non-CLR code | C/C++, direct OS access, manual memory mgmt |
-| **Assembly** | Compiled .NET unit (.dll/.exe) | Contains IL, metadata, manifest, resources |
+| **Assembly** | Compiled . NET unit (.dll/.exe) | Contains IL, metadata, manifest, resources |
 | **Thread Pool** | Manages reusable worker threads | Efficient task execution without thread creation overhead |
 
 ---
@@ -67,7 +68,7 @@
 
 ## Visual Diagrams {#visual-diagrams}
 
-### CLR Architecture & Execution Flow (.NET 10)
+### CLR Architecture & Execution Flow (. NET 10)
 
 ```
 ╔═════════════════════════════════════════════════════════════════════════════╗
@@ -338,9 +339,10 @@ Recommendation: Use R2R + PGO for production web apps (fast start + peak perf)
 
 ## 1. What is CLR (Common Language Runtime)?
 
-The **Common Language Runtime (CLR)** is the execution engine for .NET applications. It's a virtual machine that provides a runtime environment for executing managed code. Think of CLR as the "operating system for .NET" - it manages memory, handles security, provides services, and ensures code runs safely and efficiently.
+The **Common Language Runtime (CLR)** is the execution engine for . NET applications. It's a virtual machine that provides a runtime environment for executing managed code. Think of CLR as the "operating system for . NET" - it manages memory, handles security, provides services, and ensures code runs safely and efficiently.
 
 ### Core Responsibilities:
+
 1. **Code Execution Management** - Converts IL to native code and executes it
 2. **Memory Management** - Automatic memory allocation and garbage collection
 3. **Type Safety** - Ensures code doesn't access invalid memory locations
@@ -350,11 +352,12 @@ The **Common Language Runtime (CLR)** is the execution engine for .NET applicati
 7. **Interoperability** - COM interop and Platform Invoke (P/Invoke)
 
 ### Why CLR Matters:
-- **Write Once, Run Anywhere**: Code compiled to IL can run on any platform with CLR implementation
-- **Language Interoperability**: C#, VB.NET, F# can seamlessly work together
-- **Automatic Resource Management**: No manual memory management needed
-- **Enhanced Security**: Code runs in a protected sandbox environment
-- **Performance**: JIT compilation optimizes code for the specific hardware
+
+* **Write Once, Run Anywhere**: Code compiled to IL can run on any platform with CLR implementation
+* **Language Interoperability**: C#, VB. NET, F# can seamlessly work together
+* **Automatic Resource Management**: No manual memory management needed
+* **Enhanced Security**: Code runs in a protected sandbox environment
+* **Performance**: JIT compilation optimizes code for the specific hardware
 
 ---
 
@@ -362,11 +365,12 @@ The **Common Language Runtime (CLR)** is the execution engine for .NET applicati
 
 ### 2.1 Common Language Specification (CLS)
 
-**Definition**: CLS is a subset of CTS that defines language features guaranteed to work across all .NET languages.
+**Definition**: CLS is a subset of CTS that defines language features guaranteed to work across all . NET languages.
 
 **Purpose**: Ensures cross-language interoperability by establishing common rules.
 
 **Key Rules**:
+
 ```csharp
 // ✅ CLS-Compliant (works in C#, VB.NET, F#)
 [CLSCompliant(true)]
@@ -387,13 +391,14 @@ public class BadExample
 ```
 
 **CLS Compliance Requirements**:
-- Only signed integer types in public APIs (int, long) - no uint, ulong
-- Case-insensitive identifier uniqueness (avoid `Process` and `process`)
-- No pointers in public interfaces
-- Exceptions must derive from System.Exception
-- Arrays must be zero-based with single dimension
+* Only signed integer types in public APIs (int, long) - no uint, ulong
+* Case-insensitive identifier uniqueness (avoid `Process` and `process`)
+* No pointers in public interfaces
+* Exceptions must derive from System. Exception
+* Arrays must be zero-based with single dimension
 
 **Real-World Impact**:
+
 ```csharp
 // C# Library
 [assembly: CLSCompliant(true)]
@@ -412,9 +417,10 @@ Dim result = math.CalculateInterest(1000, 5)  ' Works perfectly!
 
 ### 2.2 Common Type System (CTS)
 
-**Definition**: CTS defines all data types available in .NET and rules for how types are declared, used, and managed.
+**Definition**: CTS defines all data types available in . NET and rules for how types are declared, used, and managed.
 
 **Type Hierarchy**:
+
 ```
 System.Object (root of everything)
     │
@@ -431,6 +437,7 @@ System.Object (root of everything)
 ```
 
 **Value Types vs Reference Types**:
+
 ```csharp
 // Value Type - Stack allocated, copied by value
 struct Point
@@ -458,6 +465,7 @@ Console.WriteLine(person1.Age);  // Now 35 ✓
 ```
 
 **Boxing and Unboxing**:
+
 ```csharp
 // Boxing: Value Type → Reference Type (heap allocation)
 int value = 42;
@@ -478,6 +486,7 @@ numbers.Add(42);  // No boxing, stays as int ✓
 ```
 
 **CTS Type Mapping Across Languages**:
+
 ```
 C# Type         VB.NET Type      F# Type        CTS Type
 ─────────────────────────────────────────────────────────
@@ -491,9 +500,10 @@ decimal         Decimal          decimal        System.Decimal
 
 ### 2.3 Base Class Library (BCL)
 
-**Definition**: BCL is the foundational class library providing core functionality for all .NET applications.
+**Definition**: BCL is the foundational class library providing core functionality for all . NET applications.
 
 **Key Namespaces**:
+
 ```csharp
 // System - Core types
 using System;
@@ -538,6 +548,7 @@ string response = await client.GetStringAsync("https://api.example.com");
 8. **Reflection**: Type, Assembly, MethodInfo, PropertyInfo
 
 **Real-World Example**:
+
 ```csharp
 // BCL provides building blocks for common tasks
 public class UserService
@@ -582,6 +593,7 @@ public class UserService
 4. **Smaller Deployment**: IL is more compact than native code
 
 **JIT Compilation Process**:
+
 ```csharp
 // Your C# Code
 public int Calculate(int x, int y)
@@ -613,7 +625,8 @@ ret                  ; Return
 // Step 3: Subsequent calls use cached native code (no recompilation)
 ```
 
-**Tiered Compilation in .NET 10**:
+**Tiered Compilation in . NET 10**:
+
 ```csharp
 public class OrderProcessor
 {
@@ -641,6 +654,7 @@ public class OrderProcessor
 ```
 
 **JIT Optimization Techniques**:
+
 ```csharp
 // 1. Method Inlining
 public int GetTotal() => Price + Tax;  // ✓ Inlined (small method)
@@ -682,6 +696,7 @@ if (userId > 0)  // JIT learns this is 99% true
 ```
 
 **JIT Performance Example**:
+
 ```csharp
 public class PerformanceTest
 {
@@ -709,6 +724,7 @@ public class PerformanceTest
 **Definition**: GC is an automatic memory manager that allocates and frees memory for managed objects, eliminating manual memory management.
 
 **Why Garbage Collection?**
+
 ```csharp
 // ❌ C/C++ - Manual memory management
 Person* person = new Person();
@@ -722,6 +738,7 @@ var person = new Person();
 ```
 
 **Generational GC Model**:
+
 ```
 ┌─────────────────────────────────────────────────────────────┐
 │  Generation 0 (Young Objects)                               │
@@ -765,6 +782,7 @@ var person = new Person();
 ```
 
 **GC Collection Process**:
+
 ```csharp
 // Mark Phase: Identify live objects
 public class OrderService
@@ -791,6 +809,7 @@ public class OrderService
 ```
 
 **GC Modes**:
+
 ```csharp
 // 1. Workstation GC (Default for desktop apps)
 // - Single-threaded or concurrent
@@ -816,6 +835,7 @@ public class OrderService
 ```
 
 **GC Best Practices**:
+
 ```csharp
 // ✅ GOOD: Reuse objects, minimize allocations
 public class BufferPool
@@ -872,6 +892,7 @@ public int Sum(int[] array, int start, int length)
 ```
 
 **Forcing GC (Rarely Needed)**:
+
 ```csharp
 // Only use in specific scenarios: before performance tests, after large batch operations
 public void ProcessLargeBatch()
@@ -896,6 +917,7 @@ public void ProcessLargeBatch()
 **Definition**: Exception Manager handles errors using structured exception handling (SEH), allowing graceful error recovery across method calls and threads.
 
 **Exception Handling Flow**:
+
 ```csharp
 public class PaymentProcessor
 {
@@ -939,6 +961,7 @@ public class PaymentProcessor
 ```
 
 **Stack Unwinding**:
+
 ```csharp
 public void Method1()
 {
@@ -972,6 +995,7 @@ public void Method3()
 ```
 
 **Exception Best Practices**:
+
 ```csharp
 // ✅ GOOD: Specific exceptions
 public class UserService
@@ -1035,6 +1059,7 @@ public class OrderProcessingException : Exception
 **Definition**: Thread Pool manages a collection of worker threads, reusing them for multiple tasks to avoid the overhead of creating new threads.
 
 **Why Thread Pool?**
+
 ```csharp
 // ❌ BAD: Creating threads manually (expensive!)
 for (int i = 0; i < 100; i++)
@@ -1053,6 +1078,7 @@ for (int i = 0; i < 100; i++)
 ```
 
 **Thread Pool Architecture**:
+
 ```
 ┌─────────────────────────────────────────────────────────────┐
 │                     THREAD POOL                             │
@@ -1077,6 +1103,7 @@ for (int i = 0; i < 100; i++)
 ```
 
 **Thread Pool in Action**:
+
 ```csharp
 public class DataProcessor
 {
@@ -1126,6 +1153,7 @@ public class DataProcessor
 ```
 
 **Thread Pool vs Dedicated Threads**:
+
 ```csharp
 // Use Thread Pool when:
 // ✓ Short-lived tasks (< 1 second)
@@ -1159,6 +1187,7 @@ bgThread.Start();
 **Definition**: Assembly Loader locates, loads, and initializes assemblies (.dll/.exe files) into memory for execution.
 
 **Assembly Loading Process**:
+
 ```
 1. Assembly Request
    └→ AppDomain.Load("MyLibrary")
@@ -1183,6 +1212,7 @@ bgThread.Start();
 ```
 
 **Assembly Structure**:
+
 ```csharp
 // MyLibrary.dll
 ┌──────────────────────────────────────────────────────────┐
@@ -1218,6 +1248,7 @@ bgThread.Start();
 ```
 
 **Loading Assemblies**:
+
 ```csharp
 // 1. Implicit loading (automatic)
 using MyLibrary;  // Compiler adds reference
@@ -1251,6 +1282,7 @@ alc.Unload();  // Unload assembly and free memory ✓
 ```
 
 **Assembly Versioning**:
+
 ```csharp
 // Strong-named assembly (signed with private key)
 [assembly: AssemblyVersion("2.1.0.0")]  // Major.Minor.Build.Revision
@@ -1269,6 +1301,7 @@ alc.Unload();  // Unload assembly and free memory ✓
 ## 3. CLR Execution Lifecycle (Complete Flow) {#clr-execution-lifecycle}
 
 ### Phase 1: Compilation (Development Time)
+
 ```csharp
 // 1. Write C# code
 public class Program
@@ -1285,6 +1318,7 @@ public class Program
 ```
 
 ### Phase 2: Application Startup (Runtime)
+
 ```
 User runs: dotnet Program.dll
     │
@@ -1367,6 +1401,7 @@ User runs: dotnet Program.dll
 ## Real-World CLR Scenarios {#real-world-scenarios}
 
 ### Scenario 1: Web API Request Processing
+
 ```csharp
 // ASP.NET Core Web API
 [ApiController]
@@ -1411,6 +1446,7 @@ public class UsersController : ControllerBase
 ```
 
 ### Scenario 2: High-Performance Data Processing
+
 ```csharp
 public class DataAnalyzer
 {
@@ -1447,6 +1483,7 @@ public class DataAnalyzer
 ```
 
 ### Scenario 3: Memory-Intensive Application
+
 ```csharp
 public class CacheManager
 {
@@ -1481,7 +1518,7 @@ public class CacheManager
 
 ## Performance Tuning {#performance-tuning}
 
-### .NET 10 Compilation Strategies
+### . NET 10 Compilation Strategies
 
 ```csharp
 // Strategy 1: Default (Tiered JIT + PGO)
@@ -1523,7 +1560,7 @@ public class CacheManager
 
 ### Common CLR Interview Questions
 
-**Q1: What happens when you run a .NET application?**
+**Q1: What happens when you run a . NET application?**
 
 **A:** The complete flow is:
 1. **OS Loader** loads CLR (coreclr.dll/clr.dll)
@@ -1540,30 +1577,30 @@ public class CacheManager
 **Q2: Why use IL (Intermediate Language) instead of compiling directly to native code?**
 
 **A:** IL provides several key benefits:
-- **Platform Independence**: Same IL runs on Windows, Linux, macOS, Arm64
-- **Runtime Optimization**: JIT can optimize for the actual CPU (AVX-512, SIMD)
-- **Security**: IL can be verified for type safety before execution
-- **Smaller Deployment**: IL is more compact than native code for all platforms
-- **Reflection Support**: Metadata-rich IL enables runtime type inspection
-- **Cross-Language**: C#, VB.NET, F# all compile to same IL format
+* **Platform Independence**: Same IL runs on Windows, Linux, macOS, Arm64
+* **Runtime Optimization**: JIT can optimize for the actual CPU (AVX-512, SIMD)
+* **Security**: IL can be verified for type safety before execution
+* **Smaller Deployment**: IL is more compact than native code for all platforms
+* **Reflection Support**: Metadata-rich IL enables runtime type inspection
+* **Cross-Language**: C#, VB. NET, F# all compile to same IL format
 
 ---
 
-**Q3: Explain Tiered Compilation in .NET 10.**
+**Q3: Explain Tiered Compilation in . NET 10.**
 
 **A:** Tiered compilation is a two-tier JIT strategy:
 
 **Tier 0 (Quick JIT)**:
-- Minimal optimizations for fast startup
-- Compiles in microseconds
-- Starts profiling: tracks call frequency, branch patterns, type usage
-- Used on first method call
+* Minimal optimizations for fast startup
+* Compiles in microseconds
+* Starts profiling: tracks call frequency, branch patterns, type usage
+* Used on first method call
 
 **Tier 1 (Optimized JIT with PGO)**:
-- Triggered after ~30 calls or hot loop detection
-- Applies Profile-Guided Optimization based on actual runtime behavior
-- Optimizations: method inlining, SIMD vectorization, dead code elimination, loop unrolling
-- Can be 2-10× faster than Tier 0
+* Triggered after ~30 calls or hot loop detection
+* Applies Profile-Guided Optimization based on actual runtime behavior
+* Optimizations: method inlining, SIMD vectorization, dead code elimination, loop unrolling
+* Can be 2-10× faster than Tier 0
 
 **Example**: Web API endpoint - First request uses Tier 0 (~50ms), after 30 requests recompiles to Tier 1 (~1ms per request).
 
@@ -1580,9 +1617,10 @@ public class CacheManager
 | **Throughput** | Moderate | High (optimized for throughput) |
 | **Latency** | Lower pause times | Higher pause times |
 | **Use Case** | Desktop apps, UI apps | Web servers, APIs, background services |
-| **Default** | Client apps | ASP.NET Core apps |
+| **Default** | Client apps | ASP. NET Core apps |
 
 **Configuration**:
+
 ```json
 {
   "runtimeOptions": {
@@ -1625,22 +1663,22 @@ This prevents memory corruption, buffer overflows, and security vulnerabilities 
 **A:** Use Native AOT when:
 
 **✅ Good for:**
-- CLI tools (fast startup critical)
-- Containers/microservices (small image size important)
-- AWS Lambda/serverless (cold start time matters)
-- Embedded devices (limited resources)
-- Trimmed deployments (12MB vs 65MB)
+* CLI tools (fast startup critical)
+* Containers/microservices (small image size important)
+* AWS Lambda/serverless (cold start time matters)
+* Embedded devices (limited resources)
+* Trimmed deployments (12MB vs 65MB)
 
 **❌ Avoid when:**
-- App uses reflection extensively
-- Dynamic code generation needed (emit IL)
-- Assembly.Load scenarios
-- Need peak throughput (JIT PGO is faster)
+* App uses reflection extensively
+* Dynamic code generation needed (emit IL)
+* Assembly. Load scenarios
+* Need peak throughput (JIT PGO is faster)
 
 **Performance**:
-- Startup: 80ms (AOT) vs 1200ms (JIT) - **15× faster**
-- Memory: 35MB (AOT) vs 150MB (JIT) - **77% less**
-- Throughput: 48K req/s (AOT) vs 65K req/s (JIT+PGO) - **26% slower**
+* Startup: 80ms (AOT) vs 1200ms (JIT) - **15× faster**
+* Memory: 35MB (AOT) vs 150MB (JIT) - **77% less**
+* Throughput: 48K req/s (AOT) vs 65K req/s (JIT+PGO) - **26% slower**
 
 ---
 
@@ -1649,27 +1687,27 @@ This prevents memory corruption, buffer overflows, and security vulnerabilities 
 **A:** GC uses 3 generations to optimize collection:
 
 **Generation 0** (Young objects):
-- Short-lived: local variables, temp objects
-- Collected frequently (~10ms per collection)
-- ~90% objects die here (don't survive)
-- Triggers when ~16MB allocated
+* Short-lived: local variables, temp objects
+* Collected frequently (~10ms per collection)
+* ~90% objects die here (don't survive)
+* Triggers when ~16MB allocated
 
 **Generation 1** (Medium-lived):
-- Survived 1+ Gen 0 collections
-- Buffer between Gen 0 and Gen 2
-- Collected less frequently (~100ms)
-- ~10% of Gen 0 survivors
+* Survived 1+ Gen 0 collections
+* Buffer between Gen 0 and Gen 2
+* Collected less frequently (~100ms)
+* ~10% of Gen 0 survivors
 
 **Generation 2** (Old objects):
-- Long-lived: static data, singletons, caches
-- Collected rarely (~1 second)
-- Most expensive (full heap scan + compact)
-- Only collected when memory pressure high
+* Long-lived: static data, singletons, caches
+* Collected rarely (~1 second)
+* Most expensive (full heap scan + compact)
+* Only collected when memory pressure high
 
 **Large Object Heap (LOH)**:
-- Objects ≥ 85,000 bytes
-- Not compacted (too expensive to move)
-- Collected with Gen 2
+* Objects ≥ 85, 000 bytes
+* Not compacted (too expensive to move)
+* Collected with Gen 2
 
 **Why this model?** Based on observation: most objects die young. By checking Gen 0 frequently, GC reclaims most memory quickly without scanning entire heap.
 
@@ -1680,17 +1718,18 @@ This prevents memory corruption, buffer overflows, and security vulnerabilities 
 **A:**
 
 **CTS (Common Type System)**:
-- **Superset** - All types available in .NET
-- Defines: int, uint, long, ulong, class, struct, interface, delegate, etc.
-- Language-specific types allowed (C# has `uint`, VB.NET doesn't)
+* **Superset** - All types available in . NET
+* Defines: int, uint, long, ulong, class, struct, interface, delegate, etc.
+* Language-specific types allowed (C# has `uint`, VB. NET doesn't)
 
 **CLS (Common Language Specification)**:
-- **Subset of CTS** - Minimum types for interoperability
-- Rules for cross-language compatibility
-- Only signed types in public APIs (no `uint`, `ulong`)
-- Case-insensitive identifier uniqueness
+* **Subset of CTS** - Minimum types for interoperability
+* Rules for cross-language compatibility
+* Only signed types in public APIs (no `uint`,  `ulong`)
+* Case-insensitive identifier uniqueness
 
 **Example**:
+
 ```csharp
 // ✅ CLS-Compliant (works in all .NET languages)
 [CLSCompliant(true)]
@@ -1712,15 +1751,17 @@ public class Calculator {
 **A:** 
 
 **Step 1: Method Call**
+
 ```csharp
 int result = Calculate(5, 3);  // First call
 ```
 
 **Step 2: JIT Stub Intercept**
-- CLR inserts JIT stub for each method
-- First call redirects to JIT compiler
+* CLR inserts JIT stub for each method
+* First call redirects to JIT compiler
 
 **Step 3: IL Reading**
+
 ```
 .method int32 Calculate(int32 x, int32 y)
 {
@@ -1732,10 +1773,11 @@ int result = Calculate(5, 3);  // First call
 ```
 
 **Step 4: Optimization (Tier 0)**
-- Minimal optimizations
-- Quick compilation (~10-50µs)
+* Minimal optimizations
+* Quick compilation (~10-50µs)
 
 **Step 5: Native Code Generation**
+
 ```asm
 mov eax, ecx    ; x to eax
 add eax, edx    ; add y
@@ -1743,15 +1785,17 @@ ret             ; return result
 ```
 
 **Step 6: Cache Native Code**
-- Stores compiled code in memory
-- Replaces JIT stub with direct call
+* Stores compiled code in memory
+* Replaces JIT stub with direct call
 
 **Step 7: Subsequent Calls**
+
 ```csharp
 int result2 = Calculate(10, 20);  // Direct call, no JIT!
 ```
-- Uses cached native code (~5ns)
-- No recompilation needed
+
+* Uses cached native code (~5ns)
+* No recompilation needed
 
 ---
 
@@ -1760,6 +1804,7 @@ int result2 = Calculate(10, 20);  // Direct call, no JIT!
 **A:**
 
 **Boxing** (Value Type → Reference Type):
+
 ```csharp
 int value = 42;        // Stack (4 bytes)
 object boxed = value;  // Heap allocation + copy (12 bytes)
@@ -1767,6 +1812,7 @@ object boxed = value;  // Heap allocation + copy (12 bytes)
 ```
 
 **Unboxing** (Reference Type → Value Type):
+
 ```csharp
 object boxed = 42;
 int value = (int)boxed;  // Extract value from heap
@@ -1774,6 +1820,7 @@ int value = (int)boxed;  // Extract value from heap
 ```
 
 **Performance Impact**:
+
 ```csharp
 // ❌ BAD: Boxing in loop (1 million heap allocations!)
 for (int i = 0; i < 1000000; i++) {
@@ -1786,9 +1833,9 @@ numbers.Add(42);  // No boxing, stays as int
 ```
 
 **Why it matters**: 
-- Each box allocates heap memory
-- Triggers GC more frequently
-- ~100× slower than direct value access
+* Each box allocates heap memory
+* Triggers GC more frequently
+* ~100× slower than direct value access
 
 ---
 
@@ -1797,6 +1844,7 @@ numbers.Add(42);  // No boxing, stays as int
 **A:**
 
 **Architecture**:
+
 ```
 Thread Pool:
 ├── Worker Threads (CPU-bound): 8 threads for 8 cores
@@ -1806,11 +1854,12 @@ Thread Pool:
 ```
 
 **Benefits**:
-- **Reuse**: Threads recycled, no creation overhead
-- **Efficiency**: ~32KB stack vs ~1MB for dedicated thread
-- **Auto-scaling**: Adjusts thread count based on workload
+* **Reuse**: Threads recycled, no creation overhead
+* **Efficiency**: ~32KB stack vs ~1MB for dedicated thread
+* **Auto-scaling**: Adjusts thread count based on workload
 
 **When to use Thread Pool**:
+
 ```csharp
 // ✅ Short-lived tasks (< 1 second)
 await Task.Run(() => ComputeHash(data));
@@ -1820,6 +1869,7 @@ Parallel.For(0, 1000, i => ProcessItem(i));
 ```
 
 **When to use dedicated Thread**:
+
 ```csharp
 // ✅ Long-running background work
 new Thread(() => {
@@ -1832,7 +1882,7 @@ new Thread(() => {
 
 ---
 
-**Q12: What are the CLR compilation strategies in .NET 10?**
+**Q12: What are the CLR compilation strategies in . NET 10?**
 
 **A:**
 
@@ -1844,6 +1894,7 @@ new Thread(() => {
 | **Hybrid (R2R+PGO)** | 0.5s | 160MB | 65K req/s | Production (best) |
 
 **Configuration**:
+
 ```xml
 <!-- ReadyToRun -->
 <PublishReadyToRun>true</PublishReadyToRun>
@@ -1863,6 +1914,7 @@ new Thread(() => {
 **A:** Static classes and members are initialized by CLR in a special way:
 
 **Static Class Characteristics**:
+
 ```csharp
 // Static class definition
 public static class ConfigurationManager
@@ -1882,6 +1934,7 @@ public static class ConfigurationManager
 ```
 
 **Execution Timeline**:
+
 ```
 1. First Access Trigger
    └→ var value = ConfigurationManager.GetValue("key");
@@ -1906,12 +1959,13 @@ public static class ConfigurationManager
 ```
 
 **Key Points**:
-- **Lazy Initialization**: Static constructor runs on first access, not at app startup
-- **Thread-Safe**: CLR guarantees only one thread executes static constructor
-- **Lifetime**: Static members live for entire application lifetime (never garbage collected)
-- **Memory**: Stored in Gen 2 heap (long-lived objects)
+* **Lazy Initialization**: Static constructor runs on first access, not at app startup
+* **Thread-Safe**: CLR guarantees only one thread executes static constructor
+* **Lifetime**: Static members live for entire application lifetime (never garbage collected)
+* **Memory**: Stored in Gen 2 heap (long-lived objects)
 
 **Example with Timing**:
+
 ```csharp
 public static class Logger
 {
@@ -1936,7 +1990,8 @@ Logger.Log("Third call");   // Only method execution (1ms)
 
 **A:** CLR supports multiple singleton implementation patterns:
 
-**1. Eager Initialization (Pre-.NET 4)**:
+**1. Eager Initialization (Pre-. NET 4)**:
+
 ```csharp
 public sealed class DatabaseConnection
 {
@@ -1958,6 +2013,7 @@ public sealed class DatabaseConnection
 ```
 
 **2. Lazy Initialization (Thread-Safe)**:
+
 ```csharp
 public sealed class CacheManager
 {
@@ -1979,6 +2035,7 @@ public sealed class CacheManager
 ```
 
 **3. Double-Check Locking (Legacy Pattern)**:
+
 ```csharp
 public sealed class ConfigService
 {
@@ -2015,7 +2072,8 @@ public sealed class ConfigService
 | **Lazy<T>** | First access | ✅ (Built-in) | Fast | Lower (on-demand) |
 | **Double-Check** | First access | ✅ (Manual) | Moderate | Lower (on-demand) |
 
-**Recommended (.NET 10)**:
+**Recommended (. NET 10)**:
+
 ```csharp
 // Use Lazy<T> - simplest, thread-safe, efficient
 public sealed class ServiceManager
@@ -2039,6 +2097,7 @@ public sealed class ServiceManager
 **A:** Object lifecycle in CLR involves multiple phases:
 
 **Phase 1: Object Creation**
+
 ```csharp
 var person = new Person { Name = "John", Age = 30 };
 
@@ -2053,6 +2112,7 @@ var person = new Person { Name = "John", Age = 30 };
 ```
 
 **Phase 2: Object Usage**
+
 ```csharp
 person.Age = 35;              // Modify field
 var name = person.Name;       // Read field
@@ -2065,6 +2125,7 @@ ProcessPerson(person);        // Pass as parameter
 ```
 
 **Phase 3: Object Becomes Unreachable**
+
 ```csharp
 public void CreateTemporaryObject()
 {
@@ -2079,6 +2140,7 @@ public void CreateTemporaryObject()
 ```
 
 **Phase 4: Garbage Collection**
+
 ```
 GC Trigger (Gen 0 full - ~16MB allocated):
     │
@@ -2106,6 +2168,7 @@ Promotion (if survived):
 ```
 
 **Phase 5: Finalization (If Applicable)**
+
 ```csharp
 public class DatabaseConnection : IDisposable
 {
@@ -2130,6 +2193,7 @@ public class DatabaseConnection : IDisposable
 ```
 
 **Complete Timeline Example**:
+
 ```csharp
 public class ObjectLifecycleDemo
 {
@@ -2158,6 +2222,7 @@ public class ObjectLifecycleDemo
 ```
 
 **Memory Layout Over Time**:
+
 ```
 T=0ms:   Gen 0 [person] [obj2] [obj3] ...
 T=100ms: Gen 0 [GARBAGE] [obj2] [obj3] ...  (person unreachable)
@@ -2167,11 +2232,12 @@ T=125ms: Gen 0 [newObj] [obj2] [obj3] ...   (memory reused)
 
 ---
 
-**Q16: Explain ASP.NET Core Kestrel web server execution lifecycle with CLR.**
+**Q16: Explain ASP. NET Core Kestrel web server execution lifecycle with CLR.**
 
-**A:** Kestrel is a cross-platform web server for ASP.NET Core. Here's the complete lifecycle:
+**A:** Kestrel is a cross-platform web server for ASP. NET Core. Here's the complete lifecycle:
 
 **1. Application Startup (CLR Initialization)**
+
 ```csharp
 // Program.cs
 var builder = WebApplication.CreateBuilder(args);
@@ -2190,6 +2256,7 @@ app.Run();  // Blocks here, starts Kestrel
 ```
 
 **2. Kestrel Server Initialization**
+
 ```
 app.Run() triggers:
     │
@@ -2216,6 +2283,7 @@ app.Run() triggers:
 ```
 
 **3. Request Processing Lifecycle**
+
 ```csharp
 // Incoming Request: GET /api/users/123
 
@@ -2324,6 +2392,7 @@ GC Pressure: ~2KB Gen 0 (with pooling)
 ```
 
 **6. Kestrel Shutdown**
+
 ```
 SIGTERM/SIGINT received:
     │
@@ -2337,12 +2406,12 @@ Graceful Shutdown:
 ```
 
 **Key Kestrel + CLR Features**:
-- **Async I/O**: No threads blocked on I/O operations
-- **Memory Pooling**: Reduces GC pressure by 80%
-- **JIT Tiering**: Hot paths optimized with PGO
-- **Span<T>**: Zero-allocation HTTP parsing
-- **Server GC**: Multi-threaded GC for high throughput
-- **Native AOT**: Optional for ultra-fast cold starts
+* **Async I/O**: No threads blocked on I/O operations
+* **Memory Pooling**: Reduces GC pressure by 80%
+* **JIT Tiering**: Hot paths optimized with PGO
+* **Span<T>**: Zero-allocation HTTP parsing
+* **Server GC**: Multi-threaded GC for high throughput
+* **Native AOT**: Optional for ultra-fast cold starts
 
 **Kestrel vs IIS + CLR**:
 
@@ -2358,9 +2427,9 @@ Graceful Shutdown:
 
 ### CLR vs JVM vs V8 (Runtime Comparison)
 
-| Feature | CLR (.NET 10) | JVM (Java 21) | V8 (Node.js) |
+| Feature | CLR (. NET 10) | JVM (Java 21) | V8 (Node.js) |
 |---------|---------------|---------------|--------------|
-| **Languages** | C#, F#, VB.NET | Java, Kotlin, Scala | JavaScript, TypeScript |
+| **Languages** | C#, F#, VB. NET | Java, Kotlin, Scala | JavaScript, TypeScript |
 | **Compilation** | IL → JIT/AOT | Bytecode → JIT | JS → JIT |
 | **GC** | Generational (3) | G1/ZGC | Generational |
 | **Startup** | 0.5-1.2s | 1-2s | 0.1-0.3s |
@@ -2374,31 +2443,37 @@ Graceful Shutdown:
 ## Summary - Key Takeaways
 
 ### CLR Fundamentals
+
 ✅ **CLR** - Execution engine managing memory, security, code execution, and type safety  
 ✅ **IL/MSIL** - Platform-independent bytecode enabling cross-platform execution  
 ✅ **JIT Compilation** - Tiered compilation (Tier 0 → Tier 1 with PGO) for optimal performance  
 
 ### Memory Management
+
 ✅ **Garbage Collection** - Generational model (Gen 0/1/2 + LOH) with automatic memory cleanup  
 ✅ **Gen 0** - Young objects, collected frequently (~10ms), ~90% mortality rate  
 ✅ **Gen 2** - Long-lived objects, collected rarely (~1s), includes static/cached data  
 
 ### Type System & Interoperability
-✅ **CTS** - Common Type System defining all .NET types (value/reference types)  
+
+✅ **CTS** - Common Type System defining all . NET types (value/reference types)  
 ✅ **CLS** - Common Language Specification ensuring cross-language compatibility  
 ✅ **BCL** - Base Class Library providing core functionality (System.*, Collections, IO, LINQ)  
 
 ### Performance & Execution
+
 ✅ **Thread Pool** - Reusable worker threads for efficient task execution (I/O and CPU-bound)  
-✅ **.NET 10 Strategies** - JIT (balanced), R2R (fast start), Native AOT (ultra-fast), Hybrid (production)  
+✅ **. NET 10 Strategies** - JIT (balanced), R2R (fast start), Native AOT (ultra-fast), Hybrid (production)  
 ✅ **Kestrel** - High-performance web server using async I/O, memory pooling, and Span<T>  
 
 ### Object Lifecycle
+
 ✅ **Static Classes** - Lazy initialization on first access, thread-safe, live for app lifetime  
 ✅ **Singleton Pattern** - Use Lazy<T> for thread-safe, on-demand initialization  
 ✅ **Object Phases** - Creation (Gen 0) → Usage → Unreachable → GC Collection → Memory Reuse  
 
 ### Best Practices
+
 ✅ **Avoid Boxing** - Use generics to prevent value→reference type conversions  
 ✅ **Memory Pooling** - Use ArrayPool<T> and ObjectPool<T> to reduce GC pressure  
 ✅ **Span<T>** - Zero-allocation memory slicing for high-performance scenarios  
@@ -2407,10 +2482,10 @@ Graceful Shutdown:
 ---
 
 **📚 Document Information**
-- **Version**: 1.1
-- **Last Updated**: January 23, 2026
-- **Target Framework**: .NET 10
-- **Question Count**: 16 comprehensive Q&A
-- **Audience**: Senior/Lead .NET Developers & Architects
+* **Version**: 1.1
+* **Last Updated**: January 23, 2026
+* **Target Framework**: . NET 10
+* **Question Count**: 16 comprehensive Q&A
+* **Audience**: Senior/Lead . NET Developers & Architects
 
 ---

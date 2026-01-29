@@ -7,8 +7,9 @@
 **Answer:** Here are the key differences with detailed explanations and examples:
 
 #### **Multiple Inheritance vs Single Inheritance**
-- **Interfaces**: A class can implement multiple interfaces
-- **Abstract Classes**: A class can inherit from only one abstract class
+
+* **Interfaces**: A class can implement multiple interfaces
+* **Abstract Classes**: A class can inherit from only one abstract class
 
 ```csharp
 // Multiple interface implementation - ALLOWED
@@ -28,8 +29,9 @@ public abstract class Vehicle { }
 ```
 
 #### **Implementation Requirements**
-- **Interfaces**: All members must be implemented (unless default implementation in C# 8.0+)
-- **Abstract Classes**: Can have both abstract (must implement) and concrete (optional to override) methods
+
+* **Interfaces**: All members must be implemented (unless default implementation in C# 8.0+)
+* **Abstract Classes**: Can have both abstract (must implement) and concrete (optional to override) methods
 
 ```csharp
 // Interface - all methods must be implemented
@@ -55,8 +57,9 @@ public abstract class Shape
 ```
 
 #### **Fields and Constructors**
-- **Interfaces**: Cannot have instance fields or constructors
-- **Abstract Classes**: Can have fields, constructors, and destructors
+
+* **Interfaces**: Cannot have instance fields or constructors
+* **Abstract Classes**: Can have fields, constructors, and destructors
 
 ```csharp
 // Interface - no fields or constructors
@@ -84,8 +87,9 @@ public abstract class BaseRepository
 ```
 
 #### **Access Modifiers**
-- **Interfaces**: Members are public by default (C# 8.0+ allows other modifiers with default implementations)
-- **Abstract Classes**: Can use any access modifier (private, protected, internal, public)
+
+* **Interfaces**: Members are public by default (C# 8.0+ allows other modifiers with default implementations)
+* **Abstract Classes**: Can use any access modifier (private, protected, internal, public)
 
 ```csharp
 // Interface access modifiers
@@ -106,8 +110,9 @@ public abstract class ExampleBase
 ```
 
 #### **Static Members**
-- **Interfaces**: Can have static members (C# 8.0+)
-- **Abstract Classes**: Can have static members (always supported)
+
+* **Interfaces**: Can have static members (C# 8.0+)
+* **Abstract Classes**: Can have static members (always supported)
 
 ```csharp
 // Interface with static members (C# 8.0+)
@@ -130,6 +135,7 @@ public abstract class MathBase
 #### **When to Use Each**
 
 **Use Interface When:**
+
 ```csharp
 // Contract definition - multiple unrelated classes can implement
 public interface INotificationService
@@ -144,6 +150,7 @@ public class PushNotificationService : INotificationService { /* implementation 
 ```
 
 **Use Abstract Class When:**
+
 ```csharp
 // Shared functionality among related classes
 public abstract class Employee
@@ -185,6 +192,7 @@ public class ContractEmployee : Employee
 ```
 
 ### 2. **Can an abstract class implement an interface?**
+
 **Answer:** Yes, an abstract class can implement one or more interfaces. The abstract class can either provide implementation for interface members or leave them for derived classes to implement.
 
 ```csharp
@@ -206,6 +214,7 @@ public abstract class BaseClass : IExample
 ```
 
 ### 3. **Can an interface inherit from another interface?**
+
 **Answer:** Yes, an interface can inherit from one or multiple interfaces. This is called interface inheritance.
 
 ```csharp
@@ -221,14 +230,17 @@ public interface IDerived : IBase
 ```
 
 ### 4. **Can we have a constructor in an interface?**
+
 **Answer:** No, interfaces cannot have constructors because they cannot be instantiated directly. Only classes (including abstract classes) can have constructors.
 
 ### 5. **Can abstract classes have private methods?**
+
 **Answer:** Yes, abstract classes can have private, protected, internal, and public methods. This allows for encapsulation and helper methods.
 
 ## Advanced Concepts
 
 ### 6. **What are default interface methods (C# 8.0+)?**
+
 **Answer:** Starting from C# 8.0, interfaces can have default implementations for methods. This allows adding new methods to interfaces without breaking existing implementations.
 
 ```csharp
@@ -245,12 +257,14 @@ public interface ILogger
 ```
 
 ### 7. **Can an abstract class be sealed?**
+
 **Answer:** No, an abstract class cannot be sealed. The `abstract` keyword means the class must be inherited, while `sealed` means it cannot be inherited. These are mutually exclusive.
 
 ### 8. **What is the difference between abstract methods and virtual methods?**
+
 **Answer:**
-- **Abstract methods:** Have no implementation in the base class and MUST be overridden in derived classes
-- **Virtual methods:** Have an implementation in the base class and MAY be overridden in derived classes (optional)
+* **Abstract methods:** Have no implementation in the base class and MUST be overridden in derived classes
+* **Virtual methods:** Have an implementation in the base class and MAY be overridden in derived classes (optional)
 
 ```csharp
 public abstract class Base
@@ -261,6 +275,7 @@ public abstract class Base
 ```
 
 ### 9. **Can interfaces have static members?**
+
 **Answer:** Yes (C# 8.0+), interfaces can have static members including static methods, fields, and properties.
 
 ```csharp
@@ -272,11 +287,13 @@ public interface IConstants
 ```
 
 ### 10. **When should you use an abstract class vs an interface?**
+
 **Answer:**
 
 **Use Abstract Class when:**
 
 1. **Shared Implementation**: You have common code that multiple related classes should share
+
 ```csharp
 public abstract class Vehicle
 {
@@ -321,6 +338,7 @@ public class Boat : Vehicle
 ```
 
 2. **IS-A Relationship**: When there's a clear hierarchical relationship
+
 ```csharp
 public abstract class Employee
 {
@@ -346,6 +364,7 @@ public abstract class Employee
 **Use Interface when:**
 
 1. **Contract Definition**: You want to define what a class can do, not what it is
+
 ```csharp
 public interface IPaymentProcessor
 {
@@ -386,6 +405,7 @@ public class PayPalProcessor : IPaymentProcessor
 ```
 
 2. **Multiple Capabilities**: When a class needs multiple unrelated capabilities
+
 ```csharp
 public interface IFlyable { void Fly(); }
 public interface ISwimmable { void Swim(); }
@@ -407,6 +427,7 @@ public class Fish : ISwimmable
 ```
 
 3. **Dependency Injection and Testing**: Interfaces make code more testable
+
 ```csharp
 public interface IEmailService
 {
@@ -458,6 +479,7 @@ public class MockEmailService : IEmailService
 ## Practical Scenarios
 
 ### 11. **Can a class implement two interfaces with the same method signature?**
+
 **Answer:** Yes, a class can implement multiple interfaces with the same method signature. A single implementation satisfies both interfaces.
 
 ```csharp
@@ -474,9 +496,11 @@ public class MyClass : IA, IB
 ```
 
 ### 12. **What is explicit interface implementation?**
+
 **Answer:** Explicit interface implementation is when you implement an interface member by fully qualifying it with the interface name. This is useful when implementing multiple interfaces with conflicting member names or when you want to hide interface members from the public API.
 
 **Basic Explicit Implementation:**
+
 ```csharp
 public interface IDrawable
 {
@@ -521,6 +545,7 @@ printable.Print(); // OK - accessed through interface
 ```
 
 **Handling Name Conflicts:**
+
 ```csharp
 public interface IFileManager
 {
@@ -559,6 +584,7 @@ public class FileEditor : IFileManager, IUserInterface
 ```
 
 **Mixed Implicit and Explicit Implementation:**
+
 ```csharp
 public interface IRepository<T>
 {
@@ -622,6 +648,7 @@ repo.HardDeleteAsync(1); // Direct access to public method
 **When to Use Explicit Implementation:**
 
 1. **Interface Segregation**: Hide complex interface members from everyday usage
+
 ```csharp
 public interface IAdvancedConfiguration
 {
@@ -651,6 +678,7 @@ public class SimpleService : IAdvancedConfiguration
 ```
 
 2. **Version Compatibility**: Maintain backward compatibility
+
 ```csharp
 public interface ILegacyService
 {
@@ -681,6 +709,7 @@ public class DataService : ILegacyService, IModernService
 ```
 
 ### 13. **Can abstract classes have fields while interfaces cannot?**
+
 **Answer:** Yes, abstract classes can have instance fields (variables), while interfaces cannot have instance fields. However, interfaces can have static fields (C# 8.0+).
 
 ```csharp
@@ -697,6 +726,7 @@ public interface IExample
 ```
 
 ### 14. **Can you instantiate an abstract class or interface?**
+
 **Answer:** No, you cannot directly instantiate either an abstract class or an interface. However, you can create instances of concrete classes that inherit from abstract classes or implement interfaces.
 
 ```csharp
@@ -705,6 +735,7 @@ Shape shape = new Circle(); // OK - Circle is concrete
 ```
 
 ### 15. **What happens if a derived class doesn't implement all abstract methods?**
+
 **Answer:** The derived class must also be declared as abstract. Only concrete (non-abstract) classes must implement all abstract methods.
 
 ```csharp
@@ -729,6 +760,7 @@ public class Concrete : Derived
 ## Design Patterns
 
 ### 16. **How are interfaces used in Dependency Injection?**
+
 **Answer:** Interfaces are commonly used in Dependency Injection to define contracts, allowing loose coupling between components. This makes code more testable and maintainable.
 
 ```csharp
@@ -749,6 +781,7 @@ public class Service
 ```
 
 ### 17. **What is the Template Method pattern and how does it relate to abstract classes?**
+
 **Answer:** The Template Method pattern uses abstract classes to define the skeleton of an algorithm, deferring some steps to subclasses. Abstract methods in the base class are overridden to provide specific behavior.
 
 ```csharp
@@ -768,6 +801,7 @@ public abstract class DataProcessor
 ```
 
 ### 18. **Can interfaces have properties?**
+
 **Answer:** Yes, interfaces can define properties. Implementing classes must provide the property implementation.
 
 ```csharp
@@ -787,10 +821,12 @@ public class Product : IEntity
 ## Performance and Best Practices
 
 ### 19. **Is there a performance difference between interfaces and abstract classes?**
+
 **Answer:** The performance difference is negligible. Both use virtual method dispatch. The choice should be based on design requirements rather than performance.
 
 ### 20. **What are marker interfaces?**
-**Answer:** Marker interfaces (or tag interfaces) are empty interfaces used to mark classes as having certain characteristics. Example: `ISerializable`, `ICloneable`.
+
+**Answer:** Marker interfaces (or tag interfaces) are empty interfaces used to mark classes as having certain characteristics. Example: `ISerializable` , `ICloneable` .
 
 ```csharp
 public interface ISpecialProcessing { }
@@ -808,6 +844,7 @@ if (obj is ISpecialProcessing)
 ```
 
 ### 21. **Can abstract classes have static methods?**
+
 **Answer:** Yes, abstract classes can have static methods just like regular classes.
 
 ```csharp
@@ -823,6 +860,7 @@ public abstract class MathOperations
 ```
 
 ### 22. **What is the purpose of abstract properties?**
+
 **Answer:** Abstract properties force derived classes to provide their own implementation for getting/setting values, allowing each derived class to handle the property differently.
 
 ```csharp
@@ -834,6 +872,7 @@ public abstract class Entity
 ```
 
 ### 23. **Can you have an abstract class with no abstract methods?**
+
 **Answer:** Yes, you can have an abstract class with no abstract methods. This is useful when you want to prevent direct instantiation of a class while providing common functionality.
 
 ```csharp
@@ -847,6 +886,7 @@ public abstract class Logger
 ```
 
 ### 24. **What is interface segregation principle (ISP)?**
+
 **Answer:** ISP states that clients should not be forced to depend on interfaces they don't use. It's better to have many specific interfaces than one general-purpose interface.
 
 ```csharp
@@ -865,6 +905,7 @@ public interface ISleepable { void Sleep(); }
 ```
 
 ### 25. **Can abstract classes implement the Singleton pattern?**
+
 **Answer:** While technically possible, it's not common because abstract classes cannot be instantiated directly. However, you can implement Singleton in a concrete class derived from an abstract class.
 
 ```csharp
@@ -886,7 +927,8 @@ public sealed class AppConfiguration : Configuration
 ## Bonus Questions
 
 ### 26. **What are covariant and contravariant interfaces?**
-**Answer:** Covariant (`out`) and contravariant (`in`) allow for more flexible type conversions with generic interfaces.
+
+**Answer:** Covariant ( `out` ) and contravariant ( `in` ) allow for more flexible type conversions with generic interfaces.
 
 ```csharp
 public interface ICovariant<out T>
@@ -901,6 +943,7 @@ public interface IContravariant<in T>
 ```
 
 ### 27. **Can you use access modifiers with interface members in C# 8.0+?**
+
 **Answer:** Yes, starting from C# 8.0, interface members can have access modifiers when they have default implementations.
 
 ```csharp
@@ -914,9 +957,11 @@ public interface IExample
 ```
 
 ### 28. **What is the liskov substitution principle and how does it relate to abstract classes?**
+
 **Answer:** The Liskov Substitution Principle states that objects of a derived class should be able to replace objects of the base class without affecting program correctness. Abstract classes should be designed with this principle in mind.
 
 ### 29. **Can you have async methods in interfaces?**
+
 **Answer:** Yes, interfaces can declare async method signatures using `Task` or `Task<T>` return types.
 
 ```csharp
@@ -928,9 +973,10 @@ public interface IAsyncService
 ```
 
 ### 30. **What is the difference between IS-A and CAN-DO relationships?**
+
 **Answer:**
-- **IS-A (Abstract Class):** Represents inheritance - "A Dog IS-A Animal"
-- **CAN-DO (Interface):** Represents capability - "A Dog CAN-DO Run, Bark, Eat"
+* **IS-A (Abstract Class):** Represents inheritance - "A Dog IS-A Animal"
+* **CAN-DO (Interface):** Represents capability - "A Dog CAN-DO Run, Bark, Eat"
 
 ```csharp
 // IS-A relationship
@@ -958,6 +1004,7 @@ public class Dog : IRunnable { } // Dog CAN-DO Run
 ## Additional Advanced Questions
 
 ### 31. **What are generic interfaces and abstract classes? How do they differ?**
+
 **Answer:** Both can be generic, but they handle type constraints differently.
 
 ```csharp
@@ -989,6 +1036,7 @@ public abstract class BaseRepository<T> where T : class, new()
 ```
 
 ### 32. **Can interfaces have nested types? What about abstract classes?**
+
 **Answer:** Yes, both can have nested types, but with different accessibility rules.
 
 ```csharp
@@ -1026,6 +1074,7 @@ public abstract class Container
 ```
 
 ### 33. **How do you handle versioning with interfaces vs abstract classes?**
+
 **Answer:** Interfaces are more fragile to changes, while abstract classes provide better versioning support.
 
 ```csharp
@@ -1058,6 +1107,7 @@ public abstract class PaymentProcessorBase
 ```
 
 ### 34. **What is the difference between implicit and explicit interface implementation performance?**
+
 **Answer:** Explicit interface implementation has slight performance overhead due to boxing/casting.
 
 ```csharp
@@ -1090,6 +1140,7 @@ iface.Method(); // Virtual dispatch - slightly slower
 ```
 
 ### 35. **How do abstract classes work with dependency injection containers?**
+
 **Answer:** Abstract classes cannot be directly registered but can be used as base classes for concrete implementations.
 
 ```csharp
@@ -1127,6 +1178,7 @@ services.AddScoped<EmailService>(); // Register concrete class
 ```
 
 ### 36. **What are the memory implications of interfaces vs abstract classes?**
+
 **Answer:** Interfaces have no memory footprint themselves, while abstract classes can have instance data.
 
 ```csharp
@@ -1163,6 +1215,7 @@ public class HeavyImplementation : HeavyBase
 ```
 
 ### 37. **How do you test classes that depend on abstract classes vs interfaces?**
+
 **Answer:** Interfaces are easier to mock, while abstract classes may require partial mocking or test-specific implementations.
 
 ```csharp
@@ -1213,6 +1266,7 @@ public class TestEmailService : EmailServiceBase
 ```
 
 ### 38. **What is the role of interfaces and abstract classes in microservices architecture?**
+
 **Answer:** Interfaces define service contracts, while abstract classes provide shared infrastructure code.
 
 ```csharp
@@ -1286,6 +1340,7 @@ public class OrderService : BaseService, IOrderService
 ```
 
 ### 39. **How do you handle circular dependencies with interfaces and abstract classes?**
+
 **Answer:** Interfaces help break circular dependencies, while abstract classes can sometimes create them.
 
 ```csharp
@@ -1339,6 +1394,7 @@ public class CustomerService : ICustomerService
 ```
 
 ### 40. **What are the compilation and runtime differences between interfaces and abstract classes?**
+
 **Answer:** Different IL generation and runtime behavior.
 
 ```csharp
@@ -1376,4 +1432,3 @@ public class Implementation : ExampleBase
 // - Both have similar performance characteristics
 // - Concrete class calls are fastest (no virtual dispatch)
 ```
-

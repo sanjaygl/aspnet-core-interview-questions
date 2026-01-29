@@ -7,18 +7,20 @@ A comprehensive collection of 50 REST API interview questions with real-world HT
 ## 📋 Table of Contents
 
 ### Batch 1: REST Fundamentals & HTTP Methods (Questions 1-10)
-1. [What is REST and what are its core constraints?](#1-what-is-rest-and-what-are-its-core-constraints)
-2. [What are the main HTTP methods and their purposes?](#2-what-are-the-main-http-methods-and-their-purposes)
-3. [What is idempotency in REST APIs?](#3-what-is-idempotency-in-rest-apis)
-4. [What does it mean for REST APIs to be stateless?](#4-what-does-it-mean-for-rest-apis-to-be-stateless)
-5. [What is the difference between REST and SOAP?](#5-what-is-the-difference-between-rest-and-soap)
-6. [What are HTTP status codes and when should you use them?](#6-what-are-http-status-codes-and-when-should-you-use-them)
-7. [What is the difference between safe and unsafe HTTP methods?](#7-what-is-the-difference-between-safe-and-unsafe-http-methods)
-8. [What is the difference between idempotent and non-idempotent methods?](#8-what-is-the-difference-between-idempotent-and-non-idempotent-methods)
-9. [What is HATEOAS in REST?](#9-what-is-hateoas-in-rest)
+
+01. [What is REST and what are its core constraints?](#1-what-is-rest-and-what-are-its-core-constraints)
+02. [What are the main HTTP methods and their purposes?](#2-what-are-the-main-http-methods-and-their-purposes)
+03. [What is idempotency in REST APIs?](#3-what-is-idempotency-in-rest-apis)
+04. [What does it mean for REST APIs to be stateless?](#4-what-does-it-mean-for-rest-apis-to-be-stateless)
+05. [What is the difference between REST and SOAP?](#5-what-is-the-difference-between-rest-and-soap)
+06. [What are HTTP status codes and when should you use them?](#6-what-are-http-status-codes-and-when-should-you-use-them)
+07. [What is the difference between safe and unsafe HTTP methods?](#7-what-is-the-difference-between-safe-and-unsafe-http-methods)
+08. [What is the difference between idempotent and non-idempotent methods?](#8-what-is-the-difference-between-idempotent-and-non-idempotent-methods)
+09. [What is HATEOAS in REST?](#9-what-is-hateoas-in-rest)
 10. [What are REST resource naming best practices?](#10-what-are-rest-resource-naming-best-practices)
 
 ### Batch 2: Authentication, Authorization & Security (Questions 11-20)
+
 11. [What is the difference between Authentication and Authorization?](#11-what-is-the-difference-between-authentication-and-authorization)
 12. [What is JWT and how does it work?](#12-what-is-jwt-and-how-does-it-work)
 13. [What is OAuth 2.0 and when should you use it?](#13-what-is-oauth-20-and-when-should-you-use-it)
@@ -31,6 +33,7 @@ A comprehensive collection of 50 REST API interview questions with real-world HT
 20. [What is the difference between webhooks and polling?](#20-what-is-the-difference-between-webhooks-and-polling)
 
 ### Batch 3: API Design, Best Practices & Error Handling (Questions 21-30)
+
 21. [What are REST API URI design best practices?](#21-what-are-rest-api-uri-design-best-practices)
 22. [How should you handle errors in REST APIs?](#22-how-should-you-handle-errors-in-rest-apis)
 23. [What is the difference between PUT and POST?](#23-what-is-the-difference-between-put-and-post)
@@ -43,6 +46,7 @@ A comprehensive collection of 50 REST API interview questions with real-world HT
 30. [What is API deprecation and how do you handle it?](#30-what-is-api-deprecation-and-how-do-you-handle-it)
 
 ### Batch 4: Advanced Topics & Performance (Questions 31-40)
+
 31. [What is the difference between Monolithic and Microservices API architecture?](#31-what-is-the-difference-between-monolithic-and-microservices-api-architecture)
 32. [What is the difference between GraphQL and REST?](#32-what-is-the-difference-between-graphql-and-rest)
 33. [What is the API Gateway pattern and when should you use it?](#33-what-is-the-api-gateway-pattern-and-when-should-you-use-it)
@@ -55,6 +59,7 @@ A comprehensive collection of 50 REST API interview questions with real-world HT
 40. [How do you handle backwards compatibility when evolving REST APIs?](#40-how-do-you-handle-backwards-compatibility-when-evolving-rest-apis)
 
 ### Batch 5: Real-World Scenarios & Best Practices (Questions 41-50)
+
 41. [How do you implement request/response compression in REST APIs?](#41-how-do-you-implement-requestresponse-compression-in-rest-apis)
 42. [What is Content Negotiation and how does it work?](#42-what-is-content-negotiation-and-how-does-it-work)
 43. [How do you implement bulk operations in REST APIs?](#43-how-do-you-implement-bulk-operations-in-rest-apis)
@@ -81,14 +86,15 @@ A comprehensive collection of 50 REST API interview questions with real-world HT
 **When to use:** Use REST for building public APIs, microservices, mobile backends, and any distributed system requiring stateless communication over HTTP.
 
 **The 6 REST Constraints:**
-1. **Client-Server Architecture** - Separation of concerns between UI and data storage
-2. **Stateless** - Each request contains all information needed; no session stored on server
-3. **Cacheable** - Responses must define themselves as cacheable or non-cacheable
-4. **Uniform Interface** - Standardized way of communicating (URIs, HTTP methods, representations)
-5. **Layered System** - Client cannot tell if connected directly to server or through intermediary
-6. **Code on Demand (Optional)** - Server can extend client functionality by transferring executable code
+01. **Client-Server Architecture** - Separation of concerns between UI and data storage
+02. **Stateless** - Each request contains all information needed; no session stored on server
+03. **Cacheable** - Responses must define themselves as cacheable or non-cacheable
+04. **Uniform Interface** - Standardized way of communicating (URIs, HTTP methods, representations)
+05. **Layered System** - Client cannot tell if connected directly to server or through intermediary
+06. **Code on Demand (Optional)** - Server can extend client functionality by transferring executable code
 
 **Real-time Example:**
+
 ```http
 GET /api/customers/12345 HTTP/1.1
 Host: api.company.com
@@ -127,6 +133,7 @@ Cache-Control: max-age=3600
 **Real-time Example:**
 
 **PUT Request (Complete Replacement):**
+
 ```http
 PUT /api/employees/789 HTTP/1.1
 Content-Type: application/json
@@ -142,6 +149,7 @@ Content-Type: application/json
 ```
 
 **PATCH Request (Partial Update):**
+
 ```http
 PATCH /api/employees/789 HTTP/1.1
 Content-Type: application/json
@@ -163,15 +171,15 @@ Content-Type: application/json
 **When to use:** Design all safe operations to be idempotent. Critical for payment systems, order processing, and any operation where duplicate execution could cause issues.
 
 **Idempotent HTTP Methods:**
-- **GET** - Reading data multiple times doesn't change it
-- **PUT** - Replacing a resource with same data produces same result
-- **DELETE** - Deleting already deleted resource has no additional effect
-- **HEAD** - Same as GET, only retrieves headers
-- **OPTIONS** - Querying supported methods doesn't change state
+* **GET** - Reading data multiple times doesn't change it
+* **PUT** - Replacing a resource with same data produces same result
+* **DELETE** - Deleting already deleted resource has no additional effect
+* **HEAD** - Same as GET, only retrieves headers
+* **OPTIONS** - Querying supported methods doesn't change state
 
 **Non-Idempotent HTTP Methods:**
-- **POST** - Creating resources multiple times creates multiple instances
-- **PATCH** - Depending on implementation, may or may not be idempotent
+* **POST** - Creating resources multiple times creates multiple instances
+* **PATCH** - Depending on implementation, may or may not be idempotent
 
 **Real-time Example:**
 
@@ -214,12 +222,13 @@ Content-Type: application/json
 **When to use:** Always design REST APIs to be stateless. Store session data on the client (JWT tokens) or in external stores (Redis, databases) rather than in server memory.
 
 **Stateless vs Stateful Comparison:**
-- **Stateless:** Token in each request → Server validates → Processes request
-- **Stateful:** Session ID in request → Server looks up session → Processes request
+* **Stateless:** Token in each request → Server validates → Processes request
+* **Stateful:** Session ID in request → Server looks up session → Processes request
 
 **Real-time Example:**
 
 **Stateless Approach (Correct REST):**
+
 ```http
 # Request 1 - Get user profile
 GET /api/users/profile HTTP/1.1
@@ -242,6 +251,7 @@ Content-Type: application/json
 ```
 
 **Stateful Approach (Violates REST):**
+
 ```http
 # Login creates server-side session
 POST /api/login
@@ -279,6 +289,7 @@ Cookie: SESSIONID=abc123
 **Real-time Example:**
 
 **REST API Request:**
+
 ```http
 POST /api/payments HTTP/1.1
 Host: api.payment.com
@@ -299,6 +310,7 @@ HTTP/1.1 201 Created
 ```
 
 **SOAP API Request:**
+
 ```xml
 POST /PaymentService HTTP/1.1
 Host: api.payment.com
@@ -327,11 +339,11 @@ Content-Type: text/xml
 **When to use:** Always return appropriate status codes. Helps client applications implement retry logic, error handling, caching, and user feedback mechanisms.
 
 **Status Code Categories:**
-- **1xx (Informational)** - Request received, continuing process
-- **2xx (Success)** - Request successfully received, understood, and accepted
-- **3xx (Redirection)** - Further action needed to complete the request
-- **4xx (Client Error)** - Request contains bad syntax or cannot be fulfilled
-- **5xx (Server Error)** - Server failed to fulfill valid request
+* **1xx (Informational)** - Request received, continuing process
+* **2xx (Success)** - Request successfully received, understood, and accepted
+* **3xx (Redirection)** - Further action needed to complete the request
+* **4xx (Client Error)** - Request contains bad syntax or cannot be fulfilled
+* **5xx (Server Error)** - Server failed to fulfill valid request
 
 **Common Status Codes:**
 
@@ -350,6 +362,7 @@ Content-Type: text/xml
 | **503** | Service Unavailable | Server temporarily unavailable | Maintenance mode |
 
 **Real-time Example:**
+
 ```http
 # 201 Created - New customer registration
 POST /api/customers HTTP/1.1
@@ -420,6 +433,7 @@ Both **401** and **403** are client error codes, but they represent different se
 **Real-time Example:**
 
 **401 Unauthorized Scenarios:**
+
 ```http
 # No authentication token provided
 GET /api/orders/5001 HTTP/1.1
@@ -447,6 +461,7 @@ WWW-Authenticate: Bearer error="invalid_token"
 ```
 
 **403 Forbidden Scenarios:**
+
 ```http
 # User authenticated but trying to access another user's order
 GET /api/orders/5001 HTTP/1.1
@@ -482,10 +497,10 @@ HTTP/1.1 403 Forbidden
 **When to use:** Implement when API serves multiple client types, supports internationalization, or needs to provide data in different formats (public APIs, B2B integrations, multilingual applications).
 
 **Key Headers:**
-- **Accept**: Client specifies desired response format
-- **Accept-Language**: Client specifies preferred language
-- **Accept-Encoding**: Client specifies compression (gzip, deflate)
-- **Content-Type**: Server/client specifies actual format sent
+* **Accept**: Client specifies desired response format
+* **Accept-Language**: Client specifies preferred language
+* **Accept-Encoding**: Client specifies compression (gzip, deflate)
+* **Content-Type**: Server/client specifies actual format sent
 
 **Real-time Example:**
 
@@ -701,6 +716,7 @@ HTTP/1.1 204 No Content
 ```
 
 **Common Mistake - Using GET for Unsafe Operations:**
+
 ```http
 # WRONG - Never use GET to modify state
 GET /api/employees/EMP-123/delete HTTP/1.1
@@ -814,9 +830,9 @@ WWW-Authenticate: Bearer error="invalid_token"
 
 **JWT Structure (3 parts separated by dots):**
 
-1. **Header** - Algorithm and token type
-2. **Payload** - Claims (user data, metadata)
-3. **Signature** - Cryptographic signature for verification
+01. **Header** - Algorithm and token type
+02. **Payload** - Claims (user data, metadata)
+03. **Signature** - Cryptographic signature for verification
 
 **Format:** `header.payload.signature`
 
@@ -827,33 +843,35 @@ WWW-Authenticate: Bearer error="invalid_token"
 
 // 1. HEADER (Base64URL encoded)
 {
-  "alg": "HS256",      // Algorithm: HMAC SHA-256
-  "typ": "JWT"         // Type: JSON Web Token
+    "alg": "HS256", // Algorithm: HMAC SHA-256
+    "typ": "JWT" // Type: JSON Web Token
 }
 
 // 2. PAYLOAD (Base64URL encoded) - Claims
 {
-  "sub": "user123",              // Subject (user ID)
-  "name": "Alice Johnson",       // User name
-  "email": "alice@company.com",  // Email
-  "roles": ["Employee", "Manager"],  // Authorization
-  "iat": 1706011200,            // Issued At (timestamp)
-  "exp": 1706014800             // Expiration (timestamp)
+    "sub": "user123", // Subject (user ID)
+    "name": "Alice Johnson", // User name
+    "email": "alice@company.com", // Email
+    "roles": ["Employee", "Manager"], // Authorization
+    "iat": 1706011200, // Issued At (timestamp)
+    "exp": 1706014800 // Expiration (timestamp)
 }
 
 // 3. SIGNATURE (prevents tampering)
 HMACSHA256(
-  base64UrlEncode(header) + "." + base64UrlEncode(payload),
-  secret_key
+    base64UrlEncode(header) + "." + base64UrlEncode(payload),
+    secret_key
 )
 ```
 
 **Complete JWT Token:**
+
 ```
 eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ1c2VyMTIzIiwibmFtZSI6IkFsaWNlIEpvaG5zb24iLCJlbWFpbCI6ImFsaWNlQGNvbXBhbnkuY29tIiwicm9sZXMiOlsiRW1wbG95ZWUiLCJNYW5hZ2VyIl0sImlhdCI6MTcwNjAxMTIwMCwiZXhwIjoxNzA2MDE0ODAwfQ.4vC2Hf8x_9mN5yKzP1qW8rL3jT6nU2oS7bM9dR4eE1k
 ```
 
 **API Usage:**
+
 ```http
 # Using JWT for authenticated request
 GET /api/orders HTTP/1.1
@@ -874,12 +892,12 @@ HTTP/1.1 200 OK
 ```
 
 **JWT Best Practices:**
-- Store sensitive key server-side, never in JWT
-- Keep payload small (JWT sent with every request)
-- Set appropriate expiration time (short-lived: 15-60 min)
-- Use refresh tokens for long sessions
-- Use HTTPS to prevent token interception
-- Validate signature and expiration on every request
+* Store sensitive key server-side, never in JWT
+* Keep payload small (JWT sent with every request)
+* Set appropriate expiration time (short-lived: 15-60 min)
+* Use refresh tokens for long sessions
+* Use HTTPS to prevent token interception
+* Validate signature and expiration on every request
 
 ---
 
@@ -977,6 +995,7 @@ HTTP/1.1 200 OK
 ```
 
 **OAuth 2.0 Scopes Example:**
+
 ```
 read_profile       - View user profile
 write_profile      - Modify user profile
@@ -1060,6 +1079,7 @@ X-RateLimit-Tier: enterprise
 ```
 
 **Implementation Strategies:**
+
 ```http
 # Per-User Rate Limiting (by authentication token)
 Authorization: Bearer user_token_123
@@ -1076,11 +1096,11 @@ POST /api/auth/login          # 5 req/minute (prevent brute force)
 ```
 
 **Best Practices:**
-- Return `429 Too Many Requests` with `Retry-After` header
-- Include rate limit info in response headers
-- Implement different limits for different endpoints
-- Use distributed rate limiting (Redis) for multiple servers
-- Provide upgrade path for users hitting limits
+* Return `429 Too Many Requests` with `Retry-After` header
+* Include rate limit info in response headers
+* Implement different limits for different endpoints
+* Use distributed rate limiting (Redis) for multiple servers
+* Provide upgrade path for users hitting limits
 
 ---
 
@@ -1096,7 +1116,7 @@ POST /api/auth/login          # 5 req/minute (prevent brute force)
 
 | Strategy | Example | Pros | Cons |
 |----------|---------|------|------|
-| **URI Path** | `/api/v1/users`, `/api/v2/users` | Clear, simple, cacheable | URL changes, multiple endpoints |
+| **URI Path** | `/api/v1/users` , `/api/v2/users` | Clear, simple, cacheable | URL changes, multiple endpoints |
 | **Query Parameter** | `/api/users?version=1` | Single endpoint | Not RESTful, caching issues |
 | **Header** | `Accept: application/vnd.api.v1+json` | Clean URLs | Less visible, tooling issues |
 | **Content Negotiation** | `Accept: application/vnd.api+json;version=2` | RESTful, flexible | Complex, harder to test |
@@ -1186,6 +1206,7 @@ Warning: 299 - "API v1 is deprecated. Migrate to v2 by Dec 2026"
 ```
 
 **Version Lifecycle Management:**
+
 ```
 Version 1.0 → Released (Jan 2024)
 Version 2.0 → Released (Jan 2025)
@@ -1435,9 +1456,9 @@ Authorization: Basic YWRtaW46c2VjcmV0  # "admin:secret"
 ```
 
 **Best Practices:**
-- **API Keys:** Rotate regularly, use separate keys per environment, don't commit to source control
-- **Bearer Tokens:** Short expiration (15-60 min), use refresh tokens, store securely (httpOnly cookies)
-- **Basic Auth:** Only with HTTPS, avoid in production, use for internal/dev environments only
+* **API Keys:** Rotate regularly, use separate keys per environment, don't commit to source control
+* **Bearer Tokens:** Short expiration (15-60 min), use refresh tokens, store securely (httpOnly cookies)
+* **Basic Auth:** Only with HTTPS, avoid in production, use for internal/dev environments only
 
 ---
 
@@ -1580,6 +1601,7 @@ HTTP/1.1 200 OK
 ```
 
 **Filtering + Sorting + Pagination Combined:**
+
 ```http
 GET /api/employees?
     department=Engineering&
@@ -1759,6 +1781,7 @@ Expires: 0
 ```
 
 **Cache-Control Directives:**
+
 ```http
 # Public, cacheable for 1 hour
 Cache-Control: public, max-age=3600
@@ -1777,12 +1800,12 @@ Cache-Control: max-age=3600, stale-if-error=86400
 ```
 
 **Caching Best Practices:**
-- Use appropriate Cache-Control directives
-- Implement ETags for efficient revalidation
-- Never cache sensitive/personal data without `private`
-- Use cache invalidation on data updates
-- Consider using Redis for distributed caching
-- Monitor cache hit rates and adjust TTLs
+* Use appropriate Cache-Control directives
+* Implement ETags for efficient revalidation
+* Never cache sensitive/personal data without `private`
+* Use cache invalidation on data updates
+* Consider using Redis for distributed caching
+* Monitor cache hit rates and adjust TTLs
 
 ---
 
@@ -1926,6 +1949,7 @@ HTTP/1.1 200 OK  # Success
 ```
 
 **Webhook Use Cases:**
+
 ```http
 # Payment Processing (Stripe, PayPal)
 Event: payment.succeeded
@@ -1945,13 +1969,13 @@ Webhook: https://inventory.myapp.com/webhooks/orders
 ```
 
 **Webhook Best Practices:**
-- Always verify webhook signatures (prevent spoofing)
-- Respond quickly (200 OK), process asynchronously
-- Implement retry logic with exponential backoff
-- Use HTTPS for webhook endpoints
-- Log all webhook events for debugging
-- Provide webhook management UI (view, test, disable)
-- Include idempotency keys to handle duplicate deliveries
+* Always verify webhook signatures (prevent spoofing)
+* Respond quickly (200 OK), process asynchronously
+* Implement retry logic with exponential backoff
+* Use HTTPS for webhook endpoints
+* Log all webhook events for debugging
+* Provide webhook management UI (view, test, disable)
+* Include idempotency keys to handle duplicate deliveries
 
 ---
 
@@ -2097,6 +2121,7 @@ Content-Type: application/json
 ```
 
 **Complete Example - E-commerce API:**
+
 ```http
 # Customers
 GET    /api/customers                    # List all customers
@@ -2140,6 +2165,7 @@ POST   /api/search                       # Advanced search
 **When to use:** Implement comprehensive error handling for all endpoints - validation errors (400), authentication failures (401), authorization issues (403), not found errors (404), server errors (500), and custom business logic errors.
 
 **Error Response Structure:**
+
 ```json
 {
   "error": {
@@ -2385,15 +2411,15 @@ Content-Type: application/json
 ```
 
 **Error Handling Best Practices:**
-- Use appropriate HTTP status codes
-- Provide consistent error response structure
-- Include helpful error messages and details
-- Don't expose sensitive information or stack traces
-- Include request IDs for traceability
-- Log errors server-side with full context
-- Use specific error codes for programmatic handling
-- Provide timestamp and path information
-- Include suggestions for resolution when possible
+* Use appropriate HTTP status codes
+* Provide consistent error response structure
+* Include helpful error messages and details
+* Don't expose sensitive information or stack traces
+* Include request IDs for traceability
+* Log errors server-side with full context
+* Use specific error codes for programmatic handling
+* Provide timestamp and path information
+* Include suggestions for resolution when possible
 
 ---
 
@@ -2412,7 +2438,7 @@ Content-Type: application/json
 | **Primary Use** | Create new resource | Update/replace existing resource |
 | **Can Create?** | Yes (server assigns ID) | Yes (client provides ID) |
 | **Idempotent** | No | Yes |
-| **URI** | Collection URI (`/api/orders`) | Specific resource URI (`/api/orders/123`) |
+| **URI** | Collection URI ( `/api/orders` ) | Specific resource URI ( `/api/orders/123` ) |
 | **Response Status** | 201 Created | 200 OK or 204 No Content |
 | **Location Header** | Yes (new resource URL) | Optional |
 | **Multiple Calls** | Creates multiple resources | Same result |
@@ -2559,6 +2585,7 @@ Content-Type: application/json
 ```
 
 **Decision Matrix:**
+
 ```
 Need to create resource?
 ├─ Server should assign ID?
@@ -2792,17 +2819,17 @@ HTTP/1.1 200 OK
 
 **Common Async Patterns:**
 
-1. **202 Accepted + Polling**: Return job ID, client polls status
-2. **Webhooks**: Server notifies client when complete
-3. **Server-Sent Events (SSE)**: Real-time updates pushed to client
-4. **WebSockets**: Bidirectional real-time communication
-5. **Message Queue**: Decouple request from processing
+01. **202 Accepted + Polling**: Return job ID, client polls status
+02. **Webhooks**: Server notifies client when complete
+03. **Server-Sent Events (SSE)**: Real-time updates pushed to client
+04. **WebSockets**: Bidirectional real-time communication
+05. **Message Queue**: Decouple request from processing
 
 **Status Codes for Async:**
-- `202 Accepted` - Request accepted, processing async
-- `200 OK` - Status check successful
-- `303 See Other` - Resource ready, redirect to result
-- `410 Gone` - Job completed and cleaned up
+* `202 Accepted` - Request accepted, processing async
+* `200 OK` - Status check successful
+* `303 See Other` - Resource ready, redirect to result
+* `410 Gone` - Job completed and cleaned up
 
 ---
 
@@ -3039,22 +3066,22 @@ API-Version: 2.0
 ```
 
 **Popular API Gateway Solutions:**
-- **AWS API Gateway** - Fully managed, serverless
-- **Kong** - Open-source, plugin-based
-- **NGINX** - High-performance, widely used
-- **Apigee** - Enterprise-grade, Google Cloud
-- **Azure API Management** - Microsoft Azure
-- **Tyk** - Open-source, Docker-native
-- **Ocelot** - .NET Core, lightweight
+* **AWS API Gateway** - Fully managed, serverless
+* **Kong** - Open-source, plugin-based
+* **NGINX** - High-performance, widely used
+* **Apigee** - Enterprise-grade, Google Cloud
+* **Azure API Management** - Microsoft Azure
+* **Tyk** - Open-source, Docker-native
+* **Ocelot** - . NET Core, lightweight
 
 **API Gateway Benefits:**
-- Simplified client code (single endpoint)
-- Centralized security and authentication
-- Reduced number of client requests (aggregation)
-- Backend service independence (routing abstraction)
-- Consistent error handling and logging
-- Easy A/B testing and canary deployments
-- Protocol translation (REST to gRPC, etc.)
+* Simplified client code (single endpoint)
+* Centralized security and authentication
+* Reduced number of client requests (aggregation)
+* Backend service independence (routing abstraction)
+* Consistent error handling and logging
+* Easy A/B testing and canary deployments
+* Protocol translation (REST to gRPC, etc.)
 
 ---
 
@@ -3293,22 +3320,22 @@ X-Tier: professional
 ```
 
 **Throttling Strategies:**
-1. **Token Bucket** - Tokens refill at constant rate, allow bursts
-2. **Leaky Bucket** - Requests processed at constant rate, smooth traffic
-3. **Fixed Window** - Reset limits at fixed intervals
-4. **Sliding Window** - Smooth distribution across time
-5. **Dynamic Throttling** - Adjust based on system load
-6. **Priority Throttling** - Different limits for different user tiers
+01. **Token Bucket** - Tokens refill at constant rate, allow bursts
+02. **Leaky Bucket** - Requests processed at constant rate, smooth traffic
+03. **Fixed Window** - Reset limits at fixed intervals
+04. **Sliding Window** - Smooth distribution across time
+05. **Dynamic Throttling** - Adjust based on system load
+06. **Priority Throttling** - Different limits for different user tiers
 
 **Implementation Best Practices:**
-- Return clear headers (limit, remaining, reset)
-- Use 429 status code with Retry-After header
-- Implement per-user and per-IP throttling
-- Provide upgrade paths for higher limits
-- Log throttling events for analysis
-- Use distributed throttling (Redis) for multiple servers
-- Consider geographic distribution
-- Implement graceful degradation during overload
+* Return clear headers (limit, remaining, reset)
+* Use 429 status code with Retry-After header
+* Implement per-user and per-IP throttling
+* Provide upgrade paths for higher limits
+* Log throttling events for analysis
+* Use distributed throttling (Redis) for multiple servers
+* Consider geographic distribution
+* Implement graceful degradation during overload
 
 ---
 
@@ -3341,10 +3368,12 @@ X-Tier: professional
 # Customer Management API Documentation
 
 ## Overview
+
 The Customer API enables management of customer records, including creation, 
 retrieval, updates, and deletion. Base URL: `https://api.company.com`
 
 ## Authentication
+
 All requests require Bearer token authentication:
 
 Authorization: Bearer YOUR_ACCESS_TOKEN
@@ -3361,6 +3390,7 @@ POST /api/auth/login
 ## Endpoints
 
 ### 1. Create Customer
+
 Creates a new customer record.
 
 **Endpoint:** `POST /api/customers`
@@ -3441,6 +3471,7 @@ const customer = await response.json();
 ---
 
 ### 2. Get Customer
+
 Retrieves a specific customer by ID.
 
 **Endpoint:** `GET /api/customers/{customerId}`
@@ -3483,6 +3514,7 @@ curl -X GET https://api.company.com/api/customers/CUST-789 \
 ---
 
 ### 3. List Customers
+
 Retrieves paginated list of customers with optional filtering.
 
 **Endpoint:** `GET /api/customers`
@@ -3519,6 +3551,7 @@ GET /api/customers?page=1&pageSize=20&status=active&sortBy=name&sortOrder=asc
 ---
 
 ### 4. Update Customer
+
 Updates customer information (partial update).
 
 **Endpoint:** `PATCH /api/customers/{customerId}`
@@ -3535,6 +3568,7 @@ Updates customer information (partial update).
 ---
 
 ### 5. Delete Customer
+
 Deletes a customer record.
 
 **Endpoint:** `DELETE /api/customers/{customerId}`
@@ -3544,6 +3578,7 @@ Deletes a customer record.
 ---
 
 ## Rate Limiting
+
 - Free tier: 1,000 requests/hour
 - Premium tier: 10,000 requests/hour
 - Enterprise: Unlimited
@@ -3563,6 +3598,7 @@ When exceeded:
 ---
 
 ## Versioning
+
 Current version: v1
 Base URL includes version: https://api.company.com/api/v1/
 
@@ -3571,6 +3607,7 @@ Migration guide for v2: /docs/migration-v1-to-v2
 ---
 
 ## SDKs and Libraries
+
 - Python: pip install company-api-client
 - JavaScript: npm install @company/api-client
 - C#: Install-Package Company.Api.Client
@@ -3578,21 +3615,23 @@ Migration guide for v2: /docs/migration-v1-to-v2
 ---
 
 ## Support
+
 - Documentation: https://docs.api.company.com
 - Support email: api-support@company.com
 - Status page: https://status.api.company.com
 ```
 
 **Documentation Tools:**
-- **Swagger/OpenAPI** - Industry standard, interactive docs
-- **Postman** - Collection sharing, examples
-- **ReadMe** - User-friendly, interactive
-- **API Blueprint** - Markdown-based
-- **Redoc** - Clean, responsive OpenAPI renderer
-- **Stoplight** - Design-first approach
-- **Slate** - Beautiful static docs
+* **Swagger/OpenAPI** - Industry standard, interactive docs
+* **Postman** - Collection sharing, examples
+* **ReadMe** - User-friendly, interactive
+* **API Blueprint** - Markdown-based
+* **Redoc** - Clean, responsive OpenAPI renderer
+* **Stoplight** - Design-first approach
+* **Slate** - Beautiful static docs
 
 **OpenAPI (Swagger) Example:**
+
 ```yaml
 openapi: 3.0.0
 info:
@@ -3940,21 +3979,21 @@ dotnet list package --vulnerable  # .NET
 ```
 
 **Security Checklist:**
-- [ ] Enforce HTTPS (TLS 1.2+)
-- [ ] Implement strong authentication (JWT/OAuth)
-- [ ] Apply authorization checks on all endpoints
-- [ ] Validate and sanitize all inputs
-- [ ] Implement rate limiting
-- [ ] Configure CORS properly
-- [ ] Add security headers
-- [ ] Never expose sensitive data
-- [ ] Use generic error messages
-- [ ] Implement logging and monitoring
-- [ ] Regular security audits and pen testing
-- [ ] Keep dependencies updated
-- [ ] Use secrets management (not hardcoded)
-- [ ] Implement request size limits
-- [ ] Enable audit logging for sensitive operations
+* [ ] Enforce HTTPS (TLS 1.2+)
+* [ ] Implement strong authentication (JWT/OAuth)
+* [ ] Apply authorization checks on all endpoints
+* [ ] Validate and sanitize all inputs
+* [ ] Implement rate limiting
+* [ ] Configure CORS properly
+* [ ] Add security headers
+* [ ] Never expose sensitive data
+* [ ] Use generic error messages
+* [ ] Implement logging and monitoring
+* [ ] Regular security audits and pen testing
+* [ ] Keep dependencies updated
+* [ ] Use secrets management (not hardcoded)
+* [ ] Implement request size limits
+* [ ] Enable audit logging for sensitive operations
 
 ---
 
@@ -4215,31 +4254,37 @@ SEVERITY warning
 # Real-time API Dashboard displays:
 
 ## Availability
+
 ✓ Uptime: 99.95% (current month)
 ✓ Status: All systems operational
 
 ## Performance (Last hour)
+
 - Requests: 1,245,678
 - RPS (req/sec): 346
 - Avg Response Time: 125ms
 - p50: 85ms | p95: 250ms | p99: 450ms
 
 ## Errors (Last hour)
+
 - Total Errors: 1,234 (0.99%)
 - 4xx Errors: 1,100 (89%)
 - 5xx Errors: 134 (11%)
 
 ## Top Endpoints (by traffic)
-1. GET /api/products - 45% (156 RPS)
-2. GET /api/customers - 25% (87 RPS)
-3. POST /api/orders - 15% (52 RPS)
+
+01. GET /api/products - 45% (156 RPS)
+02. GET /api/customers - 25% (87 RPS)
+03. POST /api/orders - 15% (52 RPS)
 
 ## Slowest Endpoints (p95)
-1. POST /api/reports/generate - 3.2s
-2. GET /api/analytics/dashboard - 1.8s
-3. GET /api/orders?includeItems=true - 850ms
+
+01. POST /api/reports/generate - 3.2s
+02. GET /api/analytics/dashboard - 1.8s
+03. GET /api/orders?includeItems=true - 850ms
 
 ## Error Breakdown
+
 - 401 Unauthorized: 600 (48.6%)
 - 404 Not Found: 350 (28.4%)
 - 500 Internal Server Error: 134 (10.9%)
@@ -4302,12 +4347,12 @@ Current: 0.95% | Target: <1% | Trend: ↗ increasing
 ```
 
 **Monitoring Tools Stack:**
-- **Metrics**: Prometheus, Datadog, New Relic, CloudWatch
-- **Logging**: ELK Stack, Splunk, Loki
-- **Tracing**: Jaeger, Zipkin, AWS X-Ray
-- **APM**: New Relic, Datadog APM, Dynatrace
-- **Alerting**: PagerDuty, Opsgenie, Slack
-- **Dashboards**: Grafana, Kibana
+* **Metrics**: Prometheus, Datadog, New Relic, CloudWatch
+* **Logging**: ELK Stack, Splunk, Loki
+* **Tracing**: Jaeger, Zipkin, AWS X-Ray
+* **APM**: New Relic, Datadog APM, Dynatrace
+* **Alerting**: PagerDuty, Opsgenie, Slack
+* **Dashboards**: Grafana, Kibana
 
 ---
 
@@ -4418,12 +4463,14 @@ Content-Type: application/json
 ## API v1 to v2 Migration Guide
 
 ### Overview
+
 API v2 introduces improved response structures, better error handling,
 and enhanced performance. All v1 clients must migrate by Jan 1, 2027.
 
 ### Breaking Changes
 
 #### 1. Customer Resource Structure
+
 **v1:**
 {
   "id": "123",
@@ -4441,6 +4488,7 @@ and enhanced performance. All v1 clients must migrate by Jan 1, 2027.
 }
 
 #### 2. Endpoint Changes
+
 | v1 Endpoint | v2 Endpoint | Notes |
 |-------------|-------------|-------|
 | GET /api/v1/customers | GET /api/v2/customers | Pagination required |
@@ -4448,6 +4496,7 @@ and enhanced performance. All v1 clients must migrate by Jan 1, 2027.
 | POST /api/v1/orders | POST /api/v2/customers/{customerId}/orders | Nested under customer |
 
 #### 3. Error Response Format
+
 **v1:**
 {
   "error": "Customer not found"
@@ -4487,11 +4536,13 @@ customer = response.json()
 print(f"{customer['firstName']} {customer['lastName']}")  # "John Doe"
 
 ### Migration Timeline
+
 - Now - Jan 1, 2027: Dual support (v1 and v2 available)
 - Jan 1, 2027: v1 sunset (returns 410 Gone)
 - Feb 1, 2027: v1 code removed
 
 ### Support
+
 - Migration questions: api-support@company.com
 - Office hours: Wednesdays 2-4 PM PT
 - Slack channel: #api-v2-migration
@@ -4584,26 +4635,26 @@ X-Feature-Flag: use-v2-format
 ```
 
 **Deprecation Best Practices:**
-- Provide 6-12 month deprecation period
-- Use standard HTTP headers (Deprecation, Sunset)
-- Send email notifications to affected clients
-- Maintain comprehensive migration documentation
-- Offer backward compatibility layer temporarily
-- Monitor deprecated API usage
-- Provide sandbox environment for testing
-- Have dedicated support during transition
-- Use semantic versioning
-- Log deprecated feature usage
+* Provide 6-12 month deprecation period
+* Use standard HTTP headers (Deprecation, Sunset)
+* Send email notifications to affected clients
+* Maintain comprehensive migration documentation
+* Offer backward compatibility layer temporarily
+* Monitor deprecated API usage
+* Provide sandbox environment for testing
+* Have dedicated support during transition
+* Use semantic versioning
+* Log deprecated feature usage
 
 **Communication Channels:**
-- API documentation (prominent banner)
-- Response headers (every request)
-- Email to registered developers
-- Blog posts and announcements
-- Slack/Discord community channels
-- Status page updates
-- In-product notifications
-- Changelog and release notes
+* API documentation (prominent banner)
+* Response headers (every request)
+* Email to registered developers
+* Blog posts and announcements
+* Slack/Discord community channels
+* Status page updates
+* In-product notifications
+* Changelog and release notes
 
 ---
 
@@ -4799,11 +4850,11 @@ Response Time: ~250ms (network overhead + multiple calls)
 
 # MONOLITHIC DEPLOYMENT
 # Small bug fix in notification module:
-1. Fix code in Notification module
-2. Run ALL tests (entire application)
-3. Build entire application
-4. Deploy entire application (downtime/rolling restart)
-5. Risk: Any bug anywhere affects entire app
+01. Fix code in Notification module
+02. Run ALL tests (entire application)
+03. Build entire application
+04. Deploy entire application (downtime/rolling restart)
+05. Risk: Any bug anywhere affects entire app
 
 Deployment time: 30-60 minutes
 Risk level: High (everything deployed)
@@ -4812,11 +4863,11 @@ Risk level: High (everything deployed)
 
 # MICROSERVICES DEPLOYMENT
 # Small bug fix in notification service:
-1. Fix code in Notification Service only
-2. Run tests for Notification Service
-3. Build Notification Service only
-4. Deploy Notification Service independently
-5. Other services unaffected, keep running
+01. Fix code in Notification Service only
+02. Run tests for Notification Service
+03. Build Notification Service only
+04. Deploy Notification Service independently
+05. Other services unaffected, keep running
 
 Deployment time: 5-10 minutes
 Risk level: Low (isolated to one service)
@@ -4912,20 +4963,20 @@ OrderService → calls PaymentService (timeout)
 ```
 
 **Migration Strategy (Monolith → Microservices):**
-1. **Strangler Fig Pattern**: Gradually extract services
-2. **Start with boundaries**: Identify bounded contexts
-3. **Extract non-critical services first**: Lower risk
-4. **API Gateway**: Facade over both monolith and microservices
-5. **Data migration**: Gradual separation
-6. **Don't over-decompose**: Find right service size
+01. **Strangler Fig Pattern**: Gradually extract services
+02. **Start with boundaries**: Identify bounded contexts
+03. **Extract non-critical services first**: Lower risk
+04. **API Gateway**: Facade over both monolith and microservices
+05. **Data migration**: Gradual separation
+06. **Don't over-decompose**: Find right service size
 
 **Decision Matrix:**
-- **Small team (< 10)**: Monolithic
-- **Large team (> 20)**: Consider microservices
-- **Simple domain**: Monolithic
-- **Complex domain with clear boundaries**: Microservices
-- **Rapid prototyping/MVP**: Monolithic
-- **Scale requirements vary by feature**: Microservices
+* **Small team (< 10)**: Monolithic
+* **Large team (> 20)**: Consider microservices
+* **Simple domain**: Monolithic
+* **Complex domain with clear boundaries**: Microservices
+* **Rapid prototyping/MVP**: Monolithic
+* **Scale requirements vary by feature**: Microservices
 
 ---
 
@@ -5427,16 +5478,16 @@ ETag: "abc123"
 ```
 
 **Popular GraphQL Tools:**
-- **Apollo Server/Client**: Most popular GraphQL implementation
-- **GraphiQL**: Interactive GraphQL IDE
-- **Relay**: Facebook's GraphQL client
-- **Hasura**: Instant GraphQL APIs over PostgreSQL
-- **AWS AppSync**: Managed GraphQL service
-- **GraphQL Code Generator**: Generate types from schema
+* **Apollo Server/Client**: Most popular GraphQL implementation
+* **GraphiQL**: Interactive GraphQL IDE
+* **Relay**: Facebook's GraphQL client
+* **Hasura**: Instant GraphQL APIs over PostgreSQL
+* **AWS AppSync**: Managed GraphQL service
+* **GraphQL Code Generator**: Generate types from schema
 
 **When to Choose:**
-- **Choose REST**: Public APIs, simple CRUD, RESTful conventions match domain, caching critical
-- **Choose GraphQL**: Complex data relationships, mobile apps, rapid iteration, varying client needs, real-time subscriptions
+* **Choose REST**: Public APIs, simple CRUD, RESTful conventions match domain, caching critical
+* **Choose GraphQL**: Complex data relationships, mobile apps, rapid iteration, varying client needs, real-time subscriptions
 
 ---
 
@@ -5885,28 +5936,28 @@ routes:
 ```
 
 **API Gateway Responsibilities:**
-- ✓ Request Routing & Composition
-- ✓ Protocol Translation (REST ↔ gRPC ↔ SOAP)
-- ✓ Authentication & Authorization
-- ✓ Rate Limiting & Throttling
-- ✓ Load Balancing
-- ✓ Caching
-- ✓ Request/Response Transformation
-- ✓ Circuit Breaking
-- ✓ Monitoring & Logging
-- ✓ API Versioning
-- ✓ CORS handling
-- ✓ SSL/TLS Termination
+* ✓ Request Routing & Composition
+* ✓ Protocol Translation (REST ↔ gRPC ↔ SOAP)
+* ✓ Authentication & Authorization
+* ✓ Rate Limiting & Throttling
+* ✓ Load Balancing
+* ✓ Caching
+* ✓ Request/Response Transformation
+* ✓ Circuit Breaking
+* ✓ Monitoring & Logging
+* ✓ API Versioning
+* ✓ CORS handling
+* ✓ SSL/TLS Termination
 
 **Popular API Gateway Solutions:**
-- Kong, AWS API Gateway, Azure API Management
-- NGINX, Apigee, Tyk, Ocelot (.NET), Spring Cloud Gateway
+* Kong, AWS API Gateway, Azure API Management
+* NGINX, Apigee, Tyk, Ocelot (. NET), Spring Cloud Gateway
 
 **API Gateway Considerations:**
-- **Single Point of Failure**: Make gateway highly available
-- **Performance Bottleneck**: Optimize, scale horizontally
-- **Added Latency**: Keep gateway logic lightweight
-- **Complexity**: Don't add too much business logic
+* **Single Point of Failure**: Make gateway highly available
+* **Performance Bottleneck**: Optimize, scale horizontally
+* **Added Latency**: Keep gateway logic lightweight
+* **Complexity**: Don't add too much business logic
 
 ---
 
@@ -6332,19 +6383,19 @@ log.info("Processing order with idempotency key: " + key)
 ```
 
 **Idempotency Benefits:**
-- ✓ Safe retries (no duplicate operations)
-- ✓ Resilient to network failures
-- ✓ Enables automatic retry logic
-- ✓ Prevents duplicate charges/orders
-- ✓ Simplifies client error handling
-- ✓ Essential for webhooks and message queues
+* ✓ Safe retries (no duplicate operations)
+* ✓ Resilient to network failures
+* ✓ Enables automatic retry logic
+* ✓ Prevents duplicate charges/orders
+* ✓ Simplifies client error handling
+* ✓ Essential for webhooks and message queues
 
 **Implementation Strategies:**
-1. **Idempotency Keys** (POST operations)
-2. **Natural Idempotency** (PUT, DELETE)
-3. **Client-Generated IDs** (PUT with resource ID)
-4. **Deduplication** (track processed message IDs)
-5. **Database Constraints** (unique constraints)
+01. **Idempotency Keys** (POST operations)
+02. **Natural Idempotency** (PUT, DELETE)
+03. **Client-Generated IDs** (PUT with resource ID)
+04. **Deduplication** (track processed message IDs)
+05. **Database Constraints** (unique constraints)
 
 ---
 
@@ -6890,22 +6941,22 @@ HTTP/1.1 504 Gateway Timeout
 ```
 
 **Common Mistakes to Avoid:**
-- ❌ Using 200 for errors with error message in body
-- ❌ Using 500 for validation errors (use 400)
-- ❌ Using 401 for permission denied (use 403)
-- ❌ Not including Location header with 201
-- ❌ Not including Retry-After with 429/503
-- ❌ Exposing stack traces in 500 responses
-- ❌ Using 404 when resource is forbidden (leaks information)
+* ❌ Using 200 for errors with error message in body
+* ❌ Using 500 for validation errors (use 400)
+* ❌ Using 401 for permission denied (use 403)
+* ❌ Not including Location header with 201
+* ❌ Not including Retry-After with 429/503
+* ❌ Exposing stack traces in 500 responses
+* ❌ Using 404 when resource is forbidden (leaks information)
 
 **Best Practices:**
-- ✓ Use appropriate status codes consistently
-- ✓ Include helpful error messages
-- ✓ Add relevant headers (Location, Retry-After, WWW-Authenticate)
-- ✓ Document expected status codes per endpoint
-- ✓ Log detailed errors server-side (don't expose to client)
-- ✓ Use 4xx for client errors, 5xx for server errors
-- ✓ Implement proper error response structure
+* ✓ Use appropriate status codes consistently
+* ✓ Include helpful error messages
+* ✓ Add relevant headers (Location, Retry-After, WWW-Authenticate)
+* ✓ Document expected status codes per endpoint
+* ✓ Log detailed errors server-side (don't expose to client)
+* ✓ Use 4xx for client errors, 5xx for server errors
+* ✓ Implement proper error response structure
 
 ---
 
@@ -7420,26 +7471,26 @@ X-Content-Type-Options: nosniff
 ```
 
 **File Upload Best Practices:**
-- ✓ Implement file size limits
-- ✓ Validate file types (whitelist, not blacklist)
-- ✓ Check file content (magic numbers), don't trust extensions
-- ✓ Run virus/malware scans
-- ✓ Sanitize filenames
-- ✓ Use unique filenames (UUIDs)
-- ✓ Store files outside web root
-- ✓ Implement authentication and authorization
-- ✓ Use chunked uploads for large files
-- ✓ Provide progress tracking
-- ✓ Set request timeouts
-- ✓ Use presigned URLs for direct-to-storage uploads
-- ✓ Implement rate limiting on upload endpoints
+* ✓ Implement file size limits
+* ✓ Validate file types (whitelist, not blacklist)
+* ✓ Check file content (magic numbers), don't trust extensions
+* ✓ Run virus/malware scans
+* ✓ Sanitize filenames
+* ✓ Use unique filenames (UUIDs)
+* ✓ Store files outside web root
+* ✓ Implement authentication and authorization
+* ✓ Use chunked uploads for large files
+* ✓ Provide progress tracking
+* ✓ Set request timeouts
+* ✓ Use presigned URLs for direct-to-storage uploads
+* ✓ Implement rate limiting on upload endpoints
 
 **Storage Options:**
-- **Local Filesystem**: Simple, but not scalable
-- **AWS S3**: Scalable, CDN integration, versioning
-- **Azure Blob Storage**: Microsoft ecosystem
-- **Google Cloud Storage**: Google Cloud integration
-- **CDN**: CloudFront, CloudFlare for fast delivery
+* **Local Filesystem**: Simple, but not scalable
+* **AWS S3**: Scalable, CDN integration, versioning
+* **Azure Blob Storage**: Microsoft ecosystem
+* **Google Cloud Storage**: Google Cloud integration
+* **CDN**: CloudFront, CloudFlare for fast delivery
 
 ---
 
@@ -7970,22 +8021,23 @@ jobs:
 ```
 
 **Testing Best Practices:**
-- ✓ Write tests for all endpoints (happy path + error cases)
-- ✓ Test authentication and authorization
-- ✓ Test input validation (valid, invalid, edge cases)
-- ✓ Test error responses (status codes, error messages)
-- ✓ Test performance under load
-- ✓ Automate tests in CI/CD pipeline
-- ✓ Use test databases (not production!)
-- ✓ Mock external dependencies in unit tests
-- ✓ Test idempotency (especially for POST/DELETE)
-- ✓ Verify rate limiting works
-- ✓ Test CORS configuration
-- ✓ Test file uploads (size limits, types, malicious files)
-- ✓ Security testing for common vulnerabilities
-- ✓ Monitor test coverage (aim for >80%)
+* ✓ Write tests for all endpoints (happy path + error cases)
+* ✓ Test authentication and authorization
+* ✓ Test input validation (valid, invalid, edge cases)
+* ✓ Test error responses (status codes, error messages)
+* ✓ Test performance under load
+* ✓ Automate tests in CI/CD pipeline
+* ✓ Use test databases (not production!)
+* ✓ Mock external dependencies in unit tests
+* ✓ Test idempotency (especially for POST/DELETE)
+* ✓ Verify rate limiting works
+* ✓ Test CORS configuration
+* ✓ Test file uploads (size limits, types, malicious files)
+* ✓ Security testing for common vulnerabilities
+* ✓ Monitor test coverage (aim for >80%)
 
 **Test Pyramid:**
+
 ```
          /\
         /  \  E2E Tests (Few, Slow, Expensive)
@@ -7999,13 +8051,13 @@ jobs:
 ```
 
 **Testing Tools:**
-- **Unit**: xUnit, JUnit, pytest, Jest
-- **Integration**: RestAssured, Supertest, WebApplicationFactory
-- **API**: Postman, Newman, Insomnia
-- **Contract**: Pact, Spring Cloud Contract
-- **Performance**: k6, JMeter, Gatling, Apache Bench
-- **Security**: OWASP ZAP, Burp Suite, SonarQube
-- **Mocking**: WireMock, MockServer, Mountebank
+* **Unit**: xUnit, JUnit, pytest, Jest
+* **Integration**: RestAssured, Supertest, WebApplicationFactory
+* **API**: Postman, Newman, Insomnia
+* **Contract**: Pact, Spring Cloud Contract
+* **Performance**: k6, JMeter, Gatling, Apache Bench
+* **Security**: OWASP ZAP, Burp Suite, SonarQube
+* **Mocking**: WireMock, MockServer, Mountebank
 
 ---
 
@@ -8532,22 +8584,23 @@ HTTP/1.1 200 OK
 ```
 
 **Mobile API Best Practices:**
-- ✓ Minimize payload size (compress, remove unnecessary fields)
-- ✓ Reduce number of requests (batch, aggregate)
-- ✓ Use appropriate image sizes
-- ✓ Implement aggressive caching
-- ✓ Support offline mode
-- ✓ Use push notifications instead of polling
-- ✓ Implement delta sync for large datasets
-- ✓ Use long-lived tokens (reduce re-authentication)
-- ✓ Provide bandwidth-aware options
-- ✓ Handle poor connectivity gracefully
-- ✓ Consider binary protocols (protobuf, gRPC)
-- ✓ Implement request timeouts (longer than web)
-- ✓ Use CDN for static assets
-- ✓ Version APIs carefully (support old app versions)
+* ✓ Minimize payload size (compress, remove unnecessary fields)
+* ✓ Reduce number of requests (batch, aggregate)
+* ✓ Use appropriate image sizes
+* ✓ Implement aggressive caching
+* ✓ Support offline mode
+* ✓ Use push notifications instead of polling
+* ✓ Implement delta sync for large datasets
+* ✓ Use long-lived tokens (reduce re-authentication)
+* ✓ Provide bandwidth-aware options
+* ✓ Handle poor connectivity gracefully
+* ✓ Consider binary protocols (protobuf, gRPC)
+* ✓ Implement request timeouts (longer than web)
+* ✓ Use CDN for static assets
+* ✓ Version APIs carefully (support old app versions)
 
 **Mobile-Specific Headers:**
+
 ```http
 X-App-Version: 2.1.0          # Track app version
 X-Device-Type: iPhone14        # Device info
@@ -8557,9 +8610,9 @@ X-Battery-Level: 45            # Battery percentage
 ```
 
 **Mobile API Gateway Pattern:**
-- Web API Gateway → Serves web clients
-- Mobile API Gateway → Optimized for mobile
-- Backend Microservices → Shared by both gateways
+* Web API Gateway → Serves web clients
+* Mobile API Gateway → Optimized for mobile
+* Backend Microservices → Shared by both gateways
 
 ---
 
@@ -9119,41 +9172,41 @@ Idempotency-Key: 550e8400-e29b-41d4-a716-446655440000
 ```
 
 **API Design Checklist:**
-- [ ] Use nouns in URLs, not verbs
-- [ ] Use plural names for collections
-- [ ] Use proper HTTP methods (GET, POST, PUT, PATCH, DELETE)
-- [ ] Never use GET for state-changing operations
-- [ ] Return appropriate HTTP status codes
-- [ ] Version API from day one (/api/v1/)
-- [ ] Implement pagination for collections
-- [ ] Provide filtering, sorting, searching
-- [ ] Use consistent naming conventions
-- [ ] Return detailed, actionable error messages
-- [ ] Include request IDs for tracing
-- [ ] Implement authentication and authorization
-- [ ] Add rate limiting
-- [ ] Use HTTPS only
-- [ ] Implement CORS properly
-- [ ] Add security headers
-- [ ] Use DTOs (don't expose DB structure)
-- [ ] Document API thoroughly (OpenAPI/Swagger)
-- [ ] Implement idempotency for unsafe operations
-- [ ] Use ETags for caching and concurrency control
-- [ ] Provide health check endpoints
-- [ ] Support content negotiation (JSON, XML)
-- [ ] Use compression (gzip)
-- [ ] Implement monitoring and logging
-- [ ] Handle concurrent updates properly
-- [ ] Provide aggregated endpoints (reduce chattiness)
-- [ ] Cache responses where appropriate
-- [ ] Test extensively (unit, integration, load, security)
+* [ ] Use nouns in URLs, not verbs
+* [ ] Use plural names for collections
+* [ ] Use proper HTTP methods (GET, POST, PUT, PATCH, DELETE)
+* [ ] Never use GET for state-changing operations
+* [ ] Return appropriate HTTP status codes
+* [ ] Version API from day one (/api/v1/)
+* [ ] Implement pagination for collections
+* [ ] Provide filtering, sorting, searching
+* [ ] Use consistent naming conventions
+* [ ] Return detailed, actionable error messages
+* [ ] Include request IDs for tracing
+* [ ] Implement authentication and authorization
+* [ ] Add rate limiting
+* [ ] Use HTTPS only
+* [ ] Implement CORS properly
+* [ ] Add security headers
+* [ ] Use DTOs (don't expose DB structure)
+* [ ] Document API thoroughly (OpenAPI/Swagger)
+* [ ] Implement idempotency for unsafe operations
+* [ ] Use ETags for caching and concurrency control
+* [ ] Provide health check endpoints
+* [ ] Support content negotiation (JSON, XML)
+* [ ] Use compression (gzip)
+* [ ] Implement monitoring and logging
+* [ ] Handle concurrent updates properly
+* [ ] Provide aggregated endpoints (reduce chattiness)
+* [ ] Cache responses where appropriate
+* [ ] Test extensively (unit, integration, load, security)
 
 **Resources for API Design:**
-- REST API Design Rulebook (O'Reilly)
-- Microsoft REST API Guidelines
-- Google API Design Guide
-- API Design Patterns (Manning)
-- RESTful Web APIs (O'Reilly)
+* REST API Design Rulebook (O'Reilly)
+* Microsoft REST API Guidelines
+* Google API Design Guide
+* API Design Patterns (Manning)
+* RESTful Web APIs (O'Reilly)
 
 ---
 
@@ -9708,55 +9761,55 @@ POST /api/customers HTTP/1.1
 
 **Backwards Compatibility Strategies:**
 
-1. **Additive Changes Only** (safest)
+01. **Additive Changes Only** (safest)
    - Add new fields (optional)
    - Add new endpoints
    - Add new enum values
    - Never remove or rename
 
-2. **Deprecation Period**
+02. **Deprecation Period**
    - Mark fields/endpoints as deprecated
    - Support both old and new (6-12 months)
    - Communicate sunset date
    - Monitor usage of deprecated features
    - Remove in next major version
 
-3. **API Versioning**
+03. **API Versioning**
    - Major version for breaking changes
    - Maintain multiple versions simultaneously
    - Clear migration path
    - Eventually sunset old versions
 
-4. **Feature Flags**
+04. **Feature Flags**
    - Toggle new behavior
    - Gradual rollout
    - Quick rollback
    - Per-client enablement
 
-5. **Sensible Defaults**
+05. **Sensible Defaults**
    - Provide defaults for new required fields
    - Handle missing data gracefully
    - Don't break old clients
 
 **Best Practices:**
-- ✓ Design for extension from day one
-- ✓ Accept unknown fields (forward compatibility)
-- ✓ Make clients ignore unknown response fields
-- ✓ Use optional fields for new additions
-- ✓ Communicate changes clearly (changelogs, deprecation warnings)
-- ✓ Monitor usage of deprecated features
-- ✓ Test with real client versions
-- ✓ Provide migration guides
-- ✓ Version breaking changes
-- ✓ Support multiple versions temporarily
-- ✓ Use semantic versioning (major.minor.patch)
+* ✓ Design for extension from day one
+* ✓ Accept unknown fields (forward compatibility)
+* ✓ Make clients ignore unknown response fields
+* ✓ Use optional fields for new additions
+* ✓ Communicate changes clearly (changelogs, deprecation warnings)
+* ✓ Monitor usage of deprecated features
+* ✓ Test with real client versions
+* ✓ Provide migration guides
+* ✓ Version breaking changes
+* ✓ Support multiple versions temporarily
+* ✓ Use semantic versioning (major.minor.patch)
 
 **When to Break Compatibility:**
-- Security vulnerabilities
-- Fundamental design flaws
-- Performance issues (if benefits outweigh cost)
-- When usage of old version is minimal
-- With proper deprecation period and communication
+* Security vulnerabilities
+* Fundamental design flaws
+* Performance issues (if benefits outweigh cost)
+* When usage of old version is minimal
+* With proper deprecation period and communication
 
 ---
 
@@ -9990,16 +10043,16 @@ Vary: Accept-Encoding  # Important for caching!
 ```
 
 **Compression Best Practices:**
-- ✓ Always enable for text-based content (JSON, XML, HTML, CSS, JavaScript)
-- ✓ Use Brotli for better compression (if client supports)
-- ✓ Fall back to gzip for universal support
-- ✓ Include `Vary: Accept-Encoding` header for proper caching
-- ✓ Skip compression for already-compressed formats (images, videos)
-- ✓ Skip compression for small payloads (<1 KB)
-- ✓ Use `CompressionLevel.Optimal` for balanced performance
-- ✓ Enable HTTPS compression carefully (BREACH/CRIME vulnerability mitigation)
-- ✓ Monitor CPU usage (compression has computational cost)
-- ✓ Consider pre-compressing static assets at build time
+* ✓ Always enable for text-based content (JSON, XML, HTML, CSS, JavaScript)
+* ✓ Use Brotli for better compression (if client supports)
+* ✓ Fall back to gzip for universal support
+* ✓ Include `Vary: Accept-Encoding` header for proper caching
+* ✓ Skip compression for already-compressed formats (images, videos)
+* ✓ Skip compression for small payloads (<1 KB)
+* ✓ Use `CompressionLevel.Optimal` for balanced performance
+* ✓ Enable HTTPS compression carefully (BREACH/CRIME vulnerability mitigation)
+* ✓ Monitor CPU usage (compression has computational cost)
+* ✓ Consider pre-compressing static assets at build time
 
 ---
 
@@ -10015,11 +10068,11 @@ Vary: Accept-Encoding  # Important for caching!
 
 | Type | Header | Purpose | Example |
 |------|--------|---------|---------|
-| **Media Type** | `Accept` | Response format | `application/json`, `application/xml` |
-| **Language** | `Accept-Language` | Localization | `en-US`, `es-ES`, `fr-FR` |
-| **Encoding** | `Accept-Encoding` | Compression | `gzip`, `br`, `deflate` |
-| **Charset** | `Accept-Charset` | Character encoding | `utf-8`, `iso-8859-1` |
-| **Custom** | `X-Format`, `?format=` | Query param override | `?format=csv` |
+| **Media Type** | `Accept` | Response format | `application/json` , `application/xml` |
+| **Language** | `Accept-Language` | Localization | `en-US` , `es-ES` , `fr-FR` |
+| **Encoding** | `Accept-Encoding` | Compression | `gzip` , `br` , `deflate` |
+| **Charset** | `Accept-Charset` | Character encoding | `utf-8` , `iso-8859-1` |
+| **Custom** | `X-Format` , `?format=` | Query param override | `?format=csv` |
 
 **Real-time Example:**
 
@@ -10275,16 +10328,16 @@ public class CustomersController : ControllerBase
 ```
 
 **Content Negotiation Best Practices:**
-- ✓ Support JSON as primary format (most common)
-- ✓ Use standard MIME types (`application/json`, `application/xml`)
-- ✓ Return `406 Not Acceptable` for unsupported formats
-- ✓ Include supported formats in error response
-- ✓ Use quality values (q) for preference ordering
-- ✓ Consider query parameter override for convenience
-- ✓ Document all supported formats
-- ✓ Set proper `Content-Type` header in response
-- ✓ Use `Vary: Accept` header for caching
-- ✓ Support language negotiation for international APIs
+* ✓ Support JSON as primary format (most common)
+* ✓ Use standard MIME types (`application/json`,  `application/xml`)
+* ✓ Return `406 Not Acceptable` for unsupported formats
+* ✓ Include supported formats in error response
+* ✓ Use quality values (q) for preference ordering
+* ✓ Consider query parameter override for convenience
+* ✓ Document all supported formats
+* ✓ Set proper `Content-Type` header in response
+* ✓ Use `Vary: Accept` header for caching
+* ✓ Support language negotiation for international APIs
 
 ---
 
@@ -10731,19 +10784,19 @@ HTTP/1.1 207 Multi-Status
 ```
 
 **Bulk Operation Best Practices:**
-- ✓ Use `207 Multi-Status` for partial success
-- ✓ Return detailed results for each item (index, status, error)
-- ✓ Set reasonable batch size limits (e.g., 1000-5000 items)
-- ✓ Use async processing for very large batches
-- ✓ Provide progress tracking for long-running operations
-- ✓ Support atomic transactions when needed (all-or-nothing)
-- ✓ Validate entire batch before processing (fail-fast)
-- ✓ Include index in error responses for client correlation
-- ✓ Implement proper database transactions
-- ✓ Consider chunking/streaming for huge datasets
-- ✓ Return `413 Payload Too Large` if limits exceeded
-- ✓ Document batch size limits clearly
-- ✓ Provide downloadable error reports for large failures
+* ✓ Use `207 Multi-Status` for partial success
+* ✓ Return detailed results for each item (index, status, error)
+* ✓ Set reasonable batch size limits (e.g., 1000-5000 items)
+* ✓ Use async processing for very large batches
+* ✓ Provide progress tracking for long-running operations
+* ✓ Support atomic transactions when needed (all-or-nothing)
+* ✓ Validate entire batch before processing (fail-fast)
+* ✓ Include index in error responses for client correlation
+* ✓ Implement proper database transactions
+* ✓ Consider chunking/streaming for huge datasets
+* ✓ Return `413 Payload Too Large` if limits exceeded
+* ✓ Document batch size limits clearly
+* ✓ Provide downloadable error reports for large failures
 
 ---
 
@@ -11184,16 +11237,16 @@ setInterval(() => {
 | Admin dashboard metrics | SSE | Server streams metrics |
 
 **Best Practices:**
-- ✓ Use HTTPS/WSS (secure connections)
-- ✓ Implement authentication before streaming
-- ✓ Add heartbeat/ping-pong for connection health
-- ✓ Handle reconnection gracefully (exponential backoff)
-- ✓ Implement message queuing for offline clients
-- ✓ Limit message size and rate
-- ✓ Clean up resources on disconnect
-- ✓ Provide fallback (WebSocket → SSE → Long Polling)
-- ✓ Monitor active connections
-- ✓ Use load balancers with sticky sessions (or Redis for pub/sub)
+* ✓ Use HTTPS/WSS (secure connections)
+* ✓ Implement authentication before streaming
+* ✓ Add heartbeat/ping-pong for connection health
+* ✓ Handle reconnection gracefully (exponential backoff)
+* ✓ Implement message queuing for offline clients
+* ✓ Limit message size and rate
+* ✓ Clean up resources on disconnect
+* ✓ Provide fallback (WebSocket → SSE → Long Polling)
+* ✓ Monitor active connections
+* ✓ Use load balancers with sticky sessions (or Redis for pub/sub)
 
 ---
 
@@ -11651,29 +11704,29 @@ Idempotency-Key: 550e8400-e29b-41d4-a716-446655440000
 ```
 
 **Retry Best Practices:**
-- ✓ Use exponential backoff with jitter
-- ✓ Set maximum retry attempts (3-5)
-- ✓ Respect `Retry-After` header
-- ✓ Only retry idempotent operations (or use idempotency keys)
-- ✓ Only retry transient errors (503, 504, 429, network timeouts)
-- ✓ Don't retry client errors (4xx except 408, 429)
-- ✓ Implement circuit breaker to prevent retry storms
-- ✓ Log retry attempts for debugging
-- ✓ Set reasonable timeouts (connection, request, read)
-- ✓ Use timeout strategy appropriate for operation type
-- ✓ Provide fallback behavior when all retries fail
-- ✓ Consider bulkhead pattern to isolate failures
+* ✓ Use exponential backoff with jitter
+* ✓ Set maximum retry attempts (3-5)
+* ✓ Respect `Retry-After` header
+* ✓ Only retry idempotent operations (or use idempotency keys)
+* ✓ Only retry transient errors (503, 504, 429, network timeouts)
+* ✓ Don't retry client errors (4xx except 408, 429)
+* ✓ Implement circuit breaker to prevent retry storms
+* ✓ Log retry attempts for debugging
+* ✓ Set reasonable timeouts (connection, request, read)
+* ✓ Use timeout strategy appropriate for operation type
+* ✓ Provide fallback behavior when all retries fail
+* ✓ Consider bulkhead pattern to isolate failures
 
 **Timeout Configuration Examples:**
-- **Fast APIs**: 5-10 seconds
-- **Standard APIs**: 30 seconds
-- **Long-running operations**: 60+ seconds (or use async)
-- **Connection timeout**: 5-10 seconds
-- **Mobile apps**: Longer timeouts (poor connectivity)
+* **Fast APIs**: 5-10 seconds
+* **Standard APIs**: 30 seconds
+* **Long-running operations**: 60+ seconds (or use async)
+* **Connection timeout**: 5-10 seconds
+* **Mobile apps**: Longer timeouts (poor connectivity)
 
-- **Long-running operations**: 60+ seconds (or use async)
-- **Connection timeout**: 5-10 seconds
-- **Mobile apps**: Longer timeouts (poor connectivity)
+* **Long-running operations**: 60+ seconds (or use async)
+* **Connection timeout**: 5-10 seconds
+* **Mobile apps**: Longer timeouts (poor connectivity)
 
 ---
 
@@ -12015,24 +12068,24 @@ public class ServiceClients
 ```
 
 **Circuit Breaker Best Practices:**
-- ✓ Set appropriate failure threshold (3-10 failures)
-- ✓ Configure reasonable timeout before testing recovery (30-120 seconds)
-- ✓ Use different thresholds for different services (critical vs non-critical)
-- ✓ Combine with retry policy (retry first, then circuit breaker)
-- ✓ Provide fallback responses (cached data, default values)
-- ✓ Log state transitions for monitoring
-- ✓ Expose circuit breaker status via health checks
-- ✓ Use percentage-based thresholds for high-traffic services
-- ✓ Consider bulkhead pattern to isolate failures
-- ✓ Test circuit breaker behavior in staging
+* ✓ Set appropriate failure threshold (3-10 failures)
+* ✓ Configure reasonable timeout before testing recovery (30-120 seconds)
+* ✓ Use different thresholds for different services (critical vs non-critical)
+* ✓ Combine with retry policy (retry first, then circuit breaker)
+* ✓ Provide fallback responses (cached data, default values)
+* ✓ Log state transitions for monitoring
+* ✓ Expose circuit breaker status via health checks
+* ✓ Use percentage-based thresholds for high-traffic services
+* ✓ Consider bulkhead pattern to isolate failures
+* ✓ Test circuit breaker behavior in staging
 
 **When to Use Circuit Breaker:**
-- ✓ Calling external APIs (third-party services)
-- ✓ Microservice communication
-- ✓ Database connections
-- ✓ Any remote resource that can fail
-- ✓ Preventing cascading failures
-- ✓ Improving system resilience
+* ✓ Calling external APIs (third-party services)
+* ✓ Microservice communication
+* ✓ Database connections
+* ✓ Any remote resource that can fail
+* ✓ Preventing cascading failures
+* ✓ Improving system resilience
 
 ---
 
@@ -12467,21 +12520,21 @@ app.UseMiddleware<ValidationExceptionMiddleware>();
 ```
 
 **Validation Best Practices:**
-- ✓ Validate all incoming requests
-- ✓ Return detailed error messages (field, reason, rejected value)
-- ✓ Use HTTP 400 Bad Request for validation errors
-- ✓ Validate at API boundary (don't trust clients)
-- ✓ Use declarative validation (Data Annotations, FluentValidation)
-- ✓ Validate data types, formats, lengths, ranges
-- ✓ Implement business rule validation
-- ✓ Sanitize input to prevent XSS and SQL injection
-- ✓ Use parameterized queries for database operations
-- ✓ Provide consistent error response format
-- ✓ Include field names in error messages
-- ✓ Validate nested objects and arrays
-- ✓ Use async validation for database checks (email uniqueness)
-- ✓ Document validation rules in API documentation
-- ✓ Test validation with invalid data
+* ✓ Validate all incoming requests
+* ✓ Return detailed error messages (field, reason, rejected value)
+* ✓ Use HTTP 400 Bad Request for validation errors
+* ✓ Validate at API boundary (don't trust clients)
+* ✓ Use declarative validation (Data Annotations, FluentValidation)
+* ✓ Validate data types, formats, lengths, ranges
+* ✓ Implement business rule validation
+* ✓ Sanitize input to prevent XSS and SQL injection
+* ✓ Use parameterized queries for database operations
+* ✓ Provide consistent error response format
+* ✓ Include field names in error messages
+* ✓ Validate nested objects and arrays
+* ✓ Use async validation for database checks (email uniqueness)
+* ✓ Document validation rules in API documentation
+* ✓ Test validation with invalid data
 
 ---
 
@@ -12861,27 +12914,27 @@ public class CustomersController : ControllerBase
 ```
 
 **Conditional Request Best Practices:**
-- ✓ Always include ETag in GET responses
-- ✓ Support If-None-Match for efficient caching
-- ✓ Use If-Match for PUT/PATCH to prevent lost updates
-- ✓ Return 304 Not Modified when resource unchanged
-- ✓ Return 412 Precondition Failed when ETag mismatch
-- ✓ Include current ETag in 412 response
-- ✓ Use strong ETags for precise matching
-- ✓ Consider weak ETags for gzip-compressed responses
-- ✓ Support both ETag and Last-Modified
-- ✓ Generate ETags efficiently (hash, version number)
-- ✓ Use database row version for concurrency control
-- ✓ Document ETag behavior in API documentation
-- ✓ Test concurrent update scenarios
+* ✓ Always include ETag in GET responses
+* ✓ Support If-None-Match for efficient caching
+* ✓ Use If-Match for PUT/PATCH to prevent lost updates
+* ✓ Return 304 Not Modified when resource unchanged
+* ✓ Return 412 Precondition Failed when ETag mismatch
+* ✓ Include current ETag in 412 response
+* ✓ Use strong ETags for precise matching
+* ✓ Consider weak ETags for gzip-compressed responses
+* ✓ Support both ETag and Last-Modified
+* ✓ Generate ETags efficiently (hash, version number)
+* ✓ Use database row version for concurrency control
+* ✓ Document ETag behavior in API documentation
+* ✓ Test concurrent update scenarios
 
 **Benefits:**
-- ✓ Prevents lost updates (optimistic locking)
-- ✓ Reduces bandwidth (304 Not Modified)
-- ✓ Improves cache efficiency
-- ✓ No need for distributed locks
-- ✓ Better user experience (fast responses)
-- ✓ Scales horizontally (stateless)
+* ✓ Prevents lost updates (optimistic locking)
+* ✓ Reduces bandwidth (304 Not Modified)
+* ✓ Improves cache efficiency
+* ✓ No need for distributed locks
+* ✓ Better user experience (fast responses)
+* ✓ Scales horizontally (stateless)
 
 ---
 
@@ -13351,30 +13404,30 @@ GET /api/orders HTTP/1.1
 ```
 
 **Performance Optimization Checklist:**
-- [ ] Implement caching (Redis, in-memory)
-- [ ] Add database indexes on frequently queried columns
-- [ ] Use eager loading to prevent N+1 queries
-- [ ] Implement pagination for large datasets
-- [ ] Enable response compression (gzip/Brotli)
-- [ ] Use connection pooling (database, HTTP)
-- [ ] Process long operations asynchronously
-- [ ] Select only required fields (no SELECT *)
-- [ ] Implement CDN for static assets
-- [ ] Use load balancing for horizontal scaling
-- [ ] Optimize database queries (execution plans)
-- [ ] Implement read replicas for read-heavy workloads
-- [ ] Use denormalized read models (CQRS)
-- [ ] Batch database operations
-- [ ] Use parallel processing where appropriate
-- [ ] Monitor performance with APM tools
-- [ ] Set up alerting for slow queries
-- [ ] Regularly review and optimize bottlenecks
+* [ ] Implement caching (Redis, in-memory)
+* [ ] Add database indexes on frequently queried columns
+* [ ] Use eager loading to prevent N+1 queries
+* [ ] Implement pagination for large datasets
+* [ ] Enable response compression (gzip/Brotli)
+* [ ] Use connection pooling (database, HTTP)
+* [ ] Process long operations asynchronously
+* [ ] Select only required fields (no SELECT *)
+* [ ] Implement CDN for static assets
+* [ ] Use load balancing for horizontal scaling
+* [ ] Optimize database queries (execution plans)
+* [ ] Implement read replicas for read-heavy workloads
+* [ ] Use denormalized read models (CQRS)
+* [ ] Batch database operations
+* [ ] Use parallel processing where appropriate
+* [ ] Monitor performance with APM tools
+* [ ] Set up alerting for slow queries
+* [ ] Regularly review and optimize bottlenecks
 
 **Monitoring Tools:**
-- **APM**: Application Insights, New Relic, Datadog
-- **Database**: SQL Server Profiler, pgAdmin, MongoDB Compass
-- **Caching**: Redis CLI, Redis Insight
-- **Load Testing**: k6, JMeter, Apache Bench, Gatling
+* **APM**: Application Insights, New Relic, Datadog
+* **Database**: SQL Server Profiler, pgAdmin, MongoDB Compass
+* **Caching**: Redis CLI, Redis Insight
+* **Load Testing**: k6, JMeter, Apache Bench, Gatling
 
 ---
 
@@ -13855,41 +13908,41 @@ public class PerformanceLoggingFilter : IActionFilter
 ```
 
 **Logging Best Practices:**
-- ✓ Use structured logging (JSON format)
-- ✓ Include correlation ID in all logs
-- ✓ Log request ID for tracing
-- ✓ Sanitize sensitive data (passwords, tokens, PII)
-- ✓ Use appropriate log levels (DEBUG, INFO, WARN, ERROR)
-- ✓ Log request start and completion
-- ✓ Log performance metrics (response time)
-- ✓ Include user ID for audit trail
-- ✓ Log all errors with stack traces
-- ✓ Use log aggregation (ELK, Splunk, Datadog)
-- ✓ Set up alerts for error rate thresholds
-- ✓ Rotate logs regularly (daily)
-- ✓ Retain logs per compliance requirements
-- ✓ Index logs for fast searching
-- ✓ Monitor log volume (prevent disk full)
+* ✓ Use structured logging (JSON format)
+* ✓ Include correlation ID in all logs
+* ✓ Log request ID for tracing
+* ✓ Sanitize sensitive data (passwords, tokens, PII)
+* ✓ Use appropriate log levels (DEBUG, INFO, WARN, ERROR)
+* ✓ Log request start and completion
+* ✓ Log performance metrics (response time)
+* ✓ Include user ID for audit trail
+* ✓ Log all errors with stack traces
+* ✓ Use log aggregation (ELK, Splunk, Datadog)
+* ✓ Set up alerts for error rate thresholds
+* ✓ Rotate logs regularly (daily)
+* ✓ Retain logs per compliance requirements
+* ✓ Index logs for fast searching
+* ✓ Monitor log volume (prevent disk full)
 
 **What to Log:**
-- ✓ Request method, path, query params
-- ✓ Response status code, time
-- ✓ User ID, IP address, user agent
-- ✓ Request/Correlation ID
-- ✓ Errors and exceptions
-- ✓ Performance metrics
-- ✓ External API calls (start, end, duration)
-- ✓ Database queries (slow queries)
-- ✓ Authentication events (login, logout, failures)
-- ✓ Authorization failures
+* ✓ Request method, path, query params
+* ✓ Response status code, time
+* ✓ User ID, IP address, user agent
+* ✓ Request/Correlation ID
+* ✓ Errors and exceptions
+* ✓ Performance metrics
+* ✓ External API calls (start, end, duration)
+* ✓ Database queries (slow queries)
+* ✓ Authentication events (login, logout, failures)
+* ✓ Authorization failures
 
 **What NOT to Log:**
-- ✗ Passwords
-- ✗ Credit card numbers
-- ✗ Social security numbers
-- ✗ API keys, tokens (full values)
-- ✗ Personal identifiable information (PII) unless required
-- ✗ Full request/response bodies (unless debugging)
+* ✗ Passwords
+* ✗ Credit card numbers
+* ✗ Social security numbers
+* ✗ API keys, tokens (full values)
+* ✗ Personal identifiable information (PII) unless required
+* ✗ Full request/response bodies (unless debugging)
 
 ---
 
@@ -13901,21 +13954,20 @@ public class PerformanceLoggingFilter : IActionFilter
 
 This comprehensive guide covered 50 REST API interview questions across five key areas:
 
-1. **REST Fundamentals & HTTP Methods (1-10)**: REST principles, HTTP methods, idempotency, statelessness, REST vs SOAP, status codes, safe/unsafe methods
+01. **REST Fundamentals & HTTP Methods (1-10)**: REST principles, HTTP methods, idempotency, statelessness, REST vs SOAP, status codes, safe/unsafe methods
    
-2. **Authentication, Security & Authorization (11-20)**: JWT, OAuth 2.0, API keys, rate limiting, versioning, CORS, pagination, caching, webhooks
+02. **Authentication, Security & Authorization (11-20)**: JWT, OAuth 2.0, API keys, rate limiting, versioning, CORS, pagination, caching, webhooks
 
-3. **API Design & Best Practices (21-30)**: URI design, error handling, PUT vs POST, sync vs async, API Gateway, throttling, documentation, monitoring, deprecation
+03. **API Design & Best Practices (21-30)**: URI design, error handling, PUT vs POST, sync vs async, API Gateway, throttling, documentation, monitoring, deprecation
 
-4. **Advanced Topics & Performance (31-40)**: Monolithic vs microservices, GraphQL vs REST, API Gateway pattern, idempotency in distributed systems, HTTP status codes, file uploads, API testing, mobile vs web design, common mistakes, backwards compatibility
+04. **Advanced Topics & Performance (31-40)**: Monolithic vs microservices, GraphQL vs REST, API Gateway pattern, idempotency in distributed systems, HTTP status codes, file uploads, API testing, mobile vs web design, common mistakes, backwards compatibility
 
 Each question includes:
-- Clear explanation of concepts
-- Real-world use cases
-- Practical HTTP examples
-- Code samples
-- Best practices
-- Common pitfalls to avoid
+* Clear explanation of concepts
+* Real-world use cases
+* Practical HTTP examples
+* Code samples
+* Best practices
+* Common pitfalls to avoid
 
 This guide prepares you for mid-to-senior level REST API interviews with production-ready knowledge.
-

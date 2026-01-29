@@ -1,6 +1,7 @@
 # Dependency Inversion Principle (DIP)
 
 ## Definition / Intent
+
 **Dependency Inversion Principle (DIP)** introduced by **Robert C. Martin** states that:
 
 **High-level modules should not depend on low-level modules. Both should depend on abstractions.**
@@ -83,14 +84,15 @@ public class DataAccessLayer
 ```
 
 **Problems with this approach:**
-- **Tight Coupling**: BLL is directly dependent on the low-level Data Access Layer
-- **Hard to Test**: Impossible to perform unit tests on BLL without hitting the database
-- **Not Extensible**: If DAL needs to be extended to support SQL and XML layers, implementation becomes tedious and complicated
-- **Violates DIP**: High-level module (BLL) depends on low-level module (DAL)
-- **Limited Reusability**: BLL cannot be reused with different data access implementations
-- **Breaking Changes**: Any change in DAL breaks BLL
+* **Tight Coupling**: BLL is directly dependent on the low-level Data Access Layer
+* **Hard to Test**: Impossible to perform unit tests on BLL without hitting the database
+* **Not Extensible**: If DAL needs to be extended to support SQL and XML layers, implementation becomes tedious and complicated
+* **Violates DIP**: High-level module (BLL) depends on low-level module (DAL)
+* **Limited Reusability**: BLL cannot be reused with different data access implementations
+* **Breaking Changes**: Any change in DAL breaks BLL
 
 **Testing Challenge:**
+
 ```csharp
 // ❌ Cannot mock DataAccessLayer
 [Test]
@@ -228,14 +230,15 @@ class Program
 4. **Constructor Injection**: BLL receives its dependency through constructor, not by creating it
 
 **Benefits:**
-- ✅ **Loose Coupling**: BLL and DAL are decoupled
-- ✅ **Testability**: Can easily mock `IRepositoryLayer` for unit tests
-- ✅ **Extensibility**: Easy to add new implementations (XML, Cloud, etc.)
-- ✅ **Reusability**: BLL can be reused with any `IRepositoryLayer` implementation
-- ✅ **Maintainability**: Changes in DAL don't affect BLL
-- ✅ **Flexibility**: Can switch implementations at runtime
+* ✅ **Loose Coupling**: BLL and DAL are decoupled
+* ✅ **Testability**: Can easily mock `IRepositoryLayer` for unit tests
+* ✅ **Extensibility**: Easy to add new implementations (XML, Cloud, etc.)
+* ✅ **Reusability**: BLL can be reused with any `IRepositoryLayer` implementation
+* ✅ **Maintainability**: Changes in DAL don't affect BLL
+* ✅ **Flexibility**: Can switch implementations at runtime
 
 **Testing Made Easy:**
+
 ```csharp
 // ✅ Can now mock the repository
 [Test]
@@ -252,6 +255,7 @@ public void TestBusinessLogic()
 ## Real-World Example: Notification System
 
 **Before DIP (Violation):**
+
 ```csharp
 public class EmailService
 {
@@ -274,6 +278,7 @@ public class NotificationManager
 ```
 
 **After DIP (Correct):**
+
 ```csharp
 public interface INotificationService
 {
@@ -351,30 +356,30 @@ The high-level class defines its own adapter interface which is the abstraction 
 
 ### Other Related Patterns
 
-- **Dependency Injection (DI)**: Implements DIP by injecting dependencies
-- **Inversion of Control (IoC)**: Container manages object creation and dependencies
-- **Factory Pattern**: Creates objects that depend on abstractions
-- **Repository Pattern**: Abstracts data access layer
-- **Strategy Pattern**: Algorithms depend on abstraction
+* **Dependency Injection (DI)**: Implements DIP by injecting dependencies
+* **Inversion of Control (IoC)**: Container manages object creation and dependencies
+* **Factory Pattern**: Creates objects that depend on abstractions
+* **Repository Pattern**: Abstracts data access layer
+* **Strategy Pattern**: Algorithms depend on abstraction
 
 ## When to Use / When NOT to Overuse
 
 **Use DIP when:**
-- High-level modules depend on concrete low-level implementations
-- You need to swap implementations (e.g., SQL vs NoSQL)
-- Testing requires mocking dependencies
-- Multiple implementations of the same functionality exist
-- Building layered architectures (UI → BLL → DAL)
+* High-level modules depend on concrete low-level implementations
+* You need to swap implementations (e.g., SQL vs NoSQL)
+* Testing requires mocking dependencies
+* Multiple implementations of the same functionality exist
+* Building layered architectures (UI → BLL → DAL)
 
 **Don't Overuse:**
-- Avoid unnecessary abstractions for simple, stable code
-- Don't create interfaces for every single class
-- Don't abstract stable, well-tested third-party libraries unnecessarily
-- For simple utility classes that won't change
+* Avoid unnecessary abstractions for simple, stable code
+* Don't create interfaces for every single class
+* Don't abstract stable, well-tested third-party libraries unnecessarily
+* For simple utility classes that won't change
 
 ## Real-world / Enterprise Use Case
 
-### ASP.NET Core Dependency Injection
+### ASP. NET Core Dependency Injection
 
 ```csharp
 // Startup.cs or Program.cs
@@ -558,29 +563,29 @@ public class BusinessLogicLayer
 ## Performance & Maintainability Impact
 
 **Maintainability:** ✅ Greatly increases
-- Code is decoupled and easier to change
-- Changes in low-level modules don't affect high-level modules
-- Clear separation of concerns
+* Code is decoupled and easier to change
+* Changes in low-level modules don't affect high-level modules
+* Clear separation of concerns
 
 **Testability:** ✅ Dramatically improves
-- Allows mocking dependencies in unit tests
-- Can test business logic without database or external services
-- Faster test execution
+* Allows mocking dependencies in unit tests
+* Can test business logic without database or external services
+* Faster test execution
 
 **Flexibility:** ✅ Enhanced
-- Easy to swap implementations
-- Can configure different implementations per environment
-- Supports multiple implementations simultaneously
+* Easy to swap implementations
+* Can configure different implementations per environment
+* Supports multiple implementations simultaneously
 
 **Performance:** ➡️ Neutral to slight overhead
-- DI containers add minimal overhead
-- Interface calls have negligible performance cost
-- Benefits far outweigh any performance cost
+* DI containers add minimal overhead
+* Interface calls have negligible performance cost
+* Benefits far outweigh any performance cost
 
 **Development Speed:** ✅ Faster over time
-- Initial setup takes longer
-- Long-term development becomes much faster
-- Easier refactoring and extension
+* Initial setup takes longer
+* Long-term development becomes much faster
+* Easier refactoring and extension
 
 ## Interview Cross-Questions with Answers
 
@@ -589,13 +594,13 @@ public class BusinessLogicLayer
 
 **Q: What is the difference between DIP and Service Locator?**  
 **A:** 
-- **DIP with Constructor Injection**: Dependencies are explicitly passed through constructor, making them visible and testable
-- **Service Locator**: Dependencies are hidden and retrieved from a central registry, making code harder to test and understand. Service Locator is considered an anti-pattern.
+* **DIP with Constructor Injection**: Dependencies are explicitly passed through constructor, making them visible and testable
+* **Service Locator**: Dependencies are hidden and retrieved from a central registry, making code harder to test and understand. Service Locator is considered an anti-pattern.
 
 **Q: What's the difference between DIP and Dependency Injection (DI)?**  
 **A:** 
-- **DIP**: A design principle stating high-level and low-level modules should depend on abstractions
-- **DI**: A technique/pattern for implementing DIP by injecting dependencies from outside
+* **DIP**: A design principle stating high-level and low-level modules should depend on abstractions
+* **DI**: A technique/pattern for implementing DIP by injecting dependencies from outside
 
 **Q: What are the types of Dependency Injection?**  
 **A:** 
@@ -604,18 +609,18 @@ public class BusinessLogicLayer
 3. **Method Injection**: Dependencies passed as method parameters
 
 **Q: How does DIP relate to IoC (Inversion of Control)?**  
-**A:** IoC is a broader principle where the framework controls the flow. DIP is a specific application of IoC where dependency control is inverted. IoC containers (like ASP.NET Core's built-in DI) implement both concepts.
+**A:** IoC is a broader principle where the framework controls the flow. DIP is a specific application of IoC where dependency control is inverted. IoC containers (like ASP. NET Core's built-in DI) implement both concepts.
 
 **Q: Can you have DIP without interfaces?**  
 **A:** Yes, you can use abstract classes instead of interfaces. The key is depending on abstractions (either interfaces or abstract classes) rather than concrete implementations.
 
 **Q: What are the signs that DIP is violated?**  
 **A:** 
-- Using `new` keyword to create dependencies
-- Depending on concrete classes instead of interfaces
-- Static methods everywhere
-- Hard to write unit tests
-- Changes in low-level modules breaking high-level modules
+* Using `new` keyword to create dependencies
+* Depending on concrete classes instead of interfaces
+* Static methods everywhere
+* Hard to write unit tests
+* Changes in low-level modules breaking high-level modules
 
 **Q: Why is DIP considered the most important SOLID principle?**  
 **A:** Because it enables all other principles and makes code truly flexible and testable. Without DIP, it's difficult to properly implement OCP, LSP, and ISP.
@@ -630,7 +635,7 @@ public class BusinessLogicLayer
 ✅ **Enables loose coupling, testability, and extensibility**  
 ✅ **Use constructor injection to pass dependencies**  
 ✅ **Avoid Service Locator pattern and static classes**  
-✅ **ASP.NET Core has built-in DI container**  
+✅ **ASP. NET Core has built-in DI container**  
 ✅ **Related to Adapter, Factory, and Repository patterns**
 
 ### Key Takeaway

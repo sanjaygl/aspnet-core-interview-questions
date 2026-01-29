@@ -2,18 +2,18 @@
 
 ## Introduction to SOLID
 
-SOLID is an acronym for five design principles that help developers build robust, maintainable, and scalable software. These principles are especially critical in large-scale .NET and ASP.NET Core applications, where code quality, testability, and long-term maintainability are paramount.
+SOLID is an acronym for five design principles that help developers build robust, maintainable, and scalable software. These principles are especially critical in large-scale . NET and ASP. NET Core applications, where code quality, testability, and long-term maintainability are paramount.
 
 **SOLID was introduced by Robert C. Martin (Uncle Bob)** and represents the foundation of object-oriented design and clean code architecture.
 
 ## Why SOLID Matters in Large-Scale Systems
 
-- **Reduces technical debt and code rot** - Prevents accumulation of poor design decisions
-- **Improves testability and flexibility** - Makes unit testing and mocking easier
-- **Enables easier onboarding and collaboration** - New team members can understand code faster
-- **Supports clean architecture and microservices** - Provides foundation for scalable systems
-- **Facilitates maintenance and refactoring** - Changes become safer and more predictable
-- **Enhances code reusability** - Components can be reused across different contexts
+* **Reduces technical debt and code rot** - Prevents accumulation of poor design decisions
+* **Improves testability and flexibility** - Makes unit testing and mocking easier
+* **Enables easier onboarding and collaboration** - New team members can understand code faster
+* **Supports clean architecture and microservices** - Provides foundation for scalable systems
+* **Facilitates maintenance and refactoring** - Changes become safer and more predictable
+* **Enhances code reusability** - Components can be reused across different contexts
 
 ## SOLID Overview Table
 
@@ -28,76 +28,87 @@ SOLID is an acronym for five design principles that help developers build robust
 ## The SOLID Principles - Detailed Index
 
 ### 1. [Single Responsibility Principle (SRP)](single-responsibility-principle.md)
+
 **"A class should have only one reason to change."**
 
-- Each class and module should focus on a single task at a time
-- Everything in the class should be related to that single purpose
-- Promotes smaller, cleaner classes with less fragile code
-- **Example**: Separate user management, logging, and email services
+* Each class and module should focus on a single task at a time
+* Everything in the class should be related to that single purpose
+* Promotes smaller, cleaner classes with less fragile code
+* **Example**: Separate user management, logging, and email services
 
 ### 2. [Open/Closed Principle (OCP)](open-closed-principle.md)
+
 **"Software entities should be open for extension but closed for modification."**
 
-- Add new functionality by creating new classes, not modifying existing ones
-- Originated by Bertrand Meyer, emphasized by Bob Martin
-- Use interfaces, abstract classes, and inheritance
-- **Example**: Employee bonus calculation with different employee types
+* Add new functionality by creating new classes, not modifying existing ones
+* Originated by Bertrand Meyer, emphasized by Bob Martin
+* Use interfaces, abstract classes, and inheritance
+* **Example**: Employee bonus calculation with different employee types
 
 ### 3. [Liskov Substitution Principle (LSP)](liskov-substitution-principle.md)
+
 **"Derived types must be completely substitutable for their base types."**
 
-- Introduced by Barbara Liskov in 1987
-- Subtypes should not break the contract of base types
-- Extension of the Open/Closed Principle
-- **Example**: Employee hierarchy with proper interface segregation
+* Introduced by Barbara Liskov in 1987
+* Subtypes should not break the contract of base types
+* Extension of the Open/Closed Principle
+* **Example**: Employee hierarchy with proper interface segregation
 
 ### 4. [Interface Segregation Principle (ISP)](interface-segregation-principle.md)
+
 **"No client should be forced to depend on methods it does not use."**
 
-- Prefer many small, role-specific interfaces over one fat interface
-- Originated from Robert C. Martin's work with Xerox printer systems
-- Prevents empty implementations and NotImplementedException
-- **Example**: Printer capabilities (print, scan, fax, duplex)
+* Prefer many small, role-specific interfaces over one fat interface
+* Originated from Robert C. Martin's work with Xerox printer systems
+* Prevents empty implementations and NotImplementedException
+* **Example**: Printer capabilities (print, scan, fax, duplex)
 
 ### 5. [Dependency Inversion Principle (DIP)](dependency-inversion-principle.md)
+
 **"Depend on abstractions, not concretions."**
 
-- High-level and low-level modules should both depend on abstractions
-- Introduced by Robert C. Martin
-- Enables loose coupling, testability, and extensibility
-- **Example**: Business Logic Layer depending on IRepository interface
+* High-level and low-level modules should both depend on abstractions
+* Introduced by Robert C. Martin
+* Enables loose coupling, testability, and extensibility
+* **Example**: Business Logic Layer depending on IRepository interface
 
 ## Cross-Principle Comparison & Scenarios
 
 ### SRP vs Separation of Concerns
-- **SRP** focuses on a single reason to change per class
-- **Separation of Concerns** is broader, about dividing a system into distinct features
-- SRP is more granular; Separation of Concerns is architectural
+
+* **SRP** focuses on a single reason to change per class
+* **Separation of Concerns** is broader, about dividing a system into distinct features
+* SRP is more granular; Separation of Concerns is architectural
 
 ### OCP vs Strategy Pattern
-- **OCP** is a design principle; **Strategy** is a design pattern
-- Strategy pattern helps achieve OCP by allowing behavior to be selected at runtime
-- Both enable extension without modification
+
+* **OCP** is a design principle; **Strategy** is a design pattern
+* Strategy pattern helps achieve OCP by allowing behavior to be selected at runtime
+* Both enable extension without modification
 
 ### ISP vs SRP
-- **ISP** focuses on interface design (clients shouldn't depend on unused methods)
-- **SRP** focuses on class responsibility (one reason to change)
-- ISP helps achieve SRP by preventing fat interfaces
+
+* **ISP** focuses on interface design (clients shouldn't depend on unused methods)
+* **SRP** focuses on class responsibility (one reason to change)
+* ISP helps achieve SRP by preventing fat interfaces
 
 ### LSP vs OCP
-- **LSP** ensures that extensions (OCP) don't break existing functionality
-- LSP is about proper substitutability; OCP is about extensibility
-- LSP validates that OCP implementation is correct
+
+* **LSP** ensures that extensions (OCP) don't break existing functionality
+* LSP is about proper substitutability; OCP is about extensibility
+* LSP validates that OCP implementation is correct
 
 ### DIP vs All Other Principles
-- **DIP** enables proper implementation of all other SOLID principles
-- Without DIP, it's difficult to achieve OCP, LSP, and ISP properly
-- DIP is the foundation for testable, maintainable code
+
+* **DIP** enables proper implementation of all other SOLID principles
+* Without DIP, it's difficult to achieve OCP, LSP, and ISP properly
+* DIP is the foundation for testable, maintainable code
 
 ### DIP vs Service Locator
-- **DIP** encourages constructor injection and explicit dependencies
-- **Service Locator** is an anti-pattern that hides dependencies
-- DIP makes dependencies visible; Service Locator hides them
+
+* **DIP** encourages constructor injection and explicit dependencies
+* **Service Locator** is an anti-pattern that hides dependencies
+* DIP makes dependencies visible; Service Locator hides them
 
 ## How SOLID Principles Work Together
 
@@ -136,6 +147,7 @@ SOLID is an acronym for five design principles that help developers build robust
 ### 1. **Which SOLID principle is violated and why?**
 
 **Example Code:**
+
 ```csharp
 public class UserService
 {
@@ -150,9 +162,9 @@ public class UserService
 ```
 
 **Violations:**
-- ? **SRP**: Multiple responsibilities (validation, data access, email, logging)
-- ? **OCP**: Can't extend without modifying
-- ? **DIP**: Direct dependencies on concrete implementations
+* ? **SRP**: Multiple responsibilities (validation, data access, email, logging)
+* ? **OCP**: Can't extend without modifying
+* ? **DIP**: Direct dependencies on concrete implementations
 
 ### 2. **How to refactor legacy code to follow SOLID?**
 
@@ -166,17 +178,17 @@ public class UserService
 ### 3. **How does SOLID apply to Microservices & Clean Architecture?**
 
 **Microservices:**
-- **SRP**: Each service has single business capability
-- **OCP**: Add new services without modifying existing ones
-- **LSP**: Services implement common interfaces/contracts
-- **ISP**: Service interfaces are focused and minimal
-- **DIP**: Services depend on abstractions (APIs, message contracts)
+* **SRP**: Each service has single business capability
+* **OCP**: Add new services without modifying existing ones
+* **LSP**: Services implement common interfaces/contracts
+* **ISP**: Service interfaces are focused and minimal
+* **DIP**: Services depend on abstractions (APIs, message contracts)
 
 **Clean Architecture:**
-- **Layers follow SRP** - Each layer has single responsibility
-- **Dependencies point inward (DIP)** - Outer layers depend on inner abstractions
-- **Interfaces at boundaries (ISP)** - Clean contracts between layers
-- **LSP in use cases** - Interchangeable implementations
+* **Layers follow SRP** - Each layer has single responsibility
+* **Dependencies point inward (DIP)** - Outer layers depend on inner abstractions
+* **Interfaces at boundaries (ISP)** - Clean contracts between layers
+* **LSP in use cases** - Interchangeable implementations
 
 ### 4. **Which principles are most commonly violated?**
 
@@ -188,51 +200,51 @@ public class UserService
 5. **LSP** - Throwing NotImplementedException in subclasses
 
 **Why?**
-- Tight deadlines lead to shortcuts
-- Lack of understanding of SOLID principles
-- Legacy codebases without proper architecture
-- Fear of "over-engineering"
+* Tight deadlines lead to shortcuts
+* Lack of understanding of SOLID principles
+* Legacy codebases without proper architecture
+* Fear of "over-engineering"
 
 ### 5. **Can you over-apply SOLID principles?**
 
 **Yes! Signs of over-engineering:**
-- Creating interfaces for every single class
-- Too many layers of abstraction
-- Overly complex class hierarchies
-- Premature optimization
-- Analysis paralysis
+* Creating interfaces for every single class
+* Too many layers of abstraction
+* Overly complex class hierarchies
+* Premature optimization
+* Analysis paralysis
 
 **Balance:**
-- Apply SOLID where it adds value
-- Start simple, refactor when needed
-- Consider team size and project complexity
-- Avoid abstraction for its own sake
+* Apply SOLID where it adds value
+* Start simple, refactor when needed
+* Consider team size and project complexity
+* Avoid abstraction for its own sake
 
 ## Quick Revision / Cheat Sheet
 
 ### Visual Mnemonics
 
 **S - Single Responsibility Principle**
-- ?? One class, one job
-- Example: Separate `UserService`, `EmailService`, `Logger`
+* ?? One class, one job
+* Example: Separate `UserService`,  `EmailService`,  `Logger`
 
 **O - Open/Closed Principle**
-- ?? Open for extension, ?? Closed for modification
-- Example: New employee types without changing base calculation
+* ?? Open for extension, ?? Closed for modification
+* Example: New employee types without changing base calculation
 
 **L - Liskov Substitution Principle**
-- ?? Subtype must work where parent type works
-- Example: All employees must implement valid contracts
+* ?? Subtype must work where parent type works
+* Example: All employees must implement valid contracts
 
 **I - Interface Segregation Principle**
-- ?? Many small interfaces, not one big interface
-- Example: `IPrintable`, `IScannable`, `IFaxable` instead of `IDevice`
+* ?? Many small interfaces, not one big interface
+* Example: `IPrintable`,  `IScannable`,  `IFaxable` instead of `IDevice`
 
 **D - Dependency Inversion Principle**
-- ?? Depend on abstractions, not concrete classes
-- Example: Inject `IRepository`, not `SqlRepository`
+* ?? Depend on abstractions, not concrete classes
+* Example: Inject `IRepository`, not `SqlRepository`
 
-## Real-World Mapping in ASP.NET Core
+## Real-World Mapping in ASP. NET Core
 
 ### Typical Application Structure
 
@@ -251,22 +263,22 @@ public class UserService
 **How SOLID Applies:**
 
 **Controllers (Presentation)**
-- **SRP**: Handle HTTP concerns only, delegate business logic to services
-- **DIP**: Inject service interfaces, not concrete services
+* **SRP**: Handle HTTP concerns only, delegate business logic to services
+* **DIP**: Inject service interfaces, not concrete services
 
 **Services (Application)**
-- **SRP**: Each service focuses on one business domain
-- **OCP**: Add new services without modifying existing ones
-- **DIP**: Depend on repository and domain interfaces
+* **SRP**: Each service focuses on one business domain
+* **OCP**: Add new services without modifying existing ones
+* **DIP**: Depend on repository and domain interfaces
 
 **Repositories (Infrastructure)**
-- **SRP**: Each repository handles one entity type
-- **ISP**: Separate read/write interfaces if needed
-- **DIP**: Implement repository interfaces from domain layer
+* **SRP**: Each repository handles one entity type
+* **ISP**: Separate read/write interfaces if needed
+* **DIP**: Implement repository interfaces from domain layer
 
 **Middleware & Filters**
-- **OCP**: Extend pipeline without modifying core
-- **DIP**: Depend on abstractions, registered via DI
+* **OCP**: Extend pipeline without modifying core
+* **DIP**: Depend on abstractions, registered via DI
 
 ### Example: E-commerce Application
 
@@ -374,17 +386,17 @@ public interface ISmsNotification
 
 ## Resources for Further Learning
 
-- **Books:**
-  - "Clean Code" by Robert C. Martin
-  - "Agile Software Development: Principles, Patterns, and Practices" by Robert C. Martin
-  - "Design Patterns" by Gang of Four
+* **Books:**
+  + "Clean Code" by Robert C. Martin
+  + "Agile Software Development: Principles, Patterns, and Practices" by Robert C. Martin
+  + "Design Patterns" by Gang of Four
 
-- **Principles in Practice:**
-  - [Single Responsibility Principle](single-responsibility-principle.md)
-  - [Open/Closed Principle](open-closed-principle.md)
-  - [Liskov Substitution Principle](liskov-substitution-principle.md)
-  - [Interface Segregation Principle](interface-segregation-principle.md)
-  - [Dependency Inversion Principle](dependency-inversion-principle.md)
+* **Principles in Practice:**
+  + [Single Responsibility Principle](single-responsibility-principle.md)
+  + [Open/Closed Principle](open-closed-principle.md)
+  + [Liskov Substitution Principle](liskov-substitution-principle.md)
+  + [Interface Segregation Principle](interface-segregation-principle.md)
+  + [Dependency Inversion Principle](dependency-inversion-principle.md)
 
 ## Summary
 

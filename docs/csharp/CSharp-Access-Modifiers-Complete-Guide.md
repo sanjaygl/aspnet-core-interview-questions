@@ -8,11 +8,11 @@ Access modifiers are keywords in C# that define the accessibility or visibility 
 
 ### Why Are They Important?
 
-- **Encapsulation**: Hide implementation details and expose only what's necessary
-- **Security**: Prevent unauthorized access to sensitive data or critical methods
-- **API Design**: Create clean, maintainable public APIs while keeping internal details hidden
-- **Maintainability**: Changes to private/internal members don't break external code
-- **Principle of Least Privilege**: Expose minimum necessary access to reduce coupling
+* **Encapsulation**: Hide implementation details and expose only what's necessary
+* **Security**: Prevent unauthorized access to sensitive data or critical methods
+* **API Design**: Create clean, maintainable public APIs while keeping internal details hidden
+* **Maintainability**: Changes to private/internal members don't break external code
+* **Principle of Least Privilege**: Expose minimum necessary access to reduce coupling
 
 ---
 
@@ -54,6 +54,7 @@ namespace ClassLibraryA
 ```
 
 **Usage:**
+
 ```csharp
 // From another assembly/project
 var obj = new ClassLibraryA.PublicClass(); // ✅ Accessible
@@ -103,6 +104,7 @@ namespace ClassLibraryA
 ```
 
 **Usage:**
+
 ```csharp
 var obj = new PrivateExample();
 obj.Execute();                // ✅ Accessible (public method)
@@ -155,6 +157,7 @@ namespace ClassLibraryA
 ```
 
 **Usage:**
+
 ```csharp
 var derived = new DerivedClass();
 derived.DisplayData();        // ✅ Accessible (public method)
@@ -209,6 +212,7 @@ namespace ClassLibraryA
 ```
 
 **Usage from Same Assembly:**
+
 ```csharp
 // Within ClassLibraryA project
 var obj = new InternalClass();           // ✅ Accessible within same assembly
@@ -216,6 +220,7 @@ obj.InternalOperation();                 // ✅ Accessible
 ```
 
 **Usage from Different Assembly:**
+
 ```csharp
 // From another project/assembly
 // var obj = new ClassLibraryA.InternalClass(); // ❌ Error: Not accessible
@@ -227,7 +232,7 @@ obj.InternalOperation();                 // ✅ Accessible
 ### 2.5 `protected internal` – Union of Protected + Internal
 
 **Definition:**  
-Members are accessible from the same assembly OR from derived classes in any assembly. It's the **union** (logical OR) of `protected` and `internal`.
+Members are accessible from the same assembly OR from derived classes in any assembly. It's the **union** (logical OR) of `protected` and `internal` .
 
 **Formula:** `protected internal = protected OR internal`
 
@@ -286,7 +291,7 @@ public class ExternalDerived : ClassLibraryA.ProtectedInternalExample
 ### 2.6 `private protected` – Intersection of Private + Protected
 
 **Definition:**  
-Members are accessible only within the same class AND derived classes in the **same assembly**. It's the **intersection** (logical AND) of `private` and `protected`. Introduced in C# 7.2.
+Members are accessible only within the same class AND derived classes in the **same assembly**. It's the **intersection** (logical AND) of `private` and `protected` . Introduced in C# 7.2.
 
 **Formula:** `private protected = protected AND internal`
 
@@ -377,30 +382,30 @@ public class ExternalDerived : ClassLibraryA.PrivateProtectedExample
 
 ### Logical Formula Summary
 
-- **`protected internal`** = `protected` **OR** `internal` (union - more permissive)
-- **`private protected`** = `protected` **AND** `internal` (intersection - more restrictive)
+* **`protected internal`** = `protected` **OR** `internal` (union - more permissive)
+* **`private protected`** = `protected` **AND** `internal` (intersection - more restrictive)
 
 ---
 
 ## 4. Interview Cross Questions (Q&A Style)
 
 **Q1. What are the access modifiers in C#?**  
-A. C# has six access modifiers: `public`, `private`, `protected`, `internal`, `protected internal`, and `private protected`. They control the visibility and accessibility of types and members, forming the foundation of encapsulation.
+A. C# has six access modifiers: `public` , `private` , `protected` , `internal` , `protected internal` , and `private protected` . They control the visibility and accessibility of types and members, forming the foundation of encapsulation.
 
-**Q2. What is the difference between `public` and `internal`?**  
+**Q2. What is the difference between `public` and `internal` ?**  
 A. `public` is accessible from anywhere (all assemblies). `internal` is accessible only within the same assembly (project/DLL). Use `internal` for implementation details that should be hidden from external consumers but shared within your library.
 
 **Q3. What is `protected internal` and when would you use it?**  
-A. `protected internal` is the union (OR) of `protected` and `internal`. A member is accessible if code is in the same assembly OR in a derived class (any assembly). It's useful for base classes in libraries that need internal helpers but also want to allow external inheritance.
+A. `protected internal` is the union (OR) of `protected` and `internal` . A member is accessible if code is in the same assembly OR in a derived class (any assembly). It's useful for base classes in libraries that need internal helpers but also want to allow external inheritance.
 
-**Q4. What is `private protected` and how is it different from `protected`?**  
-A. `private protected` (C# 7.2) is the intersection (AND) of `protected` and `internal`. Members are accessible only by derived classes in the **same assembly**. Unlike `protected`, external assemblies cannot access these members even in derived classes. Use it to expose extensibility points internally without allowing external overrides.
+**Q4. What is `private protected` and how is it different from `protected` ?**  
+A. `private protected` (C# 7.2) is the intersection (AND) of `protected` and `internal` . Members are accessible only by derived classes in the **same assembly**. Unlike `protected` , external assemblies cannot access these members even in derived classes. Use it to expose extensibility points internally without allowing external overrides.
 
-**Q5. Can a top-level class be `private`?**  
-A. No. Top-level classes (not nested) can only be `public` or `internal` (default). Only nested classes can be `private`. A `private` nested class is accessible only within its containing class.
+**Q5. Can a top-level class be `private` ?**  
+A. No. Top-level classes (not nested) can only be `public` or `internal` (default). Only nested classes can be `private` . A `private` nested class is accessible only within its containing class.
 
 **Q6. What is the default access modifier for class members?**  
-A. `private` is the default for all class members (fields, methods, properties, nested classes, events). Top-level types default to `internal`.
+A. `private` is the default for all class members (fields, methods, properties, nested classes, events). Top-level types default to `internal` .
 
 **Q7. Can you have a `protected` constructor?**  
 A. Yes. A `protected` constructor is commonly used in abstract classes to prevent direct instantiation while allowing derived classes to call the base constructor. Also used in the Singleton pattern variant.
@@ -408,11 +413,11 @@ A. Yes. A `protected` constructor is commonly used in abstract classes to preven
 **Q8. Why were `protected internal` and `private protected` introduced?**  
 A. `protected internal` (existed since C# 1.0) allows library authors to provide internal helpers that are also accessible to external derived classes. `private protected` (C# 7.2) was added to restrict protected members to the same assembly only, preventing external assemblies from overriding sensitive methods while still allowing internal extensibility.
 
-**Q9. What is the difference between `protected internal` and `private protected`?**  
+**Q9. What is the difference between `protected internal` and `private protected` ?**  
 A. `protected internal` = `protected` OR `internal` (more permissive: same assembly + external derived classes). `private protected` = `protected` AND `internal` (more restrictive: derived classes in same assembly only). They are opposites in terms of external assembly access.
 
 **Q10. Can interfaces have access modifiers on their members?**  
-A. Since C# 8.0, yes. Interface members can have access modifiers (`public`, `private`, `protected`, `internal`, `protected internal`, `private protected`) with default implementations. Before C# 8.0, all interface members were implicitly `public`.
+A. Since C# 8.0, yes. Interface members can have access modifiers ( `public` , `private` , `protected` , `internal` , `protected internal` , `private protected` ) with default implementations. Before C# 8.0, all interface members were implicitly `public` .
 
 **Q11. What is `internal` typically used for?**  
 A. Hiding implementation details within a library/assembly. Classes, helper methods, or utilities that shouldn't be exposed to external consumers but need to be shared across types within the same project. Common in well-designed NuGet packages.
@@ -468,7 +473,7 @@ public class OrderProcessor
 ### ❌ Mistake 2: Misunderstanding `protected internal`
 
 **Problem:**  
-Thinking `protected internal` is more restrictive than `protected`, when it's actually **more permissive**.
+Thinking `protected internal` is more restrictive than `protected` , when it's actually **more permissive**.
 
 ```csharp
 // Incorrect assumption: "protected internal is for internal derived classes only"
@@ -480,10 +485,10 @@ public class BaseClass
 
 **Truth:**  
 `protected internal` = `protected` **OR** `internal` (union)
-- Accessible in same assembly (even non-derived classes)
-- Accessible from external derived classes
+* Accessible in same assembly (even non-derived classes)
+* Accessible from external derived classes
 
-**When you probably wanted `private protected`:**
+**When you probably wanted `private protected` :**
 
 ```csharp
 public class BaseClass
@@ -507,7 +512,7 @@ protected private void Method() { }
 private protected void Method() { }
 ```
 
-**Remember:** It's `private protected` (not `protected private`).
+**Remember:** It's `private protected` (not `protected private` ).
 
 ---
 
@@ -596,13 +601,13 @@ public class Order
 
 ✅ **Use `private` by default** – Expose only what's necessary. Follow the principle of least privilege for better encapsulation and maintainability.
 
-✅ **`internal` for library internals** – Hide implementation details within your assembly while sharing code across types in the same project.
+✅ ** `internal` for library internals** – Hide implementation details within your assembly while sharing code across types in the same project.
 
-✅ **`protected` for inheritance** – Allow derived classes (any assembly) to access base class members. Useful for template method pattern and extensibility.
+✅ ** `protected` for inheritance** – Allow derived classes (any assembly) to access base class members. Useful for template method pattern and extensibility.
 
-✅ **`protected internal` = OR logic** – More permissive (same assembly OR external derived classes). Use for base classes that need internal helpers and external inheritance.
+✅ ** `protected internal` = OR logic** – More permissive (same assembly OR external derived classes). Use for base classes that need internal helpers and external inheritance.
 
-✅ **`private protected` = AND logic** – More restrictive (derived classes in same assembly only). Use to prevent external overrides while allowing internal extensibility.
+✅ ** `private protected` = AND logic** – More restrictive (derived classes in same assembly only). Use to prevent external overrides while allowing internal extensibility.
 
 ### Access Modifier Selection Guide
 
@@ -713,6 +718,6 @@ namespace ClassLibraryA
 
 ---
 
-**Total Guide Length:** ~2,500 words  
+**Total Guide Length:** ~2, 500 words  
 **Complexity Level:** Junior to Senior Interview Preparation  
-**Last Updated:** January 2026 (.NET 10)
+**Last Updated:** January 2026 (. NET 10)

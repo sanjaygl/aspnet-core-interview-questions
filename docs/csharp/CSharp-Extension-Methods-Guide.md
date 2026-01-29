@@ -1,15 +1,16 @@
 # C# Extension Methods - Complete Guide
 
 ## Table of Contents
-1. [Introduction](#introduction)
-2. [What Are Extension Methods?](#what-are-extension-methods)
-3. [How Extension Methods Work](#how-extension-methods-work)
-4. [Syntax and Rules](#syntax-and-rules)
-5. [Real-World Examples](#real-world-examples)
-6. [Best Practices](#best-practices)
-7. [Advanced Scenarios](#advanced-scenarios)
-8. [Common Use Cases](#common-use-cases)
-9. [Limitations and Gotchas](#limitations-and-gotchas)
+
+01. [Introduction](#introduction)
+02. [What Are Extension Methods?](#what-are-extension-methods)
+03. [How Extension Methods Work](#how-extension-methods-work)
+04. [Syntax and Rules](#syntax-and-rules)
+05. [Real-World Examples](#real-world-examples)
+06. [Best Practices](#best-practices)
+07. [Advanced Scenarios](#advanced-scenarios)
+08. [Common Use Cases](#common-use-cases)
+09. [Limitations and Gotchas](#limitations-and-gotchas)
 10. [Performance Considerations](#performance-considerations)
 11. [Interview Questions](#interview-questions)
 
@@ -17,14 +18,14 @@
 
 ## Introduction
 
-Extension methods are one of the most powerful features introduced in C# 3.0 (.NET Framework 3.5) that enable developers to add new methods to existing types without modifying the original type, creating a new derived type, or recompiling the original code. They provide a clean and intuitive way to extend functionality while maintaining code readability and following the Open/Closed Principle from SOLID design principles.
+Extension methods are one of the most powerful features introduced in C# 3.0 (. NET Framework 3.5) that enable developers to add new methods to existing types without modifying the original type, creating a new derived type, or recompiling the original code. They provide a clean and intuitive way to extend functionality while maintaining code readability and following the Open/Closed Principle from SOLID design principles.
 
 **Key Benefits:**
-- Extend types you don't own (sealed classes, third-party libraries)
-- Add methods to interfaces without breaking existing implementations
-- Improve code readability through fluent APIs
-- Enable LINQ functionality
-- Avoid unnecessary inheritance or wrapper classes
+* Extend types you don't own (sealed classes, third-party libraries)
+* Add methods to interfaces without breaking existing implementations
+* Improve code readability through fluent APIs
+* Enable LINQ functionality
+* Avoid unnecessary inheritance or wrapper classes
 
 ---
 
@@ -71,9 +72,9 @@ string result = StringExtensions.ToTitleCase(myString);
 ### Compiler Resolution
 
 When the compiler encounters a method call, it follows this order:
-1. **Instance methods** on the type
-2. **Extension methods** in the current namespace
-3. **Extension methods** in imported namespaces (using directives)
+01. **Instance methods** on the type
+02. **Extension methods** in the current namespace
+03. **Extension methods** in imported namespaces (using directives)
 
 ```csharp
 public class MyClass
@@ -120,10 +121,10 @@ public static class StringExtensions
 
 ### Mandatory Rules
 
-1. **Static Class**: Extension methods must be defined in a static class
-2. **Static Method**: The method itself must be static
-3. **`this` Modifier**: The first parameter must have the `this` modifier
-4. **Non-Generic Static Class**: The containing class cannot be generic (but can contain generic methods)
+01. **Static Class**: Extension methods must be defined in a static class
+02. **Static Method**: The method itself must be static
+03. **`this` Modifier**: The first parameter must have the `this` modifier
+04. **Non-Generic Static Class**: The containing class cannot be generic (but can contain generic methods)
 
 ```csharp
 // ? WRONG - Not a static class
@@ -1503,11 +1504,11 @@ public static ReadOnlySpan<char> TrimPrefix(this ReadOnlySpan<char> span, ReadOn
 **Q2: What are the basic requirements for creating an extension method?**
 
 **A:** The requirements are:
-1. Must be defined in a static class
-2. Must be a static method
-3. First parameter must have the `this` modifier
-4. First parameter specifies the type being extended
-5. The namespace containing the extension method must be imported with a `using` directive
+01. Must be defined in a static class
+02. Must be a static method
+03. First parameter must have the `this` modifier
+04. First parameter specifies the type being extended
+05. The namespace containing the extension method must be imported with a `using` directive
 
 **Q3: Can extension methods access private members of the extended type?**
 
@@ -1516,9 +1517,9 @@ public static ReadOnlySpan<char> TrimPrefix(this ReadOnlySpan<char> span, ReadOn
 **Q4: What happens if an extension method has the same name as an instance method?**
 
 **A:** The instance method always takes priority. The extension method will never be called if there's an instance method with the same signature. The compiler resolves method calls in this order:
-1. Instance methods
-2. Extension methods in current namespace
-3. Extension methods in imported namespaces
+01. Instance methods
+02. Extension methods in current namespace
+03. Extension methods in imported namespaces
 
 **Q5: Can extension methods be called on null references?**
 
@@ -1539,8 +1540,8 @@ nullStr.SafePrint(); // Works, returns "NULL"
 **Q6: What is the difference between instance methods and extension methods at runtime?**
 
 **A:** At runtime, there is no difference in how they are called. Extension methods are compiled as regular static method calls. The extension method syntax is purely syntactic sugar provided by the compiler. For example:
-- What you write: `str.Reverse()`
-- What the compiler generates: `StringExtensions.Reverse(str)`
+* What you write: `str.Reverse()`
+* What the compiler generates: `StringExtensions.Reverse(str)`
 
 **Q7: Can you create extension methods for sealed classes?**
 
@@ -1598,9 +1599,9 @@ array.Print();
 **Q11: What happens when two extension methods with the same name are available from different namespaces?**
 
 **A:** The compiler generates an ambiguity error. You must either:
-1. Remove one of the using directives
-2. Use the fully qualified static method name
-3. Create an alias for one of the namespaces
+01. Remove one of the using directives
+02. Use the fully qualified static method name
+03. Create an alias for one of the namespaces
 
 ```csharp
 using Namespace1;
@@ -1644,11 +1645,11 @@ obj.Method(); // Outputs "Derived", not "Extension"
 **Q14: What are the best practices for naming extension method classes?**
 
 **A:** Best practices include:
-1. Use descriptive names: `StringExtensions`, `DateTimeExtensions`
-2. Group related extensions in the same class
-3. Use the `Extensions` suffix consistently
-4. Organize in namespaces by functionality
-5. Avoid generic names like `Helpers` or `Utils`
+01. Use descriptive names: `StringExtensions`, `DateTimeExtensions`
+02. Group related extensions in the same class
+03. Use the `Extensions` suffix consistently
+04. Organize in namespaces by functionality
+05. Avoid generic names like `Helpers` or `Utils`
 
 **Q15: Can you create extension methods with ref or out parameters?**
 
@@ -1668,8 +1669,8 @@ public static bool TryParseInt(this string str, out int result)
 **Q16: What is the difference between extending IEnumerable<T> and IQueryable<T>?**
 
 **A:**
-- **IEnumerable<T>**: Executes in-memory, uses LINQ to Objects, operations run on client side
-- **IQueryable<T>**: Builds expression trees, translates to provider-specific queries (SQL, etc.), operations run on server side
+* **IEnumerable<T>**: Executes in-memory, uses LINQ to Objects, operations run on client side
+* **IQueryable<T>**: Builds expression trees, translates to provider-specific queries (SQL, etc.), operations run on server side
 
 ```csharp
 // IEnumerable - runs in memory
@@ -1721,19 +1722,19 @@ var extensionMethods = typeof(StringExtensions)
 **Q19: What are the security implications of extension methods?**
 
 **A:** Extension methods:
-1. Cannot access private members, so they don't break encapsulation
-2. Can be defined by any assembly, potentially causing conflicts
-3. Require namespace imports, giving you control over what's available
-4. Should validate parameters (especially for public APIs)
-5. Should be documented to avoid confusion with real instance methods
+01. Cannot access private members, so they don't break encapsulation
+02. Can be defined by any assembly, potentially causing conflicts
+03. Require namespace imports, giving you control over what's available
+04. Should validate parameters (especially for public APIs)
+05. Should be documented to avoid confusion with real instance methods
 
 **Q20: How do extension methods relate to SOLID principles?**
 
 **A:** Extension methods support several SOLID principles:
-- **Open/Closed Principle**: Extend types without modifying them
-- **Interface Segregation**: Add specific functionality to interfaces without forcing all implementations to have it
-- **Single Responsibility**: Separate concerns by adding functionality externally
-- **Dependency Inversion**: Extend abstractions (interfaces) rather than concrete types
+* **Open/Closed Principle**: Extend types without modifying them
+* **Interface Segregation**: Add specific functionality to interfaces without forcing all implementations to have it
+* **Single Responsibility**: Separate concerns by adding functionality externally
+* **Dependency Inversion**: Extend abstractions (interfaces) rather than concrete types
 
 ### Expert Questions
 
@@ -1773,9 +1774,9 @@ public static class AsyncExtensions
 **Q22: How do extension methods interact with expression trees in Entity Framework?**
 
 **A:** Extension methods on IQueryable<T> work with expression trees, but they must:
-1. Use expressions that can be translated to the target query language (SQL, etc.)
-2. Avoid method calls that can't be translated
-3. Return IQueryable<T> to maintain query composition
+01. Use expressions that can be translated to the target query language (SQL, etc.)
+02. Avoid method calls that can't be translated
+03. Return IQueryable<T> to maintain query composition
 
 ```csharp
 // ? Translatable - uses expression
@@ -1794,12 +1795,12 @@ public static IQueryable<User> WhereActiveUsers(this IQueryable<User> query)
 **Q23: Can you explain the internals of how the compiler resolves extension methods?**
 
 **A:** The compiler:
-1. Checks if the method exists as an instance method (highest priority)
-2. Searches for extension methods in the current namespace
-3. Searches for extension methods in imported namespaces
-4. Performs type inference for generic extension methods
-5. Applies overload resolution rules
-6. Transforms the call into a static method call in the generated IL
+01. Checks if the method exists as an instance method (highest priority)
+02. Searches for extension methods in the current namespace
+03. Searches for extension methods in imported namespaces
+04. Performs type inference for generic extension methods
+05. Applies overload resolution rules
+06. Transforms the call into a static method call in the generated IL
 
 The compiler adds the ExtensionAttribute to extension methods in the IL code to mark them.
 
@@ -1835,17 +1836,17 @@ public static class SpanExtensions
 **A:**
 
 **Library Code:**
-- Use conservative naming to avoid conflicts
-- Document extensively
-- Consider InternalsVisibleTo for internal extensions
-- Be careful with breaking changes
-- Version carefully (extensions can be removed or changed)
+* Use conservative naming to avoid conflicts
+* Document extensively
+* Consider InternalsVisibleTo for internal extensions
+* Be careful with breaking changes
+* Version carefully (extensions can be removed or changed)
 
 **Application Code:**
-- More freedom with naming
-- Can be more specific to domain
-- Less concern about conflicts
-- Can refactor more easily
+* More freedom with naming
+* Can be more specific to domain
+* Less concern about conflicts
+* Can refactor more easily
 
 ```csharp
 // Library - conservative naming
@@ -1866,52 +1867,52 @@ namespace MyApp.Extensions
 ## Summary
 
 Extension methods are a powerful C# feature that enables:
-- **Code Extension**: Add methods to types you don't own
-- **Clean Syntax**: Write fluent, readable code
-- **LINQ Support**: Foundation of Language Integrated Query
-- **Interface Enhancement**: Add functionality to interfaces
-- **Open/Closed Principle**: Extend without modification
+* **Code Extension**: Add methods to types you don't own
+* **Clean Syntax**: Write fluent, readable code
+* **LINQ Support**: Foundation of Language Integrated Query
+* **Interface Enhancement**: Add functionality to interfaces
+* **Open/Closed Principle**: Extend without modification
 
 ### Key Takeaways
 
-1. Extension methods are static methods with `this` modifier on first parameter
-2. They are syntactic sugar compiled to static method calls
-3. Instance methods always have priority over extension methods
-4. They can extend any type including sealed classes and interfaces
-5. They cannot access private members of extended types
-6. They are the foundation of LINQ
-7. They have zero performance overhead
-8. They require namespace imports to be visible
-9. They support generic types and constraints
+01. Extension methods are static methods with `this` modifier on first parameter
+02. They are syntactic sugar compiled to static method calls
+03. Instance methods always have priority over extension methods
+04. They can extend any type including sealed classes and interfaces
+05. They cannot access private members of extended types
+06. They are the foundation of LINQ
+07. They have zero performance overhead
+08. They require namespace imports to be visible
+09. They support generic types and constraints
 10. They enable fluent API design and method chaining
 
 ### When to Use Extension Methods
 
 **Use extension methods when:**
-- Extending third-party or framework types
-- Adding utility methods to common types
-- Creating fluent APIs
-- Extending interfaces with default behavior
-- Building LINQ-like query operations
+* Extending third-party or framework types
+* Adding utility methods to common types
+* Creating fluent APIs
+* Extending interfaces with default behavior
+* Building LINQ-like query operations
 
 **Avoid extension methods when:**
-- You own the type and can modify it directly
-- The method needs access to private members
-- The method is core functionality of the type
-- It would conflict with existing or potential future methods
-- The functionality is complex and better suited to a separate class
+* You own the type and can modify it directly
+* The method needs access to private members
+* The method is core functionality of the type
+* It would conflict with existing or potential future methods
+* The functionality is complex and better suited to a separate class
 
 ---
 
 ## Additional Resources
 
-- [Microsoft Documentation: Extension Methods](https://docs.microsoft.com/en-us/dotnet/csharp/programming-guide/classes-and-structs/extension-methods)
-- [C# Language Specification: Extension Methods](https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/language-specification/classes#extension-methods)
-- [LINQ Architecture and Design](https://docs.microsoft.com/en-us/dotnet/standard/linq/)
+* [Microsoft Documentation: Extension Methods](https://docs.microsoft.com/en-us/dotnet/csharp/programming-guide/classes-and-structs/extension-methods)
+* [C# Language Specification: Extension Methods](https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/language-specification/classes#extension-methods)
+* [LINQ Architecture and Design](https://docs.microsoft.com/en-us/dotnet/standard/linq/)
 
 ---
 
 **Document Version:** 1.0  
 **Last Updated:** 2024  
-**Target Framework:** .NET 6.0 and later  
+**Target Framework:** . NET 6.0 and later  
 **C# Version:** C# 10.0 and later

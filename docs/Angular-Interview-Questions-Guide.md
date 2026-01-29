@@ -11,112 +11,116 @@
 ## 📑 Table of Contents
 
 ### 🟢 Beginner Level (Foundations)
-1. [What is Angular?](#1-what-is-angular)
-2. [What are the main building blocks of Angular?](#2-what-are-the-main-building-blocks-of-angular)
-3. [Difference between constructor and ngOnInit?](#3-difference-between-constructor-and-ngoninit)
-4. [What is data binding?](#4-what-is-data-binding)
-5. [What is a directive?](#5-what-is-a-directive)
+
+001. [What is Angular?](#1-what-is-angular)
+002. [What are the main building blocks of Angular?](#2-what-are-the-main-building-blocks-of-angular)
+003. [Difference between constructor and ngOnInit?](#3-difference-between-constructor-and-ngoninit)
+004. [What is data binding?](#4-what-is-data-binding)
+005. [What is a directive?](#5-what-is-a-directive)
 
 ### 🟡 Advanced Level (Real Interview Focus)
-6. [What is Change Detection?](#6-what-is-change-detection)
-7. [What is RxJS and why is it used?](#7-what-is-rxjs-and-why-is-it-used)
-8. [Difference between Subject and BehaviorSubject?](#8-difference-between-subject-and-behaviorsubject)
-9. [What is an HTTP Interceptor?](#9-what-is-an-http-interceptor)
-10. [What are Reactive Forms?](#10-what-are-reactive-forms)
+
+006. [What is Change Detection?](#6-what-is-change-detection)
+007. [What is RxJS and why is it used?](#7-what-is-rxjs-and-why-is-it-used)
+008. [Difference between Subject and BehaviorSubject?](#8-difference-between-subject-and-behaviorsubject)
+009. [What is an HTTP Interceptor?](#9-what-is-an-http-interceptor)
+010. [What are Reactive Forms?](#10-what-are-reactive-forms)
 
 ### 🔴 Expert Level (Senior / Lead)
-11. [What are Angular Signals? (Angular 16+)](#11-what-are-angular-signals-angular-16)
-12. [Signals vs RxJS – when to use which?](#12-signals-vs-rxjs--when-to-use-which)
-13. [What is OnPush change detection internally?](#13-what-is-onpush-change-detection-internally)
-14. [What is Lazy Loading?](#14-what-is-lazy-loading)
-15. [How does Angular prevent XSS?](#15-how-does-angular-prevent-xss)
-16. [What is Server-Side Rendering (SSR)?](#16-what-is-server-side-rendering-ssr)
-17. [What is Module Federation?](#17-what-is-module-federation)
-18. [How do you optimize Angular performance?](#18-how-do-you-optimize-angular-performance)
-19. [How do you handle global error handling?](#19-how-do-you-handle-global-error-handling)
-20. [How do you structure a large Angular application?](#20-how-do-you-structure-a-large-angular-application)
-21. [What are Standalone Components? (Angular 15+)](#21-what-are-standalone-components-angular-15)
-22. [What is Control Flow syntax in Angular? (Angular 17+)](#22-what-is-control-flow-syntax-in-angular-angular-17)
-23. [What is hydration in Angular SSR? (Angular 17+)](#23-what-is-hydration-in-angular-ssr-angular-17)
-24. [What are some new features in Angular 18–21?](#24-what-are-some-new-features-in-angular-1821)
-25. [How do you migrate a legacy Angular app to the latest version?](#25-how-do-you-migrate-a-legacy-angular-app-to-the-latest-version)
-26. [How do you test Signals and Standalone Components?](#26-how-do-you-test-signals-and-standalone-components)
-27. [How do you secure Angular apps (Angular 16+)?](#27-how-do-you-secure-angular-apps-angular-16)
-28. [How do you use typed forms in Angular 17+?](#28-how-do-you-use-typed-forms-in-angular-17)
-29. [How do you implement micro frontends in Angular 17+?](#29-how-do-you-implement-micro-frontends-in-angular-17)
-30. [What is the future direction of Angular (v21+)?](#30-what-is-the-future-direction-of-angular-v21)
-31. [How do you use Angular's new built-in control flow?](#31-how-do-you-use-angulars-new-built-in-control-flow-if-for-switch-in-templates-angular-17)
-32. [How do you create a custom pipe in Angular?](#32-how-do-you-create-a-custom-pipe-in-angular)
-33. [How do you use Angular signals in a service for shared state?](#33-how-do-you-use-angular-signals-in-a-service-for-shared-state-angular-16)
-34. [How do you implement route guards using functional APIs?](#34-how-do-you-implement-route-guards-using-functional-apis-angular-15)
-35. [How do you use dependency injection in standalone components?](#35-how-do-you-use-dependency-injection-in-standalone-components-angular-15)
-36. [How do you use the new provideHttpClient API?](#36-how-do-you-use-the-new-providehttpclient-api-angular-15)
-37. [How do you implement optimistic UI updates with signals?](#37-how-do-you-implement-optimistic-ui-updates-with-signals)
-38. [How do you use Angular's built-in form validation improvements?](#38-how-do-you-use-angulars-built-in-form-validation-improvements-angular-18)
-39. [How do you use the new @defer block for lazy rendering?](#39-how-do-you-use-the-new-defer-block-for-lazy-rendering-angular-17)
-40. [How do you use the Angular CLI to generate a standalone component?](#40-how-do-you-use-the-angular-cli-to-generate-a-standalone-component)
-41. [How do you use the new inject function in Angular?](#41-how-do-you-use-the-new-inject-function-in-angular-angular-14)
-42. [How do you use the new destroyRef for cleanup in Angular?](#42-how-do-you-use-the-new-destroyref-for-cleanup-in-angular-angular-16)
-43. [How do you use the new @input transform for input coercion?](#43-how-do-you-use-the-new-input-transform-for-input-coercion-angular-16)
-44. [How do you use the new @output transform for output events?](#44-how-do-you-use-the-new-output-transform-for-output-events-angular-16)
-45. [How do you use the new @model decorator for two-way binding?](#45-how-do-you-use-the-new-model-decorator-for-two-way-binding-angular-17)
-46. [How do you use the new @signalEffect for side effects?](#46-how-do-you-use-the-new-signaleffect-for-side-effects-angular-18)
-47. [How do you use the new @computed decorator for derived state?](#47-how-do-you-use-the-new-computed-decorator-for-derived-state-angular-17)
-48. [How do you use the new @injectable decorator for tree-shakable services?](#48-how-do-you-use-the-new-injectable-decorator-for-tree-shakable-services-angular-16)
-49. [How do you use the new @environmentInjector for environment-specific providers?](#49-how-do-you-use-the-new-environmentinjector-for-environment-specific-providers-angular-17)
-50. [How do you use the new @hydration API for SSR hydration?](#50-how-do-you-use-the-new-hydration-api-for-ssr-hydration-angular-17)
-51. [How do you use the new @input required flag for required inputs?](#51-how-do-you-use-the-new-input-required-flag-for-required-inputs-angular-16)
-52. [How do you use the new @output required flag for required outputs?](#52-how-do-you-use-the-new-output-required-flag-for-required-outputs-angular-16)
-53. [How do you use the new @HostDirectives decorator?](#53-how-do-you-use-the-new-hostdirectives-decorator-angular-16)
-54. [How do you use the new @Self, @SkipSelf, @Optional, and @Host DI flags?](#54-how-do-you-use-the-new-self-skipself-optional-and-host-di-flags)
-55. [How do you use the new @ViewChild and @ContentChild static option?](#55-how-do-you-use-the-new-viewchild-and-contentchild-static-option)
-56. [How do you use the new @NgOptimizedImage directive?](#56-how-do-you-use-the-new-ngoptimizedimage-directive-angular-16)
-57. [How do you use the new @NgIf else block with @if?](#57-how-do-you-use-the-new-ngif-else-block-with-if-angular-17)
-58. [How do you use the new @NgFor with track and empty blocks?](#58-how-do-you-use-the-new-ngfor-with-track-and-empty-blocks-angular-17)
-59. [How do you use the new @NgSwitch for advanced template branching?](#59-how-do-you-use-the-new-ngswitch-for-advanced-template-branching-angular-17)
-60. [How do you use the new @NgTemplateOutlet for dynamic templates?](#60-how-do-you-use-the-new-ngtemplateoutlet-for-dynamic-templates)
-61. [How do you use the new @NgZone for manual change detection?](#61-how-do-you-use-the-new-ngzone-for-manual-change-detection)
-62. [How do you use the new @Renderer2 for safe DOM manipulation?](#62-how-do-you-use-the-new-renderer2-for-safe-dom-manipulation)
-63. [How do you use the new @NgPlural for pluralization?](#63-how-do-you-use-the-new-ngplural-for-pluralization)
-64. [How do you use the new @NgClass and @NgStyle for dynamic styling?](#64-how-do-you-use-the-new-ngclass-and-ngstyle-for-dynamic-styling)
-65. [How do you use the new @NgContent for content projection?](#65-how-do-you-use-the-new-ngcontent-for-content-projection)
-66. [How do you use the new @NgModule for legacy support?](#66-how-do-you-use-the-new-ngmodule-for-legacy-support)
-67. [How do you use the new @NgUpgrade for hybrid AngularJS/Angular apps?](#67-how-do-you-use-the-new-ngupgrade-for-hybrid-angularjsangular-apps)
-68. [How do you use the new @NgRx for state management?](#68-how-do-you-use-the-new-ngrx-for-state-management)
-69. [How do you use the new @Ngxs for state management?](#69-how-do-you-use-the-new-ngxs-for-state-management)
-70. [How do you use the new @ApolloAngular for GraphQL integration?](#70-how-do-you-use-the-new-apolloangular-for-graphql-integration)
-71. [How do you use the new @ngx-translate for internationalization (i18n)?](#71-how-do-you-use-the-new-ngx-translate-for-internationalization-i18n)
-72. [How do you use the new @angular/localize for built-in i18n?](#72-how-do-you-use-the-new-angularlocalize-for-built-in-i18n)
-73. [How do you use the new @angular/service-worker for PWA support?](#73-how-do-you-use-the-new-angularservice-worker-for-pwa-support)
-74. [How do you use the new @angular/animations for advanced animations?](#74-how-do-you-use-the-new-angularanimations-for-advanced-animations)
-75. [How do you use the new @angular/cdk for accessibility and utilities?](#75-how-do-you-use-the-new-angularcdk-for-accessibility-and-utilities)
-76. [How do you use the new @angular/material for UI components?](#76-how-do-you-use-the-new-angularmaterial-for-ui-components)
-77. [How do you use the new @angular/forms for custom validators?](#77-how-do-you-use-the-new-angularforms-for-custom-validators)
-78. [How do you use the new @angular/router for lazy loading with standalone components?](#78-how-do-you-use-the-new-angularrouter-for-lazy-loading-with-standalone-components)
-79. [How do you use the new @angular/router for route resolvers?](#79-how-do-you-use-the-new-angularrouter-for-route-resolvers)
-80. [How do you use the new @angular/router for guards with signals?](#80-how-do-you-use-the-new-angularrouter-for-guards-with-signals)
-81. [How do you use the new @angular/router for canMatch and canLoad guards?](#81-how-do-you-use-the-new-angularrouter-for-canmatch-and-canload-guards)
-82. [How do you use the new @angular/router for router events?](#82-how-do-you-use-the-new-angularrouter-for-router-events)
-83. [How do you use the new @angular/router for router outlets and named outlets?](#83-how-do-you-use-the-new-angularrouter-for-router-outlets-and-named-outlets)
-84. [How do you use the new @angular/router for routerLinkActive and routerLinkActiveOptions?](#84-how-do-you-use-the-new-angularrouter-for-routerlinkactive-and-routerlinkactiveoptions)
-85. [How do you use the new @angular/router for query params and fragments?](#85-how-do-you-use-the-new-angularrouter-for-query-params-and-fragments)
-86. [How do you use the new @angular/router for navigation extras?](#86-how-do-you-use-the-new-angularrouter-for-navigation-extras)
-87. [How do you use the new @angular/router for route reuse strategy?](#87-how-do-you-use-the-new-angularrouter-for-route-reuse-strategy)
-88. [How do you use the new @angular/router for preloading strategies?](#88-how-do-you-use-the-new-angularrouter-for-preloading-strategies)
-89. [How do you use the new @angular/router for custom URL serializers?](#89-how-do-you-use-the-new-angularrouter-for-custom-url-serializers)
-90. [How do you use the new @angular/router for router state snapshots?](#90-how-do-you-use-the-new-angularrouter-for-router-state-snapshots)
-91. [How do you use the new @angular/router for dynamic route configuration?](#91-how-do-you-use-the-new-angularrouter-for-dynamic-route-configuration)
-92. [How do you use the new @angular/router for guards with async/await?](#92-how-do-you-use-the-new-angularrouter-for-guards-with-asyncawait)
-93. [How do you use the new @angular/router for router events with signals?](#93-how-do-you-use-the-new-angularrouter-for-router-events-with-signals)
-94. [How do you use the new @angular/router for scroll position restoration?](#94-how-do-you-use-the-new-angularrouter-for-scroll-position-restoration)
-95. [How do you use the new @angular/router for custom preloading strategies?](#95-how-do-you-use-the-new-angularrouter-for-custom-preloading-strategies)
-96. [How do you use the new @angular/router for router guards with dependency injection?](#96-how-do-you-use-the-new-angularrouter-for-router-guards-with-dependency-injection)
-97. [How do you use the new @angular/router for router navigation extras with replaceUrl?](#97-how-do-you-use-the-new-angularrouter-for-router-navigation-extras-with-replaceurl)
-98. [How do you use the new @angular/router for router navigation with relativeTo?](#98-how-do-you-use-the-new-angularrouter-for-router-navigation-with-relativeto)
-99. [How do you use the new @angular/router for router navigation with skipLocationChange?](#99-how-do-you-use-the-new-angularrouter-for-router-navigation-with-skiplocationchange)
+
+011. [What are Angular Signals? (Angular 16+)](#11-what-are-angular-signals-angular-16)
+012. [Signals vs RxJS – when to use which?](#12-signals-vs-rxjs--when-to-use-which)
+013. [What is OnPush change detection internally?](#13-what-is-onpush-change-detection-internally)
+014. [What is Lazy Loading?](#14-what-is-lazy-loading)
+015. [How does Angular prevent XSS?](#15-how-does-angular-prevent-xss)
+016. [What is Server-Side Rendering (SSR)?](#16-what-is-server-side-rendering-ssr)
+017. [What is Module Federation?](#17-what-is-module-federation)
+018. [How do you optimize Angular performance?](#18-how-do-you-optimize-angular-performance)
+019. [How do you handle global error handling?](#19-how-do-you-handle-global-error-handling)
+020. [How do you structure a large Angular application?](#20-how-do-you-structure-a-large-angular-application)
+021. [What are Standalone Components? (Angular 15+)](#21-what-are-standalone-components-angular-15)
+022. [What is Control Flow syntax in Angular? (Angular 17+)](#22-what-is-control-flow-syntax-in-angular-angular-17)
+023. [What is hydration in Angular SSR? (Angular 17+)](#23-what-is-hydration-in-angular-ssr-angular-17)
+024. [What are some new features in Angular 18–21?](#24-what-are-some-new-features-in-angular-1821)
+025. [How do you migrate a legacy Angular app to the latest version?](#25-how-do-you-migrate-a-legacy-angular-app-to-the-latest-version)
+026. [How do you test Signals and Standalone Components?](#26-how-do-you-test-signals-and-standalone-components)
+027. [How do you secure Angular apps (Angular 16+)?](#27-how-do-you-secure-angular-apps-angular-16)
+028. [How do you use typed forms in Angular 17+?](#28-how-do-you-use-typed-forms-in-angular-17)
+029. [How do you implement micro frontends in Angular 17+?](#29-how-do-you-implement-micro-frontends-in-angular-17)
+030. [What is the future direction of Angular (v21+)?](#30-what-is-the-future-direction-of-angular-v21)
+031. [How do you use Angular's new built-in control flow?](#31-how-do-you-use-angulars-new-built-in-control-flow-if-for-switch-in-templates-angular-17)
+032. [How do you create a custom pipe in Angular?](#32-how-do-you-create-a-custom-pipe-in-angular)
+033. [How do you use Angular signals in a service for shared state?](#33-how-do-you-use-angular-signals-in-a-service-for-shared-state-angular-16)
+034. [How do you implement route guards using functional APIs?](#34-how-do-you-implement-route-guards-using-functional-apis-angular-15)
+035. [How do you use dependency injection in standalone components?](#35-how-do-you-use-dependency-injection-in-standalone-components-angular-15)
+036. [How do you use the new provideHttpClient API?](#36-how-do-you-use-the-new-providehttpclient-api-angular-15)
+037. [How do you implement optimistic UI updates with signals?](#37-how-do-you-implement-optimistic-ui-updates-with-signals)
+038. [How do you use Angular's built-in form validation improvements?](#38-how-do-you-use-angulars-built-in-form-validation-improvements-angular-18)
+039. [How do you use the new @defer block for lazy rendering?](#39-how-do-you-use-the-new-defer-block-for-lazy-rendering-angular-17)
+040. [How do you use the Angular CLI to generate a standalone component?](#40-how-do-you-use-the-angular-cli-to-generate-a-standalone-component)
+041. [How do you use the new inject function in Angular?](#41-how-do-you-use-the-new-inject-function-in-angular-angular-14)
+042. [How do you use the new destroyRef for cleanup in Angular?](#42-how-do-you-use-the-new-destroyref-for-cleanup-in-angular-angular-16)
+043. [How do you use the new @input transform for input coercion?](#43-how-do-you-use-the-new-input-transform-for-input-coercion-angular-16)
+044. [How do you use the new @output transform for output events?](#44-how-do-you-use-the-new-output-transform-for-output-events-angular-16)
+045. [How do you use the new @model decorator for two-way binding?](#45-how-do-you-use-the-new-model-decorator-for-two-way-binding-angular-17)
+046. [How do you use the new @signalEffect for side effects?](#46-how-do-you-use-the-new-signaleffect-for-side-effects-angular-18)
+047. [How do you use the new @computed decorator for derived state?](#47-how-do-you-use-the-new-computed-decorator-for-derived-state-angular-17)
+048. [How do you use the new @injectable decorator for tree-shakable services?](#48-how-do-you-use-the-new-injectable-decorator-for-tree-shakable-services-angular-16)
+049. [How do you use the new @environmentInjector for environment-specific providers?](#49-how-do-you-use-the-new-environmentinjector-for-environment-specific-providers-angular-17)
+050. [How do you use the new @hydration API for SSR hydration?](#50-how-do-you-use-the-new-hydration-api-for-ssr-hydration-angular-17)
+051. [How do you use the new @input required flag for required inputs?](#51-how-do-you-use-the-new-input-required-flag-for-required-inputs-angular-16)
+052. [How do you use the new @output required flag for required outputs?](#52-how-do-you-use-the-new-output-required-flag-for-required-outputs-angular-16)
+053. [How do you use the new @HostDirectives decorator?](#53-how-do-you-use-the-new-hostdirectives-decorator-angular-16)
+054. [How do you use the new @Self, @SkipSelf, @Optional, and @Host DI flags?](#54-how-do-you-use-the-new-self-skipself-optional-and-host-di-flags)
+055. [How do you use the new @ViewChild and @ContentChild static option?](#55-how-do-you-use-the-new-viewchild-and-contentchild-static-option)
+056. [How do you use the new @NgOptimizedImage directive?](#56-how-do-you-use-the-new-ngoptimizedimage-directive-angular-16)
+057. [How do you use the new @NgIf else block with @if?](#57-how-do-you-use-the-new-ngif-else-block-with-if-angular-17)
+058. [How do you use the new @NgFor with track and empty blocks?](#58-how-do-you-use-the-new-ngfor-with-track-and-empty-blocks-angular-17)
+059. [How do you use the new @NgSwitch for advanced template branching?](#59-how-do-you-use-the-new-ngswitch-for-advanced-template-branching-angular-17)
+060. [How do you use the new @NgTemplateOutlet for dynamic templates?](#60-how-do-you-use-the-new-ngtemplateoutlet-for-dynamic-templates)
+061. [How do you use the new @NgZone for manual change detection?](#61-how-do-you-use-the-new-ngzone-for-manual-change-detection)
+062. [How do you use the new @Renderer2 for safe DOM manipulation?](#62-how-do-you-use-the-new-renderer2-for-safe-dom-manipulation)
+063. [How do you use the new @NgPlural for pluralization?](#63-how-do-you-use-the-new-ngplural-for-pluralization)
+064. [How do you use the new @NgClass and @NgStyle for dynamic styling?](#64-how-do-you-use-the-new-ngclass-and-ngstyle-for-dynamic-styling)
+065. [How do you use the new @NgContent for content projection?](#65-how-do-you-use-the-new-ngcontent-for-content-projection)
+066. [How do you use the new @NgModule for legacy support?](#66-how-do-you-use-the-new-ngmodule-for-legacy-support)
+067. [How do you use the new @NgUpgrade for hybrid AngularJS/Angular apps?](#67-how-do-you-use-the-new-ngupgrade-for-hybrid-angularjsangular-apps)
+068. [How do you use the new @NgRx for state management?](#68-how-do-you-use-the-new-ngrx-for-state-management)
+069. [How do you use the new @Ngxs for state management?](#69-how-do-you-use-the-new-ngxs-for-state-management)
+070. [How do you use the new @ApolloAngular for GraphQL integration?](#70-how-do-you-use-the-new-apolloangular-for-graphql-integration)
+071. [How do you use the new @ngx-translate for internationalization (i18n)?](#71-how-do-you-use-the-new-ngx-translate-for-internationalization-i18n)
+072. [How do you use the new @angular/localize for built-in i18n?](#72-how-do-you-use-the-new-angularlocalize-for-built-in-i18n)
+073. [How do you use the new @angular/service-worker for PWA support?](#73-how-do-you-use-the-new-angularservice-worker-for-pwa-support)
+074. [How do you use the new @angular/animations for advanced animations?](#74-how-do-you-use-the-new-angularanimations-for-advanced-animations)
+075. [How do you use the new @angular/cdk for accessibility and utilities?](#75-how-do-you-use-the-new-angularcdk-for-accessibility-and-utilities)
+076. [How do you use the new @angular/material for UI components?](#76-how-do-you-use-the-new-angularmaterial-for-ui-components)
+077. [How do you use the new @angular/forms for custom validators?](#77-how-do-you-use-the-new-angularforms-for-custom-validators)
+078. [How do you use the new @angular/router for lazy loading with standalone components?](#78-how-do-you-use-the-new-angularrouter-for-lazy-loading-with-standalone-components)
+079. [How do you use the new @angular/router for route resolvers?](#79-how-do-you-use-the-new-angularrouter-for-route-resolvers)
+080. [How do you use the new @angular/router for guards with signals?](#80-how-do-you-use-the-new-angularrouter-for-guards-with-signals)
+081. [How do you use the new @angular/router for canMatch and canLoad guards?](#81-how-do-you-use-the-new-angularrouter-for-canmatch-and-canload-guards)
+082. [How do you use the new @angular/router for router events?](#82-how-do-you-use-the-new-angularrouter-for-router-events)
+083. [How do you use the new @angular/router for router outlets and named outlets?](#83-how-do-you-use-the-new-angularrouter-for-router-outlets-and-named-outlets)
+084. [How do you use the new @angular/router for routerLinkActive and routerLinkActiveOptions?](#84-how-do-you-use-the-new-angularrouter-for-routerlinkactive-and-routerlinkactiveoptions)
+085. [How do you use the new @angular/router for query params and fragments?](#85-how-do-you-use-the-new-angularrouter-for-query-params-and-fragments)
+086. [How do you use the new @angular/router for navigation extras?](#86-how-do-you-use-the-new-angularrouter-for-navigation-extras)
+087. [How do you use the new @angular/router for route reuse strategy?](#87-how-do-you-use-the-new-angularrouter-for-route-reuse-strategy)
+088. [How do you use the new @angular/router for preloading strategies?](#88-how-do-you-use-the-new-angularrouter-for-preloading-strategies)
+089. [How do you use the new @angular/router for custom URL serializers?](#89-how-do-you-use-the-new-angularrouter-for-custom-url-serializers)
+090. [How do you use the new @angular/router for router state snapshots?](#90-how-do-you-use-the-new-angularrouter-for-router-state-snapshots)
+091. [How do you use the new @angular/router for dynamic route configuration?](#91-how-do-you-use-the-new-angularrouter-for-dynamic-route-configuration)
+092. [How do you use the new @angular/router for guards with async/await?](#92-how-do-you-use-the-new-angularrouter-for-guards-with-asyncawait)
+093. [How do you use the new @angular/router for router events with signals?](#93-how-do-you-use-the-new-angularrouter-for-router-events-with-signals)
+094. [How do you use the new @angular/router for scroll position restoration?](#94-how-do-you-use-the-new-angularrouter-for-scroll-position-restoration)
+095. [How do you use the new @angular/router for custom preloading strategies?](#95-how-do-you-use-the-new-angularrouter-for-custom-preloading-strategies)
+096. [How do you use the new @angular/router for router guards with dependency injection?](#96-how-do-you-use-the-new-angularrouter-for-router-guards-with-dependency-injection)
+097. [How do you use the new @angular/router for router navigation extras with replaceUrl?](#97-how-do-you-use-the-new-angularrouter-for-router-navigation-extras-with-replaceurl)
+098. [How do you use the new @angular/router for router navigation with relativeTo?](#98-how-do-you-use-the-new-angularrouter-for-router-navigation-with-relativeto)
+099. [How do you use the new @angular/router for router navigation with skipLocationChange?](#99-how-do-you-use-the-new-angularrouter-for-router-navigation-with-skiplocationchange)
 100. [How do you use the new @angular/router for router navigation with state?](#100-how-do-you-use-the-new-angularrouter-for-router-navigation-with-state)
 
 ### 💼 Practical Coding Challenges
+
 101. [Build a parent component that passes data to a child component](#101-build-a-parent-component-that-passes-data-to-a-child-component-and-receives-an-event-back-when-an-item-is-selected)
 102. [Implement a search input that triggers an API call after debounce](#102-implement-a-search-input-that-triggers-an-api-call-only-after-the-user-stops-typing-for-500ms)
 103. [Create a custom directive that changes background color on hover](#103-create-a-custom-directive-that-changes-the-background-color-of-an-element-on-hover)
@@ -171,6 +175,7 @@
 Angular is a TypeScript-based frontend framework developed by Google for building scalable, single-page applications using components, dependency injection, and reactive programming.
 
 **Example:**
+
 ```ts
 import { Component } from '@angular/core';
 @Component({
@@ -185,13 +190,14 @@ export class AppComponent {}
 ## 2. What are the main building blocks of Angular?
 
 **Answer:**
-- Components
-- Templates
-- Directives
-- Services
-- Modules (optional in modern Angular)
+* Components
+* Templates
+* Directives
+* Services
+* Modules (optional in modern Angular)
 
 **Example:**
+
 ```ts
 // Component
 @Component({ selector: 'app-demo', template: '<div>Demo</div>' })
@@ -211,10 +217,11 @@ export class DataService {}
 ## 3. Difference between constructor and ngOnInit?
 
 **Answer:**
-- `constructor`: Used for dependency injection
-- `ngOnInit`: Used for initialization logic
+* `constructor`: Used for dependency injection
+* `ngOnInit`: Used for initialization logic
 
 **Example:**
+
 ```ts
 constructor(private service: DataService) {}
 
@@ -231,12 +238,13 @@ ngOnInit() {
 Data binding connects the component class with the template.
 
 Types:
-- Interpolation `{{ }}`
-- Property binding `[value]`
-- Event binding `(click)`
-- Two-way binding `[(ngModel)]`
+* Interpolation `{{ }}`
+* Property binding `[value]`
+* Event binding `(click)`
+* Two-way binding `[(ngModel)]`
 
 **Example:**
+
 ```html
 <!-- Interpolation -->
 <p>{{ title }}</p>
@@ -256,6 +264,7 @@ Types:
 Directives are classes that modify the behavior or appearance of DOM elements.
 
 **Example:**
+
 ```ts
 @Directive({ selector: '[appHighlight]' })
 export class HighlightDirective {
@@ -274,10 +283,11 @@ export class HighlightDirective {
 **Answer:**  
 Change detection is the mechanism Angular uses to synchronize the DOM with application state.
 
-- Default strategy checks entire component tree
-- `OnPush` checks only on input changes
+* Default strategy checks entire component tree
+* `OnPush` checks only on input changes
 
 **Example:**
+
 ```ts
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -296,6 +306,7 @@ export class FastComponent {
 RxJS provides reactive programming using Observables for async operations like HTTP calls and events.
 
 **Example:**
+
 ```ts
 import { HttpClient } from '@angular/common/http';
 import { switchMap } from 'rxjs';
@@ -310,10 +321,11 @@ this.http.get('/api/users')
 ## 8. Difference between Subject and BehaviorSubject?
 
 **Answer:**
-- Subject: No initial value
-- BehaviorSubject: Requires initial value and emits last value
+* Subject: No initial value
+* BehaviorSubject: Requires initial value and emits last value
 
 **Example:**
+
 ```ts
 import { Subject, BehaviorSubject } from 'rxjs';
 const subject = new Subject<number>();
@@ -331,6 +343,7 @@ behavior.next(2); // Subscribers always get latest value (2)
 Interceptors allow you to modify HTTP requests and responses globally.
 
 **Example:**
+
 ```ts
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
@@ -349,6 +362,7 @@ export class AuthInterceptor implements HttpInterceptor {
 Reactive forms provide a model-driven approach for handling form inputs.
 
 **Example:**
+
 ```ts
 import { FormBuilder, Validators } from '@angular/forms';
 constructor(private fb: FormBuilder) {}
@@ -368,6 +382,7 @@ this.form = this.fb.group({
 Signals are a new reactive primitive for state management with fine-grained reactivity, introduced in Angular 16 and improved in 17+.
 
 **Example:**
+
 ```ts
 import { signal } from '@angular/core';
 count = signal(0);
@@ -382,10 +397,11 @@ increment() {
 ## 12. Signals vs RxJS – when to use which?
 
 **Answer:**
-- Signals: Local UI state, synchronous reactivity
-- RxJS: Async streams, HTTP, events, complex flows
+* Signals: Local UI state, synchronous reactivity
+* RxJS: Async streams, HTTP, events, complex flows
 
 **Example:**
+
 ```ts
 // Signals for local state
 count = signal(0);
@@ -400,11 +416,12 @@ users$ = this.http.get('/api/users');
 
 **Answer:**
 `OnPush` triggers change detection only when:
-- Input reference changes
-- Event occurs
-- Observable emits
+* Input reference changes
+* Event occurs
+* Observable emits
 
 **Example:**
+
 ```ts
 @Component({
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -423,6 +440,7 @@ export class OnPushComponent {
 Lazy loading loads feature modules or routes only when needed.
 
 **Example:**
+
 ```ts
 // Standalone route lazy loading (Angular 15+)
 {
@@ -439,6 +457,7 @@ Lazy loading loads feature modules or routes only when needed.
 Angular sanitizes untrusted HTML and escapes values automatically.
 
 **Example:**
+
 ```ts
 @Component({ template: `<div [innerHTML]="userHtml"></div>` })
 export class SafeHtmlComponent {
@@ -454,6 +473,7 @@ export class SafeHtmlComponent {
 SSR renders Angular apps on the server to improve performance and SEO. Angular 17+ supports hydration for seamless SSR/CSR transitions.
 
 **Example:**
+
 ```ts
 // main.server.ts
 import { provideServerRendering } from '@angular/platform-server';
@@ -467,12 +487,15 @@ import { provideServerRendering } from '@angular/platform-server';
 Module Federation enables micro-frontends by sharing Angular modules at runtime.
 
 **Example:**
+
 ```js
 // webpack.config.js
 new ModuleFederationPlugin({
-  name: 'app1',
-  remotes: { app2: 'app2@http://localhost:3002/remoteEntry.js' },
-  shared: ['@angular/core']
+    name: 'app1',
+    remotes: {
+        app2: 'app2@http://localhost:3002/remoteEntry.js'
+    },
+    shared: ['@angular/core']
 })
 ```
 
@@ -481,15 +504,16 @@ new ModuleFederationPlugin({
 ## 18. How do you optimize Angular performance?
 
 **Answer:**
-- OnPush
-- trackBy
-- Lazy loading
-- Signals
-- Avoid heavy pipes
-- Use Standalone APIs (Angular 15+)
-- Use Control Flow syntax (Angular 17+)
+* OnPush
+* trackBy
+* Lazy loading
+* Signals
+* Avoid heavy pipes
+* Use Standalone APIs (Angular 15+)
+* Use Control Flow syntax (Angular 17+)
 
 **Example:**
+
 ```ts
 // OnPush
 @Component({ changeDetection: ChangeDetectionStrategy.OnPush })
@@ -507,6 +531,7 @@ count = signal(0);
 Using HTTP interceptors and global error handlers.
 
 **Example:**
+
 ```ts
 @Injectable()
 export class GlobalErrorHandler implements ErrorHandler {
@@ -521,13 +546,14 @@ export class GlobalErrorHandler implements ErrorHandler {
 ## 20. How do you structure a large Angular application?
 
 **Answer:**
-- Feature-based folder structure
-- Shared modules
-- Smart vs dumb components
-- Clear state boundaries
-- Use Standalone Components (Angular 15+)
+* Feature-based folder structure
+* Shared modules
+* Smart vs dumb components
+* Clear state boundaries
+* Use Standalone Components (Angular 15+)
 
 **Example:**
+
 ```
 /src
   /features
@@ -545,6 +571,7 @@ export class GlobalErrorHandler implements ErrorHandler {
 Standalone components can be used without NgModules, simplifying app structure and improving tree-shaking and lazy loading.
 
 **Example:**
+
 ```ts
 @Component({
   selector: 'app-standalone',
@@ -559,12 +586,13 @@ export class StandaloneComponent {}
 ## 22. What is Control Flow syntax in Angular? (Angular 17+)
 
 **Answer:**
-Control Flow syntax (`@if`, `@for`, `@switch`) replaces structural directives for more readable and performant templates.
+Control Flow syntax ( `@if` , `@for` , `@switch` ) replaces structural directives for more readable and performant templates.
 
 **Example:**
+
 ```html
 @for (item of items; track item.id) {
-  <div>{{ item.name }}</div>
+<div>{{ item.name }}</div>
 }
 ```
 
@@ -576,6 +604,7 @@ Control Flow syntax (`@if`, `@for`, `@switch`) replaces structural directives fo
 Hydration allows Angular to reuse server-rendered HTML on the client, improving SSR performance and SEO.
 
 **Example:**
+
 ```ts
 // SSR hydration is enabled by default in Angular 17+ when using provideServerRendering
 ```
@@ -585,14 +614,15 @@ Hydration allows Angular to reuse server-rendered HTML on the client, improving 
 ## 24. What are some new features in Angular 18–21?
 
 **Answer:**
-- Enhanced Signals API (Angular 18+)
-- Built-in form validation improvements
-- Improved SSR and hydration
-- More granular lazy loading
-- Advanced Control Flow and template type checking
-- Deprecation of legacy APIs (NgModules, ViewEngine)
+* Enhanced Signals API (Angular 18+)
+* Built-in form validation improvements
+* Improved SSR and hydration
+* More granular lazy loading
+* Advanced Control Flow and template type checking
+* Deprecation of legacy APIs (NgModules, ViewEngine)
 
 **Example:**
+
 ```ts
 // Angular 18+ signals
 const user = signal({ name: 'Alice', age: 30 });
@@ -604,12 +634,13 @@ user.mutate(u => { u.age = 31; });
 ## 25. How do you migrate a legacy Angular app to the latest version?
 
 **Answer:**
-- Upgrade dependencies step by step
-- Refactor to standalone components
-- Replace legacy APIs with Signals and new Control Flow
-- Use Angular Update Guide for breaking changes
+* Upgrade dependencies step by step
+* Refactor to standalone components
+* Replace legacy APIs with Signals and new Control Flow
+* Use Angular Update Guide for breaking changes
 
 **Example:**
+
 ```ts
 // Migrate NgModule-based component to standalone
 @Component({
@@ -625,11 +656,12 @@ export class LegacyComponent {}
 ## 26. How do you test Signals and Standalone Components?
 
 **Answer:**
-- Use TestBed for standalone components
-- Use Angular's testing utilities for Signals
-- Prefer Jest for fast, isolated tests
+* Use TestBed for standalone components
+* Use Angular's testing utilities for Signals
+* Prefer Jest for fast, isolated tests
 
 **Example:**
+
 ```ts
 import { TestBed } from '@angular/core/testing';
 import { StandaloneComponent } from './standalone.component';
@@ -647,12 +679,13 @@ describe('StandaloneComponent', () => {
 ## 27. How do you secure Angular apps (Angular 16+)?
 
 **Answer:**
-- Use built-in sanitization
-- Avoid direct DOM manipulation
-- Use HttpClient with XSRF protection
-- Implement route guards and role-based access
+* Use built-in sanitization
+* Avoid direct DOM manipulation
+* Use HttpClient with XSRF protection
+* Implement route guards and role-based access
 
 **Example:**
+
 ```ts
 // Route guard
 import { CanActivateFn } from '@angular/router';
@@ -667,6 +700,7 @@ export const adminGuard: CanActivateFn = () => isAdmin();
 Typed forms provide type safety for form controls and groups.
 
 **Example:**
+
 ```ts
 import { FormGroup, FormControl } from '@angular/forms';
 interface UserForm {
@@ -684,17 +718,20 @@ const form = new FormGroup<UserForm>({
 ## 29. How do you implement micro frontends in Angular 17+?
 
 **Answer:**
-- Use Module Federation for runtime sharing
-- Prefer standalone components for isolation
-- Share common dependencies via Webpack config
+* Use Module Federation for runtime sharing
+* Prefer standalone components for isolation
+* Share common dependencies via Webpack config
 
 **Example:**
+
 ```js
 // webpack.config.js
 new ModuleFederationPlugin({
-  name: 'shell',
-  remotes: { mfe1: 'mfe1@http://localhost:3001/remoteEntry.js' },
-  shared: ['@angular/core']
+    name: 'shell',
+    remotes: {
+        mfe1: 'mfe1@http://localhost:3001/remoteEntry.js'
+    },
+    shared: ['@angular/core']
 })
 ```
 
@@ -703,13 +740,14 @@ new ModuleFederationPlugin({
 ## 30. What is the future direction of Angular (v21+)?
 
 **Answer:**
-- Signals-first reactivity
-- Standalone-first architecture
-- Enhanced SSR and hydration
-- Improved DX (developer experience) and CLI
-- More deprecations of legacy APIs
+* Signals-first reactivity
+* Standalone-first architecture
+* Enhanced SSR and hydration
+* Improved DX (developer experience) and CLI
+* More deprecations of legacy APIs
 
 **Example:**
+
 ```ts
 // Future: signals-first, standalone-first
 @Component({ standalone: true })
@@ -720,18 +758,19 @@ export class FutureComponent {
 
 ---
 
-## 31. How do you use Angular's new built-in control flow (`@if`, `@for`, `@switch`) in templates? (Angular 17+)
+## 31. How do you use Angular's new built-in control flow ( `@if` , `@for` , `@switch` ) in templates? (Angular 17+)
 
 **Answer:**
-The new control flow syntax provides more readable and performant alternatives to structural directives like `*ngIf` and `*ngFor`.
+The new control flow syntax provides more readable and performant alternatives to structural directives like `*ngIf` and `*ngFor` .
 
 **Example:**
+
 ```html
 @for (user of users; track user.id) {
-  <div>{{ user.name }}</div>
+<div>{{ user.name }}</div>
 }
 @else {
-  <div>No users found.</div>
+<div>No users found.</div>
 }
 ```
 
@@ -743,6 +782,7 @@ The new control flow syntax provides more readable and performant alternatives t
 A custom pipe transforms data in templates.
 
 **Example:**
+
 ```ts
 import { Pipe, PipeTransform } from '@angular/core';
 @Pipe({ name: 'capitalize' })
@@ -761,6 +801,7 @@ export class CapitalizePipe implements PipeTransform {
 Signals can be used in services to share reactive state across components.
 
 **Example:**
+
 ```ts
 import { Injectable, signal } from '@angular/core';
 @Injectable({ providedIn: 'root' })
@@ -778,6 +819,7 @@ export class CounterService {
 Functional route guards are simple functions that return a boolean or an Observable/Promise.
 
 **Example:**
+
 ```ts
 import { CanActivateFn } from '@angular/router';
 export const authGuard: CanActivateFn = () => isLoggedIn();
@@ -791,6 +833,7 @@ export const authGuard: CanActivateFn = () => isLoggedIn();
 Standalone components support DI just like NgModule-based components.
 
 **Example:**
+
 ```ts
 @Component({
   selector: 'app-profile',
@@ -810,6 +853,7 @@ export class ProfileComponent {
 `provideHttpClient` is used to provide HttpClient in standalone apps.
 
 **Example:**
+
 ```ts
 import { bootstrapApplication, provideHttpClient } from '@angular/platform-browser';
 bootstrapApplication(AppComponent, {
@@ -825,6 +869,7 @@ bootstrapApplication(AppComponent, {
 Update the UI state immediately, then revert if the server call fails.
 
 **Example:**
+
 ```ts
 likeCount = signal(0);
 likePost() {
@@ -841,6 +886,7 @@ likePost() {
 Angular 18+ provides stricter type checking and better error messages for forms.
 
 **Example:**
+
 ```ts
 form = new FormGroup({
   email: new FormControl('', { validators: [Validators.email], nonNullable: true })
@@ -855,9 +901,10 @@ form = new FormGroup({
 `@defer` allows you to lazily render parts of the template.
 
 **Example:**
+
 ```html
 @defer (userLoaded) {
-  <app-user-profile [user]="user"></app-user-profile>
+<app-user-profile [user]="user"></app-user-profile>
 }
 ```
 
@@ -869,6 +916,7 @@ form = new FormGroup({
 Use the `--standalone` flag with the `ng generate component` command.
 
 **Example:**
+
 ```sh
 ng generate component my-feature --standalone
 ```
@@ -881,6 +929,7 @@ ng generate component my-feature --standalone
 `inject` allows you to inject dependencies outside of constructors.
 
 **Example:**
+
 ```ts
 import { inject } from '@angular/core';
 const myService = inject(MyService);
@@ -894,6 +943,7 @@ const myService = inject(MyService);
 `DestroyRef` allows you to register cleanup logic when a component or directive is destroyed.
 
 **Example:**
+
 ```ts
 import { DestroyRef, inject } from '@angular/core';
 const destroyRef = inject(DestroyRef);
@@ -908,6 +958,7 @@ destroyRef.onDestroy(() => console.log('Destroyed!'));
 `@Input` transform allows you to coerce or transform input values.
 
 **Example:**
+
 ```ts
 @Input({ transform: (value: string) => value.trim() })
 set name(val: string) { this._name = val; }
@@ -921,6 +972,7 @@ set name(val: string) { this._name = val; }
 `@Output` transform allows you to transform output event values before emitting.
 
 **Example:**
+
 ```ts
 @Output({ transform: (val: number) => val * 2 })
 valueChange = new EventEmitter<number>();
@@ -934,6 +986,7 @@ valueChange = new EventEmitter<number>();
 `@model` simplifies two-way binding in standalone components.
 
 **Example:**
+
 ```ts
 @model() value: string;
 ```
@@ -946,6 +999,7 @@ valueChange = new EventEmitter<number>();
 `@signalEffect` runs a function whenever a signal changes.
 
 **Example:**
+
 ```ts
 import { signal, signalEffect } from '@angular/core';
 count = signal(0);
@@ -960,6 +1014,7 @@ signalEffect(() => console.log(this.count()));
 `@computed` creates a derived signal from other signals.
 
 **Example:**
+
 ```ts
 import { computed, signal } from '@angular/core';
 count = signal(2);
@@ -974,6 +1029,7 @@ double = computed(() => this.count() * 2);
 `@Injectable({ providedIn: 'root' })` makes a service tree-shakable and available app-wide.
 
 **Example:**
+
 ```ts
 @Injectable({ providedIn: 'root' })
 export class ApiService {}
@@ -987,6 +1043,7 @@ export class ApiService {}
 `EnvironmentInjector` allows you to provide dependencies based on the environment.
 
 **Example:**
+
 ```ts
 import { EnvironmentInjector } from '@angular/core';
 const injector = EnvironmentInjector.create([{ provide: API_URL, useValue: 'https://api.example.com' }]);
@@ -1000,6 +1057,7 @@ const injector = EnvironmentInjector.create([{ provide: API_URL, useValue: 'http
 `@hydration` enables advanced SSR hydration features.
 
 **Example:**
+
 ```ts
 import { provideHydration } from '@angular/platform-browser';
 bootstrapApplication(AppComponent, { providers: [provideHydration()] });
@@ -1013,6 +1071,7 @@ bootstrapApplication(AppComponent, { providers: [provideHydration()] });
 You can mark an input as required to enforce that a value is always provided.
 
 **Example:**
+
 ```ts
 @Component({ selector: 'app-user', template: '{{ name }}' })
 export class UserComponent {
@@ -1028,6 +1087,7 @@ export class UserComponent {
 You can mark an output as required to ensure the parent listens to the event.
 
 **Example:**
+
 ```ts
 @Component({ selector: 'app-btn', template: '<button (click)="clicked.emit()">Click</button>' })
 export class BtnComponent {
@@ -1043,6 +1103,7 @@ export class BtnComponent {
 `@HostDirectives` allows you to attach directives to a host element from a component.
 
 **Example:**
+
 ```ts
 @Component({
   selector: 'app-card',
@@ -1054,12 +1115,13 @@ export class CardComponent {}
 
 ---
 
-## 54. How do you use the new `@Self`, `@SkipSelf`, `@Optional`, and `@Host` DI flags?
+## 54. How do you use the new `@Self` , `@SkipSelf` , `@Optional` , and `@Host` DI flags?
 
 **Answer:**
 These flags control how Angular resolves dependencies in the injector hierarchy.
 
 **Example:**
+
 ```ts
 constructor(@Optional() private logger?: LoggerService) {}
 ```
@@ -1072,6 +1134,7 @@ constructor(@Optional() private logger?: LoggerService) {}
 The `static` option determines when the query is resolved (before or after change detection).
 
 **Example:**
+
 ```ts
 @ViewChild('input', { static: true }) input!: ElementRef;
 ```
@@ -1084,23 +1147,25 @@ The `static` option determines when the query is resolved (before or after chang
 `NgOptimizedImage` optimizes image loading and performance.
 
 **Example:**
+
 ```html
 <img ngSrc="/assets/photo.jpg" width="400" height="300" />
 ```
 
 ---
 
-## 57. How do you use the new `@NgIf` else block with `@if`? (Angular 17+)
+## 57. How do you use the new `@NgIf` else block with `@if` ? (Angular 17+)
 
 **Answer:**
 The new control flow allows for cleaner else blocks.
 
 **Example:**
+
 ```html
 @if (isLoggedIn) {
-  <p>Welcome!</p>
+<p>Welcome!</p>
 } @else {
-  <p>Please log in.</p>
+<p>Please log in.</p>
 }
 ```
 
@@ -1112,9 +1177,10 @@ The new control flow allows for cleaner else blocks.
 `@for` supports `track` and `empty` for better performance and fallback UI.
 
 **Example:**
+
 ```html
 @for (item of items; track item.id; empty) {
-  <div>No items found.</div>
+<div>No items found.</div>
 }
 ```
 
@@ -1123,14 +1189,15 @@ The new control flow allows for cleaner else blocks.
 ## 59. How do you use the new `@NgSwitch` for advanced template branching? (Angular 17+)
 
 **Answer:**
-`@switch` provides a more readable alternative to `*ngSwitch`.
+`@switch` provides a more readable alternative to `*ngSwitch` .
 
 **Example:**
+
 ```html
 @switch (status) {
-  @case ('loading') { <p>Loading...</p> }
-  @case ('error') { <p>Error!</p> }
-  @default { <p>Done!</p> }
+@case ('loading') { <p>Loading...</p> }
+@case ('error') { <p>Error!</p> }
+@default { <p>Done!</p> }
 }
 ```
 
@@ -1142,9 +1209,10 @@ The new control flow allows for cleaner else blocks.
 `ngTemplateOutlet` allows you to render templates dynamically.
 
 **Example:**
+
 ```html
 <ng-template #tpl let-name>
-  <div>Hello {{ name }}</div>
+    <div>Hello {{ name }}</div>
 </ng-template>
 <div [ngTemplateOutlet]="tpl" [ngTemplateOutletContext]="{ $implicit: 'Angular' }"></div>
 ```
@@ -1157,6 +1225,7 @@ The new control flow allows for cleaner else blocks.
 `NgZone` allows you to run code inside or outside Angular's zone for performance tuning.
 
 **Example:**
+
 ```ts
 constructor(private zone: NgZone) {}
 runOutside() {
@@ -1174,6 +1243,7 @@ runOutside() {
 `Renderer2` provides a safe way to manipulate the DOM.
 
 **Example:**
+
 ```ts
 constructor(private renderer: Renderer2, private el: ElementRef) {}
 ngOnInit() {
@@ -1189,11 +1259,12 @@ ngOnInit() {
 `NgPlural` helps display different text based on a numeric value.
 
 **Example:**
+
 ```html
 <div [ngPlural]="messages.length">
-  <ng-template ngPluralCase="=0">No messages</ng-template>
-  <ng-template ngPluralCase="=1">One message</ng-template>
-  <ng-template ngPluralCase="other">{{ messages.length }} messages</ng-template>
+    <ng-template ngPluralCase="=0">No messages</ng-template>
+    <ng-template ngPluralCase="=1">One message</ng-template>
+    <ng-template ngPluralCase="other">{{ messages.length }} messages</ng-template>
 </div>
 ```
 
@@ -1205,6 +1276,7 @@ ngOnInit() {
 `ngClass` and `ngStyle` allow you to set classes and styles dynamically.
 
 **Example:**
+
 ```html
 <div [ngClass]="{ active: isActive }" [ngStyle]="{ color: color }">Styled Text</div>
 ```
@@ -1217,6 +1289,7 @@ ngOnInit() {
 `ng-content` projects content from parent to child components.
 
 **Example:**
+
 ```ts
 @Component({ selector: 'app-card', template: '<ng-content></ng-content>' })
 export class CardComponent {}
@@ -1230,6 +1303,7 @@ export class CardComponent {}
 `NgModule` is still supported for legacy and large-scale apps.
 
 **Example:**
+
 ```ts
 @NgModule({ declarations: [AppComponent], imports: [BrowserModule], bootstrap: [AppComponent] })
 export class AppModule {}
@@ -1243,6 +1317,7 @@ export class AppModule {}
 `NgUpgrade` helps run AngularJS and Angular code together during migration.
 
 **Example:**
+
 ```ts
 import { UpgradeModule } from '@angular/upgrade/static';
 @NgModule({ imports: [UpgradeModule] })
@@ -1257,6 +1332,7 @@ export class HybridAppModule {}
 NgRx provides Redux-style state management for Angular apps.
 
 **Example:**
+
 ```ts
 import { createAction, createReducer, on } from '@ngrx/store';
 export const increment = createAction('[Counter] Increment');
@@ -1271,6 +1347,7 @@ export const counterReducer = createReducer(0, on(increment, state => state + 1)
 Ngxs is an alternative state management library for Angular.
 
 **Example:**
+
 ```ts
 @State<number>({ name: 'count', defaults: 0 })
 @Injectable()
@@ -1290,6 +1367,7 @@ export class CountState {
 Apollo Angular provides GraphQL client support for Angular apps.
 
 **Example:**
+
 ```ts
 import { Apollo } from 'apollo-angular';
 this.apollo.watchQuery({ query: GET_USERS }).valueChanges.subscribe(result => {
@@ -1305,6 +1383,7 @@ this.apollo.watchQuery({ query: GET_USERS }).valueChanges.subscribe(result => {
 `@ngx-translate` is a popular library for runtime translation in Angular apps.
 
 **Example:**
+
 ```ts
 import { TranslateService } from '@ngx-translate/core';
 constructor(private translate: TranslateService) {
@@ -1320,6 +1399,7 @@ constructor(private translate: TranslateService) {
 `@angular/localize` provides compile-time translation and localization.
 
 **Example:**
+
 ```html
 <p i18n="@@welcome">Welcome!</p>
 ```
@@ -1332,6 +1412,7 @@ constructor(private translate: TranslateService) {
 Angular's service worker enables Progressive Web App features like offline support.
 
 **Example:**
+
 ```sh
 ng add @angular/pwa
 ```
@@ -1344,6 +1425,7 @@ ng add @angular/pwa
 Angular animations provide a powerful API for UI transitions.
 
 **Example:**
+
 ```ts
 import { trigger, state, style, animate, transition } from '@angular/animations';
 @Component({
@@ -1365,6 +1447,7 @@ import { trigger, state, style, animate, transition } from '@angular/animations'
 The CDK provides utilities for accessibility, overlays, drag-and-drop, and more.
 
 **Example:**
+
 ```ts
 import { CdkDrag } from '@angular/cdk/drag-drop';
 <div cdkDrag>Drag me!</div>
@@ -1378,10 +1461,11 @@ import { CdkDrag } from '@angular/cdk/drag-drop';
 Angular Material provides a set of pre-built UI components.
 
 **Example:**
+
 ```html
 <mat-form-field>
-  <mat-label>Name</mat-label>
-  <input matInput>
+    <mat-label>Name</mat-label>
+    <input matInput>
 </mat-form-field>
 ```
 
@@ -1393,6 +1477,7 @@ Angular Material provides a set of pre-built UI components.
 Custom validators allow you to add custom validation logic to forms.
 
 **Example:**
+
 ```ts
 function forbiddenNameValidator(control: AbstractControl) {
   return /admin/.test(control.value) ? { forbidden: true } : null;
@@ -1408,6 +1493,7 @@ this.form = this.fb.group({ name: ['', forbiddenNameValidator] });
 You can lazy load standalone components directly in route configs.
 
 **Example:**
+
 ```ts
 {
   path: 'profile',
@@ -1423,6 +1509,7 @@ You can lazy load standalone components directly in route configs.
 Resolvers fetch data before activating a route.
 
 **Example:**
+
 ```ts
 @Injectable({ providedIn: 'root' })
 export class UserResolver implements Resolve<User> {
@@ -1443,6 +1530,7 @@ export class UserResolver implements Resolve<User> {
 You can use signals in functional guards for reactive route protection.
 
 **Example:**
+
 ```ts
 import { signal } from '@angular/core';
 const isLoggedIn = signal(false);
@@ -1457,6 +1545,7 @@ export const authGuard: CanActivateFn = () => isLoggedIn();
 `canMatch` and `canLoad` control access to lazy-loaded routes.
 
 **Example:**
+
 ```ts
 {
   path: 'admin',
@@ -1474,6 +1563,7 @@ export const authGuard: CanActivateFn = () => isLoggedIn();
 Router events allow you to react to navigation changes.
 
 **Example:**
+
 ```ts
 this.router.events.subscribe(event => {
   if (event instanceof NavigationEnd) {
@@ -1490,6 +1580,7 @@ this.router.events.subscribe(event => {
 Named outlets allow multiple views in a single route.
 
 **Example:**
+
 ```html
 <router-outlet></router-outlet>
 <router-outlet name="sidebar"></router-outlet>
@@ -1503,6 +1594,7 @@ Named outlets allow multiple views in a single route.
 These directives help style active links.
 
 **Example:**
+
 ```html
 <a routerLink="/home" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Home</a>
 ```
@@ -1515,6 +1607,7 @@ These directives help style active links.
 Query params and fragments allow you to pass data in the URL.
 
 **Example:**
+
 ```ts
 this.router.navigate(['/search'], { queryParams: { q: 'angular' }, fragment: 'top' });
 ```
@@ -1527,6 +1620,7 @@ this.router.navigate(['/search'], { queryParams: { q: 'angular' }, fragment: 'to
 Navigation extras provide additional options for navigation.
 
 **Example:**
+
 ```ts
 this.router.navigate(['/profile'], { state: { from: 'dashboard' } });
 ```
@@ -1539,6 +1633,7 @@ this.router.navigate(['/profile'], { state: { from: 'dashboard' } });
 Route reuse strategy allows you to control when routes are reused or destroyed.
 
 **Example:**
+
 ```ts
 export class CustomReuseStrategy implements RouteReuseStrategy {
   shouldReuseRoute(future, curr) { return future.routeConfig === curr.routeConfig; }
@@ -1553,6 +1648,7 @@ export class CustomReuseStrategy implements RouteReuseStrategy {
 Preloading strategies load modules in the background for faster navigation.
 
 **Example:**
+
 ```ts
 @NgModule({
   imports: [RouterModule.forRoot(routes, { preloadingStrategy: PreloadAllModules })]
@@ -1567,6 +1663,7 @@ Preloading strategies load modules in the background for faster navigation.
 Custom URL serializers allow you to control how URLs are parsed and generated.
 
 **Example:**
+
 ```ts
 @Injectable()
 export class CustomUrlSerializer implements UrlSerializer {
@@ -1583,6 +1680,7 @@ export class CustomUrlSerializer implements UrlSerializer {
 Router state snapshots provide a static snapshot of the router state at a moment in time.
 
 **Example:**
+
 ```ts
 const snapshot = this.router.routerState.snapshot;
 ```
@@ -1595,6 +1693,7 @@ const snapshot = this.router.routerState.snapshot;
 You can add or modify routes at runtime for advanced use cases.
 
 **Example:**
+
 ```ts
 this.router.resetConfig([...this.router.config, { path: 'dynamic', component: DynamicComponent }]);
 ```
@@ -1607,6 +1706,7 @@ this.router.resetConfig([...this.router.config, { path: 'dynamic', component: Dy
 Functional guards can return a Promise for async logic.
 
 **Example:**
+
 ```ts
 export const asyncGuard: CanActivateFn = async () => {
   const allowed = await checkPermission();
@@ -1622,6 +1722,7 @@ export const asyncGuard: CanActivateFn = async () => {
 You can update signals in response to router events for reactive navigation state.
 
 **Example:**
+
 ```ts
 import { signal } from '@angular/core';
 const currentUrl = signal('');
@@ -1638,6 +1739,7 @@ this.router.events.subscribe(e => {
 Scroll position restoration helps maintain scroll state between navigations.
 
 **Example:**
+
 ```ts
 RouterModule.forRoot(routes, { scrollPositionRestoration: 'enabled' });
 ```
@@ -1650,6 +1752,7 @@ RouterModule.forRoot(routes, { scrollPositionRestoration: 'enabled' });
 Custom preloading strategies allow you to control how and when modules are preloaded.
 
 **Example:**
+
 ```ts
 @Injectable({ providedIn: 'root' })
 export class CustomPreload implements PreloadingStrategy {
@@ -1665,6 +1768,7 @@ export class CustomPreload implements PreloadingStrategy {
 You can inject services directly into functional guards.
 
 **Example:**
+
 ```ts
 export const adminGuard: CanActivateFn = (route, state, injector) => {
   const auth = injector.get(AuthService);
@@ -1680,6 +1784,7 @@ export const adminGuard: CanActivateFn = (route, state, injector) => {
 `replaceUrl` replaces the current history entry instead of adding a new one.
 
 **Example:**
+
 ```ts
 this.router.navigate(['/home'], { replaceUrl: true });
 ```
@@ -1692,6 +1797,7 @@ this.router.navigate(['/home'], { replaceUrl: true });
 `relativeTo` allows navigation relative to a specific route.
 
 **Example:**
+
 ```ts
 this.router.navigate(['details'], { relativeTo: this.route });
 ```
@@ -1704,6 +1810,7 @@ this.router.navigate(['details'], { relativeTo: this.route });
 `skipLocationChange` navigates without changing the browser URL.
 
 **Example:**
+
 ```ts
 this.router.navigate(['/hidden'], { skipLocationChange: true });
 ```
@@ -1716,6 +1823,7 @@ this.router.navigate(['/hidden'], { skipLocationChange: true });
 You can pass custom state data during navigation.
 
 **Example:**
+
 ```ts
 this.router.navigate(['/profile'], { state: { referrer: 'dashboard' } });
 ```
@@ -1728,6 +1836,7 @@ this.router.navigate(['/profile'], { state: { referrer: 'dashboard' } });
 Create a parent component that holds the data and a child component that displays the data and emits an event on selection.
 
 **Example:**
+
 ```ts
 // parent.component.ts
 @Component({
@@ -1763,6 +1872,7 @@ export class ChildComponent {
 Use a reactive form with a value change listener, debounce time, and switchMap to handle the API call.
 
 **Example:**
+
 ```ts
 import { FormControl } from '@angular/forms';
 import { debounceTime, switchMap } from 'rxjs';
@@ -1786,6 +1896,7 @@ ngOnInit() {
 A directive that listens to mouse enter and leave events to change the background color.
 
 **Example:**
+
 ```ts
 @Directive({
   selector: '[appHoverColor]'
@@ -1811,6 +1922,7 @@ export class HoverColorDirective {
 A form that uses FormArray to manage a dynamic list of form controls.
 
 **Example:**
+
 ```ts
 import { FormBuilder, FormArray } from '@angular/forms';
 constructor(private fb: FormBuilder) {}
@@ -1840,6 +1952,7 @@ removeItem(index: number) {
 Use trackBy with ngFor to optimize rendering of large lists.
 
 **Example:**
+
 ```ts
 @Component({
   template: `<div *ngFor="let item of items; trackBy: trackById">{{ item.name }}</div>`
@@ -1860,6 +1973,7 @@ export class LargeListComponent {
 A guard that checks the user's role before activating a route.
 
 **Example:**
+
 ```ts
 @Injectable({ providedIn: 'root' })
 export class RoleGuard implements CanActivate {
@@ -1879,6 +1993,7 @@ export class RoleGuard implements CanActivate {
 An interceptor that catches HTTP errors and handles them globally.
 
 **Example:**
+
 ```ts
 @Injectable()
 export class ErrorInterceptor implements HttpInterceptor {
@@ -1901,6 +2016,7 @@ export class ErrorInterceptor implements HttpInterceptor {
 Refactor the service to use signals for state management instead of RxJS subjects/observables.
 
 **Example:**
+
 ```ts
 import { Injectable, signal } from '@angular/core';
 @Injectable({ providedIn: 'root' })
@@ -1923,6 +2039,7 @@ export class UserService {
 Configure the router to load a module or component lazily.
 
 **Example:**
+
 ```ts
 // For a feature module
 {
@@ -1945,6 +2062,7 @@ Configure the router to load a module or component lazily.
 A pipe that formats a date value according to the user's locale.
 
 **Example:**
+
 ```ts
 import { Pipe, PipeTransform } from '@angular/core';
 @Pipe({ name: 'localDate' })
@@ -1963,6 +2081,7 @@ export class LocalDatePipe implements PipeTransform {
 A component that uses OnPush strategy and only updates when its inputs change by reference.
 
 **Example:**
+
 ```ts
 @Component({
   selector: 'app-on-push',
@@ -1982,6 +2101,7 @@ export class OnPushComponent {
 A data table that supports pagination and sorting of data.
 
 **Example:**
+
 ```ts
 @Component({
   template: `
@@ -2032,6 +2152,7 @@ export class DataTableComponent {
 A form that displays backend validation errors to the user.
 
 **Example:**
+
 ```ts
 this.form = this.fb.group({
   username: ['', Validators.required],
@@ -2049,6 +2170,7 @@ this.form.setErrors({ backend: 'Invalid credentials' });
 A service that uses a subject to allow communication between components.
 
 **Example:**
+
 ```ts
 @Injectable({ providedIn: 'root' })
 export class SharedService {
@@ -2069,6 +2191,7 @@ export class SharedService {
 An autocomplete input that waits for the user to stop typing for a specified time before sending the request.
 
 **Example:**
+
 ```ts
 import { Component, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
@@ -2104,6 +2227,7 @@ export class AutocompleteComponent implements OnInit {
 A complete solution that includes searching, filtering, and paginating data.
 
 **Example:**
+
 ```ts
 @Component({
   template: `
@@ -2146,6 +2270,7 @@ export class SearchFilterPaginationComponent {
 A pattern that cancels the previous HTTP request if a new one is made within the debounce time.
 
 **Example:**
+
 ```ts
 import { HttpClient } from '@angular/common/http';
 import { Component, OnDestroy } from '@angular/core';
@@ -2185,6 +2310,7 @@ export class DebounceHttpComponent implements OnDestroy {
 A menu that shows or hides items based on the user's permissions.
 
 **Example:**
+
 ```ts
 @Component({
   template: `
@@ -2216,6 +2342,7 @@ export class MenuComponent {
 A component that wraps a date picker library and provides a consistent API and style.
 
 **Example:**
+
 ```ts
 @Component({
   selector: 'app-date-picker',
@@ -2236,6 +2363,7 @@ export class DatePickerComponent {
 Add keyboard navigation and accessibility attributes to a component.
 
 **Example:**
+
 ```ts
 @Component({
   selector: 'app-accessible',
@@ -2258,6 +2386,7 @@ export class AccessibleComponent {
 Identify and unsubscribe from subscriptions to prevent memory leaks.
 
 **Example:**
+
 ```ts
 @Component({
   template: `...`
@@ -2283,6 +2412,7 @@ export class SomeComponent implements OnDestroy {
 Use OnPush change detection strategy and immutable data structures to optimize performance.
 
 **Example:**
+
 ```ts
 @Component({
   selector: 'app-dashboard',
@@ -2302,6 +2432,7 @@ export class DashboardComponent {
 A solution that fetches only the required page of data from the server.
 
 **Example:**
+
 ```ts
 @Component({
   template: `
@@ -2334,6 +2465,7 @@ export class ServerSidePaginationComponent {
 A service that opens a dialog and returns an observable for the result.
 
 **Example:**
+
 ```ts
 @Injectable({ providedIn: 'root' })
 export class DialogService {
@@ -2356,6 +2488,7 @@ export class DialogService {
 Configure the router to lazy load a module and use a preloading strategy to load it in the background.
 
 **Example:**
+
 ```ts
 @NgModule({
   imports: [RouterModule.forRoot(routes, { preloadingStrategy: CustomPreloadStrategy })]
@@ -2371,6 +2504,7 @@ export class AppRoutingModule {}
 A service that holds the application state and provides methods to update and select state.
 
 **Example:**
+
 ```ts
 @Injectable({ providedIn: 'root' })
 export class StateService {
@@ -2397,6 +2531,7 @@ export class StateService {
 Move the business logic from the component to a dedicated service.
 
 **Example:**
+
 ```ts
 @Component({
   template: `...`
@@ -2418,6 +2553,7 @@ export class SomeComponent {
 A solution that loads translations and updates the application language at runtime.
 
 **Example:**
+
 ```ts
 import { TranslateService } from '@ngx-translate/core';
 constructor(private translate: TranslateService) {
@@ -2437,6 +2573,7 @@ switchLanguage(lang: string) {
 A component that generates breadcrumbs from the activated route snapshot.
 
 **Example:**
+
 ```ts
 @Component({
   template: `<nav><ng-container *ngFor="let crumb of breadcrumbs">{{ crumb.label }}</ng-container></nav>`
@@ -2483,6 +2620,7 @@ export class BreadcrumbsComponent {
 A service that manages a WebSocket connection and provides real-time data to components.
 
 **Example:**
+
 ```ts
 @Injectable({ providedIn: 'root' })
 export class WebSocketService {
@@ -2523,6 +2661,7 @@ export class WebSocketService {
 Update the UI immediately and revert if the server operation fails.
 
 **Example:**
+
 ```ts
 updateItem(item: Item) {
   this.items = this.items.map(i => i.id === item.id ? item : i);
@@ -2544,6 +2683,7 @@ updateItem(item: Item) {
 A component that catches errors in its subtree and displays a fallback UI.
 
 **Example:**
+
 ```ts
 @Component({
   template: `
@@ -2581,17 +2721,24 @@ export class ErrorBoundaryComponent {
 Configure Module Federation to share Angular modules between micro-frontends.
 
 **Example:**
+
 ```js
 // webpack.config.js
 new ModuleFederationPlugin({
-  name: 'app1',
-  remotes: {
-    app2: 'app2@http://localhost:3002/remoteEntry.js',
-  },
-  shared: {
-    '@angular/core': { singleton: true, strictVersion: true },
-    '@angular/common': { singleton: true, strictVersion: true },
-  }
+    name: 'app1',
+    remotes: {
+        app2: 'app2@http://localhost:3002/remoteEntry.js',
+    },
+    shared: {
+        '@angular/core': {
+            singleton: true,
+            strictVersion: true
+        },
+        '@angular/common': {
+            singleton: true,
+            strictVersion: true
+        },
+    }
 })
 ```
 
@@ -2603,6 +2750,7 @@ new ModuleFederationPlugin({
 Ensure the app can render on the server and client without differences.
 
 **Example:**
+
 ```ts
 // Avoid browser-only APIs during module initialization
 if (isPlatformBrowser(this.platformId)) {
@@ -2618,6 +2766,7 @@ if (isPlatformBrowser(this.platformId)) {
 Use Angular CLI built-in tools to analyze and optimize the bundle size.
 
 **Example:**
+
 ```sh
 ng build --prod --source-map
 ng run app-name:stats-json
@@ -2631,6 +2780,7 @@ ng run app-name:stats-json
 A preloading strategy that loads specific modules based on custom logic.
 
 **Example:**
+
 ```ts
 @Injectable({ providedIn: 'root' })
 export class CustomPreloadStrategy implements PreloadingStrategy {
@@ -2648,6 +2798,7 @@ export class CustomPreloadStrategy implements PreloadingStrategy {
 A solution that displays validation messages for each form field and the form as a whole.
 
 **Example:**
+
 ```ts
 @Component({
   template: `
@@ -2674,6 +2825,7 @@ export class UserFormComponent {
 A search component that emits the search term after a configurable debounce time.
 
 **Example:**
+
 ```ts
 @Component({
   selector: 'app-search',
@@ -2700,6 +2852,7 @@ export class SearchComponent {
 A service that polls a URL at a specified interval and cleans up on unsubscribe.
 
 **Example:**
+
 ```ts
 @Injectable({ providedIn: 'root' })
 export class PollingService {
@@ -2725,6 +2878,7 @@ export class PollingService {
 A directive that focuses the host element based on a condition.
 
 **Example:**
+
 ```ts
 @Directive({
   selector: '[appAutoFocus]'
@@ -2748,6 +2902,7 @@ export class AutoFocusDirective {
 Use Angular CDK's drag-and-drop module to enable dragging and dropping of elements.
 
 **Example:**
+
 ```ts
 import { DragDropModule } from '@angular/cdk/drag-drop';
 @NgModule({
@@ -2764,6 +2919,7 @@ export class AppModule {}
 Rewrite the code to use Angular Signals for state management and reactivity.
 
 **Example:**
+
 ```ts
 import { signal } from '@angular/core';
 count = signal(0);
@@ -2780,6 +2936,7 @@ increment() {
 A guard that checks the user's role and validates it with the backend before activating a route.
 
 **Example:**
+
 ```ts
 @Injectable({ providedIn: 'root' })
 export class RoleGuard implements CanActivate {
@@ -2808,4 +2965,3 @@ export class RoleGuard implements CanActivate {
 You now have 143 Angular interview questions and answers (with code examples) covering Angular 16–21+ and all major enterprise, architecture, and real-world topics.
 
 Use this as a daily revision and interview prep resource. Good luck!
-
