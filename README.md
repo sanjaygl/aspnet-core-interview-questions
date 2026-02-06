@@ -50,6 +50,8 @@ The project contains:
 
 * [ASP.NET MVC Interview Questions - Complete Guide (100 Questions)](docs/ASP.NET%20Core/ASPNET-MVC-Interview-Questions-Complete.md) - 100 comprehensive MVC questions covering MVC architecture, request lifecycle, routing (conventional vs attribute), controllers & actions, action results, model binding & validation, data annotations, filters (Authorization/Action/Result/Exception), dependency injection, ViewBag/ViewData/TempData, Razor view engine, layouts/partial views/view components, Tag Helpers vs HTML Helpers, forms & anti-forgery tokens, authentication & authorization, sessions/cookies, exception handling, and security best practices
 
+* [HTTP Status Codes - Complete Guide for REST APIs](docs/ASP.NET%20Core/HTTP-Status-Codes-Complete-Guide.md)
+
 * [Deployment & Hosting in ASP.NET Core - From Local to Production](docs/ASP.NET%20Core/Deployment-Hosting-Guide.md) - Hosting models (in-process vs out-of-process), web servers (Kestrel, IIS, Nginx), reverse proxy architecture, deploying to IIS and Linux, Docker containerization, environment configuration, secrets management, HTTPS/SSL termination, health checks, horizontal scaling, and common deployment mistakes with 10 interview questions
 
 * [Caching in ASP.NET Core - Improving Performance and Scalability](docs/ASP.NET%20Core/Caching-Guide.md) - What caching is, difference between in-memory and distributed caching, three types (IMemoryCache, IDistributedCache, Response Caching), cache expiration strategies (absolute, sliding), implementing caching with Redis, cache invalidation, real-world use cases, and common mistakes with 10 interview questions
