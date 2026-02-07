@@ -1,3 +1,26 @@
+# ASP.NET Core Interview Questions
+
+## Table of Contents
+
+1. [What is IHostedService?](#q-what-is-ihostedservice)
+2. [Explain ASP.NET Core](#q-explain-aspnet-core)
+3. [How do you design a highly scalable ASP.NET Core application?](#q-how-do-you-design-a-highly-scalable-aspnet-core-application)
+4. [What is resilience?](#q-what-is-resilience)
+5. [Monolith vs Microservices in ASP.NET Core — when would you choose each?](#q-monolith-vs-microservices-in-aspnet-core--when-would-you-choose-each)
+6. [What is rate limiting?](#q-what-is-rate-limiting)
+7. [Why do we need to configure rate limiting?](#q-why-do-we-need-to-configure-rate-limiting)
+8. [How do we configure rate limiting in ASP.NET Core?](#q-how-do-we-configure-rate-limiting-in-aspnet-core)
+9. [What is middleware in ASP.NET Core?](#q-what-is-middleware-in-aspnet-core)
+10. [How do you create a custom middleware?](#q-how-do-you-create-a-custom-middleware)
+11. [What is the difference between Use, Run, and Map in ASP.NET Core?](#q-what-is-the-difference-between-use-run-and-map-in-aspnet-core)
+12. [What is the difference between Host.CreateApplicationBuilder and WebApplication.CreateBuilder?](#q-what-is-the-difference-between-hostcreateapplicationbuilder-and-webapplicationcreatebuilder)
+13. [Explain the request processing pipeline in ASP.NET Core.](#q-explain-the-request-processing-pipeline-in-aspnet-core)
+14. [What is a Request delegate and how is it used?](#q-what-is-a-request-delegate-and-how-is-it-used)
+15. [What is the difference between AddScoped, AddTransient, and AddSingleton in ASP.NET Core?](#q-what-is-the-difference-between-addscoped-addtransient-and-addsingleton-in-aspnet-core)
+16. [What is the difference between Middleware, Filters, and DelegatingHandler in ASP.NET Core?](#q-what-is-the-difference-between-middleware-filters-and-delegatinghandler-in-aspnet-core)
+
+---
+
 ## Q. What is IHostedService?
 
 **A.**
