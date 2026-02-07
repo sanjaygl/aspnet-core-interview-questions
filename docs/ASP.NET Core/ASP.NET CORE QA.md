@@ -18,6 +18,11 @@
 14. [What is a Request delegate and how is it used?](#q-what-is-a-request-delegate-and-how-is-it-used)
 15. [What is the difference between AddScoped, AddTransient, and AddSingleton in ASP.NET Core?](#q-what-is-the-difference-between-addscoped-addtransient-and-addsingleton-in-aspnet-core)
 16. [What is the difference between Middleware, Filters, and DelegatingHandler in ASP.NET Core?](#q-what-is-the-difference-between-middleware-filters-and-delegatinghandler-in-aspnet-core)
+17. [What are Cross-Cutting Concerns and how do you handle them in ASP.NET Core?](#q-what-are-cross-cutting-concerns-and-how-do-you-handle-them-in-aspnet-core)
+18. [How do you control Middleware execution order in ASP.NET Core?](#q-how-do-you-control-middleware-execution-order-in-aspnet-core)
+19. [Can Middleware short-circuit the request? When would you do that?](#q-can-middleware-short-circuit-the-request-when-would-you-do-that)
+20. [How do you reload configuration without restarting the app in ASP.NET Core?](#q-how-do-you-reload-configuration-without-restarting-the-app-in-aspnet-core)
+21. [How do you implement Event-Driven Architecture in .NET using Kafka? (Short)](#q-how-do-you-implement-event-driven-architecture-in-net-using-kafka-short)
 
 ---
 
@@ -848,3 +853,229 @@ builder.Services.AddHttpClient<IExternalApiClient, ExternalApiClient>()
 | **Level** | Global only | Global / Controller / Action | Per HttpClient |
 | **Runs when** | Before MVC/Endpoints | Inside MVC around actions | Before external API call |
 | **Common use** | Logging, Auth, Exception handling | Validation, Authorization | Add headers, Retry logic |
+
+---
+
+## Q. What are Cross-Cutting Concerns and how do you handle them in ASP.NET Core?
+
+**A.**
+
+Cross-cutting concerns are common functionalities that are required across multiple parts of an application but are not part of the core business logic. These concerns affect many layers such as controllers, services, or the entire request pipeline.
+
+### Examples
+
+- Logging
+- Authentication & Authorization
+- Exception handling
+- Caching
+- Validation
+- Performance monitoring
+
+### How to handle them in ASP.NET Core?
+
+| Concern | Recommended Approach |
+|---------|---------------------|
+| Logging | Middleware / DelegatingHandler (for external calls) |
+| Global Exception Handling | Middleware |
+| Authentication / Authorization | Middleware / Authorization Filters |
+| Request/Response modification | Middleware |
+| Action-specific validation or logic | Filters |
+| External API logging / headers | DelegatingHandler |
+
+---
+
+## Q. How do you control Middleware execution order in ASP.NET Core?
+
+**A.**
+
+Middleware execution order is controlled by the order in which they are added in the request pipeline inside Program.cs (or Startup.cs).
+
+- Middleware executes in the same order for the incoming request.
+- Middleware executes in reverse order for the outgoing response.
+
+### Example
+
+```csharp
+app.UseMiddleware<FirstMiddleware>();
+app.UseMiddleware<SecondMiddleware>();
+app.UseMiddleware<ThirdMiddleware>();
+```
+
+### Execution Flow
+
+**Request:**
+- First → Second → Third → Controller
+
+**Response:**
+- Controller → Third → Second → First
+
+### Important Note
+
+Order matters for built-in middleware too:
+
+```csharp
+app.UseRouting();
+app.UseAuthentication();
+app.UseAuthorization();
+app.MapControllers();
+```
+
+Correct order ensures authentication runs before authorization.
+
+---
+
+## Q. Can Middleware short-circuit the request? When would you do that?
+
+**A.**
+
+Yes, middleware can short-circuit the request by not calling `next()` in the pipeline.
+
+When `next()` is not invoked, the request stops there and does not proceed to the next middleware or controller.
+
+### Example
+
+```csharp
+app.Use(async (context, next) =>
+{
+    if (!context.Request.Headers.ContainsKey("X-Api-Key"))
+    {
+        context.Response.StatusCode = 401;
+        await context.Response.WriteAsync("Unauthorized");
+        return; // Short-circuit: next() is NOT called
+    }
+
+    await next(); // Continue pipeline
+});
+```
+
+### When do you short-circuit?
+
+You short-circuit when the request should not continue further, such as:
+
+| Scenario | Reason |
+|----------|--------|
+| Authentication/Authorization failure | Block unauthorized access |
+| Invalid request | Return validation error early |
+| Rate limiting | Stop excessive requests |
+| Maintenance mode | Return service unavailable |
+| Caching | Return cached response without hitting controller |
+
+Yes, middleware can short-circuit a request by not calling `next()`, and it's used when you need to stop further processing, such as for authentication failure, validation errors, caching, or rate limiting.
+
+---
+
+## Q. How do you reload configuration without restarting the app in ASP.NET Core?
+
+**A.**
+
+ASP.NET Core supports automatic configuration reload when configuration files change by using the `reloadOnChange: true` option and accessing values through `IOptionsSnapshot` or `IOptionsMonitor`.
+
+### 1. Enable reload on change
+
+By default, appsettings.json is loaded with reload enabled:
+
+```csharp
+builder.Configuration.AddJsonFile(
+    "appsettings.json",
+    optional: false,
+    reloadOnChange: true);
+```
+
+When the file changes, configuration is reloaded automatically.
+
+### 2. Access updated values
+
+**Option A: IOptionsSnapshot (Scoped – per request)**
+
+```csharp
+public class MyController : ControllerBase
+{
+    private readonly MySettings _settings;
+
+    public MyController(IOptionsSnapshot<MySettings> options)
+    {
+        _settings = options.Value;
+    }
+}
+```
+
+Gets latest values on each request.
+
+**Option B: IOptionsMonitor (Singleton-friendly)**
+
+```csharp
+public class MyService
+{
+    private readonly IOptionsMonitor<MySettings> _options;
+
+    public MyService(IOptionsMonitor<MySettings> options)
+    {
+        _options = options;
+    }
+
+    public void Print()
+    {
+        var value = _options.CurrentValue;
+    }
+}
+```
+
+- Works with Singleton services.
+- Always provides the latest configuration.
+
+### 3. Bind configuration
+
+```csharp
+builder.Services.Configure<MySettings>(
+    builder.Configuration.GetSection("MySettings"));
+```
+
+Configuration can be reloaded without restarting by enabling `reloadOnChange` and accessing values using `IOptionsSnapshot` (per request) or `IOptionsMonitor` (for real-time updates in singleton services).
+
+---
+
+## Q. How do you implement Event-Driven Architecture in .NET using Kafka? (Short)
+
+**A.**
+
+In Kafka-based event-driven architecture:
+
+- A service (Producer) publishes events to a Kafka topic
+- Other services (Consumers) subscribe to the topic and process events asynchronously
+- In .NET, we use `Confluent.Kafka` package
+
+### Producer (Publish Event)
+
+```csharp
+var config = new ProducerConfig { BootstrapServers = "localhost:9092" };
+using var producer = new ProducerBuilder<Null, string>(config).Build();
+
+await producer.ProduceAsync("order-created",
+    new Message<Null, string> { Value = JsonSerializer.Serialize(orderEvent) });
+```
+
+### Consumer (Receive Event)
+
+```csharp
+var config = new ConsumerConfig
+{
+    BootstrapServers = "localhost:9092",
+    GroupId = "order-group",
+    AutoOffsetReset = AutoOffsetReset.Earliest
+};
+
+using var consumer = new ConsumerBuilder<Ignore, string>(config).Build();
+consumer.Subscribe("order-created");
+
+while (true)
+{
+    var result = consumer.Consume();
+    var orderEvent = JsonSerializer.Deserialize<OrderCreatedEvent>(result.Message.Value);
+}
+```
+
+### Flow
+
+Producer → Kafka Topic → Consumer
+
+In .NET, Kafka is implemented using `Confluent.Kafka` where producers publish events to a topic and consumers (often hosted services) process them asynchronously for loose coupling and scalability.
