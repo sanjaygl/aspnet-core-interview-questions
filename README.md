@@ -19,7 +19,9 @@ The project contains:
 
 ### Core C# Concepts
 
-* [C# Coding Questions - Complete Guide (50 Questions)](docs/csharp/CSharp-Coding-Questions-Complete-Guide.md) - **NEW** 50 real-world coding problems for Senior .NET developers with optimized O(n) solutions and detailed internal code comments. Covers: Collections & Algorithms (Two Sum, Anagrams, Top K Frequent), LINQ & Data Processing (Remove Duplicates, Flatten, Join, Pagination), Async/Multithreading (Parallel API calls, SemaphoreSlim, Producer-Consumer, Cancellation), Memory & Performance (IDisposable, File Streaming, Span<T>, Object Pooling), String Parsing (Palindrome), Design Patterns (In-Memory Cache, Rate Limiter, Retry Logic), Advanced Data Structures (LRU Cache), Real-world API Processing (Batch Processing), Concurrency (Thread-safe Bank Transfers), and Senior Scenarios (Parallel DB calls). Includes Top 10 Most Asked Questions and interview tips
+* [C# Threading - Complete Guide](docs/CSharp/CSharp-Threading-Complete-Guide.md) - **NEW** Comprehensive threading guide covering: Introduction (Thread vs Process, why use threading), Types of Threading (Foreground/Background, Thread Pool, TPL, async/await, Parallel programming), Thread Synchronization (lock, Mutex, Semaphore/SemaphoreSlim, ReaderWriterLockSlim), Common Issues (Race conditions, Deadlocks, Thread starvation, Context switching), Best Practices (Task over Thread, async/await for I/O, avoid blocking), and Real-world Use Cases (background processing, parallel API calls, file handling, rate limiting, connection pooling). Includes interview quick summary and quick reference table
+
+* [C# Coding Questions - Complete Guide (50 Questions)](docs/csharp/CSharp-Coding-Questions-Complete-Guide.md) - 50 real-world coding problems for Senior .NET developers with optimized O(n) solutions and detailed internal code comments. Covers: Collections & Algorithms (Two Sum, Anagrams, Top K Frequent), LINQ & Data Processing (Remove Duplicates, Flatten, Join, Pagination), Async/Multithreading (Parallel API calls, SemaphoreSlim, Producer-Consumer, Cancellation), Memory & Performance (IDisposable, File Streaming, Span<T>, Object Pooling), String Parsing (Palindrome), Design Patterns (In-Memory Cache, Rate Limiter, Retry Logic), Advanced Data Structures (LRU Cache), Real-world API Processing (Batch Processing), Concurrency (Thread-safe Bank Transfers), and Senior Scenarios (Parallel DB calls). Includes Top 10 Most Asked Questions and interview tips
 
 * [C# Access Modifiers - Complete Guide](docs/csharp/CSharp-Access-Modifiers-Complete-Guide.md) - Comprehensive guide on all 6 access modifiers (public, private, protected, internal, protected internal, private protected) with comparison tables, practical examples, interview Q&A, common mistakes, and decision trees. Includes working code examples in ClassLibraryA project
 
@@ -187,9 +189,10 @@ The project contains:
 
 ## Repository Statistics
 
-* **📚 Total Documents**: 74+ comprehensive guides
+* **📚 Total Documents**: 75+ comprehensive guides
 * **❓ Interview Questions**: 1,151+ questions with detailed answers
-* **💻 Code Examples**: 800+ real-world code snippets
+* **💻 Code Examples**: 850+ real-world code snippets
 * **🎯 Coverage**: Beginner to Senior/Lead level (11+ years experience)
-* **🔥 Latest Additions**: C# Coding Questions Complete Guide (50 Problems), C# yield Keyword Complete Guide, C# Access Modifiers Complete Guide, ASP.NET MVC (100 Q&A)
+* **🔥 Latest Additions**: C# Threading Complete Guide, C# Coding Questions Complete Guide (50 Problems), C# yield Keyword Complete Guide, C# Access Modifiers Complete Guide, ASP.NET MVC (100 Q&A)
+* **📝 Last Updated**: February 2026 (.NET 10)
 * **📝 Last Updated**: February 2026 (.NET 10)

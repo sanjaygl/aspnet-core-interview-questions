@@ -24,6 +24,9 @@
 20. [How do you reload configuration without restarting the app in ASP.NET Core?](#q-how-do-you-reload-configuration-without-restarting-the-app-in-aspnet-core)
 21. [How do you implement Event-Driven Architecture in .NET using Kafka? (Short)](#q-how-do-you-implement-event-driven-architecture-in-net-using-kafka-short)
 22. [Why do we use Event-Driven Architecture instead of direct API-to-API communication?](#q-why-do-we-use-event-driven-architecture-instead-of-direct-api-to-api-communication)
+23. [What is Semaphore / Lock and why do we use it?](#q-what-is-semaphore--lock-and-why-do-we-use-it)
+24. [What is the difference between throw and throw ex in C#?](#q-what-is-the-difference-between-throw-and-throw-ex-in-c)
+25. [If a catch block throws an exception, will the finally block execute? Can we have multiple catch blocks?](#q-if-a-catch-block-throws-an-exception-will-the-finally-block-execute-can-we-have-multiple-catch-blocks)
 
 ---
 
@@ -1144,3 +1147,384 @@ await PublishEvent("order-created", order);
 * Need immediate response/confirmation
 * Simple, quick operations
 * Strong consistency required
+
+---
+
+## Q. What is Semaphore / Lock and why do we use it?
+
+**A.**
+
+A lock mechanism is used to control access to shared resources so that multiple threads do not modify data at the same time, preventing race conditions and ensuring thread safety.
+
+### Why we use it (Main Points)
+
+- **Prevent race conditions** – Stop multiple threads from accessing data simultaneously
+- **Ensure data consistency** – Protect shared data from corruption
+- **Allow safe multi-threading** – Enable concurrent execution safely
+- **Control how many threads can access a resource** – Limit concurrent access
+
+### Common Types of Locks in C#
+
+#### 1. lock (Monitor)
+
+**Definition:** Allows only one thread to access a code block at a time.
+
+**Points:**
+- Simple and most commonly used
+- Works only for synchronous code
+- Best for protecting critical sections
+
+**Example:**
+
+```csharp
+private static readonly object _lock = new object();
+private static int _counter = 0;
+
+public void IncrementCounter()
+{
+    lock (_lock)
+    {
+        // Only one thread can execute this at a time
+        _counter++;
+    }
+}
+```
+
+---
+
+#### 2. Mutex
+
+**Definition:** Similar to lock but can work across multiple processes.
+
+**Points:**
+- Heavier than lock
+- Used for cross-process synchronization
+- Ensures only one process/thread can access
+
+**Example:**
+
+```csharp
+using var mutex = new Mutex(false, "GlobalMutexName");
+
+mutex.WaitOne(); // Wait for access
+try
+{
+    // Critical section - only one process can enter
+    Console.WriteLine("Working...");
+}
+finally
+{
+    mutex.ReleaseMutex();
+}
+```
+
+---
+
+#### 3. Semaphore
+
+**Definition:** Allows a limited number of threads to access a resource simultaneously.
+
+**Points:**
+- Controls concurrent access (e.g., allow 3 threads at a time)
+- Useful for resource pools (DB connections, API limits)
+- Can work across processes
+
+**Example:**
+
+```csharp
+// Allow max 3 threads to access at once
+private static Semaphore _semaphore = new Semaphore(3, 3);
+
+public void ProcessRequest()
+{
+    _semaphore.WaitOne(); // Wait if 3 threads already inside
+    try
+    {
+        // Max 3 threads can execute this simultaneously
+        Console.WriteLine("Processing...");
+    }
+    finally
+    {
+        _semaphore.Release(); // Allow next thread
+    }
+}
+```
+
+---
+
+#### 4. SemaphoreSlim
+
+**Definition:** Lightweight version of Semaphore for in-process and async scenarios.
+
+**Points:**
+- Faster than Semaphore
+- Supports async/await
+- Recommended for modern async code
+
+**Example:**
+
+```csharp
+private static SemaphoreSlim _semaphore = new SemaphoreSlim(5, 5);
+
+public async Task ProcessAsync()
+{
+    await _semaphore.WaitAsync(); // Async wait
+    try
+    {
+        // Max 5 threads can execute this
+        await Task.Delay(1000);
+    }
+    finally
+    {
+        _semaphore.Release();
+    }
+}
+```
+
+---
+
+#### 5. ReaderWriterLockSlim
+
+**Definition:** Allows multiple readers but only one writer.
+
+**Points:**
+- Improves performance when reads are frequent
+- Ensures exclusive write access
+- Best for read-heavy scenarios
+
+**Example:**
+
+```csharp
+private static ReaderWriterLockSlim _rwLock = new ReaderWriterLockSlim();
+private static List<int> _data = new List<int>();
+
+public int ReadData()
+{
+    _rwLock.EnterReadLock(); // Multiple readers allowed
+    try
+    {
+        return _data.Count;
+    }
+    finally
+    {
+        _rwLock.ExitReadLock();
+    }
+}
+
+public void WriteData(int value)
+{
+    _rwLock.EnterWriteLock(); // Only one writer allowed
+    try
+    {
+        _data.Add(value);
+    }
+    finally
+    {
+        _rwLock.ExitWriteLock();
+    }
+}
+```
+
+---
+
+### Quick Comparison
+
+| Lock Type | Threads Allowed | Async Support | Cross Process | Performance |
+|-----------|----------------|---------------|---------------|-------------|
+| **lock** | 1 | No | No | Fast |
+| **Mutex** | 1 | No | Yes | Slow |
+| **Semaphore** | Limited | No | Yes | Medium |
+| **SemaphoreSlim** | Limited | Yes | No | Fast |
+| **ReaderWriterLockSlim** | Many readers / 1 writer | No | No | Fast for read-heavy |
+
+### When to Use Which Lock
+
+| Use Case | Recommended Lock |
+|----------|-----------------|
+| Simple critical section (sync) | `lock` |
+| Async critical section | `SemaphoreSlim(1, 1)` |
+| Limit concurrent API calls | `SemaphoreSlim` |
+| Cross-process synchronization | `Mutex` or `Semaphore` |
+| Read-heavy, write-light | `ReaderWriterLockSlim` |
+| Database connection pool | `SemaphoreSlim` |
+
+### Summary
+
+Locks control thread access to shared resources to ensure thread safety. **Semaphore** allows limited concurrent access (e.g., 5 threads), while **lock** allows only one thread at a time. Use **SemaphoreSlim** for async scenarios and **lock** for simple synchronous cases.
+
+---
+
+## Q. What is the difference between throw and throw ex in C#?
+
+**A.**
+
+Both are used to rethrow exceptions, but they differ in how they preserve the original error details.
+
+### Main Differences
+
+#### 1. throw
+
+- Rethrows the original exception
+- Preserves the original stack trace
+- Helps identify where the exception actually occurred
+- **Recommended approach**
+
+**Example:**
+
+```csharp
+catch (Exception ex)
+{
+    // logging
+    throw;
+}
+```
+
+#### 2. throw ex
+
+- Throws the exception as a new exception
+- Resets the stack trace
+- Original error location is lost
+- Makes debugging difficult
+
+**Example:**
+
+```csharp
+catch (Exception ex)
+{
+    throw ex;
+}
+```
+
+### Quick Comparison
+
+| Feature | throw | throw ex |
+|---------|-------|----------|
+| Preserves original stack trace | Yes | No |
+| Shows actual error location | Yes | No |
+| Recommended | Yes | No |
+
+### Summary
+
+Use `throw` to rethrow exceptions because it preserves the original stack trace, while `throw ex` resets it and makes debugging harder.
+
+---
+
+## Q. If a catch block throws an exception, will the finally block execute? Can we have multiple catch blocks?
+
+**A.**
+
+In C#, `finally` always executes (except in rare cases like process crash). Multiple catch blocks are allowed, but only one matching catch runs.
+
+### 1) If catch throws an exception, will finally execute?
+
+**Answer: Yes.**
+
+Even if the catch block throws a new exception, the finally block will still execute.
+
+**Flow:**
+
+```
+try → catch → (new exception thrown) → finally → exception propagates
+```
+
+**Example:**
+
+```csharp
+try
+{
+    throw new Exception("Original error");
+}
+catch (Exception ex)
+{
+    Console.WriteLine("Catch block");
+    throw new Exception("New error"); // Throw new exception
+}
+finally
+{
+    Console.WriteLine("Finally executes!"); // Still runs
+}
+
+// Output:
+// Catch block
+// Finally executes!
+// (New exception propagates)
+```
+
+---
+
+### 2) Can we have multiple catch blocks?
+
+**Answer: Yes.**
+
+You can define multiple catch blocks to handle different exception types.
+
+**Example:**
+
+```csharp
+try
+{
+    // code
+}
+catch (NullReferenceException ex)
+{
+    // Handle null reference
+}
+catch (DivideByZeroException ex)
+{
+    // Handle divide by zero
+}
+catch (Exception ex)
+{
+    // Handle all other exceptions
+}
+finally
+{
+    // Always executes
+}
+```
+
+---
+
+### 3) If one catch executes and throws an exception, will other catch blocks execute?
+
+**Answer: No.**
+
+- Only the first matching catch block executes
+- If that catch throws another exception:
+  - Other catch blocks in the same try will **NOT** run
+  - The new exception goes to the outer try-catch (if any)
+
+**Example:**
+
+```csharp
+try
+{
+    throw new NullReferenceException();
+}
+catch (NullReferenceException ex)
+{
+    Console.WriteLine("First catch");
+    throw new Exception("New error"); // Throws new exception
+}
+catch (Exception ex)
+{
+    Console.WriteLine("Second catch"); // Will NOT execute
+}
+finally
+{
+    Console.WriteLine("Finally"); // Still executes
+}
+
+// Output:
+// First catch
+// Finally
+// (New exception propagates)
+```
+
+---
+
+### Quick Summary
+
+- `finally` always executes, even if catch throws an exception
+- Multiple catch blocks are allowed
+- Only one matching catch executes
