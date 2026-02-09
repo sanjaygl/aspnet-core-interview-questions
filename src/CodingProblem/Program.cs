@@ -1,4 +1,6 @@
-﻿namespace CodingProblem
+﻿using ThreadingPractice;
+
+namespace CodingProblem
 {
     internal class Program
     {
@@ -31,6 +33,17 @@
             JaggedArray.JaggedArrayDemo();
             Console.WriteLine(string.Join(", ", TwoSumProblem.TwoSumValues(new int[] { 2, 7, 11, 15 }, 9)));
             GroupAnagramsProblem.GroupAnagrams();
+
+            ThreadExample threadExample = new ThreadExample();
+            //threadExample.ProcessData();
+            //threadExample.ProcessDataInBackground();
+            threadExample.CuncurrancyExample();
+
+            BankAccount bankAccount = new BankAccount(1000);
+            bankAccount.Run();
+
+            DeadlockExample deadlockExample = new DeadlockExample();
+            deadlockExample.Run();
 
             Console.ReadLine();
         }
