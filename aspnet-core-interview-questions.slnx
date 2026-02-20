@@ -27,6 +27,7 @@
   </Folder>
   <Folder Name="/src/">
     <File Path="README.md" />
+    <Project Path="src/API/API.csproj" Id="00aeb4db-1337-417b-8804-2a4fbdb49bf9" />
     <Project Path="src/ClassLibraryA/ClassLibraryA.csproj" Id="fcf79e41-ea0e-47f6-8a7f-bdf4d277c971" />
     <Project Path="src/CodingProblem/CodingProblem.csproj" />
     <Project Path="src/ThreadingPractice/ThreadingPractice.csproj" Id="77b7a52a-62cb-4eda-92c9-4ad2df8d3451" />

@@ -43,7 +43,30 @@ namespace CodingProblem
             bankAccount.Run();
 
             DeadlockExample deadlockExample = new DeadlockExample();
-            deadlockExample.Run();
+            //deadlockExample.Run();
+
+            var customDictionary = new CustomDictionary<int, string>();
+            customDictionary.Add(1, "One");
+            customDictionary.Add(2, "Two");
+            customDictionary.Add(3, "Three");
+            customDictionary.Add(4, "Four");
+            customDictionary.Add(5, "Five");
+            customDictionary.Add(6, "Six");
+
+            Console.WriteLine(customDictionary.Get(1)); // One
+            // customDictionary.Remove(1);
+
+            for (int i = 1; i <= customDictionary.Count; i++)
+            {
+                try
+                {
+                    Console.WriteLine($"Key: {i}, Value: {customDictionary.Get(i)}");
+                }
+                catch (KeyNotFoundException ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
+            }
 
             Console.ReadLine();
         }

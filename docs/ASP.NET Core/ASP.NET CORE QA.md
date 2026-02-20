@@ -3,30 +3,42 @@
 ## Table of Contents
 
 01. [What is IHostedService?](#q-what-is-ihostedservice)
-02. [Explain ASP.NET Core](#q-explain-aspnet-core)
-03. [How do you design a highly scalable ASP.NET Core application?](#q-how-do-you-design-a-highly-scalable-aspnet-core-application)
+02. [Explain ASP.NET Core](#q-explain-asp-net-core)
+03. [How do you design a highly scalable ASP.NET Core application?](#q-how-do-you-design-a-highly-scalable-asp-net-core-application)
 04. [What is resilience?](#q-what-is-resilience)
-05. [Monolith vs Microservices in ASP.NET Core — when would you choose each?](#q-monolith-vs-microservices-in-aspnet-core--when-would-you-choose-each)
+05. [Monolith vs Microservices in ASP.NET Core — when would you choose each?](#q-monolith-vs-microservices-in-asp-net-core--when-would-you-choose-each)
 06. [What is rate limiting?](#q-what-is-rate-limiting)
 07. [Why do we need to configure rate limiting?](#q-why-do-we-need-to-configure-rate-limiting)
-08. [How do we configure rate limiting in ASP.NET Core?](#q-how-do-we-configure-rate-limiting-in-aspnet-core)
-09. [What is middleware in ASP.NET Core?](#q-what-is-middleware-in-aspnet-core)
+08. [How do we configure rate limiting in ASP.NET Core?](#q-how-do-we-configure-rate-limiting-in-asp-net-core)
+09. [What is middleware in ASP.NET Core?](#q-what-is-middleware-in-asp-net-core)
 10. [How do you create a custom middleware?](#q-how-do-you-create-a-custom-middleware)
-11. [What is the difference between Use, Run, and Map in ASP.NET Core?](#q-what-is-the-difference-between-use-run-and-map-in-aspnet-core)
-12. [What is the difference between Host.CreateApplicationBuilder and WebApplication.CreateBuilder?](#q-what-is-the-difference-between-hostcreateapplicationbuilder-and-webapplicationcreatebuilder)
-13. [Explain the request processing pipeline in ASP.NET Core.](#q-explain-the-request-processing-pipeline-in-aspnet-core)
+11. [What is the difference between Use, Run, and Map in ASP.NET Core?](#q-what-is-the-difference-between-use-run-and-map-in-asp-net-core)
+12. [What is the difference between Host.CreateApplicationBuilder and WebApplication.CreateBuilder?](#q-what-is-the-difference-between-host-createapplicationbuilder-and-webapplication-createbuilder)
+13. [Explain the request processing pipeline in ASP.NET Core.](#q-explain-the-request-processing-pipeline-in-asp-net-core)
 14. [What is a Request delegate and how is it used?](#q-what-is-a-request-delegate-and-how-is-it-used)
-15. [What is the difference between AddScoped, AddTransient, and AddSingleton in ASP.NET Core?](#q-what-is-the-difference-between-addscoped-addtransient-and-addsingleton-in-aspnet-core)
-16. [What is the difference between Middleware, Filters, and DelegatingHandler in ASP.NET Core?](#q-what-is-the-difference-between-middleware-filters-and-delegatinghandler-in-aspnet-core)
-17. [What are Cross-Cutting Concerns and how do you handle them in ASP.NET Core?](#q-what-are-cross-cutting-concerns-and-how-do-you-handle-them-in-aspnet-core)
-18. [How do you control Middleware execution order in ASP.NET Core?](#q-how-do-you-control-middleware-execution-order-in-aspnet-core)
+15. [What is the difference between AddScoped, AddTransient, and AddSingleton in ASP.NET Core?](#q-what-is-the-difference-between-addscoped-addtransient-and-addsingleton-in-asp-net-core)
+16. [What is the difference between Middleware, Filters, and DelegatingHandler in ASP.NET Core?](#q-what-is-the-difference-between-middleware-filters-and-delegatinghandler-in-asp-net-core)
+17. [What are Cross-Cutting Concerns and how do you handle them in ASP.NET Core?](#q-what-are-cross-cutting-concerns-and-how-do-you-handle-them-in-asp-net-core)
+18. [How do you control Middleware execution order in ASP.NET Core?](#q-how-do-you-control-middleware-execution-order-in-asp-net-core)
 19. [Can Middleware short-circuit the request? When would you do that?](#q-can-middleware-short-circuit-the-request-when-would-you-do-that)
-20. [How do you reload configuration without restarting the app in ASP.NET Core?](#q-how-do-you-reload-configuration-without-restarting-the-app-in-aspnet-core)
+20. [How do you reload configuration without restarting the app in ASP.NET Core?](#q-how-do-you-reload-configuration-without-restarting-the-app-in-asp-net-core)
 21. [How do you implement Event-Driven Architecture in .NET using Kafka? (Short)](#q-how-do-you-implement-event-driven-architecture-in-net-using-kafka-short)
 22. [Why do we use Event-Driven Architecture instead of direct API-to-API communication?](#q-why-do-we-use-event-driven-architecture-instead-of-direct-api-to-api-communication)
 23. [What is Semaphore / Lock and why do we use it?](#q-what-is-semaphore--lock-and-why-do-we-use-it)
 24. [What is the difference between throw and throw ex in C#?](#q-what-is-the-difference-between-throw-and-throw-ex-in-c)
 25. [If a catch block throws an exception, will the finally block execute? Can we have multiple catch blocks?](#q-if-a-catch-block-throws-an-exception-will-the-finally-block-execute-can-we-have-multiple-catch-blocks)
+26. [What is Microservices? Have you experienced Microservices architecture?](#q-what-is-microservices-have-you-experienced-in-microservices-architecture)
+27. [What is Saga in Microservices? Explain Choreography and Orchestration.](#q-what-is-saga-in-microservices-explain-choreography-and-orchestration)
+28. [How do we manage databases in distributed systems?](#q-how-do-we-manage-databases-in-distributed-systems)
+29. [What is Dependency Injection? Explain all three lifetimes with a good example.](#q-what-is-dependency-injection-explain-all-three-lifetimes-with-a-good-example)
+30. [What is Middleware? Explain in detail and describe custom Middleware.](#q-what-is-middleware-explain-in-detail-and-describe-custom-middleware)
+31. [How can we set rate limiting in custom Middleware to restrict to 5 (or any number of) calls?](#q-how-can-we-set-rate-limiting-in-custom-middleware-to-restrict-to-5-or-any-number-of-calls)
+32. [Design a workflow for a Microservices-based system.](#q-design-a-workflow-for-a-microservices-based-system)
+33. [How do event-based services work (e.g., Kafka, RabbitMQ)?](#q-how-do-event-based-services-work-eg-kafka-rabbitmq)
+34. [Given an E-commerce scenario, explain how Kafka messaging fits for Order, Inventory, and Payment services.](#q-given-an-e-commerce-scenario-explain-how-kafka-messaging-fits-for-order-inventory-and-payment-services)
+35. [How can we optimize Kafka? Explain partitions, offsets, consumer types, etc.](#q-how-can-we-optimize-kafka-explain-partitions-offsets-consumer-types-etc)
+36. [Write a program to create a custom Dictionary (do not use the built-in Dictionary).](#q-write-a-program-to-create-a-custom-dictionary-do-not-use-the-built-in-dictionary)
+37. [Create a custom Order Controller.](#q-create-a-custom-order-controller)
 
 ---
 
@@ -1520,6 +1532,472 @@ finally
 // Finally
 // (New exception propagates)
 ```
+
+---
+
+## Q. What is Microservices? Have you experienced Microservices architecture?
+
+**A.**
+
+Microservices is a software architecture style where an application is decomposed into small, autonomous services. Each service owns a single business capability, runs in its own process, and communicates with other services over lightweight protocols (HTTP/REST, gRPC, messaging).
+
+Yes — experience with Microservices typically includes defining bounded contexts, implementing service-to-service communication, using API Gateway patterns, observability (metrics, tracing, logging), and CI/CD pipelines for independent deployment. In many Microsoft-centered projects, common building blocks include ASP.NET Core Web APIs, Kubernetes, Azure Service Bus or Kafka, and health checks/sidecars for observability.
+
+### Main Points
+
+* Service per business capability (Database per service)
+* Independent deployability and scaling
+* Lightweight communication (REST/gRPC/messaging)
+* Observability, resilience, and automation are critical
+
+---
+
+## Q. What is Saga in Microservices? Explain Choreography and Orchestration.
+
+**A.**
+
+A Saga is a pattern for managing distributed transactions across multiple microservices. Instead of a single ACID transaction, a Saga sequences a set of local transactions across services and defines compensating actions to undo work if a later step fails.
+
+### Types
+
+1. **Choreography**
+   - Each service publishes events and other services react to them.
+   - No central coordinator; the flow emerges from event handlers.
+   - Pros: Simple, decentralized. Cons: Harder to observe and reason about complex flows.
+
+   Example flow (E-commerce):
+   - Order Service publishes OrderCreated
+   - Payment Service listens → processes payment → publishes PaymentSucceeded or PaymentFailed
+   - Inventory Service listens to PaymentSucceeded → reserves stock
+
+2. **Orchestration**
+   - A central orchestrator (Saga orchestrator) directs the workflow by calling services or sending commands/events.
+   - Pros: Easier to visualize and control. Cons: Single place of coordination (but can be made distributed/highly available).
+
+   Example flow (Orchestrator):
+   - Orchestrator receives CreateOrder
+   - Orchestrator → Order Service (create order)
+   - Orchestrator → Payment Service (process payment)
+   - Orchestrator → Inventory Service (reserve stock)
+   - If any step fails, orchestrator triggers compensating actions (refund, cancel order)
+
+---
+
+## Q. How do we manage databases in distributed systems?
+
+**A.**
+
+Managing data in distributed systems follows patterns that favor decoupling, scalability, and eventual consistency.
+
+### Key Practices
+
+1. **Database per Service (Data Ownership)**
+   - Each service owns its schema and persistence. Other services interact via APIs/events rather than direct DB access.
+
+2. **Avoid Distributed ACID Transactions**
+   - Prefer Sagas (Choreography/Orchestration) and local transactions with compensating actions rather than 2PC.
+
+3. **Eventual Consistency**
+   - Accept that data across services may be eventually consistent; use events to propagate changes.
+
+4. **Outbox Pattern (Reliable Event Publishing)**
+   - Persist the state change and the corresponding event in the same local transaction (an outbox table), then reliably publish events from the outbox.
+
+5. **Data Replication / Read Models (CQRS)**
+   - Use read-models or materialized views built from events for complex queries and reports.
+
+6. **Scaling and Sharding**
+   - Partition data by tenant, user, or region. Use cloud-managed DBs or sharded architectures for scale.
+
+### Example Summary
+
+Use Database-per-Service, Sagas for cross-service consistency, Outbox to avoid lost events, and CQRS for efficient querying and reporting.
+
+---
+
+## Q. What is Dependency Injection? Explain all three lifetimes with a good example.
+
+**A.**
+
+Dependency Injection (DI) is a design pattern where dependencies are provided to a class rather than created inside it. ASP.NET Core has a built-in DI container supporting three primary lifetimes: Transient, Scoped, and Singleton.
+
+### Lifetimes
+
+1. **Transient**
+   - A new instance is created every time the service is requested.
+   - Use for lightweight, stateless services.
+
+2. **Scoped**
+   - One instance per scope (in web apps: per HTTP request).
+   - Use for per-request operations like DbContext.
+
+3. **Singleton**
+   - A single instance for the application lifetime.
+   - Use for thread-safe, shared services (caching, configuration).
+
+### Example
+
+```csharp
+public interface ICounter { int Value { get; } }
+
+public class TransientCounter : ICounter { public int Value { get; } = new Random().Next(); }
+public class ScopedCounter : ICounter { public int Value { get; } = new Random().Next(); }
+public class SingletonCounter : ICounter { public int Value { get; } = new Random().Next(); }
+
+// Registration
+builder.Services.AddTransient<ICounter, TransientCounter>();
+builder.Services.AddScoped<ICounter, ScopedCounter>();
+builder.Services.AddSingleton<ICounter, SingletonCounter>();
+
+// Controller showing differences
+[ApiController]
+[Route("api/[controller]")]
+public class TestController : ControllerBase
+{
+    public TestController(
+        ICounter transient1,
+        ICounter transient2,
+        ICounter scoped1,
+        ICounter scoped2,
+        ICounter singleton1,
+        ICounter singleton2)
+    {
+        // Compare values: transient1 != transient2, scoped1 == scoped2 within same request, singleton1 == singleton2 across requests
+    }
+}
+```
+
+---
+
+## Q. What is Middleware? Explain in detail and describe custom Middleware.
+
+**A.**
+
+Middleware are components assembled into a pipeline to handle HTTP requests and responses. Each middleware can inspect, modify, or short-circuit the pipeline.
+
+### Responsibilities
+
+* Authentication/Authorization
+* Logging and diagnostics
+* Exception handling
+* Caching
+* Compression
+* Rate limiting
+
+### Custom Middleware Example
+
+```csharp
+public class RateLimitMiddleware
+{
+    private readonly RequestDelegate _next;
+    private readonly int _limit;
+    private static readonly ConcurrentDictionary<string, (int Count, DateTime Window)> _store = new();
+
+    public RateLimitMiddleware(RequestDelegate next, int limit)
+    {
+        _next = next;
+        _limit = limit;
+    }
+
+    public async Task InvokeAsync(HttpContext context)
+    {
+        var key = context.Connection.RemoteIpAddress?.ToString() ?? "unknown";
+        var now = DateTime.UtcNow;
+        var windowStart = now.Date.AddMinutes(now.Minute);
+
+        var entry = _store.GetOrAdd(key, _ => (0, windowStart));
+        if (entry.Window < windowStart) entry = (0, windowStart);
+
+        if (entry.Count >= _limit)
+        {
+            context.Response.StatusCode = StatusCodes.Status429TooManyRequests;
+            await context.Response.WriteAsync("Rate limit exceeded");
+            return;
+        }
+
+        _store[key] = (entry.Count + 1, entry.Window);
+        await _next(context);
+    }
+}
+
+// Registration
+app.UseMiddleware<RateLimitMiddleware>(5); // limit to 5 calls per window (example)
+```
+
+---
+
+## Q. How can we set rate limiting in custom Middleware to restrict to 5 (or any number of) calls?
+
+**A.**
+
+You can implement a simple in-memory sliding window or fixed-window counter per client IP or API key. Production systems should use distributed stores (Redis) to work across instances.
+
+### Simple fixed-window example (per IP, 5 calls)
+
+```csharp
+// See RateLimitMiddleware above; register with limit=5
+app.UseMiddleware<RateLimitMiddleware>(5);
+```
+
+### Production suggestions
+
+* Use Redis for a distributed counter
+* Use token-bucket or leaky-bucket algorithms for smoother limits
+* Consider existing middleware or cloud API gateway features (Azure API Management, AWS API Gateway)
+
+---
+
+## Q. Design a workflow for a Microservices-based system.
+
+**A.**
+
+Example workflow for an Order processing system with API Gateway and event-driven communication:
+
+Client → API Gateway → Order Service → Message Broker (Kafka/RabbitMQ) → Payment Service / Inventory Service
+
+### Sequence
+
+1. Client calls API Gateway
+2. Gateway routes to Order Service
+3. Order Service creates order (local DB) and publishes OrderCreated event
+4. Payment Service subscribes to OrderCreated → processes payment → publishes PaymentSuccess/PaymentFailed
+5. Inventory Service subscribes to PaymentSuccess → reserves stock → publishes InventoryReserved
+6. If any step fails, Saga triggers compensating actions (refund, cancel order)
+
+### Data stores
+
+* Order Service DB
+* Payment DB
+* Inventory DB
+
+---
+
+## Q. How do event-based services work (e.g., Kafka, RabbitMQ)?
+
+**A.**
+
+Event-based services use a messaging broker to decouple producers from consumers using publish–subscribe semantics.
+
+### Basic flow
+
+1. Producer publishes a message/event to a topic/queue
+2. Broker persists the message (durability depending on config)
+3. Consumers subscribe and receive messages
+4. Consumers process messages and optionally produce new events
+
+### Differences
+
+* **Kafka**: Distributed log, high-throughput, partitioned topics, consumer groups for horizontal scaling, retention-based storage
+* **RabbitMQ**: Broker with flexible routing (exchanges/queues), lower-latency patterns, good for complex routing scenarios
+
+---
+
+## Q. Given an E-commerce scenario, explain how Kafka messaging fits for Order, Inventory, and Payment services.
+
+**A.**
+
+Kafka fits well for high-throughput, durable event streaming in e-commerce workflows.
+
+### Flow
+
+1. Order Service publishes OrderCreated to topic `orders`.
+2. Payment Service subscribes to `orders`, processes payment, publishes `payment-succeeded` or `payment-failed`.
+3. Inventory Service subscribes to `payment-succeeded` and reserves stock, then publishes `inventory-reserved`.
+4. Order Service updates order status based on downstream events.
+
+### Benefits
+
+* Asynchronous processing and resilience
+* Replayable events for recovery
+* Scalability via partitions and consumer groups
+* Decoupling of services for independent deployments
+
+### Saga handling
+
+* Implement compensating actions for failures (refunds, order cancellation)
+
+---
+
+## Q. How can we optimize Kafka? Explain partitions, offsets, consumer types, etc.
+
+**A.**
+
+Key Kafka concepts and optimizations:
+
+* **Partitions**: Topics split into partitions for parallelism. More partitions → higher throughput but more resource usage.
+* **Offsets**: Each message in a partition has an offset; consumers track offsets to maintain progress.
+* **Consumer Groups**: Consumers in a group share partitions; each partition is consumed by one consumer within the group for load balancing.
+* **Replication Factor**: Number of copies of partition data across brokers for fault tolerance.
+* **Retention & Compaction**: Configure retention time and compaction for storage behavior.
+* **Batching & Compression**: Use producer batching and compression (gzip/snappy/lz4) for throughput.
+* **Idempotency**: Implement idempotent consumers or transactional producers to avoid duplicates.
+* **Partition Keying**: Choose partition keys carefully to balance load (hot partitions cause imbalance).
+
+---
+
+## Q. Write a program to create a custom Dictionary (do not use the built-in Dictionary).
+
+**A.**
+
+Below is a simple generic hash-table-based implementation (open addressing with linear probing) suitable for interview/demo purposes. This is not production-ready (no resizing or concurrency controls), but demonstrates the core idea.
+
+```csharp
+public class SimpleDictionary<TKey, TValue>
+{
+    private const int Size = 1024; // fixed size for demo
+    private readonly (TKey Key, TValue Value, bool IsUsed)[] _items;
+
+    public SimpleDictionary()
+    {
+        _items = new (TKey, TValue, bool)[Size];
+    }
+
+    private int GetIndex(TKey key)
+    {
+        var hash = key?.GetHashCode() ?? 0;
+        return Math.Abs(hash) % Size;
+    }
+
+    public void Add(TKey key, TValue value)
+    {
+        var idx = GetIndex(key);
+        for (int i = 0; i < Size; i++)
+        {
+            var probe = (idx + i) % Size;
+            if (!_items[probe].IsUsed)
+            {
+                _items[probe] = (key, value, true);
+                return;
+            }
+            if (EqualityComparer<TKey>.Default.Equals(_items[probe].Key, key))
+                throw new ArgumentException("Key already exists");
+        }
+        throw new InvalidOperationException("Dictionary full");
+    }
+
+    public bool TryGetValue(TKey key, out TValue value)
+    {
+        var idx = GetIndex(key);
+        for (int i = 0; i < Size; i++)
+        {
+            var probe = (idx + i) % Size;
+            if (!_items[probe].IsUsed)
+            {
+                value = default!;
+                return false;
+            }
+            if (EqualityComparer<TKey>.Default.Equals(_items[probe].Key, key))
+            {
+                value = _items[probe].Value;
+                return true;
+            }
+        }
+        value = default!;
+        return false;
+    }
+
+    public bool Remove(TKey key)
+    {
+        var idx = GetIndex(key);
+        for (int i = 0; i < Size; i++)
+        {
+            var probe = (idx + i) % Size;
+            if (!_items[probe].IsUsed)
+                return false;
+            if (EqualityComparer<TKey>.Default.Equals(_items[probe].Key, key))
+            {
+                _items[probe].IsUsed = false;
+                _items[probe].Key = default!;
+                _items[probe].Value = default!;
+                return true;
+            }
+        }
+        return false;
+    }
+}
+
+// Usage
+var dict = new SimpleDictionary<string, int>();
+dict.Add("one", 1);
+if (dict.TryGetValue("one", out var v)) Console.WriteLine(v); // 1
+```
+
+---
+
+## Q. Create a custom Order Controller.
+
+**A.**
+
+Below is a minimal ASP.NET Core `OrderController` demonstrating common patterns: DTOs (records for request/response), validation, service abstraction, and publishing events (simplified).
+
+```csharp
+[ApiController]
+[Route("api/[controller]")]
+public class OrderController : ControllerBase
+{
+    private readonly IOrderService _orderService;
+
+    public OrderController(IOrderService orderService)
+    {
+        _orderService = orderService;
+    }
+
+    [HttpPost]
+    public async Task<ActionResult<OrderResponse>> CreateOrder(CreateOrderRequest request)
+    {
+        if (!ModelState.IsValid) return BadRequest(ModelState);
+
+        var order = await _orderService.CreateOrderAsync(request);
+
+        var response = new OrderResponse(order.Id, order.Status, order.TotalAmount);
+        return CreatedAtAction(nameof(GetOrder), new { id = order.Id }, response);
+    }
+
+    [HttpGet("{id}")]
+    public async Task<ActionResult<OrderResponse>> GetOrder(int id)
+    {
+        var order = await _orderService.GetByIdAsync(id);
+        if (order == null) return NotFound();
+        return Ok(new OrderResponse(order.Id, order.Status, order.TotalAmount));
+    }
+}
+
+public record CreateOrderRequest(int CustomerId, List<OrderItemDto> Items, string ShippingAddress);
+public record OrderItemDto(int ProductId, int Quantity);
+public record OrderResponse(int Id, string Status, decimal TotalAmount);
+
+public interface IOrderService
+{
+    Task<Order> CreateOrderAsync(CreateOrderRequest request);
+    Task<Order?> GetByIdAsync(int id);
+}
+
+// Simplified domain/order model
+public class Order
+{
+    public int Id { get; set; }
+    public string Status { get; set; } = "Pending";
+    public decimal TotalAmount { get; set; }
+}
+
+// Example service implementation sketch (pseudocode)
+public class OrderService : IOrderService
+{
+    public async Task<Order> CreateOrderAsync(CreateOrderRequest request)
+    {
+        // 1. Validate items and prices
+        // 2. Save order to Order DB
+        // 3. Publish OrderCreated to message broker
+        // 4. Return created order
+        return new Order { Id = 1, Status = "Created", TotalAmount = 100 };
+    }
+
+    public async Task<Order?> GetByIdAsync(int id)
+    {
+        // Read from DB
+        return new Order { Id = id, Status = "Created", TotalAmount = 100 };
+    }
+}
 
 ---
 
