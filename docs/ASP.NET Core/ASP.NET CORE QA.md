@@ -1845,99 +1845,122 @@ Below is a straightforward, interview-friendly separate-chaining hash table impl
 ```csharp
 public class CustomDictionary<TKey, TValue>
 {
-    private readonly List<KeyValuePair<TKey, TValue>>[] _buckets;
+    // Array of buckets where each bucket is a list of key/value pairs (separate chaining)
+    private readonly List<KeyValuePair<TKey, TValue>>[] _buckets; // bucket storage
+
+    // Number of key/value pairs currently stored
     private int _count;
+
+    // Total number of buckets (array length)
     private readonly int _size;
 
+    // Constructor: allow caller to suggest initial bucket count (default 16)
     public CustomDictionary(int size = 16)
     {
+        // Ensure size is at least 1
         _size = Math.Max(1, size);
+
+        // Allocate the buckets array; individual lists are created lazily
         _buckets = new List<KeyValuePair<TKey, TValue>>[_size];
     }
 
+    // Compute the bucket index for a key
     private int GetIndex(TKey key)
     {
-        var hash = key?.GetHashCode() ?? 0;
-        return Math.Abs(hash) % _size;
+        // GetHashCode() may throw for badly implemented keys; handle null keys safely
+        var hash = key?.GetHashCode() ?? 0;              // null-coalescing: if key is null, use 0
+        return Math.Abs(hash) % _size;                  // Normalize hash to [0, _size-1]
     }
 
+    // Add a new key/value pair. Throws if key already exists (like Dictionary.Add)
     public void Add(TKey key, TValue value)
     {
-        if (key is null) throw new ArgumentNullException(nameof(key));
+        if (key is null) throw new ArgumentNullException(nameof(key)); // Guard clause for null keys
 
-        int index = GetIndex(key);
+        int index = GetIndex(key); // Find appropriate bucket for this key
+
+        // Get existing bucket or create it if missing (C# 8 null-coalescing assignment)
         var bucket = _buckets[index] ??= new List<KeyValuePair<TKey, TValue>>();
 
-        // Dictionary-like behavior: throw if key exists
+        // Check for duplicate key in the bucket
         for (int i = 0; i < bucket.Count; i++)
         {
+            // Use EqualityComparer to support custom key equality implementations
             if (EqualityComparer<TKey>.Default.Equals(bucket[i].Key, key))
                 throw new ArgumentException("An item with the same key already exists.", nameof(key));
         }
 
+        // Add the key/value pair to the bucket and increment count
         bucket.Add(new KeyValuePair<TKey, TValue>(key, value));
         _count++;
     }
 
+    // Try to get a value by key; returns true if found, false otherwise
     public bool TryGetValue(TKey key, out TValue value)
     {
-        if (key is null) { value = default!; return false; }
+        if (key is null) { value = default!; return false; } // Null guard: treat as not found
 
-        int index = GetIndex(key);
-        var bucket = _buckets[index];
+        int index = GetIndex(key);           // Compute bucket index
+        var bucket = _buckets[index];        // Get bucket (may be null if never created)
         if (bucket != null)
         {
+            // Iterate entries in bucket to find matching key
             foreach (var kvp in bucket)
             {
                 if (EqualityComparer<TKey>.Default.Equals(kvp.Key, key))
                 {
-                    value = kvp.Value;
-                    return true;
+                    value = kvp.Value;        // On match set out value
+                    return true;             // Found
                 }
             }
         }
 
-        value = default!;
+        value = default!;                    // Not found: set default and return false
         return false;
     }
 
+    // Get value or throw if key not present (helper similar to Dictionary indexer get)
     public TValue Get(TKey key)
     {
         if (TryGetValue(key, out var value))
-            return value;
-        throw new KeyNotFoundException($"Key '{key}' not found.");
+            return value;                    // Return found value
+        throw new KeyNotFoundException($"Key '{key}' not found."); // Not found: throw
     }
 
+    // Remove an entry by key; return true if removed
     public bool Remove(TKey key)
     {
-        if (key is null) return false;
+        if (key is null) return false;      // Null guard
 
-        int index = GetIndex(key);
-        var bucket = _buckets[index];
+        int index = GetIndex(key);           // Find bucket index
+        var bucket = _buckets[index];        // Get bucket
         if (bucket != null)
         {
+            // Locate the item in the bucket and remove it
             for (int i = 0; i < bucket.Count; i++)
             {
                 if (EqualityComparer<TKey>.Default.Equals(bucket[i].Key, key))
                 {
-                    bucket.RemoveAt(i);
-                    _count--;
-                    return true;
+                    bucket.RemoveAt(i);      // Remove item from bucket
+                    _count--;               // Decrement total count
+                    return true;            // Indicate successful removal
                 }
             }
         }
-        return false;
+        return false;                        // Not found
     }
 
+    // Convenience: check whether a key exists
     public bool ContainsKey(TKey key) => TryGetValue(key, out _);
 
+    // Expose number of elements
     public int Count => _count;
 }
 
 // Usage
-var dict = new CustomDictionary<string, int>(size: 5);
-dict.Add("one", 1);
-if (dict.TryGetValue("one", out var v)) Console.WriteLine(v); // 1
+var dict = new CustomDictionary<string, int>(size: 5); // Create with 5 buckets
+dict.Add("one", 1);                                  // Add key/value
+if (dict.TryGetValue("one", out var v)) Console.WriteLine(v); // Read and print value
 ```
 
 **Limitations & Notes**
