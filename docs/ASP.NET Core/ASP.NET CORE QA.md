@@ -1835,92 +1835,117 @@ Key Kafka concepts and optimizations:
 
 ---
 
+
 ## Q. Write a program to create a custom Dictionary (do not use the built-in Dictionary).
 
 **A.**
 
-Below is a simple generic hash-table-based implementation (open addressing with linear probing) suitable for interview/demo purposes. This is not production-ready (no resizing or concurrency controls), but demonstrates the core idea.
+Below is a straightforward, interview-friendly separate-chaining hash table implementation using an array of buckets (each bucket is a List). The example includes common members (Add, TryGetValue/Get, Remove, ContainsKey, Count). It is intentionally simple: no automatic resizing and not thread-safe — suitable for learning and interview/demo scenarios.
 
 ```csharp
-public class SimpleDictionary<TKey, TValue>
+public class CustomDictionary<TKey, TValue>
 {
-    private const int Size = 1024; // fixed size for demo
-    private readonly (TKey Key, TValue Value, bool IsUsed)[] _items;
+    private readonly List<KeyValuePair<TKey, TValue>>[] _buckets;
+    private int _count;
+    private readonly int _size;
 
-    public SimpleDictionary()
+    public CustomDictionary(int size = 16)
     {
-        _items = new (TKey, TValue, bool)[Size];
+        _size = Math.Max(1, size);
+        _buckets = new List<KeyValuePair<TKey, TValue>>[_size];
     }
 
     private int GetIndex(TKey key)
     {
         var hash = key?.GetHashCode() ?? 0;
-        return Math.Abs(hash) % Size;
+        return Math.Abs(hash) % _size;
     }
 
     public void Add(TKey key, TValue value)
     {
-        var idx = GetIndex(key);
-        for (int i = 0; i < Size; i++)
+        if (key is null) throw new ArgumentNullException(nameof(key));
+
+        int index = GetIndex(key);
+        var bucket = _buckets[index] ??= new List<KeyValuePair<TKey, TValue>>();
+
+        // Dictionary-like behavior: throw if key exists
+        for (int i = 0; i < bucket.Count; i++)
         {
-            var probe = (idx + i) % Size;
-            if (!_items[probe].IsUsed)
-            {
-                _items[probe] = (key, value, true);
-                return;
-            }
-            if (EqualityComparer<TKey>.Default.Equals(_items[probe].Key, key))
-                throw new ArgumentException("Key already exists");
+            if (EqualityComparer<TKey>.Default.Equals(bucket[i].Key, key))
+                throw new ArgumentException("An item with the same key already exists.", nameof(key));
         }
-        throw new InvalidOperationException("Dictionary full");
+
+        bucket.Add(new KeyValuePair<TKey, TValue>(key, value));
+        _count++;
     }
 
     public bool TryGetValue(TKey key, out TValue value)
     {
-        var idx = GetIndex(key);
-        for (int i = 0; i < Size; i++)
+        if (key is null) { value = default!; return false; }
+
+        int index = GetIndex(key);
+        var bucket = _buckets[index];
+        if (bucket != null)
         {
-            var probe = (idx + i) % Size;
-            if (!_items[probe].IsUsed)
+            foreach (var kvp in bucket)
             {
-                value = default!;
-                return false;
-            }
-            if (EqualityComparer<TKey>.Default.Equals(_items[probe].Key, key))
-            {
-                value = _items[probe].Value;
-                return true;
+                if (EqualityComparer<TKey>.Default.Equals(kvp.Key, key))
+                {
+                    value = kvp.Value;
+                    return true;
+                }
             }
         }
+
         value = default!;
         return false;
     }
 
+    public TValue Get(TKey key)
+    {
+        if (TryGetValue(key, out var value))
+            return value;
+        throw new KeyNotFoundException($"Key '{key}' not found.");
+    }
+
     public bool Remove(TKey key)
     {
-        var idx = GetIndex(key);
-        for (int i = 0; i < Size; i++)
+        if (key is null) return false;
+
+        int index = GetIndex(key);
+        var bucket = _buckets[index];
+        if (bucket != null)
         {
-            var probe = (idx + i) % Size;
-            if (!_items[probe].IsUsed)
-                return false;
-            if (EqualityComparer<TKey>.Default.Equals(_items[probe].Key, key))
+            for (int i = 0; i < bucket.Count; i++)
             {
-                _items[probe].IsUsed = false;
-                _items[probe].Key = default!;
-                _items[probe].Value = default!;
-                return true;
+                if (EqualityComparer<TKey>.Default.Equals(bucket[i].Key, key))
+                {
+                    bucket.RemoveAt(i);
+                    _count--;
+                    return true;
+                }
             }
         }
         return false;
     }
+
+    public bool ContainsKey(TKey key) => TryGetValue(key, out _);
+
+    public int Count => _count;
 }
 
 // Usage
-var dict = new SimpleDictionary<string, int>();
+var dict = new CustomDictionary<string, int>(size: 5);
 dict.Add("one", 1);
 if (dict.TryGetValue("one", out var v)) Console.WriteLine(v); // 1
 ```
+
+**Limitations & Notes**
+
+- Fixed-size buckets (no automatic resizing) — in production add resizing and rehashing.
+- Not thread-safe — add synchronization for multi-threaded access or use concurrent collections.
+- Uses `EqualityComparer<TKey>.Default` for robust key comparisons.
+- `Add` throws on duplicate keys (consistent with `Dictionary<TKey,TValue>.Add`). You can change it to upsert if desired.
 
 ---
 
