@@ -2,21 +2,27 @@
 {
     public class CustomDictionary<TKey, TValue>
     {
-        private const int size = 5;
-        private List<KeyValuePair<TKey, TValue>>[] _bucket;
+        private const int DefaultSize = 5;
+        private readonly List<KeyValuePair<TKey, TValue>>[] _bucket;
 
-        public CustomDictionary()
+        public CustomDictionary(int size = DefaultSize)
         {
             _bucket = new List<KeyValuePair<TKey, TValue>>[size];
         }
 
         private int GetIndex(TKey key)
         {
-            return Math.Abs(key.GetHashCode()) % size;
+            if (key is null)
+                throw new ArgumentNullException(nameof(key));
+
+            return Math.Abs(key.GetHashCode() % _bucket.Length);
         }
 
         public void Add(TKey key, TValue value)
         {
+            if (key is null)
+                throw new ArgumentNullException(nameof(key));
+
             int index = GetIndex(key);
 
             if (_bucket[index] == null)
@@ -24,14 +30,10 @@
                 _bucket[index] = new List<KeyValuePair<TKey, TValue>>();
             }
 
-            for (int i = 0; i < _bucket[index].Count; i++)
+            foreach (var pair in _bucket[index])
             {
-                if (_bucket[index][i].Key.Equals(key))
-                {
-                    _bucket[index][i] = new KeyValuePair<TKey, TValue>(key, value);
-
-                    return;
-                }
+                if (pair.Key.Equals(key))
+                    throw new ArgumentException($"Key '{key}' already exists");
             }
 
             _bucket[index].Add(new KeyValuePair<TKey, TValue>(key, value));
@@ -39,24 +41,30 @@
 
         public TValue Get(TKey key)
         {
+            if (key is null)
+                throw new ArgumentNullException(nameof(key));
+
             int index = GetIndex(key);
+
             if (_bucket[index] != null)
             {
-                foreach (var kvp in _bucket[index])
+                foreach (var pair in _bucket[index])
                 {
-                    if (kvp.Key.Equals(key))
-                    {
-                        return kvp.Value;
-                    }
+                    if (pair.Key.Equals(key))
+                        return pair.Value;
                 }
             }
 
-            throw new KeyNotFoundException($"Key '{key}' not found.");
+            throw new ArgumentException($"Key '{key}' does not exist");
         }
 
         public void Remove(TKey key)
         {
+            if (key is null)
+                throw new ArgumentNullException(nameof(key));
+
             int index = GetIndex(key);
+
             if (_bucket[index] != null)
             {
                 for (int i = 0; i < _bucket[index].Count; i++)
@@ -68,23 +76,27 @@
                     }
                 }
             }
-            throw new KeyNotFoundException($"Key '{key}' not found.");
+
+            throw new ArgumentException($"Key '{key}' does not exist");
         }
 
-        public int Count
+        public bool ContainsKey(TKey key)
         {
-            get
+            if (key is null)
+                throw new ArgumentNullException(nameof(key));
+
+            int index = GetIndex(key);
+
+            if (_bucket[index] != null)
             {
-                int count = 0;
-                foreach (var bucket in _bucket)
+                foreach (var pair in _bucket[index])
                 {
-                    if (bucket != null)
-                    {
-                        count += bucket.Count;
-                    }
+                    if (pair.Key.Equals(key))
+                        return true;
                 }
-                return count;
             }
+
+            return false;
         }
     }
 }
