@@ -196,6 +196,11 @@ A monolith is a single ASP. NET Core application where all modules (UI, business
 * Lower operational and infrastructure cost
 * Best for small to medium applications
 * Suitable for small teams or early-stage products
+* Entire application is built and deployed as a single unit.
+* All modules share the same codebase and database.
+* Hard to scale specific features (must scale the whole app).
+* A small change requires full application deployment.
+* Failure in one module can impact the entire system.
 
 #### Choose Monolith when:
 
@@ -216,6 +221,11 @@ Microservices architecture breaks the application into independent ASP. NET Core
 * Suitable for large and complex systems
 * Supports distributed and cloud-native systems
 * Requires strong DevOps and monitoring
+* Application is split into small, independent services.
+* Each service has its own codebase and database.
+* Services can be developed, deployed, and scaled independently.
+* Technology flexibility (different services can use different tech).
+* Failure of one service does not affect others.
 
 #### Choose Microservices when:
 
