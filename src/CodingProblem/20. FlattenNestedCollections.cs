@@ -1,5 +1,13 @@
 ﻿namespace CodingProblem
 {
+    /// <summary>
+    /// Problem Statement:
+    /// Given a nested list of integers, flatten it into a single list.
+    ///
+    /// Example:
+    /// Input:  [[1, 2, 2], [3, 4], [5]]
+    /// Output: [1, 2, 2, 3, 4, 5]
+    /// </summary>
     internal class FlattenNestedCollections
     {
         public static void FlattenAndPrint()

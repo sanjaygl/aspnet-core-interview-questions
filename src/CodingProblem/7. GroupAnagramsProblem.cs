@@ -1,5 +1,15 @@
 ﻿namespace CodingProblem
 {
+    /// <summary>
+    /// Problem Statement:
+    /// Given an array of strings, group the anagrams together.
+    /// Strings that contain the same characters with the same frequencies
+    /// should be placed in the same group.
+    ///
+    /// Example:
+    /// Input:  ["eat", "tea", "tan", "ate", "nat", "bat"]
+    /// Output: [["eat", "tea", "ate"], ["tan", "nat"], ["bat"]]
+    /// </summary>
     internal class GroupAnagramsProblem
     {
         // Example: Given an array of strings, group the anagrams together.

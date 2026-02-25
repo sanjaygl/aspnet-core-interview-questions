@@ -1,5 +1,13 @@
 ﻿namespace CodingProblem
 {
+    /// <summary>
+    /// Problem Statement:
+    /// Given an integer array, find all elements that appear more than once.
+    ///
+    /// Example:
+    /// Input:  [1, 2, 3, 2, 4, 5, 5]
+    /// Output: [2, 5]
+    /// </summary>
     internal class FindDuplicates
     {
         // Write a function that finds all duplicate numbers in an array.

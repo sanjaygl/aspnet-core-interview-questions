@@ -1,5 +1,14 @@
 ﻿namespace CodingProblem
 {
+    /// <summary>
+    /// Problem Statement:
+    /// Using recursion, find the first uppercase character in a string.
+    /// Return '\0' if no uppercase character exists.
+    ///
+    /// Example:
+    /// Input:  "abcdeGTXYZqghABCD"
+    /// Output: 'G'
+    /// </summary>
     internal class FindFirstUppercaseRecursive
     {
         public static void FirstUppercaseProblem(string input)

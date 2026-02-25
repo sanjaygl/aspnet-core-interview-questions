@@ -1,6 +1,14 @@
 ﻿namespace CodingProblem
 {
-    // Write a method to return indices of two numbers whose sum equals the target. Constraint: O(n) time.
+    /// <summary>
+    /// Problem Statement:
+    /// Given an integer array and a target value, return the indices of two numbers
+    /// such that they add up to the target.
+    ///
+    /// Example:
+    /// Input:  [2, 7, 11, 15], target = 9
+    /// Output: [0, 1]
+    /// </summary>
     internal class TwoSumProblem
     {
         // This method returns the indices of the two numbers that add up to the target

@@ -53,21 +53,23 @@ namespace CodingProblem
             customDictionary.Add(5, "Five");
             customDictionary.Add(6, "Six");
 
-            Console.WriteLine(customDictionary.Get(1));
-            customDictionary.Remove(1);
-            Console.WriteLine(customDictionary.ContainsKey(1));
+            //Console.WriteLine(customDictionary.Get(1));
+            //customDictionary.Remove(1);
+            //Console.WriteLine(customDictionary.ContainsKey(1));
 
-            for (int i = 1; i <= 6; i++)
-            {
-                try
-                {
-                    Console.WriteLine($"Key: {i}, Value: {customDictionary.Get(i)}");
-                }
-                catch (KeyNotFoundException ex)
-                {
-                    Console.WriteLine(ex.Message);
-                }
-            }
+            //for (int i = 1; i <= 6; i++)
+            //{
+            //    try
+            //    {
+            //        Console.WriteLine($"Key: {i}, Value: {customDictionary.Get(i)}");
+            //    }
+            //    catch (KeyNotFoundException ex)
+            //    {
+            //        Console.WriteLine(ex.Message);
+            //    }
+            //}
+
+            Console.WriteLine(ReverseProblem.ReverseString("Hello World"));
 
             Console.ReadLine();
         }
