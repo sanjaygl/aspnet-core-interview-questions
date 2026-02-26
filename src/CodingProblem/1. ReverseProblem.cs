@@ -2,12 +2,23 @@
 
 namespace CodingProblem
 {
-    // Given a non-empty string, write a function to return a new string that is the reverse of the input. You must not use any built-in reverse methods.
+    /// <summary>
+    /// Problem Statement:
+    /// Given a non-empty string, return a new string that is the reverse of the input.
+    /// Do not use any built-in reverse methods.
+    ///
+    /// Example:
+    /// Input:  "interview"
+    /// Output: "weivretni"
+    /// </summary>
     internal class ReverseProblem
     {
         public static string ReverseString(string input)
         {
-            StringBuilder result = new StringBuilder();
+            if (string.IsNullOrEmpty(input))
+                return input;
+
+            StringBuilder result = new StringBuilder(input.Length);
 
             for (int i = input.Length - 1; i >= 0; i--)
             {

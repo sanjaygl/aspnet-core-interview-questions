@@ -12,46 +12,33 @@
     /// </summary>
     internal class GroupAnagramsProblem
     {
-        // Example: Given an array of strings, group the anagrams together.
-        public static void GroupAnagrams()
-        {
-            string[] input = { "eat", "tea", "tan", "ate", "nat", "bat" };
-
-            var groupedAnagrams = Groups(input);
-
-            foreach (var group in groupedAnagrams)
-            {
-                Console.WriteLine($"[{string.Join(", ", group)}]");
-            }
-        }
-
-        // Write a function that groups an array of strings into anagrams.
-        private static IList<IList<string>> Groups(string[] input)
+        public static IList<IList<string>> GroupAnagrams(string[] input)
         {
             var anagramMap = new Dictionary<string, List<string>>();
+
             // Loop through each string in the input array
             foreach (var group in input)
             {
-                // sort characters of the string to create a key for anagrams
+                // Convert the string to a character array and sort it to create a key for the anagram group
                 char[] chars = group.ToCharArray();
 
-                // Example: For "eat", chars will be ['e', 'a', 't']
+                // Sort the characters to ensure that anagrams will have the same sorted representation, Example: "eat", "tea", and "ate" will all become "aet" after sorting
                 Array.Sort(chars);
 
-                // Example: For "eat", sorted chars will be ['a', 'e', 't'], key = "aet"
+                // Convert the sorted character array back to a string to use as a key in the dictionary, Example: For "eat", key will be "aet"
                 string key = new string(chars);
 
-                // If the key doesn't exist in the map, create a new list for this anagram group
+                // If the key does not exist in the dictionary, create a new list for that key
                 if (!anagramMap.ContainsKey(key))
                 {
                     anagramMap[key] = new List<string>();
                 }
 
-                // Add the original string to the corresponding anagram group
+                // Add the original string to the list corresponding to the sorted key, Example: "eat" will be added to the list for key "aet"
                 anagramMap[key].Add(group);
             }
 
-            // Return the grouped anagrams as a list of lists
+            // Return the values of the dictionary as a list of lists, where each inner list contains anagrams, Example: [["eat", "tea", "ate"], ["tan", "nat"], ["bat"]]
             return anagramMap.Values.ToList<IList<string>>();
         }
     }

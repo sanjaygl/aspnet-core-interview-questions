@@ -19,7 +19,12 @@
             int n = nums.Length;
 
             // Expected sum of numbers from 0 to n
-            int expectedSum = n * (n + 1) / 2;
+            int expectedSum = 0;
+
+            for (int i = 0; i <= n; i++)
+            {
+                expectedSum += i;
+            }
 
             int actualSum = 0;
             foreach (var num in nums)

@@ -8,15 +8,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="11. SumOfDigitsProblem.cs" />
     <Compile Remove="21. FizzBuzzProblem.cs" />
-    <Compile Remove="3. CountCharacterFrequenciesProblem.cs" />
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="11. SumOfDigitsProblem.cs" />
     <None Include="21. FizzBuzzProblem.cs" />
-    <None Include="3. CountCharacterFrequenciesProblem.cs" />
   </ItemGroup>
 
   <ItemGroup>
