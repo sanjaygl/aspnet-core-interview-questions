@@ -1,6 +1,6 @@
-# Interface – Compact Interview Notes
+## Interface – Compact Interview Notes
 
-## Original Code
+An interface is a type of contract where the implementing class must implement its members. In other words, we can say an interface is a set of rules that the implementer has to follow.
 
 ```csharp
 namespace OOP_Concepts.Abstraction
