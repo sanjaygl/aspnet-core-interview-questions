@@ -2,9 +2,9 @@
 
 ## Fundamental Concepts
 
-### 1. **What is the difference between an interface and an abstract class in C#?**
+**Interface**: "An interface is a type of contract where the implementing class must implement its members. In other words, we can say an interface is a set of rules that the implementer has to follow."
 
-**Answer:** Here are the key differences with detailed explanations and examples:
+**Abstract Classes**: An abstract class is a half-built blueprint. It can contain abstract members (rules with no code) and non-abstract members (regular methods with full code). Any class that inherits from it must implement the abstract parts, but it also gets to reuse the non-abstract parts for free.
 
 #### **Multiple Inheritance vs Single Inheritance**
 

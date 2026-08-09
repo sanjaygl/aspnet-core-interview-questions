@@ -1,0 +1,15 @@
+C:\Personal\aspnet-core-interview-questions\src\OOP-Concepts\bin\Debug\net8.0\OOP-Concepts.exe
+C:\Personal\aspnet-core-interview-questions\src\OOP-Concepts\bin\Debug\net8.0\OOP-Concepts.deps.json
+C:\Personal\aspnet-core-interview-questions\src\OOP-Concepts\bin\Debug\net8.0\OOP-Concepts.runtimeconfig.json
+C:\Personal\aspnet-core-interview-questions\src\OOP-Concepts\bin\Debug\net8.0\OOP-Concepts.dll
+C:\Personal\aspnet-core-interview-questions\src\OOP-Concepts\bin\Debug\net8.0\OOP-Concepts.pdb
+C:\Personal\aspnet-core-interview-questions\src\OOP-Concepts\obj\Debug\net8.0\OOP-Concepts.GeneratedMSBuildEditorConfig.editorconfig
+C:\Personal\aspnet-core-interview-questions\src\OOP-Concepts\obj\Debug\net8.0\OOP-Concepts.AssemblyInfoInputs.cache
+C:\Personal\aspnet-core-interview-questions\src\OOP-Concepts\obj\Debug\net8.0\OOP-Concepts.AssemblyInfo.cs
+C:\Personal\aspnet-core-interview-questions\src\OOP-Concepts\obj\Debug\net8.0\OOP-Concepts.csproj.CoreCompileInputs.cache
+C:\Personal\aspnet-core-interview-questions\src\OOP-Concepts\obj\Debug\net8.0\OOP-Concepts.sourcelink.json
+C:\Personal\aspnet-core-interview-questions\src\OOP-Concepts\obj\Debug\net8.0\OOP-Concepts.dll
+C:\Personal\aspnet-core-interview-questions\src\OOP-Concepts\obj\Debug\net8.0\refint\OOP-Concepts.dll
+C:\Personal\aspnet-core-interview-questions\src\OOP-Concepts\obj\Debug\net8.0\OOP-Concepts.pdb
+C:\Personal\aspnet-core-interview-questions\src\OOP-Concepts\obj\Debug\net8.0\OOP-Concepts.genruntimeconfig.cache
+C:\Personal\aspnet-core-interview-questions\src\OOP-Concepts\obj\Debug\net8.0\ref\OOP-Concepts.dll
