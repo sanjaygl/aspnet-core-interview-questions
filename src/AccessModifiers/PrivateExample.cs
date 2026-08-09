@@ -1,4 +1,4 @@
-﻿namespace ClassLibraryA
+﻿namespace AccessModifiers
 {
     /// <summary>
     /// Example demonstrating private members

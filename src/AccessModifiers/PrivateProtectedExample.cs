@@ -1,4 +1,4 @@
-namespace ClassLibraryA
+namespace AccessModifiers
 {
     /// <summary>
     /// Example demonstrating private protected members (C# 7.2+)

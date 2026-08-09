@@ -16,7 +16,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\ClassLibraryA\ClassLibraryA.csproj" />
     <ProjectReference Include="..\ThreadingPractice\ThreadingPractice.csproj" />
   </ItemGroup>
 

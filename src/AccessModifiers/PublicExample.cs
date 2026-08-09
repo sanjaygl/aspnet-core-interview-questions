@@ -1,4 +1,4 @@
-﻿namespace ClassLibraryA
+﻿namespace AccessModifiers
 {
     /// <summary>
     /// Public Class Example - Accessible from any assembly

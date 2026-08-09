@@ -1,4 +1,4 @@
-﻿namespace ClassLibraryA
+﻿namespace AccessModifiers
 {
     /// <summary>
     /// Base class example demonstrating protected members

@@ -59,3 +59,5 @@ src/API/obj/Debug/net8.0/EndpointInfo/API.json
 src/API/obj/Debug/net8.0/EndpointInfo/API.OpenApiFiles.cache
 src/API/obj/Debug/net8.0/ref/API.dll
 src/API/obj/Debug/net8.0/refint/API.dll
+/src/AccessModifiers/obj
+*.tmp

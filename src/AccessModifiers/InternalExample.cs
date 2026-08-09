@@ -1,4 +1,4 @@
-﻿namespace ClassLibraryA
+﻿namespace AccessModifiers
 {
     /// <summary>
     /// Internal class example - only accessible within ClassLibraryA assembly
