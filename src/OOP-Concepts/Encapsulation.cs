@@ -1,8 +1,4 @@
-# Encapsulation – Comprehensive Notes
 
-## Part A: ENCAPSULATION
-
-```csharp
 namespace OOP_Concepts.Encapsulation
 {
     // =========================================================================
@@ -35,8 +31,14 @@ namespace OOP_Concepts.Encapsulation
 
         public decimal Balance
         {
-            get => balance;
-            private set => balance = value;
+            get
+            {
+                return balance;
+            }
+            private set
+            {
+                balance = value;
+            }
         }
 
         // ---------------------------------------------------------------------
@@ -82,7 +84,12 @@ namespace OOP_Concepts.Encapsulation
 
         public bool Withdraw(decimal amount)
         {
-            if (amount <= 0 || amount > balance)
+            if (amount <= 0)
+            {
+                return false;
+            }
+
+            if (amount > balance)
             {
                 return false;
             }
@@ -94,7 +101,7 @@ namespace OOP_Concepts.Encapsulation
 
 
     // =========================================================================
-    // PART B: ENCAPSULATION USING VALIDATION
+    // PART B: ENCAPSULATION USING PRIVATE DATA AND CONTROLLED METHODS
     // =========================================================================
 
     public class Employee
@@ -110,17 +117,28 @@ namespace OOP_Concepts.Encapsulation
         // ---------------------------------------------------------------------
         // PROPERTY WITH VALIDATION
         // ---------------------------------------------------------------------
+        // The setter controls what value is allowed.
+        // ---------------------------------------------------------------------
 
         public int Age
         {
-            get => age;
-            private set => age = value;
+            get
+            {
+                return age;
+            }
+            private set
+            {
+                if (value >= 18)
+                {
+                    age = value;
+                }
+            }
         }
 
         // ---------------------------------------------------------------------
-        // CONTROLLED STATE CHANGE
+        // METHOD TO CHANGE STATE
         // ---------------------------------------------------------------------
-        // Business rules are applied before changing the internal state.
+        // Business rules can be applied before modifying the private field.
         // ---------------------------------------------------------------------
 
         public void SetAge(int newAge)
@@ -160,6 +178,9 @@ namespace OOP_Concepts.Encapsulation
 
         // ---------------------------------------------------------------------
         // CONTROLLED UPDATE
+        // ---------------------------------------------------------------------
+        // Instead of exposing a public setter, the class controls how Name
+        // can be changed.
         // ---------------------------------------------------------------------
 
         public void ChangeName(string name)
@@ -227,13 +248,7 @@ namespace OOP_Concepts.Encapsulation
         }
     }
 }
-```
 
----
-
-## Part E: QUICK INTERVIEW QUESTIONS
-
-```csharp
 // =========================================================================
 // PART E: QUICK INTERVIEW QUESTIONS
 // =========================================================================
@@ -256,131 +271,3 @@ namespace OOP_Concepts.Encapsulation
 // 15. How does encapsulation help with maintainability and loose coupling?
 //
 // =========================================================================
-```
-
----
-
-# Explanation
-
-### 1. What is Encapsulation?
-
-Encapsulation is the process of **bundling data and the methods that operate on that data together and controlling access to the internal state**.
-
-### 2. Why should fields usually be private?
-
-A private field prevents external code from directly changing the object's internal state.
-
-### 3. What is the difference between a field and a property?
-
-A field directly stores data. A property provides controlled access to that data and can contain validation or other logic.
-
-### 4. What is the purpose of a private setter?
-
-A private setter allows the value to be read from outside the class but changed only inside the class.
-
-```csharp
-public string Name { get; private set; }
-```
-
-### 5. Can we achieve encapsulation without using properties?
-
-Yes. Methods can provide controlled access to private state.
-
-### 6. How does encapsulation help prevent invalid object state?
-
-The class controls how its internal state changes and can validate values before applying them.
-
-### 7. What is the difference between data hiding and encapsulation?
-
-Data hiding focuses on restricting direct access to internal data.
-
-Encapsulation is broader: it combines data and behavior and provides controlled access to the object's state.
-
-### 8. What is the difference between abstraction and encapsulation?
-
-**Abstraction** focuses on hiding unnecessary implementation details.
-
-**Encapsulation** focuses on protecting and controlling access to data and behavior.
-
-### 9. Why should we prefer methods over public setters when business validation is required?
-
-A method can represent a business operation and enforce rules before changing state.
-
-```csharp
-account.Withdraw(500);
-```
-
-is more controlled than exposing:
-
-```csharp
-account.Balance = 500;
-```
-
-### 10. Can a private field be accessed directly from a derived class?
-
-No. Private members are accessible only within the class that declares them.
-
-### 11. What is the difference between private and protected members?
-
-```text
-private
-    ↓
-Accessible only inside the declaring class
-
-protected
-    ↓
-Accessible inside the declaring class
-and derived classes
-```
-
-### 12. Can a property contain validation logic?
-
-Yes.
-
-```csharp
-public int Age
-{
-    get => age;
-    set
-    {
-        if (value >= 18)
-            age = value;
-    }
-}
-```
-
-### 13. Why is exposing public fields generally considered poor encapsulation?
-
-A public field allows external code to modify internal state directly, making validation and business rules difficult to enforce.
-
-### 14. Can encapsulation be achieved using only access modifiers?
-
-Access modifiers are an important part of encapsulation, but good encapsulation also involves designing controlled properties and methods.
-
-### 15. How does encapsulation help with maintainability and loose coupling?
-
-External code depends on the public contract rather than the internal implementation. The internal implementation can therefore change without unnecessarily affecting callers.
-
----
-
-# Important Rules
-
-- Keep internal state private whenever possible.
-- Expose only the functionality consumers need.
-- Use properties for controlled read/write access.
-- Use `private set` when outside code should read but not directly modify a value.
-- Use methods when changing state requires business rules or validation.
-- `private` members are accessible only within the declaring class.
-- `protected` members are accessible within the declaring class and derived classes.
-- Public fields provide little protection over object state.
-- Encapsulation helps maintain valid object state.
-- Encapsulation is different from abstraction.
-
----
-
-# Important Missing Points
-
-- Encapsulation is not simply making every field private; it is about **controlled access to state and behavior**.
-- A public property with an unrestricted setter may still expose too much control.
-- Methods can be preferable to setters when an operation represents a business action.
-- Good encapsulation allows internal implementation details to change without unnecessarily affecting calling code.
