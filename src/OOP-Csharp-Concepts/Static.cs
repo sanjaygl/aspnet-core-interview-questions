@@ -1,4 +1,4 @@
-﻿namespace OOP_Concepts
+﻿namespace OOP_CSharp_Concepts
 {
     // ---------------------------------------------------------------------
     // PART A: ARCHITECTURAL RESTRICTIONS OF A STATIC CLASS

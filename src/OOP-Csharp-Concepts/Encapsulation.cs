@@ -1,5 +1,4 @@
-
-namespace OOP_Concepts.Encapsulation
+namespace OOP_CSharp_Concepts
 {
     // =========================================================================
     // PART A: ENCAPSULATION

@@ -1,4 +1,4 @@
-﻿namespace OOP_Concepts.Abstraction
+﻿namespace OOP_CSharp_Concepts.Abstraction
 {
     /// <summary>
     /// An interface is a type of contract where the implementing class must implement its members. 

@@ -1,4 +1,4 @@
-﻿namespace OOP_Concepts.Abstraction
+﻿namespace OOP_CSharp_Concepts.Abstraction
 {
     /// <summary>
     /// An abstract class is a partially built blueprint. It can contain abstract members (rules with no code) 
@@ -93,11 +93,11 @@
         // Fulfilling Rule 6 (Methods)
         public override string Print(string message)
         {
-            return message + " " + PrintMessage(ConceptBase.ClassVersion);
+            return message + " " + PrintMessage(ClassVersion);
         }
 
         public override string PrintMessage(string message) =>
-            $"ClassVersion: {message}, MaxRetries: {ConceptBase.MaxRetries}, BuildDate: {ConceptBase.BuildDate} ";
+            $"ClassVersion: {message}, MaxRetries: {MaxRetries}, BuildDate: {BuildDate} ";
 
         // Fulfilling Rule 7 (Events)
         public override event EventHandler OnDataChanged;

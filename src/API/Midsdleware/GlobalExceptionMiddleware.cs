@@ -1,4 +1,4 @@
-﻿namespace API.Extensions
+﻿namespace API.Midsdleware
 {
     public class GlobalExceptionMiddleware
     {

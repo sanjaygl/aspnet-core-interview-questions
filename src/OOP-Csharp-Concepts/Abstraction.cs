@@ -1,4 +1,4 @@
-namespace OOP_Concepts.Abstraction
+namespace OOP_CSharp_Concepts
 {
     // =========================================================================
     // PART A: ABSTRACT CLASS
@@ -179,13 +179,13 @@ namespace OOP_Concepts.Abstraction
         public override string Print(string message)
         {
             return message + " " +
-                   PrintMessage(AbstractionBase.ClassVersion);
+                   PrintMessage(ClassVersion);
         }
 
         public override string PrintMessage(string message) =>
             $"ClassVersion: {message}, " +
-            $"MaxRetries: {AbstractionBase.MaxRetries}, " +
-            $"BuildDate: {AbstractionBase.BuildDate}";
+            $"MaxRetries: {MaxRetries}, " +
+            $"BuildDate: {BuildDate}";
 
         // ---------------------------------------------------------------------
         // 17. IMPLEMENTING ABSTRACT EVENT

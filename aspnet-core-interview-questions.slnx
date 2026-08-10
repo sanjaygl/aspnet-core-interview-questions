@@ -30,7 +30,7 @@
     <Project Path="src/AccessModifiers/AccessModifiers.csproj" />
     <Project Path="src/API/API.csproj" Id="00aeb4db-1337-417b-8804-2a4fbdb49bf9" />
     <Project Path="src/CodingProblem/CodingProblem.csproj" />
-    <Project Path="src/OOP-Concepts/OOP-Concepts.csproj" Id="bd771965-ffdd-4003-989c-ee0b98597b93" />
+    <Project Path="src/OOP-Csharp-Concepts/OOP-CSharp-Concepts.csproj" Id="bd771965-ffdd-4003-989c-ee0b98597b93" />
     <Project Path="src/ThreadingPractice/ThreadingPractice.csproj" Id="77b7a52a-62cb-4eda-92c9-4ad2df8d3451" />
   </Folder>
 </Solution>

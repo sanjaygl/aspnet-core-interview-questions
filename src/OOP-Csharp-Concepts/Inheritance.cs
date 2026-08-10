@@ -1,4 +1,4 @@
-namespace OOP_Concepts.Inheritance
+namespace OOP_CSharp_Concepts
 {
     // =========================================================================
     // PART A: BASE CLASS

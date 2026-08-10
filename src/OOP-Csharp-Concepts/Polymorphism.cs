@@ -1,4 +1,4 @@
-namespace OOP_Concepts.PolymorphismMastery
+namespace OOP_CSharp_Concepts
 {
     // =========================================================================
     // PART A: BASE CLASS & CONSTRUCTOR CONCEPTS
