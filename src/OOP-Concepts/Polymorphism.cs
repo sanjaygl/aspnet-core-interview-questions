@@ -1,8 +1,3 @@
-# Polymorphism – Compact Interview Notes
-
-## Original Code
-
-```csharp
 namespace OOP_Concepts.PolymorphismMastery
 {
     // =========================================================================
@@ -296,8 +291,79 @@ namespace OOP_Concepts.PolymorphismMastery
                 safeDragon.BreatheElement();
             }
         }
+        
+    }
+
+    public class PolyRunner {
+        public static void Run()
+        {
+            Base _base = new Child3();
+
+            Console.WriteLine("Here, the base class reference points to its 3rd-level child object. Which overridden Print() method will be called?");
+            Console.WriteLine(@"If a base class reference points to an object of any level of child class,
+                                the most-derived overridden method will be executed.
+                                So here, the base class reference points to a 3rd-level child object,
+                                therefore, the 3rd-level child class Print() method will be called.");
+
+            _base.Print();
+
+            Console.WriteLine("Here, the base class reference points to its 3rd-level child object. Which hidden Scan() method will be called?");
+            Console.WriteLine(@"If a base class reference points to an object of any level of child class,
+                                the hidden method is selected based on the reference type.
+                                So here, the reference type is the base class, therefore,
+                                the base class Scan() method will be called.");
+
+            _base.Scan();
+        }
+    }
+    class Base
+    {
+        public virtual void Print()
+        {
+            Console.WriteLine("Base Class Method Print()");
+        }
+
+        public void Scan()
+        {
+            Console.WriteLine("Base Class Method Scan()");
+        }
+    }
+    class Child1 : Base
+    {
+        public override void Print()
+        {
+            Console.WriteLine("Child1 Class Method Print()");
+        }
+
+        public new void Scan()
+        {
+            Console.WriteLine("Child1 Class Method Scan()");
+        }
+    }
+    class Child2 : Child1
+    {
+        public override void Print()
+        {
+            Console.WriteLine("Child2 Class Method Print()");
+        }
+        public new void Scan()
+        {
+            Console.WriteLine("Child2 Class Method Scan()");
+        }
+    }
+    class Child3 : Child2
+    {
+        public override void Print()
+        {
+            Console.WriteLine("Child3 Class Method Print()");
+        }
+        public new void Scan()
+        {
+            Console.WriteLine("Child3 Class Method Scan()");
+        }
     }
 }
+
 
 // =========================================================================
 // PART E: QUICK INTERVIEW QUESTIONS
@@ -325,465 +391,3 @@ namespace OOP_Concepts.PolymorphismMastery
 // 20. What is the difference between overridden, abstract, and interface members versus hidden ('new') and static members when determining which implementation is executed?
 //
 // =========================================================================
-```
-
----
-
-# Explanation
-
-### Part A: Base Class & Constructor Concepts
-
-`CreatureBaseClass` is an abstract base class. It provides common state and behavior for derived classes.
-
-```csharp
-public abstract class CreatureBaseClass
-```
-
-An abstract class cannot be instantiated directly.
-
-The base class contains:
-
-- `SpeciesName`
-- `Health`
-- A protected constructor
-- A virtual method: `Speak()`
-- A non-virtual method: `DisplayId()`
-
-### Base Constructor
-
-```csharp
-protected CreatureBaseClass(string speciesName, int health)
-```
-
-The base constructor initializes the common properties.
-
-When a derived object is created, the base constructor executes before the derived constructor body.
-
-```text
-Derived constructor requested
-        ↓
-Base constructor
-        ↓
-Base constructor body
-        ↓
-Derived constructor body
-```
-
----
-
-### Part B: Derived Class
-
-```csharp
-public class DragonChildClass : CreatureBaseClass
-```
-
-`DragonChildClass` inherits from `CreatureBaseClass`.
-
-It adds:
-
-```csharp
-public string ElementType { get; set; }
-public int HoardedGold { get; set; }
-```
-
-It also demonstrates:
-
-- Constructor chaining
-- Method overloading
-- Method overriding
-- Method hiding
-
-### Constructor Chaining Using `this`
-
-```csharp
-public DragonChildClass(string name, int health)
-    : this(name, health, "Fire", 500)
-```
-
-`this(...)` calls another constructor in the same class.
-
-### Constructor Chaining Using `base`
-
-```csharp
-public DragonChildClass(
-    string name,
-    int health,
-    string elementType,
-    int gold) : base(name, health)
-```
-
-`base(...)` calls the constructor of the parent class.
-
-Execution order:
-
-```text
-Dragon 2-parameter constructor
-        ↓
-this(...)
-        ↓
-Dragon 4-parameter constructor
-        ↓
-base(...)
-        ↓
-Creature constructor
-        ↓
-Creature constructor body
-        ↓
-Dragon 4-parameter constructor body
-        ↓
-Dragon 2-parameter constructor body
-```
-
----
-
-### Part B1: Method Overloading
-
-Method overloading is **compile-time polymorphism**.
-
-Multiple methods can have the same name when their parameter signatures are different.
-
-```csharp
-public void BreatheElement()
-{
-}
-
-public void BreatheElement(int intensity)
-{
-}
-
-public void BreatheElement(string targetEnemy)
-{
-}
-```
-
-The compiler determines the correct overload using:
-
-- Number of parameters
-- Parameter types
-- Parameter order
-
-Return type alone cannot be used for method overloading.
-
----
-
-### Part B2: Method Overriding
-
-Method overriding is **runtime polymorphism**.
-
-Requirements:
-
-1. Base method must be `virtual`, `abstract`, or already overridden.
-2. Derived method must use `override`.
-3. The method signature must match the inherited method.
-
-```csharp
-public virtual void Speak()
-{
-}
-
-public override void Speak()
-{
-}
-```
-
-If:
-
-```csharp
-CreatureBaseClass creature = new DragonChildClass(...);
-creature.Speak();
-```
-
-the runtime object is `DragonChildClass`, so the overridden `DragonChildClass.Speak()` implementation executes.
-
----
-
-### Part B3: Method Hiding
-
-Method hiding uses the `new` keyword.
-
-```csharp
-public new void DisplayId()
-{
-}
-```
-
-The important difference is:
-
-```text
-Override
-    ↓
-Actual OBJECT type determines behavior
-
-Hide
-    ↓
-REFERENCE type determines behavior
-```
-
-Therefore:
-
-```text
-Dragon reference    → Dragon.DisplayId()
-Creature reference  → Creature.DisplayId()
-```
-
-Method hiding does not provide runtime polymorphism like `override`.
-
----
-
-### Part C: Upcasting
-
-Upcasting means a base-class reference points to a derived-class object.
-
-```csharp
-CreatureBaseClass baseClass = childClass;
-```
-
-Conceptually:
-
-```text
-Reference Type → CreatureBaseClass
-Actual Object  → DragonChildClass
-```
-
-Upcasting is implicit and safe.
-
----
-
-### Downcasting
-
-Downcasting means obtaining a derived-class reference from a base-class reference.
-
-```csharp
-DragonChildClass downcastedDragon =
-    (DragonChildClass)baseClass;
-```
-
-Downcasting requires an explicit cast.
-
-It is safe only when the actual runtime object is really a `DragonChildClass`.
-
-If the object is not a `DragonChildClass`, `InvalidCastException` is thrown.
-
----
-
-### Safe Downcasting Using `is`
-
-```csharp
-if (baseClass is DragonChildClass dragon)
-{
-    dragon.BreatheElement();
-}
-```
-
-The `is` operator checks the actual runtime type before using the derived reference.
-
----
-
-### Safe Downcasting Using `as`
-
-```csharp
-DragonChildClass? safeDragon =
-    baseClass as DragonChildClass;
-
-if (safeDragon != null)
-{
-    safeDragon.BreatheElement();
-}
-```
-
-The `as` operator returns `null` instead of throwing when the reference conversion fails.
-
----
-
-# Execution Demonstration
-
-`PolymorphismRunner.RunFullDemonstration()` demonstrates:
-
-1. Constructor chaining
-2. Method overloading
-3. Upcasting
-4. Overriding / runtime polymorphism
-5. Method hiding
-6. Downcasting
-7. `is` type check
-8. `as` safe cast
-
----
-
-# Important Rules
-
-- Method overloading is **compile-time polymorphism**.
-- Method overriding is **runtime polymorphism**.
-- `virtual` allows a derived class to override a method.
-- `override` provides the derived implementation.
-- `new` hides an inherited member; it does not override it.
-- Upcasting is converting a derived reference to a base reference.
-- Upcasting is implicit and safe.
-- Downcasting converts a base reference to a derived reference.
-- Downcasting requires an explicit cast.
-- Invalid downcasting can throw `InvalidCastException`.
-- `is` can check the runtime type before casting.
-- `as` returns `null` when the reference conversion fails.
-- `base(...)` calls a parent-class constructor.
-- `this(...)` calls another constructor in the same class.
-- The reference type and actual object type can be different in polymorphism.
-
----
-
-# Questions
-
-### 1. What is inheritance, and how does `DragonChildClass` inherit from `CreatureBaseClass`?
-
-`DragonChildClass` inherits from `CreatureBaseClass` using:
-
-```csharp
-public class DragonChildClass : CreatureBaseClass
-```
-
-This creates an inheritance relationship where the derived class can use accessible members of the base class.
-
-### 2. What is upcasting, and why can a `CreatureBaseClass` reference point to a `DragonChildClass` object?
-
-Upcasting means assigning a derived object to a base-class reference:
-
-```csharp
-CreatureBaseClass creature =
-    new DragonChildClass(...);
-```
-
-A `DragonChildClass` is a `CreatureBaseClass`, so the assignment is valid.
-
-### 3. What is downcasting, when is it required, and why is an explicit cast needed?
-
-Downcasting converts a base-class reference back to a derived-class reference:
-
-```csharp
-DragonChildClass dragon =
-    (DragonChildClass)creature;
-```
-
-An explicit cast is required because the compiler cannot guarantee that the actual runtime object is the derived type.
-
-### 4. What is method overloading, and why is it considered compile-time polymorphism?
-
-Method overloading means multiple methods have the same name but different parameter signatures.
-
-The compiler selects the correct overload based on the arguments, so it is compile-time polymorphism.
-
-### 5. What is method overriding, and why is it considered runtime polymorphism?
-
-Method overriding allows a derived class to provide a different implementation of an inherited virtual or abstract method.
-
-The runtime object determines which implementation executes.
-
-### 6. What is method hiding, how does the `new` keyword work, and how is it different from overriding?
-
-Method hiding uses `new` to define a member with the same name as an inherited member.
-
-Unlike overriding, method hiding is selected based on the reference type.
-
-### 7. What is the purpose of the `is` operator in C#?
-
-It checks whether an object is compatible with a specified type and can perform pattern matching.
-
-```csharp
-if (baseClass is DragonChildClass dragon)
-{
-    dragon.BreatheElement();
-}
-```
-
-### 8. What is the purpose of the `as` operator, and what happens when the conversion fails?
-
-`as` performs a safe reference conversion. If the conversion fails, it returns `null`.
-
-### 9. What is an abstract class, and why can it not be instantiated directly?
-
-An abstract class is intended to be used as a base class. It cannot be instantiated directly.
-
-### 10. What is an abstract method, and why must a concrete child class implement it?
-
-An abstract method defines required behavior without providing an implementation. A concrete derived class must provide its implementation.
-
-### 11. What is the purpose of the `base` keyword in inheritance and constructor chaining?
-
-`base` is used to access base-class members and call a base-class constructor.
-
-```csharp
-: base(name, health)
-```
-
-### 12. What is the purpose of the `this` keyword in constructor chaining?
-
-`this(...)` calls another constructor in the same class.
-
-```csharp
-: this(name, health, "Fire", 500)
-```
-
-### 13. What is the difference between reference type and actual object type in polymorphism?
-
-Example:
-
-```csharp
-CreatureBaseClass baseClass =
-    new DragonChildClass(...);
-```
-
-Here:
-
-```text
-Reference Type → CreatureBaseClass
-Actual Object  → DragonChildClass
-```
-
-The reference type controls accessible members, while runtime dispatch uses the actual object for overridden virtual members.
-
-### 14. Why can the return type alone not be used to overload a method?
-
-Overload resolution is based on the parameter signature, not only the return type.
-
-### 15. Why can a base-class reference point to a child-class object, but a child-class reference cannot directly point to a base-class object?
-
-Every derived object is also an instance of its base type, so upcasting is valid.
-
-Not every base object is an instance of the derived type, so downcasting is not always safe.
-
-### 16. What is an abstract method, and how does it force a concrete child class to provide an implementation?
-
-An abstract method has no implementation in the base class. A concrete derived class must override it.
-
-### 17. What is interface polymorphism, and how can dispatch work through an interface reference without a shared base class?
-
-An interface reference can point to different implementing objects. Each implementation can provide its own behavior for the same interface member.
-
-### 18. What is operator overloading, and why is it considered compile-time polymorphism?
-
-Operator overloading allows operators such as `+`, `-`, or `==` to have custom behavior for user-defined types. The compiler selects the appropriate operator based on operand types.
-
-### 19. What is a sealed override, and why can a further derived class not override it again?
-
-A method can be declared:
-
-```csharp
-public sealed override void Speak()
-{
-}
-```
-
-A further derived class can inherit the method but cannot override it again.
-
-### 20. What is the difference between overridden, abstract, and interface members versus hidden (`new`) and static members when determining which implementation is executed?
-
-- `override` participates in runtime polymorphism.
-- `abstract` requires a concrete derived class to provide an implementation.
-- Interface members provide a contract for implementing types.
-- `new` hides a member and is selected based on the reference type.
-- Static members belong to the type and are not overridden through normal instance polymorphism.
-
----
-
-# Important Missing Points
-
-- The source includes interface polymorphism, operator overloading, and sealed overrides as interview topics, but does not provide code demonstrations for them.
-- The source directly demonstrates constructor chaining, overloading, overriding, method hiding, upcasting, downcasting, `is`, and `as`.

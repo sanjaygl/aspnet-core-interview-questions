@@ -1,4 +1,5 @@
 ﻿using OOP_Concepts.Abstraction;
+using OOP_Concepts.PolymorphismMastery;
 
 namespace OOP_Concepts
 {
@@ -11,6 +12,9 @@ namespace OOP_Concepts
 
             DerivedImplementationExample derivedImplementationExample = new DerivedImplementationExample();
             Console.WriteLine(derivedImplementationExample.Print("Hello Abstract"));
+
+            PolymorphismRunner.RunFullDemonstration();
+            PolyRunner.Run();
 
             Console.ReadLine();
         }
