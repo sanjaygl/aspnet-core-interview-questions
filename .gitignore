@@ -1,6 +1,8 @@
 ﻿################################################################################
 # This .gitignore file was automatically created by Microsoft(R) Visual Studio.
 ################################################################################
+**/bin/
+**/obj/
 
 /.vs
 /src/.vs
@@ -61,3 +63,6 @@ src/API/obj/Debug/net8.0/ref/API.dll
 src/API/obj/Debug/net8.0/refint/API.dll
 /src/AccessModifiers/obj
 *.tmp
+# .NET build output
+src/OOP-Concepts/bin/
+src/OOP-Concepts/obj/
