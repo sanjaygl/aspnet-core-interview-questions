@@ -18,6 +18,7 @@ namespace OOP_CSharp_Concepts
             // YieldRunner.Run();
 
             DelegateRunner.Run();
+            EqualOperator.Run();
 
             Console.ReadLine();
         }
