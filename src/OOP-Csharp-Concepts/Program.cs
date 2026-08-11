@@ -15,7 +15,9 @@ namespace OOP_CSharp_Concepts
             //PolymorphismRunner.RunFullDemonstration();
             //PolyRunner.Run();
 
-            YieldRunner.Main();
+            // YieldRunner.Run();
+
+            DelegateRunner.Run();
 
             Console.ReadLine();
         }

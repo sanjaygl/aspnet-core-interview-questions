@@ -49,3 +49,9 @@ To create standard, strongly-typed custom middleware, you must follow these step
 **AddTransient** : AddTransient object is created at every injection, we can use AddTransient for logical operation where we don't need to keep the state of object.
  
 **Ref** [DependencyInjection-Complete-Guide](ASP.NETCore\DependencyInjection-Complete-Guide.md)
+
+## What is delegate?
+**A.** A delegate is a type safe function pointer, it can point to multiple methods which have same signature.
+
+**Ref** [Delegates](../src/OOP-Csharp-Concepts/Delegate.cs)
+

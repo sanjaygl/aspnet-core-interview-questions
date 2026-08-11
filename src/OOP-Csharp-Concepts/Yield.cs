@@ -27,7 +27,7 @@ namespace OOP_CSharp_Concepts
 
     public class YieldRunner
     {
-        public static void Main()
+        public static void Run()
         {
             var demo = new YieldBasics();
 
