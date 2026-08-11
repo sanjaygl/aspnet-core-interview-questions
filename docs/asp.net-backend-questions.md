@@ -55,3 +55,49 @@ To create standard, strongly-typed custom middleware, you must follow these step
 
 **Ref** [Delegates](../src/OOP-Csharp-Concepts/Delegate.cs)
 
+## What are the differences between Func, Action, and Predicate?
+**A.** Func, Action, and Predicate are built-in generic delegates in C#.
+
+A **Func** is a built-in delegate that points to a method that must return a value. The final generic type parameter always specifies the return type.
+  ```csharp
+  Func<int, int, int> add = (a, b) => a + b;
+  int result = add(5, 3); // Returns 8
+  ```
+An **Action** is a built-in delegate that points to a method that returns `void` (no value).
+  ```csharp
+  Action<string> log = message => Console.WriteLine(message);
+  log("Hello World"); // Prints "Hello World" to the console
+  ```
+A **Predicate** is a specialized, semantic wrapper around `Func<T, bool>`. It always takes exactly one input parameter and always returns a boolean value (`true` or `false`).
+  ```csharp
+  Predicate<int> isPositive = num => num > 0;
+  bool check = isPositive(-5); // Returns false
+  ```
+## What is reflection?
+**A.** Reflection is a C# feature that allows a program to inspect, metadata-analyze and dynamically interact with its own code at runtime.
+
+**Ref** [Reflection—Interview Q&A](CSharp\Reflection—Interview.md)
+
+## What is the difference between IEnumerable and IQueryable?
+**A.** 
+**IEnumerable**: Loads the entire dataset into your app memory first, then applies filters like Where or OrderBy. Best for local collections like List or arrays.
+**IQueryable**: Translates your query commands into native database code (like SQL). It fetches only the matching data back, making it much faster for large databases.
+
+**Ref** [IEnumerable-vs-IQueryable—Interview Q&A](CSharp\IEnumerable-vs-IQueryable—Interview.md)
+
+## What is the default access modifier of Class, Interface and Variable etc?
+**A.** Class-internal
+Interface-public
+variable-private
+
+## What is the difference between Const and Readonly?
+Const is only set value when we initialize the value;
+Readonly, we can value set value in constructor.
+
+**Ref** [const vs readonly vs static — Interview Q&A](CSharp\const-vs-readonly-vs-static—Interview.md)
+
+## What is the difference of Array vs ArrayList vs Dictionary?
+**Ref** [Array vs ArrayList vs Dictionary — Interview Q&A](CSharp\Array-vs-ArrayList-vs-Dictionary—Interview.md)
+
+## What is SOLID Principle? What happens if we not follow or miss any SOLID principle?
+**Ref** [SOLID-Design-Principles-Introduction](solid-principles\SOLID-Design-Principles-Introduction.md)
