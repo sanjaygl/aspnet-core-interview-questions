@@ -127,3 +127,18 @@ A. For strings, both == and Equals() compare values (content) because string ove
 For reference types (custom objects), both == and Equals() compare references by default, unless Equals() and/or == are explicitly overridden.
 
 Ref [== and .equal operator](../src/OOP-Csharp-Concepts/EqualOperator.cs)
+
+## How to handle deadlock?
+Ref [Deadlocks—Interview](CSharp\Deadlocks—Interview.md)
+
+## What is Resilience and how is it implemented in ASP.NET Core?
+A. Resilience is the ability of an application to handle temporary failures and recover gracefully without bringing down the entire system. In ASP.NET Core, resilience can be implemented using strategies such as retry, timeout, circuit breaker, fallback, and rate limiting. For HTTP communication, we can use ASP.NET Core's resilience support with HttpClient to configure these policies.
+
+## What is scalability and how do you handle scalability in ASP.NET Core?
+A. Scalability is the ability of an application to handle increasing workload, users, or requests while maintaining acceptable performance. In ASP.NET Core, I handle scalability mainly through horizontal scaling with multiple stateless API instances behind a load balancer, caching, asynchronous I/O, database optimization, background processing, and rate limiting.
+
+## What is the difference between an interface and an abstract class? Can both have constructors? Can we create instances of an interface or an abstract class?
+Ref. [Abstraction](../src/OOP-Csharp-Concepts/Abstraction.md)
+
+## What are async and await in C#? Why do we use them? How are they different from multithreading?
+Ref. [async-await — Interview Q&A](ASP.NETCore\async-await—Interview.md)
