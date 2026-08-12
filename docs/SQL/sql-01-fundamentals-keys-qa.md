@@ -68,15 +68,24 @@ SELECT CustomerId FROM StoreOrders;   -- all rows kept, faster
 "SQL is written as `SELECT ... FROM ... WHERE ... GROUP BY ... HAVING ... ORDER BY`, but that's not the order it actually executes in. The real logical order is: `FROM` (and `JOIN`s) → `WHERE` → `GROUP BY` → `HAVING` → `SELECT` → `ORDER BY`. That's why you can't reference a column alias defined in `SELECT` inside the `WHERE` clause — `WHERE` runs before `SELECT` has even been evaluated."
 
 ```sql
-SELECT DepartmentId, COUNT(*) AS EmpCount
-FROM Employees
-WHERE IsActive = 1
-GROUP BY DepartmentId
-HAVING COUNT(*) > 5
-ORDER BY EmpCount DESC;
+SELECT DISTINCT                  -- 6. Keep only unique customer IDs
+    c.customer_id, 
+    c.customer_name, 
+    SUM(o.order_amount) AS total_spent
+FROM 
+    customers c                  -- 1. Grab the primary table
+INNER JOIN 
+    orders o ON c.customer_id = o.customer_id  -- 1b. Join the secondary table
+WHERE 
+    o.order_date >= '2026-01-01' -- 2. Filter out old orders first
+GROUP BY 
+    c.customer_id, c.customer_name -- 3. Group rows by customer
+HAVING 
+    SUM(o.order_amount) > 1000   -- 4. Keep only big-spending groups
+ORDER BY 
+    total_spent DESC             -- 7. Sort from highest spender to lowest
+LIMIT 5;                         -- 8. Bring back only the top 5 rows
 
--- Logical order: FROM -> WHERE -> GROUP BY -> HAVING -> SELECT -> ORDER BY
--- This is also why "WHERE EmpCount > 5" would fail — EmpCount doesn't exist yet at that stage
 ```
 
 **Where this comes up:** explains a lot of "why doesn't this compile" questions — aliases from `SELECT` are only usable in `ORDER BY` (which runs last), never in `WHERE`/`GROUP BY`/`HAVING`.

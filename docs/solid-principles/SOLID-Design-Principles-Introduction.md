@@ -1,5 +1,7 @@
 # SOLID Design Principles Introduction
 
+Reference: [Solid Design Principles
+](https://csharp-video-tutorials.blogspot.com/2018/01/solid-design-principles.html)
 ## Introduction to SOLID
 
 SOLID is an acronym for five design principles that help developers build robust, maintainable, and scalable software. These principles are especially critical in large-scale . NET and ASP. NET Core applications, where code quality, testability, and long-term maintainability are paramount.
