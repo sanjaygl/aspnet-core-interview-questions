@@ -3,17 +3,8 @@ using API.Middleware;
 using Microsoft.AspNetCore.RateLimiting;
 using System.Threading.RateLimiting;
 
-// QUESTION 1:
-// What is WebApplication.CreateBuilder(args)?
-// It creates the WebApplicationBuilder used to configure application services, configuration, logging, environment, and the web server.
 var builder = WebApplication.CreateBuilder(args);
 
-// QUESTION 2:
-// What is builder.Services?
-// It is the IServiceCollection used to register services in the Dependency Injection container.
-// QUESTION 3:
-// What is AddControllers()?
-// It registers the services required for controller-based APIs and enables ASP.NET Core to discover and execute controller actions.
 builder.Services.AddControllers();
 
 // QUESTION 4:
