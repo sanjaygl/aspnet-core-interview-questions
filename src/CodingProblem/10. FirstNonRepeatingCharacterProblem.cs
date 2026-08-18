@@ -16,26 +16,21 @@
             if (string.IsNullOrEmpty(input))
                 return null;
 
-            var unique = new List<char>();
-            var repeated = new HashSet<char>();
-
+            // Step 1: Count frequencies
+            var charCounts = new Dictionary<char, int>();
             foreach (char c in input)
             {
-                if (repeated.Contains(c))
-                    continue;
-
-                if (unique.Contains(c))
-                {
-                    unique.Remove(c);
-                    repeated.Add(c);
-                }
-                else
-                {
-                    unique.Add(c);
-                }
+                charCounts[c] = charCounts.GetValueOrDefault(c, 0) + 1;
             }
 
-            return unique.Count > 0 ? unique[0] : (char?)null;
+            // Step 2: Find the first unique character
+            foreach (char c in input)
+            {
+                if (charCounts[c] == 1)
+                    return c;
+            }
+
+            return null;
         }
     }
 }
