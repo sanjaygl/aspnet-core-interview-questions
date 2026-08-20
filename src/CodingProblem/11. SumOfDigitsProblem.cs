@@ -19,8 +19,8 @@
 
             while (number > 0)
             {
-                sum += number % 10;
-                number /= 10;
+                sum += number % 10; // it returns reminder
+                number /= 10; // it returns  quotient
             }
 
             return sum;
