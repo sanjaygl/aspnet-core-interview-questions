@@ -15,7 +15,7 @@ namespace API.Controllers
             _orderService = orderService;
         }
 
-        [HttpGet("All")]
+        [HttpGet("all")]
         public async Task<ActionResult> GetAsync()
         {
             var orders = await _orderService.GetAllOrdersAsync();

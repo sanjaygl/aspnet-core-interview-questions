@@ -1,11 +1,13 @@
 using API.Extensions;
-using API.Middleware;
+using API.Midsdleware;
+using API.Options;
 using Microsoft.AspNetCore.RateLimiting;
 using System.Threading.RateLimiting;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
+builder.Services.AddJwtAuthentication(builder.Configuration);
 builder.Services.AddServices();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -21,6 +23,7 @@ builder.Services.AddRateLimiter(options =>
     options.RejectionStatusCode = StatusCodes.Status429TooManyRequests;
 });
 
+builder.Services.Configure<JwtOptions>(builder.Configuration.GetSection(JwtOptions.SectionName));
 
 var app = builder.Build();
 if (app.Environment.IsDevelopment())
@@ -28,10 +31,10 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-
-app.UseMiddleware<CustomMiddleware>();
-app.UseRateLimiter();
 app.UseHttpsRedirection();
+app.UseRateLimiter();
+app.UseAuthentication();
 app.UseAuthorization();
+app.UseMiddleware<CustomMiddleware>();
 app.MapControllers();
 app.Run();

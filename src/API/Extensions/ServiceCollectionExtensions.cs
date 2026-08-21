@@ -1,3 +1,5 @@
+using API.Services.Identity.Models;
+using Microsoft.AspNetCore.Identity;
 using System.Reflection;
 
 namespace API.Extensions
@@ -19,9 +21,11 @@ namespace API.Extensions
                 var iface = impl.GetInterface(ifaceName);
                 if (iface != null)
                 {
-                    services.AddTransient(iface, impl);
+                    services.AddScoped(iface, impl);
                 }
             }
+
+            services.AddScoped<PasswordHasher<UserModel>>();
 
             return services;
         }
