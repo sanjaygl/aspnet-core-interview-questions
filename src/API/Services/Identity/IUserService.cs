@@ -1,3 +1,5 @@
+using API.Models;
+
 namespace API.Services.Identity;
 public interface IUserService
 {

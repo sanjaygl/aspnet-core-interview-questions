@@ -1,4 +1,4 @@
-namespace API.Services.Identity;
+namespace API.Models;
 
 public record RegisterRequest(string Username, string Email, string Password);
 public record LoginRequest(string Username, string Password);

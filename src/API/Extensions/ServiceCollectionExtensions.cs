@@ -1,3 +1,4 @@
+using API.Database.Entities;
 using API.Services.Identity.Models;
 using Microsoft.AspNetCore.Identity;
 using System.Reflection;
@@ -13,19 +14,23 @@ namespace API.Extensions
             assembly ??= Assembly.GetExecutingAssembly();
 
             var types = assembly.GetTypes()
-                .Where(t => t.IsClass && !t.IsAbstract);
+                .Where(t =>
+                    t.IsClass &&
+                    !t.IsAbstract &&
+                    !t.IsGenericTypeDefinition);
 
             foreach (var impl in types)
             {
                 var ifaceName = "I" + impl.Name;
                 var iface = impl.GetInterface(ifaceName);
+
                 if (iface != null)
                 {
                     services.AddScoped(iface, impl);
                 }
             }
 
-            services.AddScoped<PasswordHasher<UserModel>>();
+            services.AddScoped<PasswordHasher<User>>();
 
             return services;
         }

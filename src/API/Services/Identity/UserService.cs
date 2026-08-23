@@ -1,5 +1,7 @@
+using API.Database.Entities;
+using API.Models;
+using API.Repositories.Users;
 using API.Services.Auth;
-using API.Services.Identity.Models;
 using Microsoft.AspNetCore.Identity;
 using System.IdentityModel.Tokens.Jwt;
 
@@ -7,20 +9,23 @@ namespace API.Services.Identity;
 
 public class UserService : IUserService
 {
+    private readonly IUserRepository _userRepository;
     private readonly ITokenService _tokenService;
-    private readonly PasswordHasher<UserModel> _passwordHasher;
+    private readonly PasswordHasher<User> _passwordHasher;
 
     public UserService(
+        IUserRepository userRepository,
         ITokenService tokenService,
-        PasswordHasher<UserModel> passwordHasher)
+        PasswordHasher<User> passwordHasher)
     {
+        _userRepository = userRepository;
         _tokenService = tokenService;
         _passwordHasher = passwordHasher;
     }
 
     public async Task<AuthResponse> LoginAsync(LoginRequest loginRequest)
     {
-        var user = UserMockDatabase.Users.FirstOrDefault(u => u.Username.ToLower() == loginRequest.Username.ToLower());
+        var user = await _userRepository.GetByUsernameAsync(loginRequest.Username);
         if (user == null)
         {
             return new AuthResponse(false, "Invalid username and password.");
@@ -32,33 +37,34 @@ public class UserService : IUserService
             return new AuthResponse(false, "Invalid username and password.");
         }
 
-        var accessToken = _tokenService.GenerateToken(user.Username, user.Email, user.Role);
-        var refreshToken = _tokenService.GenerateRefreshToken();
+        var accessToken = await _tokenService.GenerateToken(user.UserName, user.Email, user.Role.Name);
+        var refreshToken = await _tokenService.GenerateRefreshToken();
 
-        user.RefreshToken = refreshToken;
-        user.RefreshTokenExpiryTime = DateTime.UtcNow.AddDays(7);
+        user.UserSession.RefreshToken = refreshToken;
+        user.UserSession.RefreshTokenExpiryTime = DateTime.UtcNow.AddDays(7);
 
         return new AuthResponse(true, "Login successful!", accessToken, refreshToken);
     }
 
     public async Task<AuthResponse> RegisterAsync(RegisterRequest registerRequest)
     {
-        var userExist = UserMockDatabase.Users.Any(u => u.Username.ToLower() == registerRequest.Username.ToLower());
+        var userExist = await _userRepository.ExistsAsync(registerRequest.Username, registerRequest.Email);
         if (userExist)
         {
             return new AuthResponse(false, "Username is already taken");
         }
 
-        var newUser = new UserModel
+        var newUser = new User
         {
-            Username = registerRequest.Username,
+            UserName = registerRequest.Username,
             Email = registerRequest.Email,
-            Role = "User"
+            RoleId = 2
         };
 
         newUser.PasswordHash = _passwordHasher.HashPassword(newUser, registerRequest.Password);
 
-        UserMockDatabase.Users.Add(newUser);
+        await _userRepository.AddAsync(newUser);
+        await _userRepository.SaveChangesAsync();
 
         return new AuthResponse(true, "User registerd successfully!");
     }
@@ -80,17 +86,20 @@ public class UserService : IUserService
         var username = jwtToken.Claims.FirstOrDefault(c => c.Type == "unique_name" || c.Type == System.Security.Claims.ClaimTypes.Name)?.Value;
         if (string.IsNullOrEmpty(username)) return new AuthResponse(false, "Invalid access token data.");
 
-        var user = UserMockDatabase.Users.FirstOrDefault(u => u.Username.ToLower() == username.ToLower());
-        if (user == null) return new AuthResponse(false, "User does not exist.");
+        var user = await _userRepository.GetByUsernameAsync(username);
+        if (user == null)
+        {
+            return new AuthResponse(false, "User does not exist.");
+        }
 
-        if (user.RefreshToken != request.RefreshToken) return new AuthResponse(false, "Invalid refresh token.");
-        if (user.RefreshTokenExpiryTime <= DateTime.UtcNow) return new AuthResponse(false, "Refresh token has expired.");
+        if (user.UserSession.RefreshToken != request.RefreshToken) return new AuthResponse(false, "Invalid refresh token.");
+        if (user.UserSession.RefreshTokenExpiryTime <= DateTime.UtcNow) return new AuthResponse(false, "Refresh token has expired.");
 
-        var newAccessToken = _tokenService.GenerateToken(user.Username, user.Email, user.Role);
-        var newRefreshToken = _tokenService.GenerateRefreshToken();
+        var newAccessToken = await _tokenService.GenerateToken(user.UserName, user.Email, user.Role.Name);
+        var newRefreshToken = await _tokenService.GenerateRefreshToken();
 
-        user.RefreshToken = newRefreshToken;
-        user.RefreshTokenExpiryTime = DateTime.UtcNow.AddDays(7);
+        user.UserSession.RefreshToken = newRefreshToken;
+        user.UserSession.RefreshTokenExpiryTime = DateTime.UtcNow.AddDays(7);
 
         return new AuthResponse(true, "Tokens refreshed successfully!", newAccessToken, newRefreshToken);
     }

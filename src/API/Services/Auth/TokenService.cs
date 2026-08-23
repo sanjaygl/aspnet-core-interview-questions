@@ -21,7 +21,7 @@ namespace API.Services.Auth
             _jwtOptions = options.Value;
         }
 
-        public string GenerateToken(string username, string email, string role)
+        public Task<string> GenerateToken(string username, string email, string role)
         {
             if (string.IsNullOrEmpty(_jwtOptions.SecretKey))
             {
@@ -47,15 +47,15 @@ namespace API.Services.Auth
                 signingCredentials: credentials
                 );
 
-            return new JwtSecurityTokenHandler().WriteToken(token);
+            return Task.FromResult(new JwtSecurityTokenHandler().WriteToken(token));
         }
 
-        public string GenerateRefreshToken()
+        public Task<string> GenerateRefreshToken()
         {
             var randomNumber = new byte[64];
             using var rng = RandomNumberGenerator.Create();
             rng.GetBytes(randomNumber);
-            return Convert.ToBase64String(randomNumber);
+            return Task.FromResult(Convert.ToBase64String(randomNumber));
         }
     }
 }

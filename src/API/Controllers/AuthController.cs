@@ -1,4 +1,5 @@
-﻿using API.Services.Identity;
+﻿using API.Models;
+using API.Services.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers

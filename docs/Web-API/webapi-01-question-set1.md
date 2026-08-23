@@ -202,3 +202,115 @@ HMACSHA256(
 )
 ```
 * **Role:** **Integrity Verification and Anti-Tampering**. If an attacker tries to change the payload text from `"role": "User"` to `"role": "Admin"`, they can easily re-encode that payload back into a Base64 string. However, because they do not know the backend's `SecretKey`, they cannot generate a matching signature hash. Your API recalculates the hash on every request, catches the discrepancy, and drops the request instantly.
+
+## 5. Entity Framework Core: Eager Loading vs Lazy Loading
+
+When retrieving entities with relationships in EF Core, how and when those related entities are loaded from the database impacts performance. The two primary strategies are **Eager Loading** and **Lazy Loading**.
+
+### Data Loading Mechanics Matrix
+
+| Strategy | Required Keyword / Method | Database Roundtrips | SQL Translation | Primary Risk | Best Used For |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| **Eager Loading** | `.Include()` / `.ThenInclude()` | Exactly **1** roundtrip | Combines data instantly via a SQL `JOIN` statement. | 🟡 Heavy payloads if over-joining data columns. | High-performance Web APIs and predictable data graphs. |
+| **Lazy Loading** | `virtual` property modifier | **1 + N** roundtrips | Fires a new `SELECT` query *every time* a property is accessed. | 💥 **N+1 Query Problem** (Server resource exhaustion). | Desktop apps or rapid prototyping with low concurrent traffic. |
+
+---
+
+### Detailed Architectural Breakdown
+
+#### Eager Loading (The Production Standard)
+Eager loading fetches related data alongside the main entity inside a single, unified database roundtrip. You explicitly define what you need using the `.Include()` extension method.
+
+```csharp
+// Single database query executed immediately
+var user = await _context.Users
+    .Include(u => u.Role)
+    .Include(u => u.UserSession)
+    .FirstOrDefaultAsync(u => u.UserName == username);
+```
+* **How it works:** EF Core translates this C# expression into a highly efficient SQL query utilizing `LEFT JOIN` or `INNER JOIN` syntax. All user, role, and session data is returned at the exact same time.
+* **Why we use it in APIs:** Web APIs must be stateless, fast, and predictable. Eager loading guarantees that all necessary relational properties are populated before the object is serialized into JSON.
+
+#### Lazy Loading (The Performance Trap)
+Lazy loading delays the retrieval of related data from the database until the navigation property is explicitly read or accessed inside your application code.
+
+```csharp
+// Class property must be marked with 'virtual'
+public virtual Role Role { get; set; }
+
+// Step 1: Queries ONLY the User table
+var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == 1);
+
+// Step 2: Relational property is read
+var roleName = user.Role.Name; // 👈 Hidden background SQL query fires here!
+```
+* **The N+1 Query Problem:** If you retrieve a list of 100 users (`1` query) and loop through them to display their role names, EF Core will silently fire a separate background query for every single loop iteration (`N` queries). This results in **101 database roundtrips** for a single HTTP request, creating massive network latency bottlenecks.
+* **Serialization Crashes:** JSON serializers (like `System.Text.Json`) recursively traverse every property of an object to convert it to a string. If they encounter `virtual` properties, they will continually trigger lazy loading database requests, leading to application hangs or a `StackOverflowException`.
+
+---
+
+### ⚠️ Critical Interview Trick Question
+
+**Question:** *"If I remove the `virtual` keyword and do not use `.Include()`, but I still need to load data later under specific conditions to avoid huge joins, what third alternative loading pattern does EF Core offer?"*
+
+**Answer:** **Explicit Loading.** You can leave your entities clean (no `virtual` keywords) and selectively load relations on demand later in your execution block using the `_context.Entry()` metadata tracking API. This is highly efficient because it keeps queries isolated without the performance risks of lazy loading.
+```csharp
+// Explicitly load the Role table only if a specific business condition is met
+await _context.Entry(user).Reference(u => u.Role).LoadAsync();
+```
+## 6. Query Execution: IEnumerable<T> vs IQueryable<T>
+
+When querying data using LINQ in .NET Core, using the wrong interface can cause severe performance issues by accidentally pulling entire database tables into server memory.
+
+### Technical Comparison Matrix
+
+| Feature | IEnumerable<T> | IQueryable<T> |
+| :--- | :--- | :--- |
+| **Execution Site** | 🖥️ **In-Memory (Client-Side)** | 🗄️ **Database (Server-Side)** |
+| **Data Filter Timing** | Pulls **all records** first, then filters in RAM. | Filters records **inside the database** before fetching. |
+| **SQL Translation** | Translates simple `SELECT *` without filters. | Translates your entire LINQ chain into a highly optimized SQL query. |
+| **Best Used For** | In-memory collections (Lists, Arrays) or post-query processing. | Querying out-of-memory data stores (SQL Server, PostgreSQL via EF Core). |
+
+---
+
+### Detailed Architectural Breakdown
+
+#### IQueryable<T> (Server-Side Filtering)
+`IQueryable<T>` is designed to evaluate queries against an external data source. It stores the query instructions as an **Expression Tree** (a data structure representing the logic of your code) rather than executing it immediately.
+
+```csharp
+// Returns an IQueryable<User>. No SQL has been sent to PostgreSQL yet.
+IQueryable<User> query = _context.Users.Where(u => u.Role.Name == "Admin");
+
+// SQL is generated and executed ONLY when the collection is iterated or materialized
+var admins = await query.ToListAsync();
+```
+* **SQL Translation:** EF Core looks at the Expression Tree and generates clean SQL with a `WHERE` clause:
+  ```sql
+  SELECT * FROM "User" WHERE "RoleName" = 'Admin';
+  ```
+* **Performance Impact:** Only the matching rows travel across the network from your database to your API server, keeping memory usage exceptionally low.
+
+#### IEnumerable<T> (Client-Side Filtering)
+`IEnumerable<T>` is designed for forward-only iteration over in-memory collections. If you cast an EF Core database query to `IEnumerable<T>` before applying your filters, you completely break database-side execution.
+
+```csharp
+// 🚨 CRITICAL PERFORMANCE BUG: Casts to IEnumerable first
+IEnumerable<User> query = _context.Users.AsEnumerable();
+
+// Filter is executed in the web server's RAM memory, NOT the database!
+var admins = query.Where(u => u.Role.Name == "Admin").ToList();
+```
+* **SQL Translation:** EF Core is forced to generate a completely unfiltered query:
+  ```sql
+  SELECT * FROM "User";
+  ```
+* **Performance Impact:** If your database table contains 10 million rows, **all 10 million rows are downloaded** across the network into your API server's RAM. The server then manually loops through every single record to discard non-admins. This triggers immediate resource exhaustion, high network latency, and memory starvation crashes.
+
+---
+
+### ⚠️ Critical Interview Trick Question
+
+**Question:** *"If I write a custom repository method that returns an `IQueryable<User>`, allowing developers to keep chaining `.Where()` filters onto it in their services, what architectural problem could this introduce?"*
+
+**Answer:** **Leaking Database Invasiveness.** While returning `IQueryable<T>` allows for flexible filtering, it breaks the Separation of Concerns principle of the Repository Pattern. It allows database connection strings and transaction logic to leak into your business services layer. If a service materializes the `IQueryable` (e.g., calls `.ToList()`) outside the scope of an active DbContext, it will trigger an immediate runtime exception. The best practice is to return `IEnumerable<T>` or `IReadOnlyList<T>` from repositories to ensure queries are safely executed inside the data layer.

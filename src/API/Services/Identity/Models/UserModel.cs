@@ -10,9 +10,3 @@ public class UserModel
     public string RefreshToken { get; set; } = string.Empty;
     public DateTime RefreshTokenExpiryTime { get; set; }
 }
-
-// Simple thread-safe in-memory store for testing
-public static class UserMockDatabase
-{
-    public static List<UserModel> Users { get; } = new();
-}
