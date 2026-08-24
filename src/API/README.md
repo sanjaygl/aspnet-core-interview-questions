@@ -27,7 +27,7 @@ Clone the repository and move into the API directory:
 
 ```bash
 git clone <repository-url>
-cd Demo_NET_API
+cd src/API
 ```
 
 Restore dependencies:
