@@ -26,7 +26,7 @@ namespace API.Controllers
                 return Unauthorized(new { Message = result.Message });
             }
 
-            return Ok(new { Message = result.Message, Token = result.AccessToken, result.RefreshToken });
+            return Ok(new { Message = result.Message });
         }
 
         [HttpPost("register")]
@@ -43,9 +43,9 @@ namespace API.Controllers
         }
 
         [HttpPost("refresh")]
-        public async Task<IActionResult> Refresh([FromBody] TokenRequest request)
+        public async Task<IActionResult> Refresh()
         {
-            var result = await _userService.RefreshTokenAsync(request);
+            var result = await _userService.RefreshTokenAsync();
 
             if (!result.Success)
             {
@@ -55,8 +55,6 @@ namespace API.Controllers
             return Ok(new
             {
                 Message = result.Message,
-                AccessToken = result.AccessToken,
-                RefreshToken = result.RefreshToken
             });
         }
     }

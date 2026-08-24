@@ -1,7 +1,19 @@
-<main class="main">
-  <div class="content">
-    {{title}}
-  </div>
-</main>
+<div style="padding: 30px; font-family: sans-serif;">
+      <h2>🧠 Pure Cookie Token Verification Dashboard</h2>
+      <hr />
 
-<router-outlet />
+      <div style="margin-bottom: 20px;">
+        <h3>1. Authentication</h3>
+        <button (click)="onLogin()" style="padding: 8px; background: green; color: white;">Log In as Admin</button>
+      </div>
+
+      <div style="margin-bottom: 20px;">
+        <h3>2. Business Action</h3>
+        <button (click)="fetchOrders()" style="padding: 10px; background: blue; color: white;">Fetch My Orders</button>
+      </div>
+
+      <div *ngIf="logs" style="padding: 15px; background: #e9ecef;">
+        <h4>📊 Operations Console Log:</h4>
+        <pre>{{ logs | json }}</pre>
+      </div>
+    </div>

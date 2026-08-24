@@ -9,3 +9,5 @@ public record AuthResponse(bool Success, string Message, string? AccessToken = n
 public record OrderResponse(bool IsSuccess, string Message, Order? Data = null);
 public record ProductDto(int Id, string Name, string Description, decimal Price, int StockQuantity);
 public record CreateProductDto(string Name, string Description, decimal Price, int StockQuantity);
+public record ErrorDetails(int StatusCode, string Message, string? Details = null);
+

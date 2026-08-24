@@ -1,4 +1,4 @@
-﻿namespace API.Midsdleware
+﻿namespace API.Middleware
 {
     // Middleware is a component in the HTTP request pipeline that can inspect, modify, or handle the request and response.
     public class CustomMiddleware

@@ -1,4 +1,5 @@
-﻿using API.Services.Orders;
+﻿using API.Extensions;
+using API.Services.Orders;
 using API.Services.Orders.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -20,7 +21,7 @@ public class OrderController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> CreateOrder([FromBody] CreateOrderDto dto)
     {
-        var username = User.Identity?.Name;
+        var username = User.GetUsername();
         if (string.IsNullOrEmpty(username))
         {
             return Unauthorized(new { Message = "User identity context missing." });
@@ -31,7 +32,7 @@ public class OrderController : ControllerBase
 
         if (!result.IsSuccess)
         {
-            return BadRequest(new { Message = result.Message });
+            return BadRequest(new { result.Message });
         }
 
         return CreatedAtAction(nameof(GetUserOrders), new { id = result.Data!.Id }, result.Data);
@@ -40,7 +41,7 @@ public class OrderController : ControllerBase
     [HttpGet("my-orders")]
     public async Task<IActionResult> GetUserOrders()
     {
-        var username = User.Identity?.Name;
+        var username = User.GetUsername();
         if (string.IsNullOrEmpty(username)) return Unauthorized();
 
         var orders = await _orderService.GetUserOrdersAsync(username);

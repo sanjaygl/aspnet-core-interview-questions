@@ -5,5 +5,5 @@ public interface IUserService
 {
     Task<AuthResponse> LoginAsync(LoginRequest loginRequest);
     Task<AuthResponse> RegisterAsync(RegisterRequest registerRequest);
-    Task<AuthResponse> RefreshTokenAsync(TokenRequest request);
+    Task<AuthResponse> RefreshTokenAsync();
 }
