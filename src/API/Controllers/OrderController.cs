@@ -1,116 +1,49 @@
-﻿using API.Models;
-using API.Services.Order;
-using API.Services.Order.Models;
+﻿using API.Services.Orders;
+using API.Services.Orders.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace API.Controllers
+namespace API.Controllers;
+
+[ApiController]
+[Route("api/[controller]")]
+[Authorize]
+public class OrderController : ControllerBase
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class OrderController : ControllerBase
+    private readonly IOrderService _orderService;
+
+    public OrderController(IOrderService orderService)
     {
-        private readonly IOrderService _orderService;
-        public OrderController(IOrderService orderService)
+        _orderService = orderService;
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> CreateOrder([FromBody] CreateOrderDto dto)
+    {
+        var username = User.Identity?.Name;
+        if (string.IsNullOrEmpty(username))
         {
-            _orderService = orderService;
+            return Unauthorized(new { Message = "User identity context missing." });
         }
 
-        [HttpGet("all")]
-        public async Task<ActionResult> GetAsync()
+        // Delegate all evaluation processing down to the business service layer
+        var result = await _orderService.CreateOrderAsync(dto, username);
+
+        if (!result.IsSuccess)
         {
-            var orders = await _orderService.GetAllOrdersAsync();
-
-            if (orders == null || !orders.Any())
-            {
-                return NotFound();
-            }
-
-            return Ok(orders);
+            return BadRequest(new { Message = result.Message });
         }
 
-        [HttpGet("{orderid}")]
-        public async Task<ActionResult> GetByIdAsync([FromRoute] long orderId)
-        {
-            var order = await _orderService.GetOrderByIdAsync(orderId);
+        return CreatedAtAction(nameof(GetUserOrders), new { id = result.Data!.Id }, result.Data);
+    }
 
-            if (order == null)
-            {
-                return NotFound();
-            }
+    [HttpGet("my-orders")]
+    public async Task<IActionResult> GetUserOrders()
+    {
+        var username = User.Identity?.Name;
+        if (string.IsNullOrEmpty(username)) return Unauthorized();
 
-            return Ok(order);
-        }
-
-        [HttpPost("create")]
-        public async Task<ActionResult> CreateAsync([FromBody] OrderCreateRequest request)
-        {
-            if (request == null)
-            {
-                return BadRequest("Invalid order data.");
-            }
-
-            OrderCreateDto orderCreateDto = new OrderCreateDto
-            {
-                OrderId = request.OrderId,
-                CustomerId = request.CustomerId,
-                OrderDate = request.OrderDate,
-                TotalAmount = request.TotalAmount
-            };
-
-            var createdOrder = await _orderService.CreateOrderAsync(orderCreateDto);
-
-            if (createdOrder == null)
-            {
-                return BadRequest("Failed to create order.");
-            }
-
-            return CreatedAtAction(nameof(GetByIdAsync), new { id = createdOrder.OrderId }, createdOrder);
-        }
-
-        [HttpPost("delete")]
-        public async Task<ActionResult> DeleteAsync([FromQuery] long id)
-        {
-            if (id <= 0)
-            {
-                return BadRequest("Invalid order ID.");
-            }
-
-            var existingOrder = await _orderService.GetOrderByIdAsync(id);
-            if (existingOrder == null)
-            {
-                return NotFound();
-            }
-            await _orderService.DeleteOrderAsync(id);
-            return NoContent();
-        }
-
-        [HttpPut("update/{id}")]
-        public async Task<ActionResult> UpdateAsync([FromRoute] long id, [FromBody] OrderUpdateRequest request)
-        {
-            if (id <= 0)
-            {
-                return BadRequest("Invalid order ID.");
-            }
-
-            if (request == null)
-            {
-                return BadRequest("Invalid order data.");
-            }
-
-            var existingOrder = await _orderService.GetOrderByIdAsync(id);
-            if (existingOrder == null)
-            {
-                return NotFound();
-            }
-
-            OrderUpdateDto orderUpdateDto = new OrderUpdateDto
-            {
-                OrderStatus = request.OrderStatus
-            };
-
-            await _orderService.UpdateOrderAsync(id, orderUpdateDto);
-
-            return NoContent();
-        }
+        var orders = await _orderService.GetUserOrdersAsync(username);
+        return Ok(orders);
     }
 }

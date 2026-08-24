@@ -9,7 +9,7 @@
 
         public int RoleId { get; set; }
 
-        public Role Role { get; set; } = null!;
-        public UserSession? UserSession { get; set; }
+        public Role Role { get; set; } = new Role();
+        public UserSession UserSession { get; set; } = new UserSession();
     }
 }

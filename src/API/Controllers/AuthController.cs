@@ -26,7 +26,7 @@ namespace API.Controllers
                 return Unauthorized(new { Message = result.Message });
             }
 
-            return Ok(new { Message = result.Message, Token = result.AccessToken });
+            return Ok(new { Message = result.Message, Token = result.AccessToken, result.RefreshToken });
         }
 
         [HttpPost("register")]

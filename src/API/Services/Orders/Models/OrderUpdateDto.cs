@@ -1,4 +1,4 @@
-namespace API.Services.Order.Models
+namespace API.Services.Orders.Models
 {
     public class OrderUpdateDto
     {
