@@ -5,7 +5,7 @@ using API.Services.Auth;
 using Microsoft.AspNetCore.Identity;
 using System.IdentityModel.Tokens.Jwt;
 
-namespace API.Services.Identity;
+namespace API.Services.Users;
 
 public class UserService : IUserService
 {

@@ -1,6 +1,6 @@
 using API.Models;
 
-namespace API.Services.Identity;
+namespace API.Services.Users;
 public interface IUserService
 {
     Task<AuthResponse> LoginAsync(LoginRequest loginRequest);

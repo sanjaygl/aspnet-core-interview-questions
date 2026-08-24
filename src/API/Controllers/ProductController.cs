@@ -1,5 +1,5 @@
 ﻿using API.Models;
-using API.Services.Product;
+using API.Services.Products;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 

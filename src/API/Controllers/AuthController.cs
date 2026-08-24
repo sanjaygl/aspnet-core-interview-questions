@@ -1,5 +1,5 @@
 ﻿using API.Models;
-using API.Services.Identity;
+using API.Services.Users;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers

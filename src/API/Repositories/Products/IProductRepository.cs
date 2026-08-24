@@ -1,6 +1,6 @@
 ﻿using API.Database.Entities;
 
-namespace API.Repositories;
+namespace API.Repositories.Products;
 
 public interface IProductRepository : IBaseRepository<Product>
 {

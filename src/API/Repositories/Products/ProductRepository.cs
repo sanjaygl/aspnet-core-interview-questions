@@ -2,7 +2,7 @@
 using API.Database.Entities;
 using Microsoft.EntityFrameworkCore;
 
-namespace API.Repositories;
+namespace API.Repositories.Products;
 
 public class ProductRepository : BaseRepository<Product>, IProductRepository
 {
