@@ -1,4 +1,5 @@
-﻿using API.Options;
+﻿using API.Constants;
+using API.Options;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
@@ -47,7 +48,7 @@ public class TokenService : ITokenService
             issuer: _jwtOptions.Issuer,
             audience: _jwtOptions.Audience,
             claims: claims,
-            expires: DateTime.UtcNow.AddMinutes(15),
+            expires: DateTime.UtcNow.AddMinutes(Constants.Constants.AccessTokenExpirationMinutes),
             signingCredentials: credentials);
 
         return Task.FromResult(

@@ -1,10 +1,9 @@
-﻿using API.Database.Entities;
-using API.Extensions;
+﻿using API.Constants;
+using API.Database.Entities;
 using API.Models;
 using API.Repositories.Users;
 using API.Services.Auth;
 using Microsoft.AspNetCore.Identity;
-using System.IdentityModel.Tokens.Jwt;
 
 namespace API.Services.Users;
 
@@ -33,26 +32,34 @@ public class UserService : IUserService
             ?? throw new InvalidOperationException("HTTP context is not available.");
 
         // Access token cookie.
-        context.Response.Cookies.Append("X-Access-Token", accessToken, new CookieOptions
-        {
-            HttpOnly = true,
-            Secure = true,
-            SameSite = SameSiteMode.None,
-            IsEssential = true,
-            Path = "/",
-            Expires = DateTimeOffset.UtcNow.AddMinutes(15)
-        });
+        context.Response.Cookies.Append(
+            Constants.Constants.AccessTokenCookie,
+            accessToken,
+            new CookieOptions
+            {
+                HttpOnly = true,
+                Secure = true,
+                SameSite = SameSiteMode.None,
+                IsEssential = true,
+                Path = "/",
+                Expires = DateTimeOffset.UtcNow.AddMinutes(
+                    Constants.Constants.AccessTokenExpirationMinutes)
+            });
 
         // Refresh token cookie.
-        context.Response.Cookies.Append("X-Refresh-Token", refreshToken, new CookieOptions
-        {
-            HttpOnly = true,
-            Secure = true,
-            SameSite = SameSiteMode.None,
-            IsEssential = true,
-            Path = "/",
-            Expires = DateTimeOffset.UtcNow.AddDays(7)
-        });
+        context.Response.Cookies.Append(
+            Constants.Constants.RefreshTokenCookie,
+            refreshToken,
+            new CookieOptions
+            {
+                HttpOnly = true,
+                Secure = true,
+                SameSite = SameSiteMode.None,
+                IsEssential = true,
+                Path = "/",
+                Expires = DateTimeOffset.UtcNow.AddDays(
+                    Constants.Constants.RefreshTokenExpirationDays)
+            });
     }
 
     public async Task<AuthResponse> LoginAsync(LoginRequest loginRequest)
@@ -63,13 +70,17 @@ public class UserService : IUserService
             return new AuthResponse(false, "Invalid username and password.");
 
         var result = _passwordHasher.VerifyHashedPassword(
-            user, user.PasswordHash, loginRequest.Password);
+            user,
+            user.PasswordHash,
+            loginRequest.Password);
 
         if (result == PasswordVerificationResult.Failed)
             return new AuthResponse(false, "Invalid username and password.");
 
         var accessToken = await _tokenService.GenerateToken(
-            user.UserName, user.Email, user.Role.Name);
+            user.UserName,
+            user.Email,
+            user.Role.Name);
 
         var refreshToken = await _tokenService.GenerateRefreshToken();
 
@@ -77,9 +88,10 @@ public class UserService : IUserService
         user.UserSession ??= new UserSession { UserId = user.Id };
 
         user.UserSession.RefreshToken = refreshToken;
-        user.UserSession.RefreshTokenExpiryTime = DateTime.UtcNow.AddDays(7);
+        user.UserSession.RefreshTokenExpiryTime = DateTime.UtcNow.AddDays(Constants.Constants.RefreshTokenExpirationDays);
 
         await _userRepository.SaveChangesAsync();
+
         SetTokenCookies(accessToken, refreshToken);
 
         return new AuthResponse(true, "Login successful!");
@@ -88,7 +100,8 @@ public class UserService : IUserService
     public async Task<AuthResponse> RegisterAsync(RegisterRequest registerRequest)
     {
         var exists = await _userRepository.ExistsAsync(
-            registerRequest.Username, registerRequest.Email);
+            registerRequest.Username,
+            registerRequest.Email);
 
         if (exists)
             return new AuthResponse(false, "Username is already taken");
@@ -101,7 +114,8 @@ public class UserService : IUserService
         };
 
         user.PasswordHash = _passwordHasher.HashPassword(
-            user, registerRequest.Password);
+            user,
+            registerRequest.Password);
 
         await _userRepository.AddAsync(user);
         await _userRepository.SaveChangesAsync();
@@ -116,52 +130,38 @@ public class UserService : IUserService
         if (request == null)
             return new AuthResponse(false, "HTTP context is not available.");
 
-        var accessToken = request.Cookies["X-Access-Token"];
-        var refreshToken = request.Cookies["X-Refresh-Token"];
+        var refreshToken = request.Cookies[Constants.Constants.RefreshTokenCookie];
 
-        if (string.IsNullOrWhiteSpace(accessToken) ||
-            string.IsNullOrWhiteSpace(refreshToken))
-            return new AuthResponse(false, "Authentication cookies are missing.");
+        if (string.IsNullOrWhiteSpace(refreshToken))
+            return new AuthResponse(false, "Refresh token is missing.");
 
-        JwtSecurityToken jwtToken;
-
-        try
-        {
-            jwtToken = new JwtSecurityTokenHandler().ReadJwtToken(accessToken);
-        }
-        catch
-        {
-            return new AuthResponse(false, "Invalid access token.");
-        }
-
-        var username = jwtToken.Claims.GetUsername();
-
-        if (string.IsNullOrWhiteSpace(username))
-            return new AuthResponse(false, "Username claim is missing from access token.");
-
-        var user = await _userRepository.GetByUsernameAsync(username);
+        // Find the user using the refresh token.
+        var user = await _userRepository.GetByRefreshTokenAsync(refreshToken);
 
         if (user?.UserSession == null)
-            return new AuthResponse(false, "User session does not exist.");
-
-        if (user.UserSession.RefreshToken != refreshToken)
             return new AuthResponse(false, "Invalid refresh token.");
 
         if (user.UserSession.RefreshTokenExpiryTime <= DateTime.UtcNow)
             return new AuthResponse(false, "Refresh token has expired.");
 
         var newAccessToken = await _tokenService.GenerateToken(
-            user.UserName, user.Email, user.Role.Name);
+            user.UserName,
+            user.Email,
+            user.Role.Name);
 
-        var newRefreshToken = await _tokenService.GenerateRefreshToken();
+        var newRefreshToken =
+            await _tokenService.GenerateRefreshToken();
 
         // Rotate the refresh token.
         user.UserSession.RefreshToken = newRefreshToken;
-        user.UserSession.RefreshTokenExpiryTime = DateTime.UtcNow.AddDays(7);
+        user.UserSession.RefreshTokenExpiryTime = DateTime.UtcNow.AddDays(Constants.Constants.RefreshTokenExpirationDays);
 
         await _userRepository.SaveChangesAsync();
+
         SetTokenCookies(newAccessToken, newRefreshToken);
 
-        return new AuthResponse(true, "Tokens refreshed successfully!");
+        return new AuthResponse(
+            true,
+            "Tokens refreshed successfully!");
     }
 }

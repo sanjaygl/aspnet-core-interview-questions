@@ -1,37 +1,45 @@
 using API.Database.Entities;
+using API.Services.Auth;
 using Microsoft.AspNetCore.Identity;
 using System.Reflection;
 
-namespace API.Extensions
+namespace API.Extensions;
+
+public static class ServiceCollectionExtensions
 {
-    public static class ServiceCollectionExtensions
+    // Scans the provided assembly (or the executing assembly) for concrete classes
+    // that have a matching interface named I{ClassName} and registers them as transient.
+    public static IServiceCollection AddServices(
+        this IServiceCollection services,
+        Assembly? assembly = null)
     {
-        // Scans the provided assembly (or the executing assembly) for concrete classes
-        // that have a matching interface named I{ClassName} and registers them as transient.
-        public static IServiceCollection AddServices(this IServiceCollection services, Assembly? assembly = null)
+        assembly ??= Assembly.GetExecutingAssembly();
+
+        var types = assembly.GetTypes()
+            .Where(t =>
+                t.IsClass &&
+                !t.IsAbstract &&
+                !t.IsGenericTypeDefinition);
+
+        foreach (var impl in types)
         {
-            assembly ??= Assembly.GetExecutingAssembly();
+            var ifaceName = "I" + impl.Name;
+            var iface = impl.GetInterface(ifaceName);
 
-            var types = assembly.GetTypes()
-                .Where(t =>
-                    t.IsClass &&
-                    !t.IsAbstract &&
-                    !t.IsGenericTypeDefinition);
+            if (iface == null)
+                continue;
 
-            foreach (var impl in types)
-            {
-                var ifaceName = "I" + impl.Name;
-                var iface = impl.GetInterface(ifaceName);
+            if (iface == typeof(ITokenService))
+                continue;
 
-                if (iface != null)
-                {
-                    services.AddScoped(iface, impl);
-                }
-            }
-
-            services.AddScoped<PasswordHasher<User>>();
-
-            return services;
+            services.AddScoped(iface, impl);
         }
+
+        services.AddScoped<PasswordHasher<User>>();
+
+        // TokenService has no scoped dependencies.
+        services.AddSingleton<ITokenService, TokenService>();
+
+        return services;
     }
 }
