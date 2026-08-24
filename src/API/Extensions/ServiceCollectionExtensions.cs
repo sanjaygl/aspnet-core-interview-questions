@@ -1,5 +1,4 @@
 using API.Database.Entities;
-using API.Services.Identity.Models;
 using Microsoft.AspNetCore.Identity;
 using System.Reflection;
 
