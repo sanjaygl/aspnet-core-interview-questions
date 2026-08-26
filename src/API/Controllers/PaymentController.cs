@@ -1,11 +1,13 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using API.Services.Payment;
 using API.Services.Payment.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class PaymentController : ControllerBase
     {
         private readonly IPaymentService _paymentService;

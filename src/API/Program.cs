@@ -19,6 +19,7 @@ builder.Services.AddCors(options =>
     });
 });
 
+builder.Services.AddValidation();
 builder.Services.AddControllers();
 builder.Services.AddJwtAuthentication(builder.Configuration);
 builder.Services.AddServices();

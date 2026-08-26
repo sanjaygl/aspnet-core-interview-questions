@@ -1,4 +1,4 @@
-﻿namespace API.Constants;
+﻿namespace API.Common;
 
 public static class Constants
 {

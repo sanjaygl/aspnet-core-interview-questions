@@ -1,4 +1,4 @@
-﻿using API.Constants;
+﻿using API.Common;
 using API.Database.Entities;
 using API.Models;
 using API.Repositories.Users;
@@ -33,7 +33,7 @@ public class UserService : IUserService
 
         // Access token cookie.
         context.Response.Cookies.Append(
-            Constants.Constants.AccessTokenCookie,
+            Constants.AccessTokenCookie,
             accessToken,
             new CookieOptions
             {
@@ -43,12 +43,12 @@ public class UserService : IUserService
                 IsEssential = true,
                 Path = "/",
                 Expires = DateTimeOffset.UtcNow.AddMinutes(
-                    Constants.Constants.AccessTokenExpirationMinutes)
+                    Constants.AccessTokenExpirationMinutes)
             });
 
         // Refresh token cookie.
         context.Response.Cookies.Append(
-            Constants.Constants.RefreshTokenCookie,
+            Constants.RefreshTokenCookie,
             refreshToken,
             new CookieOptions
             {
@@ -58,7 +58,7 @@ public class UserService : IUserService
                 IsEssential = true,
                 Path = "/",
                 Expires = DateTimeOffset.UtcNow.AddDays(
-                    Constants.Constants.RefreshTokenExpirationDays)
+                    Constants.RefreshTokenExpirationDays)
             });
     }
 
@@ -88,7 +88,7 @@ public class UserService : IUserService
         user.UserSession ??= new UserSession { UserId = user.Id };
 
         user.UserSession.RefreshToken = refreshToken;
-        user.UserSession.RefreshTokenExpiryTime = DateTime.UtcNow.AddDays(Constants.Constants.RefreshTokenExpirationDays);
+        user.UserSession.RefreshTokenExpiryTime = DateTime.UtcNow.AddDays(Constants.RefreshTokenExpirationDays);
 
         await _userRepository.SaveChangesAsync();
 
@@ -130,7 +130,7 @@ public class UserService : IUserService
         if (request == null)
             return new AuthResponse(false, "HTTP context is not available.");
 
-        var refreshToken = request.Cookies[Constants.Constants.RefreshTokenCookie];
+        var refreshToken = request.Cookies[Constants.RefreshTokenCookie];
 
         if (string.IsNullOrWhiteSpace(refreshToken))
             return new AuthResponse(false, "Refresh token is missing.");
@@ -154,7 +154,7 @@ public class UserService : IUserService
 
         // Rotate the refresh token.
         user.UserSession.RefreshToken = newRefreshToken;
-        user.UserSession.RefreshTokenExpiryTime = DateTime.UtcNow.AddDays(Constants.Constants.RefreshTokenExpirationDays);
+        user.UserSession.RefreshTokenExpiryTime = DateTime.UtcNow.AddDays(Constants.RefreshTokenExpirationDays);
 
         await _userRepository.SaveChangesAsync();
 

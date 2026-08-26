@@ -39,7 +39,7 @@ namespace API.Controllers
                 return BadRequest(new { Message = result.Message });
             }
 
-            return Ok(result);
+            return CreatedAtAction(null, result);
         }
 
         [HttpPost("refresh")]

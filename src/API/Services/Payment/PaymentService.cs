@@ -1,19 +1,22 @@
-﻿namespace API.Services.Payment
+﻿using API.Processors.Payments;
+using API.Services.Payment.Models;
+
+namespace API.Services.Payment
 {
     public class PaymentService : IPaymentService
     {
-        public async Task<Models.PaymentResponse> ProcessPaymentAsync(Models.PaymentRequest request, CancellationToken cancellationToken = default)
-        {
-            // Simulate processing delay
-            await Task.Delay(50, cancellationToken);
+        private readonly PaymentProcessorFactory _paymentProcessorFactory;
 
-            // Dummy implementation - always succeeds for demo
-            return new Models.PaymentResponse
-            {
-                Success = true,
-                TransactionId = Guid.NewGuid().ToString("N"),
-                Message = "Processed"
-            };
+        public PaymentService(PaymentProcessorFactory paymentProcessorFactory)
+        {
+            _paymentProcessorFactory = paymentProcessorFactory;
+        }
+
+        public async Task<Models.PaymentResponse> ProcessPaymentAsync(PaymentRequest request, CancellationToken cancellationToken = default)
+        {
+            var processor = _paymentProcessorFactory.Create(request.PaymentMethod);
+
+            return await processor.ProcessAsync(request, cancellationToken);
         }
     }
 }

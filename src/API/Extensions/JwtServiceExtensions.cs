@@ -1,4 +1,4 @@
-﻿using API.Constants;
+﻿using API.Common;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
@@ -58,7 +58,7 @@ public static class JwtServiceExtensions
                 OnMessageReceived = context =>
                 {
                     // Read access token from HttpOnly cookie.
-                    var accessToken = context.Request.Cookies[Constants.Constants.AccessTokenCookie];
+                    var accessToken = context.Request.Cookies[Constants.AccessTokenCookie];
 
                     if (!string.IsNullOrWhiteSpace(accessToken))
                     {
