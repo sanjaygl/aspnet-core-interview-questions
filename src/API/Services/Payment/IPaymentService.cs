@@ -5,5 +5,6 @@ namespace API.Services.Payment
     public interface IPaymentService
     {
         Task<PaymentResponse> ProcessPaymentAsync(PaymentRequest request, CancellationToken cancellationToken = default);
+        Task<PaymentResponse> RefundPaymentAsync(PaymentRequest request, CancellationToken cancellationToken = default);
     }
 }

@@ -1,5 +1,7 @@
 using API.Database.Entities;
 using API.Processors.Payments;
+using API.Processors.Payments.CreditCard;
+using API.Processors.Payments.UPI;
 using API.Services.Auth;
 using Microsoft.AspNetCore.Identity;
 using System.Reflection;
@@ -41,9 +43,17 @@ public static class ServiceCollectionExtensions
         // TokenService has no scoped dependencies.
         services.AddSingleton<ITokenService, TokenService>();
 
+        // Factory DI
         services.AddScoped<UpiPaymentProcessor>();
+        services.AddScoped<UpiRefundProcessor>();
+
         services.AddScoped<CreditCardPaymentProcessor>();
-        services.AddScoped<PaymentProcessorFactory>();
+        services.AddScoped<CreditCardRefundProcessor>();
+
+        services.AddScoped<IPaymentFactory, UpiPaymentFactory>();
+        services.AddScoped<IPaymentFactory, CreditCardPaymentFactory>();
+
+        services.AddScoped<PaymentFactoryResolver>();
 
         return services;
     }

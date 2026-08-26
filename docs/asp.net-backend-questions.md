@@ -103,9 +103,16 @@ Ref [Array vs ArrayList vs Dictionary — Interview Q&A](CSharp\Array-vs-ArrayLi
 Ref [SOLID-Design-Principles-Introduction](solid-principles\SOLID-Design-Principles-Introduction.md)
 
 ## What is Encapsulation? Can you give any real world example?
+Encapsulation is an OOP concept where we bundle data (fields/properties) and the methods that operate on that data inside a class, while controlling access to them using access modifiers. This helps protect the internal state of an object.
+Suppose in bank account we can't anyone to update the bank balance.
+Encapsulation → protects internal data and controls access to it
 Ref [Encapsulation](../src/OOP-Csharp-Concepts/Encapsulation.md)
 
 ## What is Abstraction? Can you give any real world example?
+Abstraction is the process of exposing only the essential features or behavior of an object while hiding its implementation details.
+Think about driving a car.
+In Car we use Start, Accelerate, Brake, Turn but we don't need to know how the car internally performs these operations.
+Abstraction → hides implementation details (WHAT vs HOW)
 Ref [Abstraction](../src/OOP-Csharp-Concepts/Abstraction.md)
 
 ## How Grand, Parent and Child class works if inherit one to each other? Which class constructior will call first if create object of child class?
