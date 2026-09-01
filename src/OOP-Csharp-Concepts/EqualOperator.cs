@@ -11,7 +11,8 @@ namespace OOP_CSharp_Concepts
     /// A. For strings, both == and Equals() compare values (content) because string overrides Equals() 
     /// and overloads the == operator to perform value comparison instead of reference comparison.
     /// == is null-safe, while calling Equals() on a null object throws a NullReferenceException.
-    /// For reference types (custom objects), both == and Equals() compare references by default, unless Equals() and/or == are explicitly overridden.
+    /// For reference types (custom objects), both == and Equals() compare references by default, 
+    /// unless Equals() and/or == are explicitly overridden.
     /// </summary>
     internal class EqualOperator
     {
@@ -58,7 +59,7 @@ namespace OOP_CSharp_Concepts
             try
             {
                 // CRASHES: Calling an instance method (.Equals) on a null reference throws an error
-                Console.WriteLine(c.Equals(a));
+                //Console.WriteLine(c.Equals(a));
             }
             catch (NullReferenceException ex)
             {

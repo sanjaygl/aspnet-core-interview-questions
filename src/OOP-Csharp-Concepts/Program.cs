@@ -13,12 +13,12 @@ namespace OOP_CSharp_Concepts
             //Console.WriteLine(derivedImplementationExample.Print("Hello Abstract"));
 
             //PolymorphismRunner.RunFullDemonstration();
-            //PolyRunner.Run();
+            PolyRunner.Run();
 
             // YieldRunner.Run();
 
-            DelegateRunner.Run();
-            EqualOperator.Run();
+            //DelegateRunner.Run();
+            //EqualOperator.Run();
 
             Console.ReadLine();
         }

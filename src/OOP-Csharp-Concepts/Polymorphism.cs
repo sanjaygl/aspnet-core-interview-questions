@@ -291,10 +291,11 @@ namespace OOP_CSharp_Concepts
                 safeDragon.BreatheElement();
             }
         }
-        
+
     }
 
-    public class PolyRunner {
+    public class PolyRunner
+    {
         public static void Run()
         {
             Base _base = new Child3();
@@ -313,7 +314,13 @@ namespace OOP_CSharp_Concepts
                                 So here, the reference type is the base class, therefore,
                                 the base class Scan() method will be called.");
 
+
             _base.Scan();
+
+
+            Child1 child1 = new Child1();
+            child1.Print();
+            child1.Scan();
         }
     }
     class Base
