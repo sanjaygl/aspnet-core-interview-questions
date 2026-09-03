@@ -34,10 +34,4 @@
     <Project Path="src/OOP-Csharp-Concepts/OOP-CSharp-Concepts.csproj" Id="bd771965-ffdd-4003-989c-ee0b98597b93" />
     <Project Path="src/ThreadingPractice/ThreadingPractice.csproj" Id="77b7a52a-62cb-4eda-92c9-4ad2df8d3451" />
   </Folder>
-  <Folder Name="/src/MicroServices/">
-    <Project Path="src/MicroServices/AuthService/AuthService.csproj" Id="bd3165bb-fc13-4bf2-b31a-035d418aec3e" />
-    <Project Path="src/MicroServices/OrderService/OrderService.csproj" Id="9828847c-9890-4257-9175-6dc77c210434" />
-    <Project Path="src/MicroServices/PaymentService/PaymentService.csproj" Id="1f85b392-4f93-415b-9dbc-3c15e3a162f0" />
-    <Project Path="src/MicroServices/ProductService/ProductService.csproj" Id="fc2d18fa-ac8d-4b8c-a043-3471eecc4f60" />
-  </Folder>
 </Solution>
